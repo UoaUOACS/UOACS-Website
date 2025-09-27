@@ -23,16 +23,19 @@ export default buildConfig({
   },
   collections: [Users, Media],
   editor: lexicalEditor(),
+  graphQL: {
+    disable: true,
+  },
   routes: {
     admin: "/payload/admin",
     api: "/payload/api",
   },
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
-    outputFile: path.resolve(dirname, 'payload/payload-types.ts'),
+    outputFile: path.resolve(dirname, "payload/payload-types.ts"),
   },
   db: mongooseAdapter({
-    url: process.env.DATABASE_URI || '',
+    url: process.env.DATABASE_URI || "",
   }),
   sharp,
   plugins: [
