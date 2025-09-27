@@ -1,36 +1,204 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UOACS Website
 
-## Getting Started
+A modern, full-stack website for the University of Auckland Computer Science Society (UOACS), built with Next.js, Payload CMS, and TypeScript.
 
-First, run the development server:
+## 📋 Prerequisites
+
+- **Node.js** >= 18.0.0
+- **pnpm** >= 8.0.0
+- **MongoDB** instance (local or cloud)
+
+### Node.js installation
+
+#### nvm (Node Version Manager)
+
+In the root directory of the project, you can find a `.nvmrc` file specifying the required Node.js version. If you have `nvm` installed, you can run:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+nvm install
+nvm use
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Volta
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+If you use [Volta](https://volta.sh/), the project will automatically use the correct Node.js version specified in `package.json`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Follow the [Volta installation instructions](https://docs.volta.sh/guide/getting-started) if you don't have it installed.
 
-## Learn More
+## 🛠️ Setting Up the Project
 
-To learn more about Next.js, take a look at the following resources:
+### 1. Install Dependencies
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+corepack enable
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+pnpm install
+```
 
-## Deploy on Vercel
+### 2. Environment Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Copy the example environment file at `.env.example` to `.env` and update the variables as needed:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+cp .env.example .env
+```
+
+### 3. Start Development Server
+
+```bash
+pnpm dev
+```
+
+The application will be available at:
+
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Admin Panel**: [http://localhost:3000/payload/admin](http://localhost:3000/payload/admin)
+
+## 🔧 Important Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start development server with Turbopack |
+| `pnpm build` | Build production application |
+| `pnpm lint` | Run Biome linter and formatter checks |
+| `pnpm check-types` | Run TypeScript type checking |
+| `pnpm generate:types` | Generate Payload CMS TypeScript types |
+| `pnpm storybook` | Start Storybook development server |
+
+## 🧹 Linting & Formatting
+
+This project uses **[Biome](https://biomejs.dev/)** for fast linting and formatting.
+
+### Running Linting
+
+```bash
+# Check for issues
+pnpm lint
+
+# Auto-fix issues where possible
+pnpm biome check --write .
+
+# Format files
+pnpm biome format --write .
+```
+
+Do note that we have a pre-commit hook set up using Lefthook to automatically run linting and formatting before each commit. This helps maintain code quality and consistency. Therefore, it should be rare that you need to run these commands manually.
+
+## 💻 IDE Setup
+
+### VS Code (Recommended)
+
+If you are using `VSCode`, extensions will be recommended to you (namely Biome's extension). You can open the extensions sidebar and install the recommended extensions. VSCode files have already been set up as part of the repository and will assist with Biome formatting.
+
+Otherwise, you are responsible for figuring out how to configure those plugins for yourself. We encourage you to contribute any configuration files back to the repository to help others.
+
+## 📝 Type Generation
+
+This project uses Payload CMS's automatic type generation for type-safe database operations.
+
+```bash
+pnpm generate:types
+```
+
+This will create/update:
+
+- `src/payload/payload-types.ts` - Auto-generated TypeScript interfaces
+- Never edit this file manually - it's regenerated automatically
+
+## 🏗️ Project Structure
+
+File structure overview:
+
+```
+src/
+├── app/
+│   ├── (frontend)/          # Public website pages
+│   │   ├── (route)/         # Example route group
+│   │   ├── page.tsx         # Homepage
+│   │   └── layout.tsx       # Main layout
+│   ├── payload/             # Payload CMS admin
+│   │   ├── admin/           # Admin panel
+│   │   ├── api/             # API routes
+│   │   └── layout.tsx       # Admin layout
+│   ├── api/                 # Custom API routes
+│   │   ├── (route)/         # Example API route
+├── components/              # Reusable React components
+├── payload/
+│   ├── collections/         # Payload collections (Users, Media)
+│   └── payload-types.ts     # Generated types
+├── payload.config.ts        # Payload CMS configuration
+└── ...
+
+.storybook/                  # Storybook configuration
+public/                      # Static assets
+
+package.json                 # Project metadata and scripts
+next.config.js               # Next.js configuration
+tsconfig.json                # TypeScript configuration
+biome.json                   # Biome linter configuration
+lefthook.yaml                # Git hooks configuration
+```
+
+Feel free to expand this structure as needed for the project.
+
+## 🧪 Testing
+
+### Storybook Component Testing
+
+```bash
+# Start Storybook
+pnpm storybook
+```
+
+### Component Development
+
+- Write stories for components in `*.stories.tsx` files
+- Use Storybook for isolated component development
+
+## 🚀 Tech Stack
+
+### Core Framework
+
+- **[Next.js](https://nextjs.org/)** - React framework with App Router and Turbopack
+- **[React](https://react.dev/)** - UI library with latest concurrent features
+- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
+
+### Content Management
+
+- **[Payload CMS](https://payloadcms.com/)** - Headless CMS with admin panel
+- **[MongoDB](https://www.mongodb.com/)** - Document database via Mongoose adapter
+
+### Styling & UI
+
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[PostCSS](https://postcss.org/)** - CSS post-processor
+
+### Development & Testing
+
+- **[Storybook 9.1.8](https://storybook.js.org/)** - Component development environment
+- **[Vitest 3.2.4](https://vitest.dev/)** - Fast unit testing framework
+- **[Playwright](https://playwright.dev/)** - E2E testing and browser testing
+- **[Biome](https://biomejs.dev/)** - Fast formatter and linter
+
+### Package Management
+
+- **[pnpm 10.16.1](https://pnpm.io/)** - Fast, disk space efficient package manager
+
+## 📚 Learn More
+
+### Framework Documentation
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Payload CMS Documentation](https://payloadcms.com/docs)
+- [React Documentation](https://react.dev/)
+- [Tailwind CSS Docs](https://tailwindcss.com/docs)
+
+### Development Tools
+
+- [Storybook Docs](https://storybook.js.org/docs)
+- [Biome Documentation](https://biomejs.dev/guides/getting-started/)
+- [Lefthook Documentation](https://lefthook.dev/)
+
+## 🤝 Contributing
+
+Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to contribute to this project.
