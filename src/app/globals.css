@@ -5,6 +5,7 @@
   --foreground: #171717;
 }
 
+/* biome-ignore lint/suspicious/noUnknownAtRules: @theme is needed for tailwind theming */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
