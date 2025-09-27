@@ -35,6 +35,9 @@ importers:
       react-dom:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
+      sharp:
+        specifier: ^0.34.4
+        version: 0.34.4
     devDependencies:
       '@biomejs/biome':
         specifier: 2.2.0
@@ -3642,8 +3645,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@img/colour@1.0.0':
-    optional: true
+  '@img/colour@1.0.0': {}
 
   '@img/sharp-darwin-arm64@0.34.4':
     optionalDependencies:
@@ -5654,8 +5656,7 @@ snapshots:
 
   secure-json-parse@2.7.0: {}
 
-  semver@7.7.2:
-    optional: true
+  semver@7.7.2: {}
 
   sharp@0.34.4:
     dependencies:
@@ -5685,7 +5686,6 @@ snapshots:
       '@img/sharp-win32-arm64': 0.34.4
       '@img/sharp-win32-ia32': 0.34.4
       '@img/sharp-win32-x64': 0.34.4
-    optional: true
 
   sift@17.1.3: {}
 
