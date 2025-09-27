@@ -3,7 +3,7 @@
   "files": {
     "includes": [
       "**",
-      "!**/src/payload-types.ts",
+      "!**/src/payload/payload-types.ts",
       "!pnpm-lock.yaml",
       "!**/*.md",
       "!**/.github/",
