@@ -4,8 +4,8 @@ A modern, full-stack website for the University of Auckland Computer Science Soc
 
 ## 📋 Prerequisites
 
-- **Node.js** >= 18.0.0
-- **pnpm** >= 8.0.0
+- **Node.js**
+- **pnpm**
 - **MongoDB** instance (local or cloud)
 
 ### Node.js installation
@@ -171,18 +171,17 @@ pnpm storybook
 ### Styling & UI
 
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[PostCSS](https://postcss.org/)** - CSS post-processor
 
 ### Development & Testing
 
-- **[Storybook 9.1.8](https://storybook.js.org/)** - Component development environment
-- **[Vitest 3.2.4](https://vitest.dev/)** - Fast unit testing framework
+- **[Storybook](https://storybook.js.org/)** - Component development environment
+- **[Vitest](https://vitest.dev/)** - Fast unit testing framework
 - **[Playwright](https://playwright.dev/)** - E2E testing and browser testing
 - **[Biome](https://biomejs.dev/)** - Fast formatter and linter
 
 ### Package Management
 
-- **[pnpm 10.16.1](https://pnpm.io/)** - Fast, disk space efficient package manager
+- **[pnpm](https://pnpm.io/)** - Fast, disk space efficient package manager
 
 ## 📚 Learn More
 
