@@ -176,8 +176,8 @@ pnpm storybook
 
 - **[Storybook](https://storybook.js.org/)** - Component development environment
 - **[Vitest](https://vitest.dev/)** - Fast unit testing framework
-- **[Playwright](https://playwright.dev/)** - E2E testing and browser testing
 - **[Biome](https://biomejs.dev/)** - Fast formatter and linter
+- **[Lefthook](https://lefthook.dev/)** - Git hooks manager
 
 ### Package Management
 
