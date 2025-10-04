@@ -123,6 +123,7 @@ src/
 │   ├── api/                 # Custom API routes
 │   │   ├── (route)/         # Example API route
 ├── components/              # Reusable React components
+├── lib/                     # Utility functions and helpers
 ├── payload/
 │   ├── collections/         # Payload collections (Users, Media)
 │   └── payload-types.ts     # Generated types
