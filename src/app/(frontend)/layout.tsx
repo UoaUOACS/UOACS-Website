@@ -1,5 +1,5 @@
+import { IBM_Plex_Mono, Inter_Tight } from "next/font/google"
 import type React from "react"
-import { Inter_Tight, IBM_Plex_Mono } from "next/font/google"
 import "../globals.css"
 
 const inter = Inter_Tight({
