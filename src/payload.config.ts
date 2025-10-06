@@ -8,8 +8,8 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Media } from "./payload/collections/Media"
-import { Users } from "./payload/collections/Users"
 import { Sponsors } from "./payload/collections/Sponsors"
+import { Users } from "./payload/collections/Users"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
