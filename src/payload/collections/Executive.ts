@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload"
+import { ExecutiveTeam } from "@/types/enums"
 
 export const Executive: CollectionConfig = {
   slug: "executive",
@@ -45,14 +46,7 @@ export const Executive: CollectionConfig = {
           name: "team",
           type: "select",
           index: true,
-          options: [
-            { label: "President", value: "president" },
-            { label: "Admin", value: "admin" },
-            { label: "Events", value: "events" },
-            { label: "Marketing", value: "marketing" },
-            { label: "Tech/Education", value: "tech-edu" },
-            { label: "Design", value: "design" },
-          ],
+          options: Object.values(ExecutiveTeam),
           required: true,
           admin: {
             description: "Team the executive member belongs to",
