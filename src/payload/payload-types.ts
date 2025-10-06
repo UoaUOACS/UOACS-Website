@@ -171,13 +171,13 @@ export interface Sponsor {
   /**
    * Link to visit the Sponsor, e.g. 'https://www.aleckshen.com/'
    */
-  href: string;
+  link: string;
   /**
-   * Sponsor logo
+   * Sponsor logo to be displayed
    */
   logo: string | Media;
   /**
-   * Sponsor tier (diamond, gold, or silver)
+   * Sponsor's current tier (diamond, gold, or silver)
    */
   tier: 'diamond' | 'gold' | 'silver';
   updatedAt: string;
@@ -290,7 +290,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface SponsorsSelect<T extends boolean = true> {
   name?: T;
-  href?: T;
+  link?: T;
   logo?: T;
   tier?: T;
   updatedAt?: T;

@@ -15,7 +15,7 @@ export const Sponsors: CollectionConfig = {
       },
     },
     {
-      name: "href",
+      name: "link",
       type: "text",
       required: true,
       admin: {
@@ -28,7 +28,7 @@ export const Sponsors: CollectionConfig = {
       relationTo: "media",
       required: true,
       admin: {
-        description: "Sponsor logo",
+        description: "Sponsor logo to be displayed",
       },
     },
     {
@@ -50,7 +50,7 @@ export const Sponsors: CollectionConfig = {
       ],
       required: true,
       admin: {
-        description: "Sponsor tier (diamond, gold, or silver)",
+        description: "Sponsor's current tier (diamond, gold, or silver)",
       },
     },
   ],
