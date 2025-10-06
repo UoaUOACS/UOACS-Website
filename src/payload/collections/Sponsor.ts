@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload"
+import { SponsorTier } from "@/types/enums"
 
 export const Sponsor: CollectionConfig = {
   slug: "sponsor",
@@ -37,20 +38,7 @@ export const Sponsor: CollectionConfig = {
     {
       name: "tier",
       type: "select",
-      options: [
-        {
-          label: "Diamond",
-          value: "diamond",
-        },
-        {
-          label: "Gold",
-          value: "gold",
-        },
-        {
-          label: "Silver",
-          value: "silver",
-        },
-      ],
+      options: Object.values(SponsorTier),
       required: true,
       admin: {
         description: "Sponsor's current tier (diamond, gold, or silver)",
