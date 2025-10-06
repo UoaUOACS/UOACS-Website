@@ -8,21 +8,21 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Media } from "./payload/collections/Media"
-import { Sponsors } from "./payload/collections/Sponsors"
-import { Users } from "./payload/collections/Users"
+import { Sponsor } from "./payload/collections/Sponsor"
+import { User } from "./payload/collections/User"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    user: Users.slug,
+    user: User.slug,
     importMap: {
       baseDir: path.resolve(dirname),
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Users, Media, Sponsors],
+  collections: [User, Media, Sponsor],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,

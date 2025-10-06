@@ -1,7 +1,7 @@
 import type { CollectionConfig } from "payload"
 
-export const Sponsors: CollectionConfig = {
-  slug: "sponsors",
+export const Sponsor: CollectionConfig = {
+  slug: "sponsor",
   access: {
     read: () => true,
   },
