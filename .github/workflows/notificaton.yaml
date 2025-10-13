@@ -20,7 +20,7 @@ jobs:
           color: 6385919
           title: 'PR Ready for Review: ${{ github.event.pull_request.title }}'
           description: ${{ github.event.pull_request.body }}
-          desciption_max_length: 175
+          description_max_length: 175
           url: ${{ github.event.pull_request.html_url }}
           image_url: 'https://opengraph.githubassets.com/${{ github.sha }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           author_name: ${{ github.event.pull_request.user.login }}
