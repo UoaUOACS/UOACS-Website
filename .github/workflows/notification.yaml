@@ -28,7 +28,6 @@ jobs:
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
           button_label: 'View Pull Request'
           branch_info: '`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`'
-          sender: ${{ github.actor }}
 
       - name: Send notification on PR Merged
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
@@ -44,7 +43,6 @@ jobs:
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
           button_label: 'View Merged PR'
           branch_info: '`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`'
-          sender: ${{ github.actor }}
 
       - name: Send notification on PR Closed
         if: github.event.action == 'closed' && github.event.pull_request.merged == false
@@ -59,4 +57,3 @@ jobs:
           author_url: ${{ github.event.pull_request.user.html_url }}
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
           button_label: 'View Closed PR'
-          sender: ${{ github.actor }}
