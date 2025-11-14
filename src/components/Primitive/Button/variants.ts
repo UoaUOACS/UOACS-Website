@@ -1,5 +1,9 @@
 import { tv, type VariantProps } from "tailwind-variants"
 
+/**
+ * Button variant configurations.
+ * Consists of themes, sizes, and border options.
+ */
 export const buttonVariants = tv({
   slots: {
     inner:
@@ -63,4 +67,7 @@ export const buttonVariants = tv({
   },
 })
 
+/**
+ * Props for the button variant configuration.
+ */
 export type ButtonVariantProps = VariantProps<typeof buttonVariants>
