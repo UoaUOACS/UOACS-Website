@@ -1,3 +1,4 @@
+import type { JSX } from "react"
 import { cn } from "@/lib/utils"
 import { type HeadingVariants, headingVariants } from "./variants"
 
@@ -48,8 +49,9 @@ export const Heading = ({
   periodClassName,
 }: HeadingProps) => {
   const { textVariant, periodVariant } = headingVariants({ h })
+  const Element = `h${h}` as keyof JSX.IntrinsicElements
   return (
-    <h1 className={cn(className, textVariant())}>
+    <Element className={cn(className, textVariant())}>
       {period ? (
         <>
           {children.substring(0, children.lastIndexOf(" ") + 1)}
@@ -61,6 +63,6 @@ export const Heading = ({
       ) : (
         children
       )}
-    </h1>
+    </Element>
   )
 }
