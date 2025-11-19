@@ -4,7 +4,6 @@ import Image from "next/image"
 import { getPayload } from "payload"
 
 import config from "@/payload.config"
-import "./styles.css"
 
 export default async function HomePage() {
   const headers = await getHeaders()
