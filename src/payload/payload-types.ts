@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    executive: Executive;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -77,6 +78,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    executive: ExecutiveSelect<false> | ExecutiveSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -158,6 +160,41 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "executive".
+ */
+export interface Executive {
+  id: string;
+  /**
+   * Full name of the executive member
+   */
+  name: string;
+  /**
+   * Indicates if the member is currently serving in the executive team
+   */
+  isCurrent: boolean;
+  role: {
+    /**
+     * Title of the executive role (e.g., Co-President, Treasurer). Should be required if a current member.
+     */
+    title?: string | null;
+    /**
+     * Team the executive member belongs to
+     */
+    team: 'president' | 'admin' | 'events' | 'marketing' | 'tech-edu' | 'design';
+  };
+  /**
+   * Photo of the executive member (required if a current member)
+   */
+  photo?: (string | null) | Media;
+  /**
+   * LinkedIn profile URL of the executive member
+   */
+  linkedin?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -170,6 +207,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'executive';
+        value: string | Executive;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -252,6 +293,24 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "executive_select".
+ */
+export interface ExecutiveSelect<T extends boolean = true> {
+  name?: T;
+  isCurrent?: T;
+  role?:
+    | T
+    | {
+        title?: T;
+        team?: T;
+      };
+  photo?: T;
+  linkedin?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
