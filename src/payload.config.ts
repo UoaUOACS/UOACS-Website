@@ -7,6 +7,7 @@ import { payloadCloudPlugin } from "@payloadcms/payload-cloud"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { buildConfig } from "payload"
 import sharp from "sharp"
+import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
 import { Users } from "./payload/collections/Users"
 
@@ -21,7 +22,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Executive],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,
