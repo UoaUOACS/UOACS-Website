@@ -29,7 +29,7 @@ export const ExecCard = ({ exec }: ExecCardProps) => {
           width={200}
         />
       ) : (
-        <p className="flex size-full max-h-32 max-w-32 items-center justify-center rounded-sm bg-gray-200 font-md text-lg text-secondary md:max-h-250 md:max-w-250">
+        <p className="flex aspect-square size-full max-h-32 max-w-32 items-center justify-center rounded-sm bg-gray-200 font-md text-secondary text-xl md:max-h-50 md:max-w-50">
           {exec.name
             ? exec.name
                 .split(" ")
