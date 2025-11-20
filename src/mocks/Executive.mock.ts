@@ -8,6 +8,12 @@ export const mockExecutive: Executive = {
     title: "Senior Advisor",
     team: "admin",
   },
+  updatedAt: "2025-05-01T12:00:00Z",
+  createdAt: "2024-05-01T12:00:00Z",
+}
+
+export const mockExecutiveWithPhoto: Executive = {
+  ...mockExecutive,
   photo: {
     id: "media123",
     url: "media/JoshLi.jpeg",
@@ -17,6 +23,4 @@ export const mockExecutive: Executive = {
     createdAt: "2024-05-01T12:00:00Z",
     updatedAt: "2024-05-01T12:00:00Z",
   },
-  updatedAt: "2025-05-01T12:00:00Z",
-  createdAt: "2024-05-01T12:00:00Z",
 }
