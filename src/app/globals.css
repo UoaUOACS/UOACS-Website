@@ -14,6 +14,7 @@
   --primary: #ff307c;
   --primary-border: #ff307c1a;
   --secondary: #514d4d;
+  --secondary-light: #747474;
   --accent-purple: #d5bef2;
   --accent-purple-light: #763efc1a;
   --accent-blue: #bad7f7;
@@ -41,6 +42,7 @@
   --color-primary: var(--primary);
   --color-primary-border: var(--primary-border);
   --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
   --color-accent-purple: var(--accent-purple);
   --color-accent-purple-light: var(--accent-purple-light);
   --color-accent-blue: var(--accent-blue);
