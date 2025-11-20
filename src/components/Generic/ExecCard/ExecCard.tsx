@@ -6,7 +6,7 @@ export interface ExecCardProps {
 }
 
 export const ExecCard = ({ exec }: ExecCardProps) => {
-  const photo = exec.photo as unknown
+  const photo = exec.photo
   let src: string | undefined
 
   if (!photo) {
