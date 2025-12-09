@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from "@storybook/react"
 import { Heading } from "./Heading"
 
 const meta: Meta<typeof Heading> = {
-  title: "Components/Heading",
+  title: "Primitive Components/Heading",
   component: Heading,
   argTypes: {
     h: { control: "select", options: [1, 2, 3, 4, 5, 6] },
