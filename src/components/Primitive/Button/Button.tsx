@@ -4,7 +4,7 @@ import { type ButtonVariantProps, buttonVariants } from "./variants"
 /**
  * Props for the {@link Button} component.
  */
-export interface ButtonProps {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * The content of the button to live in the middle of the button.
    */
@@ -21,10 +21,6 @@ export interface ButtonProps {
    * Variant configuration for the button.
    */
   variant?: ButtonVariantProps
-  /**
-   * The type of the button.
-   */
-  type?: HTMLButtonElement["type"]
   /**
    * Optional left icon or element.
    */

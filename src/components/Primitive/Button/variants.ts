@@ -7,7 +7,7 @@ import { tv, type VariantProps } from "tailwind-variants"
 export const buttonVariants = tv({
   slots: {
     inner:
-      "flex flex-row gap-4 items-center rounded-xl border-4 border-transparent bg-black p-4 font-mono text-white",
+      "flex flex-row gap-4 items-center rounded-xl border-4 border-transparent bg-black p-4 font-mono text-white text-left",
     border: "rounded-2xl border-4 border-transparent cursor-pointer",
   },
   variants: {
