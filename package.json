@@ -23,6 +23,7 @@
     "@storybook/react": "^9.1.8",
     "clsx": "^2.1.1",
     "graphql": "^16.11.0",
+    "motion": "^12.23.24",
     "next": "15.5.4",
     "payload": "^3.57.0",
     "react": "19.1.0",
