@@ -8,7 +8,8 @@ export const buttonVariants = tv({
   slots: {
     inner:
       "flex flex-row gap-4 items-center rounded-xl border-4 border-transparent bg-black p-4 font-mono text-white text-left",
-    border: "rounded-2xl border-4 border-transparent cursor-pointer",
+    border:
+      "rounded-2xl border-4 border-transparent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black",
   },
   variants: {
     theme: {
