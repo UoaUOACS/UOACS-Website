@@ -13,7 +13,8 @@
       "!**/.vscode",
       "!**/coverage",
       "!**/importMap.js",
-      "!**/.vercel"
+      "!**/.vercel",
+      "!**/node_modules"
     ],
     "ignoreUnknown": true
   },
