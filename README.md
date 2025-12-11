@@ -64,7 +64,7 @@ The application will be available at:
 | `pnpm lint:fix` | Fix Biome lint and format issues |
 | `pnpm lint:fix:unsafe` | Unsafely Fix Biome lint and format issues |
 | `pnpm types:check` | Run TypeScript type checking |
-| `pnpm generate:types` | Generate Payload CMS TypeScript types |
+| `pnpm types:generate` | Generate Payload CMS TypeScript types |
 | `pnpm storybook` | Start Storybook development server |
 
 ## 🧹 Linting & Formatting
