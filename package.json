@@ -8,6 +8,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "biome check .",
+    "lint:fix": "biome check . --write",
     "check-types": "tsc --noEmit",
     "generate:types": "payload generate:types",
     "storybook": "storybook dev -p 6006",
