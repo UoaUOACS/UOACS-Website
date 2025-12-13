@@ -7,11 +7,13 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "biome check .",
-    "check-types": "tsc --noEmit",
-    "generate:types": "payload generate:types",
+    "lint:check": "biome check .",
+    "lint:fix": "biome check . --write",
+    "lint:fix:unsafe": "biome check . --write --unsafe",
+    "types:check": "tsc --noEmit",
+    "types:generate": "payload generate:types",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook:build": "storybook build"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
