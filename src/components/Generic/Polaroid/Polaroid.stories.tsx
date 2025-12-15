@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react"
-import { Polaroid} from "./Polaroid"
+import { Polaroid } from "./Polaroid"
 
 const meta: Meta<typeof Polaroid> = {
   title: "Generic Components/Polaroid",

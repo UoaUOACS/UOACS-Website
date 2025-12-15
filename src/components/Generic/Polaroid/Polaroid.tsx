@@ -67,13 +67,13 @@ export const Polaroid = ({
 
   return (
     <div
-      style={{ ...transform_styles, ...shadow }}
       className="center justify-top fixed inline-flex flex-col items-center gap-7 rounded-sm bg-white"
+      style={{ ...transform_styles, ...shadow }}
     >
       <div style={mask_image_styles}>
-        <Image style={reverse_rot} alt="Photo of event" src={url} layout="fill" objectFit="cover" />
+        <Image alt="Photo of event" layout="fill" objectFit="cover" src={url} style={reverse_rot} />
       </div>
-      <p className='w-full font-mono'>{text.toUpperCase()}</p>
+      <p className="w-full font-mono">{text.toUpperCase()}</p>
     </div>
   )
 }
