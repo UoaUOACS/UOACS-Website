@@ -7,11 +7,13 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "biome check .",
-    "check-types": "tsc --noEmit",
-    "generate:types": "payload generate:types",
+    "lint:check": "biome check .",
+    "lint:fix": "biome check . --write",
+    "lint:fix:unsafe": "biome check . --write --unsafe",
+    "types:check": "tsc --noEmit",
+    "types:generate": "payload generate:types",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook:build": "storybook build"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
@@ -23,10 +25,10 @@
     "@storybook/react": "^9.1.8",
     "clsx": "^2.1.1",
     "graphql": "^16.11.0",
-    "next": "15.5.4",
+    "next": "15.5.9",
     "payload": "^3.57.0",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
     "sharp": "^0.34.4",
     "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^3.1.1"
@@ -47,7 +49,7 @@
     "@vitest/coverage-v8": "^3.2.4",
     "playwright": "^1.55.1",
     "storybook": "^9.1.8",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5",
     "vitest": "^3.2.4"
   },
