@@ -41,20 +41,26 @@ export function Footer() {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <FontAwesomeIcon fontSize={16} icon={icon} className="md:text-3xl"/>
+                <FontAwesomeIcon className="md:text-3xl" fontSize={16} icon={icon} />
               </a>
             </Button>
           ))}
         </nav>
 
-        <div className="flex flex-col items-left md:flex-row flex-1 items-start md:items-end gap-4 md:gap-8">
-          <div className="flex mb-10 md:mb-10">
-            <Image alt="UOACS Logo" height={150} src="/uoacs-logo.svg" width={150} className="mt-8 md:mt-0"/>
+        <div className="flex flex-1 flex-col items-start gap-4 md:flex-row md:items-end md:gap-8">
+          <div className="mb-10 flex md:mb-10">
+            <Image
+              alt="UOACS Logo"
+              className="mt-8 md:mt-0"
+              height={150}
+              src="/uoacs-logo.svg"
+              width={150}
+            />
           </div>
 
           <nav
             aria-label="Main navigation"
-            className="flex flex-col justify-end gap-4 pl-1 md:pl-20 text-lg"
+            className="flex flex-col justify-end gap-4 pl-1 text-lg md:pl-20"
           >
             {NAV_LINKS.map(({ label, href }) => (
               <Link className="font-mono" href={href} key={label} target="_blank">
@@ -63,8 +69,8 @@ export function Footer() {
             ))}
           </nav>
 
-          <div className="relative z-10 flex flex-1 items-end justify-start md:justify-end mt-8">
-            <Button variant={{ border: true, size: "sm", theme: "primary" }} className="">
+          <div className="relative z-10 mt-8 flex flex-1 items-end justify-start md:justify-end">
+            <Button variant={{ border: true, size: "sm", theme: "primary" }}>
               INTERESTED? JOIN US
             </Button>
           </div>
