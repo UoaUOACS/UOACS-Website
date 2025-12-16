@@ -26,9 +26,9 @@ const NAV_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="relative h-[300px] w-full bg-[#1A1A1A] p-7 text-white">
-      <div className="flex h-full flex-col">
-        <nav aria-label="Social media links" className="flex h-1/2 items-start gap-4">
+    <footer className="relative min-h-[300px] w-full overflow-hidden bg-[#1A1A1A] p-7 text-white">
+      <div className="flex min-h-[calc(300px-3.5rem)] flex-col">
+        <nav aria-label="Social media links" className="flex items-start gap-4">
           {SOCIAL_LINKS.map(({ icon, label, href }) => (
             <Button
               aria-label={label}
@@ -41,30 +41,30 @@ export function Footer() {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <FontAwesomeIcon fontSize={16} icon={icon} />
+                <FontAwesomeIcon fontSize={16} icon={icon} className="md:text-3xl"/>
               </a>
             </Button>
           ))}
         </nav>
 
-        <div className="flex h-1/2">
-          <div className="flex items-center">
-            <Image alt="UOACS Logo" height={150} src="/uoacs-logo.svg" width={150} />
+        <div className="flex flex-col items-left md:flex-row flex-1 items-start md:items-end gap-4 md:gap-8">
+          <div className="flex mb-10 md:mb-10">
+            <Image alt="UOACS Logo" height={150} src="/uoacs-logo.svg" width={150} className="mt-8 md:mt-0"/>
           </div>
 
           <nav
             aria-label="Main navigation"
-            className="flex flex-col justify-end gap-4 pl-20 text-lg"
+            className="flex flex-col justify-end gap-4 pl-1 md:pl-20 text-lg"
           >
             {NAV_LINKS.map(({ label, href }) => (
-              <Link className="font-ibm-plex-mono" href={href} key={label} target="_blank">
+              <Link className="font-mono" href={href} key={label} target="_blank">
                 {label}
               </Link>
             ))}
           </nav>
 
-          <div className="relative z-10 flex flex-1 items-end justify-end">
-            <Button variant={{ border: true, size: "sm", theme: "primary" }}>
+          <div className="relative z-10 flex flex-1 items-end justify-start md:justify-end mt-8">
+            <Button variant={{ border: true, size: "sm", theme: "primary" }} className="">
               INTERESTED? JOIN US
             </Button>
           </div>
@@ -74,7 +74,7 @@ export function Footer() {
       <Image
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute right-0 bottom-0"
+        className="pointer-events-none absolute right-0 bottom-0 w-full md:max-w-[60%]"
         height={850}
         src="/uoacs-gradient.svg"
         width={850}

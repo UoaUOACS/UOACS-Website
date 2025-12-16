@@ -36,7 +36,7 @@
 /* biome-ignore lint/suspicious/noUnknownAtRules: @theme is needed for tailwind theming */
 @theme inline {
   --font-switzer: "Switzer", sans-serif;
-  --font-ibm-plex-mono: "IBM Plex Mono", monospace;
+  --font-mono: "IBM Plex Mono", monospace;
 
   --color-black: var(--black);
   --color-white: var(--white);
