@@ -87,6 +87,7 @@
   --radius-full: 9999px;
 
   --shadow-md: 0 2px 6.5px rgb(0 0 0 / 0.25);
+  --shadow-lg: 0px 3.88px 11.64px 0px rgba(0, 0, 0, 0.25);
 }
 
 @layer base {

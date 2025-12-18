@@ -61,14 +61,10 @@ export const Polaroid = ({
     height: IMAGE_HEIGHT,
   }
 
-  const shadow = {
-    boxShadow: "0px 3.88px 11.64px 0px #00000040",
-  }
-
   return (
     <div
-      className="center justify-top fixed inline-flex flex-col items-center gap-7 rounded-sm bg-white"
-      style={{ ...transform_styles, ...shadow }}
+      className="center justify-top fixed inline-flex flex-col items-center gap-7 rounded-sm bg-white shadow-lg"
+      style={transform_styles}
     >
       <div style={mask_image_styles}>
         <Image alt="Photo of event" layout="fill" objectFit="cover" src={url} style={reverse_rot} />
