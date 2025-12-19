@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     executive: Executive;
     sponsor: Sponsor;
+    reel: Reel;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -81,6 +82,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     executive: ExecutiveSelect<false> | ExecutiveSelect<true>;
     sponsor: SponsorSelect<false> | SponsorSelect<true>;
+    reel: ReelSelect<false> | ReelSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -222,6 +224,27 @@ export interface Sponsor {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reel".
+ */
+export interface Reel {
+  id: string;
+  /**
+   * Title of the reel
+   */
+  title: string;
+  /**
+   * Subtitle or description of the reel
+   */
+  subtitle?: string | null;
+  /**
+   * The video file for the reel
+   */
+  video: string | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -242,6 +265,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'sponsor';
         value: string | Sponsor;
+      } | null)
+    | ({
+        relationTo: 'reel';
+        value: string | Reel;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -352,6 +379,17 @@ export interface SponsorSelect<T extends boolean = true> {
   link?: T;
   logo?: T;
   tier?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reel_select".
+ */
+export interface ReelSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  video?: T;
   updatedAt?: T;
   createdAt?: T;
 }
