@@ -70,6 +70,7 @@ export interface Config {
     user: User;
     media: Media;
     sponsor: Sponsor;
+    executive: Executive;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -79,6 +80,7 @@ export interface Config {
     user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     sponsor: SponsorSelect<false> | SponsorSelect<true>;
+    executive: ExecutiveSelect<false> | ExecutiveSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -180,6 +182,36 @@ export interface Sponsor {
    * Sponsor's current tier (diamond, gold, or silver)
    */
   tier: 'diamond' | 'gold' | 'silver';
+ * via the `definition` "executive".
+ */
+export interface Executive {
+  id: string;
+  /**
+   * Full name of the executive member
+   */
+  name: string;
+  /**
+   * Indicates if the member is currently serving in the executive team
+   */
+  isCurrent: boolean;
+  role: {
+    /**
+     * Title of the executive role (e.g., Co-President, Treasurer). Should be required if a current member.
+     */
+    title?: string | null;
+    /**
+     * Team the executive member belongs to
+     */
+    team: 'president' | 'admin' | 'events' | 'marketing' | 'tech-edu' | 'design';
+  };
+  /**
+   * Photo of the executive member (required if a current member)
+   */
+  photo?: (string | null) | Media;
+  /**
+   * LinkedIn profile URL of the executive member
+   */
+  linkedin?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -201,6 +233,8 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'sponsor';
         value: string | Sponsor;
+        relationTo: 'executive';
+        value: string | Executive;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -293,6 +327,19 @@ export interface SponsorSelect<T extends boolean = true> {
   link?: T;
   logo?: T;
   tier?: T;
+ * via the `definition` "executive_select".
+ */
+export interface ExecutiveSelect<T extends boolean = true> {
+  name?: T;
+  isCurrent?: T;
+  role?:
+    | T
+    | {
+        title?: T;
+        team?: T;
+      };
+  photo?: T;
+  linkedin?: T;
   updatedAt?: T;
   createdAt?: T;
 }

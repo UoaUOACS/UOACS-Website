@@ -25,5 +25,5 @@ assignees: ''
 - [ ] Tested with [react testing library](https://testing-library.com/docs/react-testing-library/example-intro)
 - [ ] Tests written for critical interactions
 - [ ] PR Reviewed (For non-trivial changes)
-- [ ] Changes tested after rebasing on master or merging in master (_hint_: `git fetch origin master:master`, then `git rebase master` or `git merge master`)
+- [ ] Changes tested after rebasing on main or merging in main (_hint_: `git fetch origin main`, then `git rebase main` or `git merge main`)
 - [ ] All required PR checks passing

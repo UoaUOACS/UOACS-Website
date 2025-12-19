@@ -91,7 +91,7 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
       
       - name: Run Type Check
-        run: pnpm check-types
+        run: pnpm types:check
 
   build-app:
     name: Build Application
@@ -175,4 +175,4 @@ jobs:
 
       - name: Build Storybook
         shell: bash
-        run: pnpm build-storybook
+        run: pnpm storybook:build
