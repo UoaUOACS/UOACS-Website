@@ -1,7 +1,7 @@
 export enum SponsorTier {
   DIAMOND = "diamond",
   GOLD = "gold",
-  SILVER = "silver"
+  SILVER = "silver",
 }
 
 export enum ExecutiveTeam {
@@ -10,5 +10,5 @@ export enum ExecutiveTeam {
   EVENTS = "events",
   MARKETING = "marketing",
   TECH_EDU = "tech-edu",
-  DESIGN = "design"
+  DESIGN = "design",
 }
