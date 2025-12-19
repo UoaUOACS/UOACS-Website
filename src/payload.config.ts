@@ -23,7 +23,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Users, Media, Executive, Sponsor],
+  collections: [User, Media, Executive, Sponsor],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,

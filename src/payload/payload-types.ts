@@ -69,8 +69,8 @@ export interface Config {
   collections: {
     user: User;
     media: Media;
-    sponsor: Sponsor;
     executive: Executive;
+    sponsor: Sponsor;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -79,8 +79,8 @@ export interface Config {
   collectionsSelect: {
     user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    sponsor: SponsorSelect<false> | SponsorSelect<true>;
     executive: ExecutiveSelect<false> | ExecutiveSelect<true>;
+    sponsor: SponsorSelect<false> | SponsorSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -162,26 +162,6 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sponsor".
- */
-export interface Sponsor {
-  id: string;
-  /**
-   * Sponsor name, e.g. 'Jane Street'
-   */
-  name: string;
-  /**
-   * Link to visit the Sponsor, e.g. 'https://www.aleckshen.com/'
-   */
-  link: string;
-  /**
-   * Sponsor logo to be displayed
-   */
-  logo: string | Media;
-  /**
-   * Sponsor's current tier (diamond, gold, or silver)
-   */
-  tier: 'diamond' | 'gold' | 'silver';
  * via the `definition` "executive".
  */
 export interface Executive {
@@ -217,6 +197,31 @@ export interface Executive {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsor".
+ */
+export interface Sponsor {
+  id: string;
+  /**
+   * Sponsor name, e.g. 'Jane Street'
+   */
+  name: string;
+  /**
+   * Link to visit the Sponsor, e.g. 'https://www.aleckshen.com/'
+   */
+  link: string;
+  /**
+   * Sponsor logo to be displayed
+   */
+  logo: string | Media;
+  /**
+   * Sponsor's current tier (diamond, gold, or silver)
+   */
+  tier: 'diamond' | 'gold' | 'silver';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -231,10 +236,12 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'sponsor';
-        value: string | Sponsor;
         relationTo: 'executive';
         value: string | Executive;
+      } | null)
+    | ({
+        relationTo: 'sponsor';
+        value: string | Sponsor;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -320,13 +327,6 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sponsor_select".
- */
-export interface SponsorSelect<T extends boolean = true> {
-  name?: T;
-  link?: T;
-  logo?: T;
-  tier?: T;
  * via the `definition` "executive_select".
  */
 export interface ExecutiveSelect<T extends boolean = true> {
@@ -340,6 +340,18 @@ export interface ExecutiveSelect<T extends boolean = true> {
       };
   photo?: T;
   linkedin?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsor_select".
+ */
+export interface SponsorSelect<T extends boolean = true> {
+  name?: T;
+  link?: T;
+  logo?: T;
+  tier?: T;
   updatedAt?: T;
   createdAt?: T;
 }
