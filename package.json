@@ -13,7 +13,8 @@
     "types:check": "tsc --noEmit",
     "types:generate": "payload generate:types",
     "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build"
+    "storybook:build": "storybook build",
+    "postinstall": "lefthook install"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
