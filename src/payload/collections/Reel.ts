@@ -5,24 +5,13 @@ export const Reel: CollectionConfig = {
   access: {
     read: () => true,
   },
-  admin: {
-    useAsTitle: "title",
-  },
   fields: [
     {
-      name: "title",
+      name: "description",
       type: "text",
       required: true,
       admin: {
-        description: "Title of the reel",
-      },
-    },
-    {
-      name: "subtitle",
-      type: "text",
-      required: false,
-      admin: {
-        description: "Subtitle or description of the reel",
+        description: "Description of the reel",
       },
     },
     {

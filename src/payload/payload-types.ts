@@ -233,13 +233,9 @@ export interface Sponsor {
 export interface Reel {
   id: string;
   /**
-   * Title of the reel
+   * Description of the reel
    */
-  title: string;
-  /**
-   * Subtitle or description of the reel
-   */
-  subtitle?: string | null;
+  description: string;
   /**
    * The video file for the reel
    */
@@ -391,8 +387,7 @@ export interface SponsorSelect<T extends boolean = true> {
  * via the `definition` "reel_select".
  */
 export interface ReelSelect<T extends boolean = true> {
-  title?: T;
-  subtitle?: T;
+  description?: T;
   video?: T;
   updatedAt?: T;
   createdAt?: T;
