@@ -100,7 +100,7 @@ Otherwise, you are responsible for figuring out how to configure those plugins f
 This project uses Payload CMS's automatic type generation for type-safe database operations.
 
 ```bash
-pnpm generate:types
+pnpm types:generate
 ```
 
 This will create/update:
