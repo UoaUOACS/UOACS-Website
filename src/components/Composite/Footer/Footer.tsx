@@ -1,5 +1,3 @@
-"use client"
-
 import { faDiscord, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
@@ -24,10 +22,10 @@ const NAV_LINKS = [
   { label: "Our sponsors", href: "/" },
 ] as const
 
-export function Footer() {
+export const Footer = () => {
   return (
-    <footer className="relative min-h-[300px] w-full overflow-hidden bg-[#1A1A1A] p-7 text-white">
-      <div className="flex min-h-[calc(300px-3.5rem)] flex-col">
+    <footer className="relative min-h-72 w-full overflow-hidden bg-dark-grey p-7 text-white">
+      <div className="flex min-h-64 flex-col">
         <nav aria-label="Social media links" className="flex items-start gap-4">
           {SOCIAL_LINKS.map(({ icon, label, href }) => (
             <Button
@@ -41,14 +39,14 @@ export function Footer() {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <FontAwesomeIcon className="md:text-3xl" fontSize={16} icon={icon} />
+                <FontAwesomeIcon className="md:text-3xl" fontSize={24} icon={icon} />
               </a>
             </Button>
           ))}
         </nav>
 
         <div className="flex flex-1 flex-col items-start gap-4 md:flex-row md:items-end md:gap-8">
-          <div className="mb-10 flex md:mb-10">
+          <div className="mb-10 flex">
             <Image
               alt="UOACS Logo"
               className="mt-8 md:mt-0"
@@ -59,7 +57,7 @@ export function Footer() {
           </div>
 
           <nav
-            aria-label="Main navigation"
+            aria-label="Footer navigation"
             className="flex flex-col justify-end gap-4 pl-1 text-lg md:pl-20"
           >
             {NAV_LINKS.map(({ label, href }) => (
@@ -78,7 +76,7 @@ export function Footer() {
       </div>
 
       <Image
-        alt=""
+        alt="Background Gradient"
         aria-hidden="true"
         className="pointer-events-none absolute right-0 bottom-0 w-full md:max-w-[60%]"
         height={850}
