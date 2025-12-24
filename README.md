@@ -60,9 +60,11 @@ The application will be available at:
 |---------|-------------|
 | `pnpm dev` | Start development server with Turbopack |
 | `pnpm build` | Build production application |
-| `pnpm lint` | Run Biome linter and formatter checks |
-| `pnpm check-types` | Run TypeScript type checking |
-| `pnpm generate:types` | Generate Payload CMS TypeScript types |
+| `pnpm lint:check` | Run Biome linter and formatter checks |
+| `pnpm lint:fix` | Fix Biome lint and format issues |
+| `pnpm lint:fix:unsafe` | Unsafely Fix Biome lint and format issues |
+| `pnpm types:check` | Run TypeScript type checking |
+| `pnpm types:generate` | Generate Payload CMS TypeScript types |
 | `pnpm storybook` | Start Storybook development server |
 
 ## 🧹 Linting & Formatting
@@ -73,13 +75,14 @@ This project uses **[Biome](https://biomejs.dev/)** for fast linting and formatt
 
 ```bash
 # Check for issues
-pnpm lint
+pnpm lint:check
 
 # Auto-fix issues where possible
-pnpm biome check --write .
+pnpm lint:fix
 
-# Format files
-pnpm biome format --write .
+# For some issues, you may need to run the following command to fix them:
+pnpm lint:fix:unsafe
+
 ```
 
 Do note that we have a pre-commit hook set up using Lefthook to automatically run linting and formatting before each commit. This helps maintain code quality and consistency. Therefore, it should be rare that you need to run these commands manually.
@@ -97,7 +100,7 @@ Otherwise, you are responsible for figuring out how to configure those plugins f
 This project uses Payload CMS's automatic type generation for type-safe database operations.
 
 ```bash
-pnpm generate:types
+pnpm types:generate
 ```
 
 This will create/update:

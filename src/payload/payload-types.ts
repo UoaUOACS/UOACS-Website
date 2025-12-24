@@ -63,22 +63,24 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
-    users: UserAuthOperations;
+    user: UserAuthOperations;
   };
   blocks: {};
   collections: {
-    users: User;
+    user: User;
     media: Media;
     executive: Executive;
+    sponsor: Sponsor;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
+    user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     executive: ExecutiveSelect<false> | ExecutiveSelect<true>;
+    sponsor: SponsorSelect<false> | SponsorSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -90,7 +92,7 @@ export interface Config {
   globalsSelect: {};
   locale: null;
   user: User & {
-    collection: 'users';
+    collection: 'user';
   };
   jobs: {
     tasks: unknown;
@@ -117,7 +119,7 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "user".
  */
 export interface User {
   id: string;
@@ -195,13 +197,38 @@ export interface Executive {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsor".
+ */
+export interface Sponsor {
+  id: string;
+  /**
+   * Sponsor name, e.g. 'Jane Street'
+   */
+  name: string;
+  /**
+   * Link to visit the Sponsor, e.g. 'https://www.aleckshen.com/'
+   */
+  link: string;
+  /**
+   * Sponsor logo to be displayed
+   */
+  logo: string | Media;
+  /**
+   * Sponsor's current tier (diamond, gold, or silver)
+   */
+  tier: 'diamond' | 'gold' | 'silver';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'users';
+        relationTo: 'user';
         value: string | User;
       } | null)
     | ({
@@ -211,10 +238,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'executive';
         value: string | Executive;
+      } | null)
+    | ({
+        relationTo: 'sponsor';
+        value: string | Sponsor;
       } | null);
   globalSlug?: string | null;
   user: {
-    relationTo: 'users';
+    relationTo: 'user';
     value: string | User;
   };
   updatedAt: string;
@@ -227,7 +258,7 @@ export interface PayloadLockedDocument {
 export interface PayloadPreference {
   id: string;
   user: {
-    relationTo: 'users';
+    relationTo: 'user';
     value: string | User;
   };
   key?: string | null;
@@ -256,9 +287,9 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "user_select".
  */
-export interface UsersSelect<T extends boolean = true> {
+export interface UserSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -309,6 +340,18 @@ export interface ExecutiveSelect<T extends boolean = true> {
       };
   photo?: T;
   linkedin?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsor_select".
+ */
+export interface SponsorSelect<T extends boolean = true> {
+  name?: T;
+  link?: T;
+  logo?: T;
+  tier?: T;
   updatedAt?: T;
   createdAt?: T;
 }

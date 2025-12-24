@@ -11,6 +11,7 @@
 :root {
   --white: #f5f5f5;
   --black: #000;
+  --dark-grey: #1a1a1a;
   --primary: #ff307c;
   --primary-border: #ff307c1a;
   --secondary: #514d4d;
@@ -36,9 +37,11 @@
 /* biome-ignore lint/suspicious/noUnknownAtRules: @theme is needed for tailwind theming */
 @theme inline {
   --font-switzer: "Switzer", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
 
   --color-black: var(--black);
   --color-white: var(--white);
+  --color-dark-grey: var(--dark-grey);
   --color-primary: var(--primary);
   --color-primary-border: var(--primary-border);
   --color-secondary: var(--secondary);
@@ -86,18 +89,8 @@
   --radius-4xl: 2rem;
   --radius-full: 9999px;
 
-  --border-width-1: 1px;
-  --border-width-2: 2px;
-  --border-width-4: 4px;
-  --border-width-6: 6px;
-  --border-width-8: 8px;
-  --border-width-10: 10px;
-  --border-width-12: 12px;
-  --border-width-16: 16px;
-  --border-width-20: 20px;
-  --border-width-24: 24px;
-
   --shadow-md: 0 2px 6.5px rgb(0 0 0 / 0.25);
+  --shadow-lg: 0px 3.88px 11.64px 0px rgba(0, 0, 0, 0.25);
 }
 
 @layer base {

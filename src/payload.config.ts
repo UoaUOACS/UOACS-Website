@@ -9,20 +9,21 @@ import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
-import { Users } from "./payload/collections/Users"
+import { Sponsor } from "./payload/collections/Sponsor"
+import { User } from "./payload/collections/User"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    user: Users.slug,
+    user: User.slug,
     importMap: {
       baseDir: path.resolve(dirname),
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Users, Media, Executive],
+  collections: [User, Media, Executive, Sponsor],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,
