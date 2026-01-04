@@ -18,7 +18,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html className={inter.variable} lang="en">
       <body>
-        <main>{children}</main>
+        <main className="flex w-full flex-col justify-center">{children}</main>
       </body>
     </html>
   )
