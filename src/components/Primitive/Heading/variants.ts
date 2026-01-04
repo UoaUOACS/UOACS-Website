@@ -6,7 +6,7 @@ import { tv, type VariantProps } from "tailwind-variants"
 export const headingVariants = tv({
   slots: {
     textVariant:
-      "flex flex-row flex-wrap items-end justify-start font-semibold gap-x-[0.2em] text-base",
+      "flex flex-row flex-wrap items-end justify-start font-semibold gap-x-[0.2em] text-base font-inter",
     periodVariant: "ml-0.5 bg-primary inline-block",
   },
   variants: {
