@@ -51,7 +51,7 @@ export const Heading = ({
   const { textVariant, periodVariant } = headingVariants({ h })
   const Element = `h${h}` as keyof JSX.IntrinsicElements
   return (
-    <Element className={cn(textVariant(), className)}>
+    <Element className={cn(className, textVariant())}>
       {period ? (
         <>
           {children.substring(0, children.lastIndexOf(" ") + 1)}
