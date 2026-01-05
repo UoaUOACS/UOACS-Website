@@ -1,7 +1,7 @@
 import { getPayload } from "payload"
 import type { Executive } from "@/payload/payload-types"
 import config from "@/payload.config"
-import { TeamPageClient } from "./__components__/TeamPageClient"
+import { TeamPageClient } from "./_components/TeamPageClient"
 
 export default async function TeamPage() {
   const payloadConfig = await config
