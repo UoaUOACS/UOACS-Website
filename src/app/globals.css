@@ -23,6 +23,7 @@
   --accent-red-light: #d96d951a;
   --accent-yellow: #f8d5bc;
   --accent-yellow-light: #ff95631a;
+  --accent-orange: #F8D5BC;
   --accent-highlight: #ffecd7;
   --sponsor-diamond: #99fffa;
   --sponsor-diamond-border: #746cdf1a;
@@ -53,6 +54,7 @@
   --color-accent-red-light: var(--accent-red-light);
   --color-accent-yellow: var(--accent-yellow);
   --color-accent-yellow-light: var(--accent-yellow-light);
+  --color-accent-orange: var(--accent-orange);
   --color-accent-highlight: var(--accent-highlight);
   --color-sponsor-diamond: var(--sponsor-diamond);
   --color-sponsor-diamond-border: var(--sponsor-diamond-border);
