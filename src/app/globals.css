@@ -1,6 +1,12 @@
+/* For Storybook */
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&display=swap");
+
 @import "tailwindcss";
 
 :root {
+  /* For Storybook */
+  --font-inter: "Inter Tight", sans-serif;
+
   --white: #f5f5f5;
   --black: #000;
   --dark-grey: #1a1a1a;
