@@ -11,12 +11,20 @@ export interface ValueCardProps {
   /**
    * The colour variant of the value card border.
    */
-  colour: "purple" | "blue" | "red" | "yellow"
+  colour: "purple" | "blue" | "red" | "yellow" | "orange"
   /**
    * The content of the value card.
    * Should provide minimal structure, as the ValueCard component handles most styling.
    */
   children: React.ReactNode
+}
+
+const borderColourClasses: Record<ValueCardProps["colour"], string> = {
+  purple: "border-accent-purple",
+  blue: "border-accent-blue",
+  red: "border-accent-red",
+  yellow: "border-accent-yellow",
+  orange: "border-accent-orange",
 }
 
 /**
@@ -37,7 +45,7 @@ export interface ValueCardProps {
  */
 export const ValueCard = ({ title, colour, children }: ValueCardProps) => {
   return (
-    <div className={`flex w-full max-w-132 flex-col border-6 border-accent-${colour}`}>
+    <div className={`flex w-full max-w-132 flex-col border-6 ${borderColourClasses[colour]}`}>
       <Heading className="border-b-1 border-b-secondary-light p-3" h={4}>
         {title}
       </Heading>
