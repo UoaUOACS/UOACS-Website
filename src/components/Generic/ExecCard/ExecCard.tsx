@@ -25,6 +25,7 @@ export const ExecCard = ({ exec }: ExecCardProps) => {
           alt={`${exec.name} photo`}
           className="size-full max-h-32 max-w-32 rounded-sm object-cover md:max-h-50 md:max-w-50"
           height={200}
+          priority
           src={src}
           width={200}
         />
