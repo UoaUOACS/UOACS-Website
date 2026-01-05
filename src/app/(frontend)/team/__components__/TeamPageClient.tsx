@@ -113,7 +113,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
         {pastTeams.map((team: string) => {
           const execsInTeam = pastExecs.filter((exec: Executive) => exec.role.team === team)
           return (
-            <div className="" key={team}>
+            <div key={team}>
               <p className="font-medium font-mono text-lg">
                 {TEAM_DISPLAY_NAMES[team].toUpperCase()}
               </p>
