@@ -10,7 +10,7 @@ export default async function TeamPage() {
     `${process.env.NEXT_PUBLIC_URL}/payload/api/executive`,
     {
       method: "GET",
-      // next: { revalidate: CACHE_TIME },
+      next: { revalidate: CACHE_TIME },
     },
   ).then((res) => res.json())
 
