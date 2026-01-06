@@ -3,11 +3,27 @@ import Link from "next/link"
 import { Button, Dropdown } from "@/components/Primitive"
 import type { DropdownOptionProps } from "@/components/Primitive/Dropdown/DropdownOption"
 
+/**
+ * Props for the {@link Navbar} component.
+ */
 export interface NavbarProps {
+  /**
+   * Links to be displayed in the center of the navbar.
+   */
   links: { label: string; href: string }[]
+  /**
+   * Social links to be displayed in the dropdown on the right of the navbar's middle.
+   */
   socialLinks: DropdownOptionProps[]
 }
 
+/**
+ * A Navbar component that includes a logo, navigation links, social media dropdown, and a join button.
+ *
+ * @param links Links to be displayed in the center of the navbar.
+ * @param socialLinks Social links to be displayed in the dropdown on the right of the navbar's middle.
+ * @returns A Navbar component with logo, navigation links, social dropdown, and join button.
+ */
 export function Navbar({ links, socialLinks }: NavbarProps) {
   return (
     <>
