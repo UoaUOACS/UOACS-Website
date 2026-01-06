@@ -37,12 +37,18 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
             variant={{ size: "md" }}
           />
         </div>
-        <Button
-          left={<div className="h-2.5 w-2.5 rounded-[0.92px] bg-white" />}
-          variant={{ size: "sm", theme: "dark" }}
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
+          rel="noopener noreferrer"
+          target="_blank"
         >
-          JOIN US
-        </Button>
+          <Button
+            left={<div className="h-2.5 w-2.5 rounded-[0.92px] bg-white" />}
+            variant={{ size: "sm", theme: "dark" }}
+          >
+            JOIN US
+          </Button>
+        </a>
       </nav>
     </>
   )
