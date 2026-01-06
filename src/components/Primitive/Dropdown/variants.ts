@@ -29,10 +29,19 @@ export const dropdownVariants = tv({
       sm: {
         icon: "size-2",
       },
+      "sm-wide": {
+        icon: "size-2",
+      },
       md: {
         icon: "size-3",
       },
+      "md-wide": {
+        icon: "size-3",
+      },
       lg: {
+        icon: "size-4",
+      },
+      "lg-wide": {
         icon: "size-4",
       },
     },
