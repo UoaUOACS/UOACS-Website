@@ -20,8 +20,8 @@ export const valuesFingerprintVariants = tv({
       red: {
         svg: "fill-accent-red",
       },
-      orange: {
-        svg: "fill-accent-orange",
+      yellow: {
+        svg: "fill-accent-yellow",
       },
     },
     size: {
