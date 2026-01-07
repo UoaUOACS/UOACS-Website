@@ -32,6 +32,7 @@
     "payload": "^3.57.0",
     "react": "19.2.1",
     "react-dom": "19.2.1",
+    "react-fast-marquee": "^1.6.5",
     "sharp": "^0.34.4",
     "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^3.1.1"

@@ -68,9 +68,15 @@ export const Footer = () => {
           </nav>
 
           <div className="relative z-10 mt-8 flex flex-1 items-end justify-start md:justify-end">
-            <Button variant={{ border: true, size: "sm", theme: "primary" }}>
-              INTERESTED? JOIN US
-            </Button>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
+              rel="noopener"
+              target="_blank"
+            >
+              <Button variant={{ border: true, size: "sm", theme: "primary" }}>
+                INTERESTED? JOIN US
+              </Button>
+            </a>
           </div>
         </div>
       </div>
