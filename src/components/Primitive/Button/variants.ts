@@ -7,9 +7,9 @@ import { tv, type VariantProps } from "tailwind-variants"
 export const buttonVariants = tv({
   slots: {
     inner:
-      "flex flex-row gap-4 items-center rounded-xl border-4 border-transparent bg-black p-4 font-mono text-white text-left",
+      "flex flex-row gap-4 items-center rounded-xl border-4 border-transparent bg-black p-4 font-mono text-white text-left transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50",
     border:
-      "rounded-2xl border-4 border-transparent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black disabled:cursor-not-allowed disabled:opacity-50",
+      "rounded-2xl border-4 border-transparent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 ease-in-out",
   },
   variants: {
     theme: {
@@ -19,7 +19,7 @@ export const buttonVariants = tv({
       },
       secondary: {
         inner: "bg-secondary",
-        border: "",
+        border: "border-secondary-border",
       },
       ghost: {
         inner: "bg-transparent text-black",

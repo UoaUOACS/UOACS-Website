@@ -1,14 +1,25 @@
-import { Inter_Tight } from "next/font/google"
-import type React from "react"
-import "../globals.css"
+import { config } from "@fortawesome/fontawesome-svg-core"
 import { faDiscord, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Inter_Tight } from "next/font/google"
+import localFont from "next/font/local"
+import type React from "react"
 import { Footer, Navbar } from "@/components/Composite"
 import type { DropdownOptionProps } from "@/components/Primitive/Dropdown/DropdownOption"
+import "@fortawesome/fontawesome-svg-core/styles.css"
+import "../globals.css"
+
+config.autoAddCss = false
 
 const inter = Inter_Tight({
   subsets: ["latin"],
   variable: "--font-inter",
+})
+
+const switzer = localFont({
+  src: "../../../public/fonts/Switzer-Variable.woff2",
+  variable: "--font-switzer",
+  display: "swap",
 })
 
 export const metadata = {
@@ -59,7 +70,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
   return (
-    <html className={inter.variable} lang="en">
+    <html className={`${inter.variable} ${switzer.variable}`} lang="en">
       <body>
         <div className="flex flex-col gap-9 px-16 py-6">
           <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />

@@ -1,20 +1,19 @@
+/* For Storybook */
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&display=swap");
+
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Switzer";
-  src: url("/fonts/Switzer-Variable.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
+  /* For Storybook */
+  --font-inter: "Inter Tight", sans-serif;
+
   --white: #f5f5f5;
   --black: #000;
   --dark-grey: #1a1a1a;
   --primary: #ff307c;
   --primary-border: #ff307c1a;
   --secondary: #514d4d;
+  --secondary-border: #0000001a;
   --secondary-light: #747474;
   --accent-purple: #d5bef2;
   --accent-purple-light: #763efc1a;
@@ -36,8 +35,9 @@
 
 /* biome-ignore lint/suspicious/noUnknownAtRules: @theme is needed for tailwind theming */
 @theme inline {
-  --font-switzer: "Switzer", sans-serif;
+  --font-switzer: var(--font-switzer);
   --font-mono: "IBM Plex Mono", monospace;
+  --font-inter: var(--font-inter);
 
   --color-black: var(--black);
   --color-white: var(--white);
@@ -45,6 +45,7 @@
   --color-primary: var(--primary);
   --color-primary-border: var(--primary-border);
   --color-secondary: var(--secondary);
+  --color-secondary-border: var(--secondary-border);
   --color-secondary-light: var(--secondary-light);
   --color-accent-purple: var(--accent-purple);
   --color-accent-purple-light: var(--accent-purple-light);

@@ -18,7 +18,7 @@ const SOCIAL_LINKS = [
 const NAV_LINKS = [
   // empty for now, add the necessary routes when they are created
   { label: "Home", href: "/" },
-  { label: "Meet the team", href: "/" },
+  { label: "Meet the team", href: "/team" },
   { label: "Our sponsors", href: "/" },
 ] as const
 
