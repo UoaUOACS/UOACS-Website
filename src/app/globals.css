@@ -11,6 +11,7 @@
 :root {
   --white: #f5f5f5;
   --black: #000;
+  --dark-grey: #1a1a1a;
   --primary: #ff307c;
   --primary-border: #ff307c1a;
   --secondary: #514d4d;
@@ -36,9 +37,11 @@
 /* biome-ignore lint/suspicious/noUnknownAtRules: @theme is needed for tailwind theming */
 @theme inline {
   --font-switzer: "Switzer", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
 
   --color-black: var(--black);
   --color-white: var(--white);
+  --color-dark-grey: var(--dark-grey);
   --color-primary: var(--primary);
   --color-primary-border: var(--primary-border);
   --color-secondary: var(--secondary);
