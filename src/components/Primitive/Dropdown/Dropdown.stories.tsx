@@ -11,6 +11,10 @@ const meta: Meta<typeof Dropdown> = {
       control: "object",
       description: "Variant configuration for theme, size",
     },
+    triggerVariant: {
+      control: "object",
+      description: "Variant configuration for trigger button",
+    },
     optionVariant: {
       control: "object",
       description: "Variant configuration for options",
