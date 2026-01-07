@@ -29,7 +29,7 @@ export const Reel = ({ reel }: ReelProps) => {
   return (
     <div className="relative aspect-9/16 cursor-pointer overflow-hidden rounded-xl">
       <video
-        aria-label={reel.description}
+        aria-label={`Instagram Reel: ${reel.description}`}
         autoPlay
         className="absolute inset-0 h-full w-full cursor-default object-cover"
         loop
