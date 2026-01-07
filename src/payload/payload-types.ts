@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     executive: Executive;
     sponsor: Sponsor;
+    reel: Reel;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -81,6 +82,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     executive: ExecutiveSelect<false> | ExecutiveSelect<true>;
     sponsor: SponsorSelect<false> | SponsorSelect<true>;
+    reel: ReelSelect<false> | ReelSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -88,8 +90,12 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'home-page': HomePage;
+  };
+  globalsSelect: {
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'user';
@@ -222,6 +228,23 @@ export interface Sponsor {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reel".
+ */
+export interface Reel {
+  id: string;
+  /**
+   * Description of the reel
+   */
+  description: string;
+  /**
+   * The video file for the reel
+   */
+  video: string | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -242,6 +265,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'sponsor';
         value: string | Sponsor;
+      } | null)
+    | ({
+        relationTo: 'reel';
+        value: string | Reel;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -357,6 +384,16 @@ export interface SponsorSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reel_select".
+ */
+export interface ReelSelect<T extends boolean = true> {
+  description?: T;
+  video?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -386,6 +423,26 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: string;
+  reels?: (string | Reel)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  reels?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
