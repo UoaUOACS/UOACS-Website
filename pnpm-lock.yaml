@@ -50,6 +50,9 @@ importers:
       react-dom:
         specifier: 19.2.1
         version: 19.2.1(react@19.2.1)
+      react-fast-marquee:
+        specifier: ^1.6.5
+        version: 1.6.5(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       sharp:
         specifier: ^0.34.4
         version: 0.34.4
@@ -3258,6 +3261,12 @@ packages:
     resolution: {integrity: sha512-GQDxZ5Jd+Aq/qUxbCm1UtzmL/s++V7zKgE8yMktJiCQXCCFZnMZh9ng+6/Ne6PjNSXH0L9CjeOEREfRnq6Duag==}
     peerDependencies:
       react: '>=16.13.1'
+
+  react-fast-marquee@1.6.5:
+    resolution: {integrity: sha512-swDnPqrT2XISAih0o74zQVE2wQJFMvkx+9VZXYYNSLb/CUcAzU9pNj637Ar2+hyRw6b4tP6xh4GQZip2ZCpQpg==}
+    peerDependencies:
+      react: '>= 16.8.0 || ^18.0.0'
+      react-dom: '>= 16.8.0 || ^18.0.0'
 
   react-image-crop@10.1.8:
     resolution: {integrity: sha512-4rb8XtXNx7ZaOZarKKnckgz4xLMvds/YrU6mpJfGhGAsy2Mg4mIw1x+DCCGngVGq2soTBVVOxx2s/C6mTX9+pA==}
@@ -7614,6 +7623,11 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.28.4
       react: 19.2.1
+
+  react-fast-marquee@1.6.5(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
+    dependencies:
+      react: 19.2.1
+      react-dom: 19.2.1(react@19.2.1)
 
   react-image-crop@10.1.8(react@19.2.1):
     dependencies:

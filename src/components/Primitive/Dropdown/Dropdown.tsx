@@ -25,6 +25,10 @@ export interface DropdownProps {
    */
   variant?: DropdownVariantProps
   /**
+   * Variant configuration for the trigger button.
+   */
+  triggerVariant?: ButtonVariantProps
+  /**
    * Variant configuration for the dropdown options.
    */
   optionVariant?: ButtonVariantProps
@@ -48,6 +52,7 @@ export const Dropdown = ({
   label,
   options,
   variant,
+  triggerVariant,
   optionVariant,
   popoverClassName,
   triggerClassname,
@@ -81,7 +86,7 @@ export const Dropdown = ({
             />
           </svg>
         }
-        variant={variant}
+        variant={triggerVariant}
       >
         {label}
       </Button>
