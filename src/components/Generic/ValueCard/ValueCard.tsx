@@ -11,7 +11,7 @@ export interface ValueCardProps {
   /**
    * The colour variant of the value card border.
    */
-  colour: "purple" | "blue" | "red" | "yellow" | "orange"
+  colour: "purple" | "blue" | "red" | "yellow"
   /**
    * The content of the value card.
    * Should provide minimal structure, as the ValueCard component handles most styling.
@@ -24,7 +24,6 @@ const borderColourClasses: Record<ValueCardProps["colour"], string> = {
   blue: "border-accent-blue",
   red: "border-accent-red",
   yellow: "border-accent-yellow",
-  orange: "border-accent-orange",
 }
 
 /**
