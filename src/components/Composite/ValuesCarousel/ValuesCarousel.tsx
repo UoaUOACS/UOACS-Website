@@ -51,7 +51,7 @@ export const ValuesCarousel = () => {
     },
     {
       title: "Connect",
-      colour: "orange",
+      colour: "yellow",
       content: (
         <>
           <p>
@@ -123,7 +123,7 @@ export const ValuesCarousel = () => {
             onClick={() => setActiveIndex(2)}
             type="button"
           >
-            <ValuesFingerprint label="Connect" variant={{ colour: "orange", size: "md" }} />
+            <ValuesFingerprint label="Connect" variant={{ colour: "yellow", size: "md" }} />
           </button>
           <button
             aria-label="Select Develop value"
