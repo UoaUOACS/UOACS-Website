@@ -35,6 +35,9 @@ export const buttonVariants = tv({
       },
     },
     size: {
+      navbar: {
+        inner: "text-sm px-6 py-3 gap-2",
+      },
       sm: {
         inner: "text-sm px-4 py-2 gap-2",
       },
@@ -58,6 +61,10 @@ export const buttonVariants = tv({
       true: {},
       false: {
         border: "border-transparent",
+      },
+      none: {
+        border: "border-0",
+        inner: "border-0",
       },
     },
   },
