@@ -1,5 +1,5 @@
 export * from "./Footer/Footer"
-export * from "./ValuesCarousel/ValuesCarousel"
 export * from "./Navbar/Navbar"
 export * from "./Reel/Reel"
 export * from "./SponsorTicker/SponsorTicker"
+export * from "./ValuesCarousel/ValuesCarousel"
