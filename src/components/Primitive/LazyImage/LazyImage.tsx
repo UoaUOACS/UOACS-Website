@@ -42,6 +42,7 @@ export function LazyImage({
     <div className={cn("relative", containerClassName)} style={{ width, height }}>
       {!isLoaded && (
         <div
+          aria-live="polite"
           className={cn("absolute inset-0 animate-pulse rounded-lg bg-gray-200", skeletonClassName)}
         />
       )}
