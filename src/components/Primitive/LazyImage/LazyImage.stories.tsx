@@ -1,0 +1,25 @@
+import type { Meta, StoryObj } from "@storybook/react"
+import { LazyImage } from "./LazyImage"
+
+const meta: Meta<typeof LazyImage> = {
+  title: "Primitive Components/LazyImage",
+  component: LazyImage,
+  argTypes: {
+    src: { control: "text" },
+    alt: { control: "text" },
+    width: { control: "number" },
+    height: { control: "number" },
+    className: { control: "text" },
+  },
+  args: {
+    src: "https://placehold.co/600x400",
+    alt: "Placeholder Image",
+    width: 600,
+    height: 400,
+  },
+}
+
+export default meta
+type Story = StoryObj<typeof LazyImage>
+
+export const Primary: Story = {}
