@@ -16,10 +16,9 @@ const SOCIAL_LINKS = [
 ] as const
 
 const NAV_LINKS = [
-  // empty for now, add the necessary routes when they are created
   { label: "Home", href: "/" },
   { label: "Meet the team", href: "/team" },
-  { label: "Our sponsors", href: "/" },
+  { label: "Our sponsors", href: "/sponsors" },
 ] as const
 
 export const Footer = () => {
