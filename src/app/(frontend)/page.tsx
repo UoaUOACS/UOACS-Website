@@ -1,5 +1,5 @@
-import { SponsorsSection } from "@/components/Composite"
+import { SponsorsServerSection } from "./_components/SponsorsServerSection"
 
 export default async function HomePage() {
-  return <SponsorsSection />
+  return <SponsorsServerSection />
 }

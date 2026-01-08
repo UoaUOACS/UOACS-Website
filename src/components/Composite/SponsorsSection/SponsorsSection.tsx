@@ -1,21 +1,24 @@
 import Link from "next/link"
-import { getPayload } from "payload"
 import { SponsorTicker } from "@/components/Generic"
 import { Button, Heading } from "@/components/Primitive"
 import type { Sponsor } from "@/payload/payload-types"
-import config from "@/payload.config"
+
+/**
+ * Props for the {@link SponsorsSection} component
+ */
+export interface SponsorsSectionProps {
+  /**
+   * An array of sponsor documents to display in the section
+   */
+  sponsors: Sponsor[]
+}
 
 /**
  * A section component that displays sponsors with a heading, description, ticker, and link to all sponsors
+ *
+ * @param sponsors An array of sponsor documents to display in the section
  */
-export const SponsorsSection = async () => {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-
-  const { docs: sponsors }: { docs: Sponsor[] } = await payload.find({
-    collection: "sponsor",
-  })
-
+export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
   return (
     <div className="flex flex-col items-center justify-center gap-6 md:gap-12">
       <div className="flex flex-col items-center gap-6 px-4 text-center">
