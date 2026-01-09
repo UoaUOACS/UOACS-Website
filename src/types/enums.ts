@@ -4,6 +4,12 @@ export enum SponsorTier {
   SILVER = "silver",
 }
 
+export const SPONSOR_TIER_ORDER: SponsorTier[] = [
+  SponsorTier.DIAMOND,
+  SponsorTier.GOLD,
+  SponsorTier.SILVER,
+]
+
 export enum ExecutiveTeam {
   PRESIDENT = "president",
   ADMIN = "admin",
