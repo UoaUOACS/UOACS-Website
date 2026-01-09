@@ -25,6 +25,7 @@ interface LazyImageProps extends ImageProps {
  * @param height The height of the image
  * @param className The class name for the image
  * @param containerClassName The class name for the container div
+ * @param skeletonClassName The class name for the skeleton placeholder
  * @param props Other {@link ImageProps}
  */
 export function LazyImage({
@@ -41,6 +42,7 @@ export function LazyImage({
     <div className={cn("relative", containerClassName)} style={{ width, height }}>
       {!isLoaded && (
         <div
+          aria-live="polite"
           className={cn("absolute inset-0 animate-pulse rounded-lg bg-gray-200", skeletonClassName)}
         />
       )}
@@ -51,7 +53,10 @@ export function LazyImage({
           className,
         )}
         height={height}
-        onLoad={() => {
+        onError={() => {
+          setIsLoaded(true)
+        }}
+        onLoadingComplete={() => {
           setIsLoaded(true)
         }}
         width={width}
