@@ -13,5 +13,12 @@ export const HomePage: GlobalConfig = {
       hasMany: true,
       maxRows: 2,
     },
+    {
+      name: "polaroids",
+      type: "relationship",
+      relationTo: "polaroid",
+      hasMany: true,
+      maxRows: 3,
+    },
   ],
 }
