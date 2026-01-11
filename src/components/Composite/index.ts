@@ -1,5 +1,6 @@
 export * from "./AboutUsSection/AboutUsSection"
 export * from "./Footer/Footer"
+export * from "./HeroSection/HeroSection"
 export * from "./Navbar/Navbar"
 export * from "./Reel/Reel"
 export * from "./SponsorsSection/SponsorsSection"

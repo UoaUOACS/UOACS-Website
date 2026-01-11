@@ -1,6 +1,7 @@
 import config from "@payload-config"
+import Image from "next/image"
 import { getPayload } from "payload"
-import { AboutUsSection } from "@/components/Composite"
+import { AboutUsSection, HeroSection } from "@/components/Composite"
 import type { Reel } from "@/payload/payload-types"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"
 
@@ -19,6 +20,15 @@ export default async function HomePage() {
 
   return (
     <>
+      <Image
+        alt="Background Gradient"
+        aria-hidden="true"
+        className="-z-1 pointer-events-none absolute top-0 left-0 w-full md:w-7/10"
+        height={1000}
+        src="/home-gradient.svg"
+        width={1000}
+      />
+      <HeroSection />
       <AboutUsSection reels={resolvedReels} />
       <SponsorsServerSection />
     </>
