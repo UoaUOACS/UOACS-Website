@@ -1,9 +1,14 @@
+import type { Metadata } from "next"
 import { getPayload } from "payload"
 import { SponsorBadge } from "@/components/Generic"
 import { Heading, LazyImage } from "@/components/Primitive"
 import type { Sponsor } from "@/payload/payload-types"
 import config from "@/payload.config"
 import { SPONSOR_TIER_ORDER, SponsorTier } from "@/types/enums"
+
+export const metadata: Metadata = {
+  title: "Sponsors",
+}
 
 export default async function SponsorsPage() {
   const payloadConfig = await config
