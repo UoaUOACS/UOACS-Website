@@ -6,6 +6,7 @@ import { TeamPageClient } from "./_components/TeamPageClient"
 
 export const metadata: Metadata = {
   title: "Team",
+  description: "Meet the team behind the University of Auckland Computer Society.",
 }
 
 export default async function TeamPage() {

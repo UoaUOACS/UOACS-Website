@@ -8,6 +8,8 @@ import { SPONSOR_TIER_ORDER, SponsorTier } from "@/types/enums"
 
 export const metadata: Metadata = {
   title: "Sponsors",
+  description:
+    "Meet the organisations that help make the University of Auckland Computer Society possible.",
 }
 
 export default async function SponsorsPage() {
