@@ -25,5 +25,9 @@ jobs:
           flyctl secrets set \
             DATABASE_URI=${{ secrets.DATABASE_URI }} \
             PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} \
-            NEXT_PUBLIC_URL=${{ vars.NEXT_PUBLIC_URL }} \
-      - run: flyctl deploy --remote-only --config fly.toml
+            NEXT_PUBLIC_URL=${{ vars.NEXT_PUBLIC_URL }}
+      - run: |
+          flyctl deploy --remote-only --config fly.staging.toml \
+            --build-secret DATABASE_URI=${{ secrets.DATABASE_URI }} \
+            --build-secret PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} \
+            --build-secret NEXT_PUBLIC_URL=${{ vars.NEXT_PUBLIC_URL }}
