@@ -9,7 +9,7 @@ LABEL fly_launch_runtime="Next.js"
 
 RUN corepack enable pnpm
 
-# Stage 1: Install dependencies (cached layer)
+# Stage 1: Install dependencies
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -23,15 +23,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Build with secrets mounted (BuildKit required)
-RUN --mount=type=secret,id=DATABASE_URI \
-    --mount=type=secret,id=PAYLOAD_SECRET \
-    --mount=type=secret,id=NEXT_PUBLIC_URL \
-    sh -c 'export DATABASE_URI=$(cat /run/secrets/DATABASE_URI) && \
-           export PAYLOAD_SECRET=$(cat /run/secrets/PAYLOAD_SECRET) && \
-           export NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL) && \
-           pnpm run build'
+RUN pnpm run build
 
 # Stage 3: Production runner (minimal image)
 FROM base AS runner
