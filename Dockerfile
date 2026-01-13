@@ -28,10 +28,10 @@ COPY . .
 RUN --mount=type=secret,id=DATABASE_URI \
     --mount=type=secret,id=PAYLOAD_SECRET \
     --mount=type=secret,id=NEXT_PUBLIC_URL \
-    sh -c 'export DATABASE_URI=$(cat /run/secrets/DATABASE_URI) && \
-           export PAYLOAD_SECRET=$(cat /run/secrets/PAYLOAD_SECRET) && \
-           export NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL) && \
-           pnpm run build'
+    DATABASE_URI="$(cat /run/secrets/DATABASE_URI)" \
+    PAYLOAD_SECRET="$(cat /run/secrets/PAYLOAD_SECRET)" \
+    NEXT_PUBLIC_URL="$(cat /run/secrets/NEXT_PUBLIC_URL)" \
+    pnpm run build
 
 # Stage 3: Production runner (minimal image)
 FROM base AS runner
