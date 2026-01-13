@@ -21,13 +21,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: |
-          flyctl secrets set \
-            DATABASE_URI=${{ secrets.DATABASE_URI }} \
-            PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} \
-            NEXT_PUBLIC_URL=${{ vars.NEXT_PUBLIC_URL }}
-      - run: |
-          flyctl deploy --remote-only --config fly.toml \
-            --build-secret DATABASE_URI=${{ secrets.DATABASE_URI }} \
-            --build-secret PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} \
-            --build-secret NEXT_PUBLIC_URL=${{ vars.NEXT_PUBLIC_URL }}
+      - run: flyctl secrets set DATABASE_URI=${{ secrets.DATABASE_URI }} PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} NEXT_PUBLIC_URL=${{ vars.NEXT_PUBLIC_URL }}
+      - run: flyctl deploy --remote-only --config fly.toml --build-secret DATABASE_URI=${{ secrets.DATABASE_URI }} --build-secret PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} --build-secret NEXT_PUBLIC_URL=${{ vars.NEXT_PUBLIC_URL }}
