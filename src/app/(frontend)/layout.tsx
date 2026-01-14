@@ -8,6 +8,7 @@ import { Footer, Navbar } from "@/components/Composite"
 import type { DropdownOptionProps } from "@/components/Primitive/Dropdown/DropdownOption"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import "../globals.css"
+import type { Viewport } from "next"
 
 config.autoAddCss = false
 
@@ -25,6 +26,13 @@ const switzer = localFont({
 export const metadata = {
   description: "A blank template using Payload in a Next.js app.",
   title: "Payload Blank Template",
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 const navbarLinks: { label: string; href: string }[] = [
