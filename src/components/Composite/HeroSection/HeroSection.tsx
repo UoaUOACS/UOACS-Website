@@ -18,30 +18,32 @@ export const HeroSection = () => {
   ] as const
 
   return (
-    <div className="mr-auto flex w-full max-w-180 flex-col justify-start gap-6 md:gap-18">
-      <p className="font-mono text-sm md:text-md">
+    <section className="flex w-full max-w-180 flex-col items-center justify-start gap-6 self-center md:items-start md:gap-18 md:self-start">
+      <p className="hidden font-mono text-sm md:block md:text-md">
         UNIVERSITY OF AUCKLAND
         <br />
         COMPUTER SCIENCE SOCIETY
         <br />
         2023 - 2025
       </p>
-      <div className="flex flex-col justify-start gap-12">
-        <div className="w-max max-w-full">
-          <Heading className="justify-start text-left" h={2}>
-            Connecting Lives
-          </Heading>
-          <Heading className="justify-start text-left" h={2} period>
-            Around Campus
-          </Heading>
-          <div className="mt-1.5 h-1.5 w-full bg-linear-to-r from-primary to-[#2134FF00]" />
+      <div className="flex flex-col justify-center gap-12 md:justify-start">
+        <div className="flex flex-col justify-center gap-6 text-center md:gap-12 md:text-left">
+          <div className="w-max max-w-full self-center md:self-start">
+            <Heading className="md:justify-start md:text-left" h={2}>
+              Connecting Lives
+            </Heading>
+            <Heading className="md:justify-start md:text-left" h={2} period>
+              Around Campus
+            </Heading>
+            <div className="mt-1.5 hidden h-1.5 w-full bg-linear-to-r from-primary to-[#2134FF00] md:block" />
+          </div>
+          <p className="font-light leading-[100%]">
+            UOACS is the Computer Science student association for social gathering.
+          </p>
         </div>
-        <p className="font-light leading-[100%]">
-          UOACS is the Computer Science student association for social gathering.
-        </p>
         <nav
           aria-label="Social media links"
-          className="flex flex-wrap items-start gap-2 overflow-x-auto md:gap-4"
+          className="flex w-fit flex-wrap items-start gap-2 self-center overflow-x-auto md:gap-4 md:self-start"
         >
           {SOCIAL_LINKS.map(({ icon, label, href }) => (
             <Button
@@ -55,12 +57,12 @@ export const HeroSection = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <FontAwesomeIcon className="text-xl md:text-3xl" icon={icon} />
+                <FontAwesomeIcon className="text-2xl md:text-3xl" icon={icon} />
               </a>
             </Button>
           ))}
         </nav>
       </div>
-    </div>
+    </section>
   )
 }
