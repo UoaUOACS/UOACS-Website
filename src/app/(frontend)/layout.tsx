@@ -80,7 +80,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html className={`${inter.variable} ${switzer.variable}`} lang="en">
       <body>
-        <div className="mx-auto flex w-full max-w-360 flex-col gap-14 px-4 sm:px-10 md:px-20 md:py-6">
+        <div className="mx-auto flex w-full max-w-360 flex-col gap-14 px-4 py-4 md:px-20 md:py-6">
           <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />
           <main className="flex flex-col items-center justify-center gap-14 py-12 md:justify-center md:gap-30">
             {children}
