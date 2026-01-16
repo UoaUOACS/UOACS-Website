@@ -28,7 +28,7 @@ export const HeroSection = () => {
       </p>
       <div className="flex flex-col justify-center gap-12 md:justify-start">
         <div className="flex flex-col justify-center gap-6 text-center md:gap-12 md:text-left">
-          <div className="w-max max-w-full self-center md:self-start">
+          <div className="w-max max-w-screen self-center md:self-start">
             <Heading className="md:justify-start md:text-left" h={2}>
               Connecting Lives
             </Heading>
@@ -43,7 +43,7 @@ export const HeroSection = () => {
         </div>
         <nav
           aria-label="Social media links"
-          className="flex w-fit flex-wrap items-start gap-2 self-center overflow-x-auto md:gap-4 md:self-start"
+          className="flex w-fit items-start gap-2 self-center md:gap-4 md:self-start"
         >
           {SOCIAL_LINKS.map(({ icon, label, href }) => (
             <Button
@@ -57,7 +57,7 @@ export const HeroSection = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <FontAwesomeIcon className="text-2xl md:text-3xl" icon={icon} />
+                <FontAwesomeIcon className="text-xl md:text-3xl" icon={icon} />
               </a>
             </Button>
           ))}
