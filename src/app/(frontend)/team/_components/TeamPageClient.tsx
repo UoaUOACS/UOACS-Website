@@ -7,7 +7,7 @@ import { useState } from "react"
 import { ExecCard } from "@/components/Generic"
 import { Button, Heading } from "@/components/Primitive"
 import type { Executive } from "@/payload/payload-types"
-import { ExecutiveTeam } from "@/types/enums"
+import { EXECUTIVE_LEVEL_ORDER, ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 
 /**
  * Mapping of executive teams to their display names
@@ -40,14 +40,35 @@ const TEAM_ORDER = [
  * @returns A client component that displays the team page with current and past executives
  */
 export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
-  const currentExecs = execs?.docs.filter((exec: Executive) => exec.isCurrent)
-  const pastExecs = execs?.docs.filter((exec: Executive) => !exec.isCurrent)
+  const currentExecs = execs?.docs
+    .filter((exec: Executive) => exec.isCurrent)
+    .sort(
+      (a, b) =>
+        EXECUTIVE_LEVEL_ORDER.indexOf(
+          (a.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
+        ) -
+        EXECUTIVE_LEVEL_ORDER.indexOf(
+          (b.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
+        ),
+    )
+  const pastExecs = execs?.docs
+    .filter((exec: Executive) => !exec.isCurrent)
+    .sort(
+      (a, b) =>
+        EXECUTIVE_LEVEL_ORDER.indexOf(
+          (a.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
+        ) -
+        EXECUTIVE_LEVEL_ORDER.indexOf(
+          (b.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
+        ),
+    )
 
   const currentTeams = Array.from(
-    new Set(currentExecs.map((exec: Executive) => exec.role.team).filter(Boolean)),
+    new Set(currentExecs.flatMap((exec: Executive) => exec.role?.teams ?? []).filter(Boolean)),
   ).sort((a, b) => TEAM_ORDER.indexOf(a as ExecutiveTeam) - TEAM_ORDER.indexOf(b as ExecutiveTeam))
+
   const pastTeams = Array.from(
-    new Set(pastExecs.map((exec: Executive) => exec.role.team).filter(Boolean)),
+    new Set(pastExecs.flatMap((exec: Executive) => exec.role?.teams ?? []).filter(Boolean)),
   ).sort((a, b) => TEAM_ORDER.indexOf(a as ExecutiveTeam) - TEAM_ORDER.indexOf(b as ExecutiveTeam))
 
   const [selectedTeam, setSelectedTeam] = useState<string | undefined>(undefined)
@@ -58,6 +79,13 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
     } else {
       setSelectedTeam(team)
     }
+  }
+
+  const toTeam = (str: string): ExecutiveTeam => {
+    if (Object.values(ExecutiveTeam).includes(str as ExecutiveTeam)) {
+      return str as ExecutiveTeam
+    }
+    throw new Error(`Invalid team: ${str}`)
   }
 
   return (
@@ -86,14 +114,18 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
             }}
           >
             {`${team.toUpperCase()} [${
-              currentExecs.filter((exec: Executive) => exec.role.team === team).length
+              currentExecs.filter((exec: Executive) =>
+                (exec.role?.teams ?? []).includes(toTeam(team)),
+              ).length
             }]`}
           </Button>
         ))}
       </div>
       <div className="grid w-full max-w-330 grid-cols-[repeat(auto-fill,128px)] justify-center gap-6 md:grid-cols-[repeat(auto-fill,200px)]">
         {currentExecs
-          ?.filter((exec: Executive) => (selectedTeam ? exec.role.team === selectedTeam : true))
+          ?.filter((exec: Executive) =>
+            selectedTeam ? (exec.role?.teams ?? []).includes(toTeam(selectedTeam)) : true,
+          )
           .map((exec: Executive) => (
             <ExecCard exec={exec} key={exec.id} />
           ))}
@@ -111,7 +143,9 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
       </div>
       <div className="grid w-full max-w-300 grid-cols-[repeat(auto-fill,16rem)] justify-center gap-6 md:gap-18">
         {pastTeams.map((team: string) => {
-          const execsInTeam = pastExecs.filter((exec: Executive) => exec.role.team === team)
+          const execsInTeam = pastExecs.filter((exec: Executive) =>
+            (exec.role?.teams ?? []).includes(toTeam(team)),
+          )
           return (
             <div key={team}>
               <p className="font-medium font-mono text-lg">

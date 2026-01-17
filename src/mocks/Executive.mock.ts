@@ -1,4 +1,5 @@
 import type { Executive } from "@/payload/payload-types"
+import { ExecutiveLevel } from "@/types/enums"
 
 export const mockExecutive: Executive = {
   id: "68e390f21023fb09c6a454da",
@@ -6,7 +7,8 @@ export const mockExecutive: Executive = {
   isCurrent: true,
   role: {
     title: "Senior Advisor",
-    team: "admin",
+    teams: ["admin"],
+    level: ExecutiveLevel.ADMIN,
   },
   updatedAt: "2025-05-01T12:00:00Z",
   createdAt: "2024-05-01T12:00:00Z",

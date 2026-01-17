@@ -15,6 +15,7 @@ export default async function TeamPage() {
 
   const execs: { docs: Executive[] } = await payload.find({
     collection: "executive",
+    limit: 100,
   })
 
   return <TeamPageClient execs={execs} />
