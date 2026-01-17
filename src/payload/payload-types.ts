@@ -72,6 +72,7 @@ export interface Config {
     executive: Executive;
     sponsor: Sponsor;
     reel: Reel;
+    polaroid: Polaroid;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -83,6 +84,7 @@ export interface Config {
     executive: ExecutiveSelect<false> | ExecutiveSelect<true>;
     sponsor: SponsorSelect<false> | SponsorSelect<true>;
     reel: ReelSelect<false> | ReelSelect<true>;
+    polaroid: PolaroidSelect<false> | PolaroidSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -245,6 +247,23 @@ export interface Reel {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "polaroid".
+ */
+export interface Polaroid {
+  id: string;
+  /**
+   * Caption underneath the polaroid image
+   */
+  caption: string;
+  /**
+   * The image file for the polaroid
+   */
+  image: string | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -269,6 +288,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'reel';
         value: string | Reel;
+      } | null)
+    | ({
+        relationTo: 'polaroid';
+        value: string | Polaroid;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -394,6 +417,16 @@ export interface ReelSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "polaroid_select".
+ */
+export interface PolaroidSelect<T extends boolean = true> {
+  caption?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -431,6 +464,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface HomePage {
   id: string;
   reels?: (string | Reel)[] | null;
+  polaroids?: (string | Polaroid)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -440,6 +474,7 @@ export interface HomePage {
  */
 export interface HomePageSelect<T extends boolean = true> {
   reels?: T;
+  polaroids?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

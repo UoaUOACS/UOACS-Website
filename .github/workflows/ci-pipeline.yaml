@@ -138,7 +138,7 @@ jobs:
         env:
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
-          NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
         run: pnpm build
 
   build-storybook:
