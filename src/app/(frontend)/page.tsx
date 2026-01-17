@@ -1,9 +1,15 @@
 import config from "@payload-config"
+import type { Metadata } from "next"
 import Image from "next/image"
 import { getPayload } from "payload"
-import { AboutUsSection, HeroSection } from "@/components/Composite"
+import { AboutUsSection, HeroSection, WhoWeAreSection } from "@/components/Composite"
 import type { Reel } from "@/payload/payload-types"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"
+
+export const metadata: Metadata = {
+  title: "Home - UOACS",
+  description: "University of Auckland Computer Society - Join our community of CS students!",
+}
 
 export default async function HomePage() {
   const payloadConfig = await config
@@ -16,6 +22,10 @@ export default async function HomePage() {
   const rawReels = (homePage?.reels ?? []) as (string | Reel | null | undefined)[]
   const resolvedReels: Reel[] = rawReels.filter((reel) => {
     return typeof reel === "object" && reel !== null
+  })
+  const rawPolaroids = homePage?.polaroids || []
+  const resolvedPolaroids = rawPolaroids.filter((polaroid) => {
+    return typeof polaroid === "object" && polaroid !== null
   })
 
   return (
@@ -30,6 +40,7 @@ export default async function HomePage() {
       />
       <HeroSection />
       <AboutUsSection reels={resolvedReels} />
+      <WhoWeAreSection polaroids={resolvedPolaroids} />
       <SponsorsServerSection />
     </>
   )

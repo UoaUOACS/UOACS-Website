@@ -1,9 +1,9 @@
 import Image from "next/image"
 
-const IMAGE_WIDTH: number = 390
-const IMAGE_HEIGHT: number = 445
-const POLAROID_HEIGHT: number = 580
-const PADDING: number = 25
+const IMAGE_WIDTH: number = 220
+const IMAGE_HEIGHT: number = 250
+const POLAROID_HEIGHT: number = 330
+const PADDING: number = 12
 
 export interface PolaroidProps {
   /**
@@ -63,13 +63,13 @@ export const Polaroid = ({
 
   return (
     <div
-      className="center justify-top fixed inline-flex flex-col items-center gap-7 rounded-sm bg-white shadow-lg"
+      className="absolute inline-flex flex-col items-center gap-3 rounded-sm bg-white shadow-lg"
       style={transform_styles}
     >
       <div style={mask_image_styles}>
-        <Image alt="Photo of event" layout="fill" objectFit="cover" src={url} style={reverse_rot} />
+        <Image alt="Photo of event" className="object-cover" fill src={url} style={reverse_rot} />
       </div>
-      <p className="w-full font-mono">{text.toUpperCase()}</p>
+      <p className="w-full text-left font-mono text-2xs">{text.toUpperCase()}</p>
     </div>
   )
 }

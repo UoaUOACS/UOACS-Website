@@ -1,0 +1,35 @@
+# See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
+
+name: Fly Deploy
+on:
+  push:
+    branches:
+      - main
+  # TODO: REMOVE BEFORE MERGING
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    concurrency: deploy-group    # optional: ensure only one action runs at a time
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - run: |
+          flyctl secrets set \
+            DATABASE_URI="${{ secrets.DATABASE_URI }}" \
+            PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}" \
+            NEXT_PUBLIC_URL="${{ vars.NEXT_PUBLIC_URL }}"
+
+      - run: |
+          flyctl deploy --remote-only --config fly.toml \
+            --build-secret DATABASE_URI="${{ secrets.DATABASE_URI }}" \
+            --build-secret PAYLOAD_SECRET="${{ secrets.PAYLOAD_SECRET }}" \
+            --build-secret NEXT_PUBLIC_URL="${{ vars.NEXT_PUBLIC_URL }}"
