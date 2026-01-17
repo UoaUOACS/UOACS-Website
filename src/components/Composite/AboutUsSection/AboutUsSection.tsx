@@ -16,7 +16,7 @@ export interface AboutUsSectionProps {
  */
 export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
   return (
-    <div className="flex w-full flex-col gap-48 md:flex-row md:flex-wrap md:justify-between md:gap-12">
+    <div className="flex w-full flex-col gap-42 md:flex-row md:flex-wrap md:justify-between md:gap-12">
       <div className="flex flex-1 flex-col gap-8 font-light leading-[100%] md:min-w-54 md:max-w-xl md:gap-12">
         <div className="flex flex-col gap-6">
           <p className="font-mono">

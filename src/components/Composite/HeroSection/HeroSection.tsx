@@ -17,6 +17,9 @@ export const HeroSection = () => {
     },
   ] as const
 
+  const START_YEAR = 2023
+  const END_YEAR = new Date().getFullYear()
+
   return (
     <section className="flex w-full max-w-180 flex-col items-center justify-start gap-6 self-center md:items-start md:gap-18 md:self-start">
       <p className="hidden font-mono text-sm md:block md:text-md">
@@ -24,7 +27,7 @@ export const HeroSection = () => {
         <br />
         COMPUTER SCIENCE SOCIETY
         <br />
-        2023 - 2025
+        {START_YEAR} - {END_YEAR}
       </p>
       <div className="flex flex-col justify-center gap-12 md:justify-start">
         <div className="flex flex-col justify-center gap-6 text-center md:gap-12 md:text-left">
