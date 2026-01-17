@@ -4,8 +4,8 @@ import { Heading } from "@/components/Primitive"
 
 export const ValuesSection = () => {
   return (
-    <div className="flex flex-col items-center justify-center pb-28">
-      <div className="flex flex-col items-center justify-center gap-4 pb-22">
+    <div className="flex flex-col items-center justify-center gap-10 md:gap-22">
+      <div className="flex flex-col items-center justify-center gap-4">
         <div className="relative flex justify-center">
           <Heading h={2}>Our Values</Heading>
           <Image
