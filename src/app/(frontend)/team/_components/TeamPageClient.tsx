@@ -7,7 +7,7 @@ import { useState } from "react"
 import { ExecCard } from "@/components/Generic"
 import { Button, Heading } from "@/components/Primitive"
 import type { Executive } from "@/payload/payload-types"
-import { ExecutiveTeam } from "@/types/enums"
+import { EXECUTIVE_LEVEL_ORDER, ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 
 /**
  * Mapping of executive teams to their display names
@@ -40,8 +40,28 @@ const TEAM_ORDER = [
  * @returns A client component that displays the team page with current and past executives
  */
 export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
-  const currentExecs = execs?.docs.filter((exec: Executive) => exec.isCurrent)
-  const pastExecs = execs?.docs.filter((exec: Executive) => !exec.isCurrent)
+  const currentExecs = execs?.docs
+    .filter((exec: Executive) => exec.isCurrent)
+    .sort(
+      (a, b) =>
+        EXECUTIVE_LEVEL_ORDER.indexOf(
+          (a.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
+        ) -
+        EXECUTIVE_LEVEL_ORDER.indexOf(
+          (b.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
+        ),
+    )
+  const pastExecs = execs?.docs
+    .filter((exec: Executive) => !exec.isCurrent)
+    .sort(
+      (a, b) =>
+        EXECUTIVE_LEVEL_ORDER.indexOf(
+          (a.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
+        ) -
+        EXECUTIVE_LEVEL_ORDER.indexOf(
+          (b.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
+        ),
+    )
 
   const currentTeams = Array.from(
     new Set(currentExecs.flatMap((exec: Executive) => exec.role?.teams ?? []).filter(Boolean)),
