@@ -1,7 +1,7 @@
+import type { Metadata } from "next"
 import { getPayload } from "payload"
 import { WhoWeAreSection } from "@/components/Composite"
 import config from "@/payload.config"
-import type { Metadata } from "next"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"
 
 export const metadata: Metadata = {
