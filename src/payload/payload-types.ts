@@ -188,7 +188,7 @@ export interface Executive {
     /**
      * Team the executive member belongs to
      */
-    team: 'president' | 'admin' | 'events' | 'marketing' | 'tech-edu' | 'design';
+    teams: ('president' | 'admin' | 'events' | 'marketing' | 'tech-edu' | 'design')[];
   };
   /**
    * Photo of the executive member (required if a current member)
@@ -363,7 +363,7 @@ export interface ExecutiveSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        team?: T;
+        teams?: T;
       };
   photo?: T;
   linkedin?: T;

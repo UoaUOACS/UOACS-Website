@@ -6,7 +6,7 @@ export const mockExecutive: Executive = {
   isCurrent: true,
   role: {
     title: "Senior Advisor",
-    team: "admin",
+    teams: ["admin"],
   },
   updatedAt: "2025-05-01T12:00:00Z",
   createdAt: "2024-05-01T12:00:00Z",

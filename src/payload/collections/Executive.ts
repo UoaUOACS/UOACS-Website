@@ -43,8 +43,9 @@ export const Executive: CollectionConfig = {
           },
         },
         {
-          name: "team",
+          name: "teams",
           type: "select",
+          hasMany: true,
           options: Object.values(ExecutiveTeam),
           required: true,
           admin: {
