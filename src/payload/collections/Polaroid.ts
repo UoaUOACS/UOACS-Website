@@ -1,0 +1,30 @@
+import type { CollectionConfig } from "payload"
+
+export const Polaroid: CollectionConfig = {
+  slug: "polaroid",
+  access: {
+    read: () => true,
+  },
+  admin: {
+    useAsTitle: "caption",
+  },
+  fields: [
+    {
+      name: "caption",
+      type: "text",
+      required: true,
+      admin: {
+        description: "Caption underneath the polaroid image",
+      },
+    },
+    {
+      name: "image",
+      type: "relationship",
+      relationTo: "media",
+      required: true,
+      admin: {
+        description: "The image file for the polaroid",
+      },
+    },
+  ],
+}
