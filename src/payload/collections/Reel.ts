@@ -5,6 +5,9 @@ export const Reel: CollectionConfig = {
   access: {
     read: () => true,
   },
+  admin: {
+    useAsTitle: "description",
+  },
   fields: [
     {
       name: "description",
