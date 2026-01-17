@@ -8,7 +8,7 @@ import { Footer, Navbar } from "@/components/Composite"
 import type { DropdownOptionProps } from "@/components/Primitive/Dropdown/DropdownOption"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import "../globals.css"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 
 config.autoAddCss = false
 
@@ -29,6 +29,13 @@ export const metadata: Metadata = {
     default: "UOACS",
     template: "%s - UOACS",
   },
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 const navbarLinks: { label: string; href: string }[] = [
