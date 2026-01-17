@@ -1,29 +1,29 @@
 import type { CollectionConfig } from "payload"
 
-export const Reel: CollectionConfig = {
-  slug: "reel",
+export const Polaroid: CollectionConfig = {
+  slug: "polaroid",
   access: {
     read: () => true,
   },
   admin: {
-    useAsTitle: "description",
+    useAsTitle: "caption",
   },
   fields: [
     {
-      name: "description",
+      name: "caption",
       type: "text",
       required: true,
       admin: {
-        description: "Description of the reel",
+        description: "Caption underneath the polaroid image",
       },
     },
     {
-      name: "video",
+      name: "image",
       type: "relationship",
       relationTo: "media",
       required: true,
       admin: {
-        description: "The video file for the reel",
+        description: "The image file for the polaroid",
       },
     },
   ],
