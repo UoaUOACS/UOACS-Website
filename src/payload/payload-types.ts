@@ -191,6 +191,10 @@ export interface Executive {
      * Team the executive member belongs to
      */
     teams: ('president' | 'admin' | 'events' | 'marketing' | 'tech-edu' | 'design')[];
+    /**
+     * Level of the executive role, used for ordering of execs
+     */
+    level?: ('president' | 'director' | 'senior-advisor' | 'admin' | 'executive') | null;
   };
   /**
    * Photo of the executive member (required if a current member)
@@ -387,6 +391,7 @@ export interface ExecutiveSelect<T extends boolean = true> {
     | {
         title?: T;
         teams?: T;
+        level?: T;
       };
   photo?: T;
   linkedin?: T;

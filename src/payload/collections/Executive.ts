@@ -1,5 +1,5 @@
 import type { CollectionConfig } from "payload"
-import { ExecutiveTeam } from "@/types/enums"
+import { ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 
 export const Executive: CollectionConfig = {
   slug: "executive",
@@ -50,6 +50,15 @@ export const Executive: CollectionConfig = {
           required: true,
           admin: {
             description: "Team the executive member belongs to",
+          },
+        },
+        {
+          name: "level",
+          type: "select",
+          options: Object.values(ExecutiveLevel),
+          required: false,
+          admin: {
+            description: "Level of the executive role, used for ordering of execs",
           },
         },
       ],

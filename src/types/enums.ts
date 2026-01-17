@@ -18,3 +18,19 @@ export enum ExecutiveTeam {
   TECH_EDU = "tech-edu",
   DESIGN = "design",
 }
+
+export enum ExecutiveLevel {
+  PRESIDENT = "president",
+  DIRECTOR = "director",
+  SENIOR_ADVISOR = "senior-advisor",
+  ADMIN = "admin",
+  EXECUTIVE = "executive",
+}
+
+export const EXECUTIVE_LEVEL_ORDER: ExecutiveLevel[] = [
+  ExecutiveLevel.PRESIDENT,
+  ExecutiveLevel.DIRECTOR,
+  ExecutiveLevel.SENIOR_ADVISOR,
+  ExecutiveLevel.ADMIN,
+  ExecutiveLevel.EXECUTIVE,
+]
