@@ -8,6 +8,7 @@ import { Footer, Navbar } from "@/components/Composite"
 import type { DropdownOptionProps } from "@/components/Primitive/Dropdown/DropdownOption"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import "../globals.css"
+import type { Metadata } from "next"
 
 config.autoAddCss = false
 
@@ -22,9 +23,12 @@ const switzer = localFont({
   display: "swap",
 })
 
-export const metadata = {
-  description: "A blank template using Payload in a Next.js app.",
-  title: "Payload Blank Template",
+export const metadata: Metadata = {
+  description: "University of Auckland Computer Society - Join our community of CS students!",
+  title: {
+    default: "UOACS",
+    template: "%s - UOACS",
+  },
 }
 
 const navbarLinks: { label: string; href: string }[] = [
