@@ -44,8 +44,10 @@ const borderColourClasses: Record<ValueCardProps["colour"], string> = {
  */
 export const ValueCard = ({ title, colour, children }: ValueCardProps) => {
   return (
-    <div className={`flex w-full max-w-132 flex-col border-6 ${borderColourClasses[colour]}`}>
-      <Heading className="border-b-1 border-b-secondary-light p-3" h={4}>
+    <div
+      className={`flex w-full max-w-75 flex-col border-6 md:max-w-132 ${borderColourClasses[colour]}`}
+    >
+      <Heading className="!justify-start !text-left border-b-1 border-b-secondary-light p-3" h={4}>
         {title}
       </Heading>
       <div className="px-3 py-6 font-light font-switzer text-xl leading-none">{children}</div>
