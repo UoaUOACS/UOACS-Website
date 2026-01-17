@@ -1,7 +1,13 @@
+import type { Metadata } from "next"
 import { getPayload } from "payload"
 import type { Executive } from "@/payload/payload-types"
 import config from "@/payload.config"
 import { TeamPageClient } from "./_components/TeamPageClient"
+
+export const metadata: Metadata = {
+  title: "Team",
+  description: "Meet the team behind the University of Auckland Computer Society.",
+}
 
 export default async function TeamPage() {
   const payloadConfig = await config
