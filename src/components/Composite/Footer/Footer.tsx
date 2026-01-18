@@ -60,7 +60,7 @@ export const Footer = () => {
             className="flex flex-col justify-end gap-4 pl-1 text-lg md:pl-20"
           >
             {NAV_LINKS.map(({ label, href }) => (
-              <Link className="font-mono" href={href} key={label} target="_blank">
+              <Link className="font-mono" href={href} key={label}>
                 {label}
               </Link>
             ))}
