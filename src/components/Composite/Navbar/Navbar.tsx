@@ -1,3 +1,5 @@
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import Link from "next/link"
 import { Button, Dropdown } from "@/components/Primitive"
@@ -14,7 +16,17 @@ export interface NavbarProps {
   /**
    * Social links to be displayed in the dropdown on the right of the navbar's middle.
    */
-  socialLinks: DropdownOptionProps[]
+  socialLinks: SocialLink[]
+}
+
+/**
+ * A single social link: an icon, a label and a destination.
+ */
+export interface SocialLink {
+  label: string
+  icon: IconDefinition
+  href: string
+  onClick?: () => void
 }
 
 /**
@@ -25,6 +37,17 @@ export interface NavbarProps {
  * @returns A Navbar component with logo, navigation links, social dropdown, and join button.
  */
 export function Navbar({ links, socialLinks }: NavbarProps) {
+  const dropdownOptions = socialLinks.map((s) => ({
+    label: (
+      <span className="flex items-center gap-2">
+        <FontAwesomeIcon className="w-4" icon={s.icon} />
+        {s.label}
+      </span>
+    ),
+    href: s.href,
+    onClick: s.onClick,
+  }))
+
   return (
     <>
       <div className="-top-40 -z-1 -translate-x-1/2 absolute left-1/2 h-80 w-7/10 rounded-[50%] bg-[linear-gradient(#8A40E7_0%,#C861A7_41%,#F27F76_67%,#FF9961_100%)] opacity-50 blur-3xl" />
@@ -47,7 +70,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
           </div>
           <Dropdown
             label="SOCIALS"
-            options={socialLinks}
+            options={dropdownOptions}
             optionVariant={{ size: "sm" }}
             triggerVariant={{ size: "navbar", border: "none" }}
             variant={{ size: "md" }}
