@@ -2,7 +2,7 @@ import config from "@payload-config"
 import type { Metadata } from "next"
 import Image from "next/image"
 import { getPayload } from "payload"
-import { AboutUsSection, HeroSection, WhoWeAreSection } from "@/components/Composite"
+import { AboutUsSection, HeroSection, ValuesSection, WhoWeAreSection } from "@/components/Composite"
 import type { Reel } from "@/payload/payload-types"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"
 
@@ -41,6 +41,7 @@ export default async function HomePage() {
       <HeroSection />
       <AboutUsSection reels={resolvedReels} />
       <WhoWeAreSection polaroids={resolvedPolaroids} />
+      <ValuesSection />
       <SponsorsServerSection />
     </>
   )

@@ -96,8 +96,8 @@ export const ValuesCarousel = () => {
   }
 
   return (
-    <div className="flex flex-col gap-12 px-4 md:flex-row md:justify-center md:gap-38 md:px-40">
-      <div className="flex flex-col items-center gap-4 pr-8 md:gap-8 md:pr-0">
+    <div className="flex flex-col gap-12 px-4 [@media(min-width:1200px)]:flex-row [@media(min-width:1200px)]:items-center [@media(min-width:1200px)]:justify-center [@media(min-width:1200px)]:gap-38 [@media(min-width:1200px)]:px-10">
+      <div className="flex flex-col items-center gap-4 pr-8 [@media(min-width:1200px)]:gap-8 [@media(min-width:1200px)]:pr-0">
         <div className="flex scale-60 gap-36 md:scale-100">
           <button
             aria-label="Select Collaborate value"
@@ -135,7 +135,7 @@ export const ValuesCarousel = () => {
           </button>
         </div>
       </div>
-      <div className="relative flex w-full justify-center md:w-auto md:justify-start">
+      <div className="relative flex w-full justify-center [@media(min-width:1200px)]:w-auto [@media(min-width:1200px)]:justify-start">
         <div className="relative inline-block">
           <ValueCard colour={values[activeIndex].colour} title={values[activeIndex].title}>
             <div className="flex flex-col gap-8">{values[activeIndex].content}</div>
@@ -145,7 +145,7 @@ export const ValuesCarousel = () => {
           <div className="-bottom-3 -right-3 absolute z-10 flex gap-0 rounded border border-gray-400 bg-white">
             <button
               aria-label="Previous value"
-              className="flex h-8 w-8 cursor-pointer items-center justify-center border-gray-400 border-r transition-colors"
+              className="flex h-8 w-8 cursor-pointer items-center justify-center border-gray-400 border-r"
               onClick={handlePrevious}
               type="button"
             >
@@ -153,7 +153,7 @@ export const ValuesCarousel = () => {
             </button>
             <button
               aria-label="Next value"
-              className="flex h-8 w-8 cursor-pointer items-center justify-center transition-colors"
+              className="flex h-8 w-8 cursor-pointer items-center justify-center"
               onClick={handleNext}
               type="button"
             >
