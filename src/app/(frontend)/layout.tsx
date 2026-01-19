@@ -8,6 +8,7 @@ import { Footer, Navbar } from "@/components/Composite"
 import type { DropdownOptionProps } from "@/components/Primitive/Dropdown/DropdownOption"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import "../globals.css"
+import type { Metadata, Viewport } from "next"
 
 config.autoAddCss = false
 
@@ -22,9 +23,19 @@ const switzer = localFont({
   display: "swap",
 })
 
-export const metadata = {
-  description: "A blank template using Payload in a Next.js app.",
-  title: "Payload Blank Template",
+export const metadata: Metadata = {
+  description: "University of Auckland Computer Society - Join our community of CS students!",
+  title: {
+    default: "UOACS",
+    template: "%s - UOACS",
+  },
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 const navbarLinks: { label: string; href: string }[] = [
@@ -72,9 +83,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html className={`${inter.variable} ${switzer.variable}`} lang="en">
       <body>
-        <div className="flex flex-col gap-9 px-16 py-6">
+        <div className="mx-auto flex w-full max-w-360 flex-col gap-9 px-4 sm:px-10 md:px-20 md:py-6">
           <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />
-          <main className="flex flex-col items-center gap-9 py-9 md:gap-18">{children}</main>
+          <main className="flex flex-col items-center gap-9 py-9 md:gap-30">{children}</main>
         </div>
         <Footer />
       </body>

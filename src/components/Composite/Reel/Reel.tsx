@@ -27,7 +27,7 @@ export const Reel = ({ reel }: ReelProps) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   return (
-    <div className="relative aspect-9/16 cursor-pointer overflow-hidden rounded-xl">
+    <div className="relative aspect-9/16 w-64 cursor-pointer overflow-hidden rounded-xl md:w-72">
       <video
         aria-label={`Instagram Reel: ${reel.description}`}
         autoPlay
