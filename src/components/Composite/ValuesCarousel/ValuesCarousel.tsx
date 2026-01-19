@@ -96,8 +96,8 @@ export const ValuesCarousel = () => {
   }
 
   return (
-    <div className="flex flex-col gap-12 px-4 [@media(min-width:1410px)]:flex-row [@media(min-width:1410px)]:items-center [@media(min-width:1410px)]:justify-center [@media(min-width:1410px)]:gap-38 [@media(min-width:1410px)]:px-40">
-      <div className="flex flex-col items-center gap-4 pr-8 [@media(min-width:1410px)]:gap-8 [@media(min-width:1410px)]:pr-0">
+    <div className="flex flex-col gap-12 px-4 [@media(min-width:1200px)]:flex-row [@media(min-width:1200px)]:items-center [@media(min-width:1200px)]:justify-center [@media(min-width:1200px)]:gap-38 [@media(min-width:1200px)]:px-10">
+      <div className="flex flex-col items-center gap-4 pr-8 [@media(min-width:1200px)]:gap-8 [@media(min-width:1200px)]:pr-0">
         <div className="flex scale-60 gap-36 md:scale-100">
           <button
             aria-label="Select Collaborate value"
@@ -135,7 +135,7 @@ export const ValuesCarousel = () => {
           </button>
         </div>
       </div>
-      <div className="relative flex w-full justify-center [@media(min-width:1410px)]:w-auto [@media(min-width:1410px)]:justify-start">
+      <div className="relative flex w-full justify-center [@media(min-width:1200px)]:w-auto [@media(min-width:1200px)]:justify-start">
         <div className="relative inline-block">
           <ValueCard colour={values[activeIndex].colour} title={values[activeIndex].title}>
             <div className="flex flex-col gap-8">{values[activeIndex].content}</div>
