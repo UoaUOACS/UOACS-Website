@@ -67,6 +67,8 @@ export const SponsorTicker = ({ items, containerClassName }: SponsorTickerProps)
               className="mx-3 flex shrink-0 items-center justify-center px-3 md:mx-12 md:px-6"
               href={sponsor.link || "#"}
               key={`${sponsor.id}-${index}`}
+              rel="noopener noreferrer"
+              target="_blank"
             >
               <LazyImage
                 alt={sponsor.name || "Sponsor Logo"}
