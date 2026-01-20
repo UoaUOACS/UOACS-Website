@@ -37,7 +37,13 @@ export const DropdownOption = ({ label, href, onClick, variant }: DropdownOption
   if (href) {
     const { inner, border } = buttonVariants(mergedVariant)
     return (
-      <Link className={cn(border(), "block w-full")} href={href} role="menuitem">
+      <Link
+        className={cn(border(), "block w-full")}
+        href={href}
+        rel="noopener noreferrer"
+        role="menuitem"
+        target="_blank"
+      >
         <div className={cn(inner(), "w-full justify-start whitespace-nowrap p-3")}>
           {label || "Option"}
         </div>
