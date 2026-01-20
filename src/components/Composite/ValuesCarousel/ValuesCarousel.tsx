@@ -37,15 +37,18 @@ export const ValuesCarousel = () => {
       content: (
         <>
           <p>
-            Most people in the industry would agree that the phrase,
-            <span className="bg-accent-highlight"> "Your network is your net worth"</span>, rings
-            true.
+            There's truth to the phrase,
+            <span className="bg-accent-highlight"> "Your network is your net worth"</span>. The
+            people you meet now can shape your entire career.
           </p>
           <p>
-            We also align ourselves with this phrase and we hope to cultivate an environment where
-            people can expand their network and create opportunities for their futures.
+            We host events where you can engage directly with industry professionals, alumni, and
+            peers who share your interests.
           </p>
-          <p>Whether this is with the faculty, industry or even just with one another.</p>
+          <p>
+            These connections often lead to internships, job opportunities, and mentorships that
+            extend well beyond university.
+          </p>
         </>
       ),
     },
@@ -55,15 +58,18 @@ export const ValuesCarousel = () => {
       content: (
         <>
           <p>
-            Most people in the industry would agree that the phrase,
-            <span className="bg-accent-highlight"> "Your network is your net worth"</span>, rings
-            true.
+            Computer science can sometimes feel like a solitary pursuit, but it doesn't have to be
+            that way.
           </p>
           <p>
-            We also align ourselves with this phrase and we hope to cultivate an environment where
-            people can expand their network and create opportunities for their futures.
+            Our events are designed to{" "}
+            <span className="bg-accent-highlight">help you meet others</span> who share similar
+            experiences, from navigating coursework to preparing for the job market.
           </p>
-          <p>Whether this is with the faculty, industry or even just with one another.</p>
+          <p>
+            The friendships you form here often become your support system throughout your studies
+            and beyond.
+          </p>
         </>
       ),
     },
@@ -73,15 +79,18 @@ export const ValuesCarousel = () => {
       content: (
         <>
           <p>
-            Most people in the industry would agree that the phrase,
-            <span className="bg-accent-highlight"> "Your network is your net worth"</span>, rings
-            true.
+            University provides the theory, but there's often a
+            <span className="bg-accent-highlight">
+              {" "}
+              gap between academic knowledge and practical skills
+            </span>
+            .
           </p>
           <p>
-            We also align ourselves with this phrase and we hope to cultivate an environment where
-            people can expand their network and create opportunities for their futures.
+            We bridge that gap through workshops, hackathons, and study groups covering everything
+            from version control to system design to interview preparation.
           </p>
-          <p>Whether this is with the faculty, industry or even just with one another.</p>
+          <p>Grow your technical abilities alongside others who are on the same journey.</p>
         </>
       ),
     },
