@@ -1,9 +1,13 @@
+"use client"
+
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button, Dropdown } from "@/components/Primitive"
-import type { DropdownOptionProps } from "@/components/Primitive/Dropdown/DropdownOption"
+import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
+import { NavbarGradient } from "./NavbarGradient"
 
 /**
  * Props for the {@link Navbar} component.
@@ -37,36 +41,41 @@ export interface SocialLink {
  * @returns A Navbar component with logo, navigation links, social dropdown, and join button.
  */
 export function Navbar({ links, socialLinks }: NavbarProps) {
-  const dropdownOptions = socialLinks.map((s) => ({
+  const dropdownOptions = socialLinks.map((socialLink) => ({
     label: (
       <span className="flex items-center gap-2">
-        <FontAwesomeIcon className="w-4" icon={s.icon} />
-        {s.label}
+        <FontAwesomeIcon className="w-4" icon={socialLink.icon} />
+        {socialLink.label}
       </span>
     ),
-    href: s.href,
-    onClick: s.onClick,
+    href: socialLink.href,
+    onClick: socialLink.onClick,
   }))
 
   return (
     <>
-      <div className="-top-40 -z-1 -translate-x-1/2 absolute left-1/2 h-80 w-7/10 rounded-[50%] bg-[linear-gradient(#8A40E7_0%,#C861A7_41%,#F27F76_67%,#FF9961_100%)] opacity-50 blur-3xl" />
+      <NavbarGradient />
       <nav className="flex flex-row items-center justify-between">
-        <Link href="/">
-          <Image alt="UOACS Logo" height={40} src="/uoacs-logo-bw.svg" width={167} />
-        </Link>
-        <div className="flex flex-row items-center gap-3">
-          <div className="h-fit rounded-2xl bg-white">
-            {links.map((link) => (
-              <Link className="rounded-2xl" href={link.href} key={link.href}>
-                <Button
-                  left={<div className="h-2 w-3 rounded-xs bg-primary" />}
-                  variant={{ size: "navbar", theme: "ghost", border: "none" }}
-                >
-                  {link.label}
-                </Button>
-              </Link>
-            ))}
+        <motion.div layoutId="navbar-logo">
+          <Link className="z-60" href="/">
+            <Image alt="UOACS Logo" height={40} src="/uoacs-logo-bw.svg" width={167} />
+          </Link>
+        </motion.div>
+        <MobileNavbar links={links} socialLinks={socialLinks} />
+        <div className="hidden flex-row items-center gap-3 md:flex">
+          <div className="nowrap flex h-fit flex-row rounded-2xl bg-white">
+            {links
+              .filter((link) => link.label.toLowerCase() !== "home")
+              .map((link) => (
+                <Link className="rounded-2xl" href={link.href} key={link.href}>
+                  <Button
+                    left={<div className="h-2 w-3 rounded-xs bg-primary" />}
+                    variant={{ size: "navbar", theme: "ghost", border: "none" }}
+                  >
+                    {link.label.toUpperCase()}
+                  </Button>
+                </Link>
+              ))}
           </div>
           <Dropdown
             label="SOCIALS"
@@ -77,6 +86,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
           />
         </div>
         <a
+          className="hidden lg:block"
           href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
           rel="noopener noreferrer"
           target="_blank"
