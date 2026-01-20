@@ -19,15 +19,17 @@ export const ValuesCarousel = () => {
       content: (
         <>
           <p>
-            Most people in the industry would agree that the phrase,
-            <span className="bg-accent-highlight"> "Your network is your net worth"</span>, rings
-            true.
+            The best ideas rarely come from working alone. When diverse perspectives come together,
+            <span className="bg-accent-highlight"> innovation happens</span>.
           </p>
           <p>
-            We also align ourselves with this phrase and we hope to cultivate an environment where
-            people can expand their network and create opportunities for their futures.
+            We cultivate an environment where students can team up on projects, share knowledge, and
+            learn from one another's unique experiences.
           </p>
-          <p>Whether this is with the faculty, industry or even just with one another.</p>
+          <p>
+            Whether with faculty, industry partners, or fellow students, collaboration is at our
+            core.
+          </p>
         </>
       ),
     },
@@ -37,9 +39,9 @@ export const ValuesCarousel = () => {
       content: (
         <>
           <p>
-            There's truth to the phrase,
-            <span className="bg-accent-highlight"> "Your network is your net worth"</span>. The
-            people you meet now can shape your entire career.
+            The people you meet now can
+            <span className="bg-accent-highlight"> shape your entire career</span>. Building
+            relationships early opens doors you didn't know existed.
           </p>
           <p>
             We host events where you can engage directly with industry professionals, alumni, and
@@ -87,7 +89,7 @@ export const ValuesCarousel = () => {
             .
           </p>
           <p>
-            We bridge that gap through workshops, hackathons, and study groups covering everything
+            We bridge that gap through workshops, hackathons, and other events covering everything
             from version control to system design to interview preparation.
           </p>
           <p>Grow your technical abilities alongside others who are on the same journey.</p>
