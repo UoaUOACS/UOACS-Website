@@ -53,7 +53,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
           {!isOpen && (
             <motion.div layoutId="navbar-button">
               <Button
-                borderClassName="z-60 md:hidden"
+                borderClassName="z-50 md:hidden"
                 onClick={() => setIsOpen(true)}
                 variant={{ size: "sm", theme: "primary", border: true }}
               >
@@ -79,7 +79,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
               </motion.div>
               <motion.div layoutId="navbar-button">
                 <Button
-                  borderClassName="z-60"
+                  borderClassName="z-50"
                   onClick={() => setIsOpen(!isOpen)}
                   variant={{ size: "sm", theme: "primary", border: true }}
                 >

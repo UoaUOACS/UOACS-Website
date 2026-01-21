@@ -57,7 +57,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
       <NavbarGradient />
       <nav className="flex flex-row items-center justify-between">
         <motion.div layoutId="navbar-logo">
-          <Link className="z-60" href="/">
+          <Link className="z-50" href="/">
             <Image alt="UOACS Logo" height={40} src="/uoacs-logo-bw.svg" width={167} />
           </Link>
         </motion.div>
