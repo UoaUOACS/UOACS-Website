@@ -1,11 +1,10 @@
 import { config } from "@fortawesome/fontawesome-svg-core"
 import { faDiscord, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Inter_Tight } from "next/font/google"
 import localFont from "next/font/local"
 import type React from "react"
 import { Footer, Navbar } from "@/components/Composite"
-import type { DropdownOptionProps } from "@/components/Primitive/Dropdown/DropdownOption"
+import type { SocialLink } from "@/components/Composite/Navbar/Navbar"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
@@ -39,40 +38,17 @@ export const viewport: Viewport = {
 }
 
 const navbarLinks: { label: string; href: string }[] = [
-  { label: "MEET THE TEAM", href: "/team" },
-  { label: "OUR SPONSORS", href: "/sponsors" },
+  { label: "Home", href: "/" },
+  { label: "Meet The Team", href: "/team" },
+  { label: "Our Sponsors", href: "/sponsors" },
 ]
-const navbarSocialLinks: DropdownOptionProps[] = [
+const navbarSocialLinks: SocialLink[] = [
+  { label: "Discord", icon: faDiscord, href: "https://discord.gg/xSgqAmGE" },
+  { label: "Instagram", icon: faInstagram, href: "https://www.instagram.com/uoacs25/" },
+  { label: "TikTok", icon: faTiktok, href: "https://www.tiktok.com/@uoacs?lang=en-GB" },
   {
-    label: (
-      <span className="flex items-center gap-2">
-        <FontAwesomeIcon className="w-4" icon={faDiscord} /> Discord
-      </span>
-    ),
-    href: "https://discord.gg/xSgqAmGE",
-  },
-  {
-    label: (
-      <span className="flex items-center gap-2">
-        <FontAwesomeIcon className="w-4" icon={faInstagram} /> Instagram
-      </span>
-    ),
-    href: "https://www.instagram.com/uoacs25/",
-  },
-  {
-    label: (
-      <span className="flex items-center gap-2">
-        <FontAwesomeIcon className="w-4" icon={faTiktok} /> TikTok
-      </span>
-    ),
-    href: "https://www.tiktok.com/@uoacs?lang=en-GB",
-  },
-  {
-    label: (
-      <span className="flex items-center gap-2">
-        <FontAwesomeIcon className="w-4" icon={faLinkedin} /> LinkedIn
-      </span>
-    ),
+    label: "LinkedIn",
+    icon: faLinkedin,
     href: "https://www.linkedin.com/company/university-of-auckland-compsci-society/posts/?feedView=all",
   },
 ]
@@ -83,7 +59,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html className={`${inter.variable} ${switzer.variable}`} lang="en">
       <body>
-        <div className="mx-auto flex w-full max-w-360 flex-col gap-9 px-4 sm:px-10 md:px-20 md:py-6">
+        <div className="mx-auto flex w-full max-w-360 flex-col gap-9 px-4 py-6 md:px-12 lg:px-20">
           <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />
           <main className="flex flex-col items-center gap-9 py-9 md:gap-30">{children}</main>
         </div>
