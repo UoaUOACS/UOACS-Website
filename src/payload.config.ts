@@ -1,10 +1,8 @@
-// storage-adapter-import-placeholder
-
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
-import { payloadCloudPlugin } from "@payloadcms/payload-cloud"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import { s3Storage } from "@payloadcms/storage-s3"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Executive } from "./payload/collections/Executive"
@@ -44,8 +42,24 @@ export default buildConfig({
     url: process.env.DATABASE_URI || "",
   }),
   sharp,
+  upload: {
+    limits: {
+      fileSize: 4_194_304,
+    },
+  },
   plugins: [
-    payloadCloudPlugin(),
-    // storage-adapter-placeholder
+    s3Storage({
+      collections: {
+        media: { prefix: "media" },
+      },
+      bucket: process.env.S3_BUCKET ?? "",
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
+        },
+        region: process.env.S3_REGION,
+      },
+    }),
   ],
 })
