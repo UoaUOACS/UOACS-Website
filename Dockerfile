@@ -24,10 +24,13 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Correct way to use build secrets
 RUN --mount=type=secret,id=DATABASE_URI \
     --mount=type=secret,id=PAYLOAD_SECRET \
     --mount=type=secret,id=NEXT_PUBLIC_URL \
+    --mount=type=secret,id=S3_ACCESS_KEY_ID \
+    --mount=type=secret,id=S3_SECRET_ACCESS_KEY \
+    --mount=type=secret,id=S3_REGION \
+    --mount=type=secret,id=S3_BUCKET \
     sh -c 'export DATABASE_URI=$(cat /run/secrets/DATABASE_URI) && \
            export PAYLOAD_SECRET=$(cat /run/secrets/PAYLOAD_SECRET) && \
            export NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL) && \
