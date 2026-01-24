@@ -45,6 +45,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup Flyctl
+      uses: superfly/flyctl-actions/setup-flyctl@master
+      env:
+        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
     - name: Set Fly.io secrets
       run: |
         flyctl secrets set \
