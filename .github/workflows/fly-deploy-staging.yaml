@@ -31,7 +31,8 @@ jobs:
             S3_ACCESS_KEY_ID="${{ secrets.S3_ACCESS_KEY_ID }}" \
             S3_SECRET_ACCESS_KEY="${{ secrets.S3_SECRET_ACCESS_KEY }}" \
             S3_REGION="${{ secrets.S3_REGION }}" \
-            S3_BUCKET="${{ secrets.S3_BUCKET }}"
+            S3_BUCKET="${{ secrets.S3_BUCKET }}" \
+            -a uoacs-website-staging
 
       - run: |
           flyctl deploy --remote-only --config fly.staging.toml \
@@ -41,4 +42,5 @@ jobs:
             --build-secret S3_ACCESS_KEY_ID="${{ secrets.S3_ACCESS_KEY_ID }}" \
             --build-secret S3_SECRET_ACCESS_KEY="${{ secrets.S3_SECRET_ACCESS_KEY }}" \
             --build-secret S3_REGION="${{ secrets.S3_REGION }}" \
-            --build-secret S3_BUCKET="${{ secrets.S3_BUCKET }}"
+            --build-secret S3_BUCKET="${{ secrets.S3_BUCKET }}" \
+            -a uoacs-website-staging
