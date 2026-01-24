@@ -45,11 +45,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v4
-    - uses: superfly/flyctl-actions/setup-flyctl@master
-      env:
-        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
-
     - name: Set Fly.io secrets
       run: |
         flyctl secrets set \

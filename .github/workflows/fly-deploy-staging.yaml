@@ -18,7 +18,10 @@ jobs:
     concurrency: staging-deploy-group
     environment: staging
     steps:
-      - uses: ./.github/actions/fly-deploy
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Deploy to Fly.io
+        uses: ./actions/fly-deploy
         with:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           APP_NAME: uoacs-website-staging
