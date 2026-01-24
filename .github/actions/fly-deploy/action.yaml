@@ -1,0 +1,81 @@
+name: Fly Deploy
+description: Deploys application to Fly.io based on the provided configuration.
+
+inputs:
+  # Deployment Config
+  CONFIG_FILE:
+    description: 'Path to the Fly.io configuration file (e.g., fly.toml)'
+    required: true
+    default: 'fly.toml'
+  FLY_API_TOKEN:
+    description: 'Fly.io API token for authentication'
+    required: true
+  # Deployment Settings
+  APP_NAME:
+    description: 'Name of the Fly.io application'
+    required: false
+    default: ''
+  ENVIRONMENT:
+    description: 'Deployment environment (staging or prod)'
+    required: false
+    default: 'staging'
+  # Build Secrets
+  DATABASE_URI:
+    description: 'Database connection URI'
+    required: true
+  PAYLOAD_SECRET:
+    description: 'Payload secret for the application'
+    required: true
+  NEXT_PUBLIC_URL:
+    description: 'Public URL for the application'
+    required: true
+  S3_ACCESS_KEY_ID:
+    description: 'S3 Access Key ID'
+    required: true
+  S3_SECRET_ACCESS_KEY:
+    description: 'S3 Secret Access Key'
+    required: true
+  S3_REGION:
+    description: 'S3 Region'
+    required: true
+  S3_BUCKET:
+    description: 'S3 Bucket Name'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+    - uses: superfly/flyctl-actions/setup-flyctl@master
+      env:
+        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
+
+    - name: Set Fly.io secrets
+      run: |
+        flyctl secrets set \
+          DATABASE_URI="${{ inputs.DATABASE_URI }}" \
+          PAYLOAD_SECRET="${{ inputs.PAYLOAD_SECRET }}" \
+          NEXT_PUBLIC_URL="${{ inputs.NEXT_PUBLIC_URL }}" \
+          S3_ACCESS_KEY_ID="${{ inputs.S3_ACCESS_KEY_ID }}" \
+          S3_SECRET_ACCESS_KEY="${{ inputs.S3_SECRET_ACCESS_KEY }}" \
+          S3_REGION="${{ inputs.S3_REGION }}" \
+          S3_BUCKET="${{ inputs.S3_BUCKET }}" \
+          -a ${{ inputs.APP_NAME }}
+      shell: bash
+      env:
+        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
+
+    - name: Deploy to Fly.io
+      run: |
+        flyctl deploy --remote-only --config ${{ inputs.CONFIG_FILE }} \
+          --build-secret DATABASE_URI="${{ inputs.DATABASE_URI }}" \
+          --build-secret PAYLOAD_SECRET="${{ inputs.PAYLOAD_SECRET }}" \
+          --build-secret NEXT_PUBLIC_URL="${{ inputs.NEXT_PUBLIC_URL }}" \
+          --build-secret S3_ACCESS_KEY_ID="${{ inputs.S3_ACCESS_KEY_ID }}" \
+          --build-secret S3_SECRET_ACCESS_KEY="${{ inputs.S3_SECRET_ACCESS_KEY }}" \
+          --build-secret S3_REGION="${{ inputs.S3_REGION }}" \
+          --build-secret S3_BUCKET="${{ inputs.S3_BUCKET }}" \
+          -a ${{ inputs.APP_NAME }}
+      shell: bash
+      env:
+        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
