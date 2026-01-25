@@ -26,7 +26,7 @@ export const Sizes: StoryFn<typeof ValuesFingerprint> = (args) => {
     <div className="flex flex-col gap-8">
       <ValuesFingerprint {...args} label="Collaborate" variant={{ colour: "purple", size: "sm" }} />
       <ValuesFingerprint {...args} label="Develop" variant={{ colour: "blue", size: "md" }} />
-      <ValuesFingerprint {...args} label="Network" variant={{ colour: "red", size: "lg" }} />
+      <ValuesFingerprint {...args} label="Network" variant={{ colour: "orange", size: "lg" }} />
     </div>
   )
 }

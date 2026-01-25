@@ -15,9 +15,6 @@ export const dropdownVariants = tv({
       primary: {
         popover: "bg-primary text-white",
       },
-      secondary: {
-        popover: "bg-secondary text-white",
-      },
       dark: {
         popover: "bg-black text-white",
       },

@@ -23,7 +23,7 @@ const NAV_LINKS = [
 
 export const Footer = () => {
   return (
-    <footer className="relative min-h-72 w-full overflow-hidden bg-dark-grey p-7 text-white">
+    <footer className="relative min-h-72 w-full overflow-hidden bg-gray-800 p-7 text-white">
       <div className="flex min-h-64 flex-col">
         <nav aria-label="Social media links" className="flex items-start gap-4">
           {SOCIAL_LINKS.map(({ icon, label, href }) => (
