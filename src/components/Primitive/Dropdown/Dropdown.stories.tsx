@@ -47,7 +47,7 @@ export const Primary: Story = {
 export const MismatchedVariants: Story = {
   args: {
     variant: { theme: "primary", size: "md" },
-    optionVariant: { theme: "secondary" },
+    optionVariant: { theme: "dark" },
     label: "MIXED THEME",
   },
 }
@@ -87,7 +87,6 @@ export const IndividualOptionVariants: Story = {
     label: "RAINBOW",
     options: [
       { label: "Primary (Default)", href: "#" },
-      { label: "Secondary", href: "#", variant: { theme: "secondary" } },
       { label: "Dark", href: "#", variant: { theme: "dark" } },
       { label: "Light", href: "#", variant: { theme: "light" } },
       { label: "Ghost", href: "#", variant: { theme: "ghost" } },
