@@ -17,7 +17,7 @@ export const HeroSection = () => {
     },
   ] as const
 
-  const START_YEAR = 2023
+  const START_YEAR = 2024
   const END_YEAR = new Date().getFullYear()
 
   return (
