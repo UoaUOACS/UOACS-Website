@@ -27,6 +27,7 @@ export interface ValuesFingerprintProps {
  * @param variant The variant styles to apply to the component.
  * @param className Additional class names to apply to the container.
  * @returns An element displaying a fingerprint SVG with an overlaid label.
+ * @deprecated Use ValuesAccordion instead.
  */
 export const ValuesFingerprint = ({ label, variant, className }: ValuesFingerprintProps) => {
   const { svg: svgClass, label: labelClass, container } = valuesFingerprintVariants(variant)
