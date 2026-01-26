@@ -34,3 +34,10 @@ export const EXECUTIVE_LEVEL_ORDER: ExecutiveLevel[] = [
   ExecutiveLevel.ADMIN,
   ExecutiveLevel.EXECUTIVE,
 ]
+
+export enum ValueColour {
+  PINK = "pink",
+  ORANGE = "orange",
+  PURPLE = "purple",
+  BLUE = "blue",
+}
