@@ -92,7 +92,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
     <>
       <div className="flex flex-col items-center gap-2 px-4 text-center">
         <div className="relative">
-          <span className="absolute top-0 right-0 translate-x-1/2 text-[#BDBDBD] text-xl md:text-3xl">
+          <span className="absolute top-0 right-0 translate-x-1/2 text-gray-400 text-xl md:text-3xl">
             {`[${currentExecs.length}]`}
           </span>
           <Heading h={1} period>
@@ -108,7 +108,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
             key={team}
             onClick={() => handleTeamSelect(team)}
             variant={{
-              theme: selectedTeam === team ? "secondary" : "light",
+              theme: selectedTeam === team ? "primary" : "light",
               size: "sm-wide",
               border: selectedTeam === team,
             }}
@@ -132,7 +132,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
       </div>
       <div className="flex flex-col items-center gap-2 px-4 text-center">
         <div className="relative">
-          <span className="absolute top-0 right-0 translate-x-1/2 text-[#BDBDBD] text-xl md:text-3xl">
+          <span className="absolute top-0 right-0 translate-x-1/2 text-gray-400 text-xl md:text-3xl">
             {`[${pastExecs.length}]`}
           </span>
           <Heading h={1} period>

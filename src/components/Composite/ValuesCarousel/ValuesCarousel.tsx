@@ -15,12 +15,12 @@ export const ValuesCarousel = () => {
   const values: Value[] = [
     {
       title: "Collaborate",
-      colour: "purple",
+      colour: "orange",
       content: (
         <>
           <p>
             The best ideas rarely come from working alone. When diverse perspectives come together,
-            <span className="bg-accent-highlight"> innovation happens</span>.
+            innovation happens.
           </p>
           <p>
             We cultivate an environment where students can team up on projects, share knowledge, and
@@ -35,13 +35,12 @@ export const ValuesCarousel = () => {
     },
     {
       title: "Network",
-      colour: "red",
+      colour: "pink",
       content: (
         <>
           <p>
-            The people you meet now can
-            <span className="bg-accent-highlight"> shape your entire career</span>. Building
-            relationships early opens doors you didn't know existed.
+            The people you meet now can shape your entire career. Building relationships early opens
+            doors you didn't know existed.
           </p>
           <p>
             We host events where you can engage directly with industry professionals, alumni, and
@@ -56,7 +55,7 @@ export const ValuesCarousel = () => {
     },
     {
       title: "Connect",
-      colour: "yellow",
+      colour: "purple",
       content: (
         <>
           <p>
@@ -64,9 +63,8 @@ export const ValuesCarousel = () => {
             that way.
           </p>
           <p>
-            Our events are designed to{" "}
-            <span className="bg-accent-highlight">help you meet others</span> who share similar
-            experiences, from navigating coursework to preparing for the job market.
+            Our events are designed to help you meet others who share similar experiences, from
+            navigating coursework to preparing for the job market.
           </p>
           <p>
             The friendships you form here often become your support system throughout your studies
@@ -81,12 +79,8 @@ export const ValuesCarousel = () => {
       content: (
         <>
           <p>
-            University provides the theory, but there's often a
-            <span className="bg-accent-highlight">
-              {" "}
-              gap between academic knowledge and practical skills
-            </span>
-            .
+            University provides the theory, but there's often a gap between academic knowledge and
+            practical skills .
           </p>
           <p>
             We bridge that gap through workshops, hackathons, and other events covering everything
@@ -116,7 +110,7 @@ export const ValuesCarousel = () => {
             onClick={() => setActiveIndex(0)}
             type="button"
           >
-            <ValuesFingerprint label="Collaborate" variant={{ colour: "purple", size: "md" }} />
+            <ValuesFingerprint label="Collaborate" variant={{ colour: "orange", size: "md" }} />
           </button>
           <button
             aria-label="Select Network value"
@@ -124,7 +118,7 @@ export const ValuesCarousel = () => {
             onClick={() => setActiveIndex(1)}
             type="button"
           >
-            <ValuesFingerprint label="Network" variant={{ colour: "red", size: "md" }} />
+            <ValuesFingerprint label="Network" variant={{ colour: "pink", size: "md" }} />
           </button>
         </div>
         <div className="flex scale-60 gap-36 md:scale-100">
@@ -134,7 +128,7 @@ export const ValuesCarousel = () => {
             onClick={() => setActiveIndex(2)}
             type="button"
           >
-            <ValuesFingerprint label="Connect" variant={{ colour: "yellow", size: "md" }} />
+            <ValuesFingerprint label="Connect" variant={{ colour: "purple", size: "md" }} />
           </button>
           <button
             aria-label="Select Develop value"
