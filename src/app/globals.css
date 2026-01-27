@@ -1,4 +1,5 @@
 /* For Storybook */
+/** biome-ignore-all lint/suspicious/noUnknownAtRules: @theme, @layer. and @screen required by tailwind */
 @import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&display=swap");
 
 @import "tailwindcss";
@@ -33,7 +34,6 @@
   --sponsor-silver-border: #0000001a;
 }
 
-/* biome-ignore lint/suspicious/noUnknownAtRules: @theme is needed for tailwind theming */
 @theme inline {
   --font-switzer: var(--font-switzer);
   --font-mono: "IBM Plex Mono", monospace;
@@ -101,5 +101,66 @@
     background-color: var(--color-white);
     color: var(--color-black);
     scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .heading-1 {
+    @apply text-7xl leading-none font-semibold font-inter;
+  }
+  @media screen and (min-width: 768px) {
+    .heading-1 {
+      @apply text-9xl;
+    }
+  }
+
+  .heading-2 {
+    @apply text-5xl leading-none font-semibold font-inter;
+  }
+  @media screen and (min-width: 768px) {
+    .heading-2 {
+      @apply text-8xl;
+    }
+  }
+
+  .heading-3 {
+    @apply text-3xl leading-none font-semibold font-inter;
+  }
+
+  @media screen and (min-width: 768px) {
+    .heading-3 {
+      @apply text-6xl;
+    }
+  }
+
+  .heading-4 {
+    @apply text-base leading-[1.2] font-medium font-inter;
+  }
+  @media screen and (min-width: 768px) {
+    .heading-4 {
+      @apply text-xl;
+    }
+  }
+
+  .paragraph {
+    @apply text-sm leading-[1.2] font-normal font-switzer;
+  }
+  @media screen and (min-width: 768px) {
+    .paragraph {
+      @apply text-xl;
+    }
+  }
+
+  .paragraph-sm {
+    @apply text-sm leading-[1.2] font-normal font-switzer;
+  }
+
+  .paragraph-xs {
+    @apply text-2xs leading-[1.2] font-normal font-switzer;
+  }
+  @media screen and (min-width: 768px) {
+    .paragraph-xs {
+      @apply text-sm;
+    }
   }
 }
