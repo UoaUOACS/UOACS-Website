@@ -49,9 +49,7 @@ export default async function SponsorsPage() {
         <Heading h={1} period>
           Our Sponsors
         </Heading>
-        <p className="text-md md:text-lg">
-          These are the organisations who make this club possible.
-        </p>
+        <p className="paragraph">These are the organisations who make this club possible.</p>
       </div>
       <div className="flex max-w-330 flex-row flex-wrap items-center justify-center gap-x-24 gap-y-12">
         {tiers.map((tier) => (

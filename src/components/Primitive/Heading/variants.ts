@@ -5,35 +5,26 @@ import { tv, type VariantProps } from "tailwind-variants"
  */
 export const headingVariants = tv({
   slots: {
-    textVariant:
-      "flex flex-row flex-wrap items-end justify-center font-semibold gap-x-[0.2em] text-base font-inter text-center",
+    textVariant: "flex flex-row flex-wrap items-end justify-center gap-x-[0.2em] text-center",
     periodVariant: "bg-primary inline-block",
   },
   variants: {
     h: {
       1: {
-        textVariant: "text-7xl md:text-9xl",
+        textVariant: "heading-1",
         periodVariant: "size-2 ml-1.5 md:size-3 md:ml-3 rounded-xs",
       },
       2: {
-        textVariant: "text-6xl md:text-8xl",
+        textVariant: "heading-2",
         periodVariant: "size-1.5 ml-1 md:size-2.5 md:ml-2.5 rounded-xs",
       },
       3: {
-        textVariant: "text-5xl md:text-6xl",
+        textVariant: "heading-3",
         periodVariant: "size-1.5 ml-1 md:size-2 md:ml-2 rounded-xs",
       },
       4: {
-        textVariant: "text-3xl md:text-4xl",
+        textVariant: "heading-4",
         periodVariant: "size-1 ml-0.5 md:size-1.5 md:ml-1.5 rounded-xs",
-      },
-      5: {
-        textVariant: "text-2xl md:text-3xl",
-        periodVariant: "size-1 ml-0.5 md:ml-1 rounded-2xs",
-      },
-      6: {
-        textVariant: "text-xl md:text-2xl",
-        periodVariant: "size-1 ml-0.5 md:ml-1 rounded-2xs",
       },
     },
   },

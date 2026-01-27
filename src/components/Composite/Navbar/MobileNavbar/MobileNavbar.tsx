@@ -144,7 +144,7 @@ export const MobileNavbarButton = ({ label, ...props }: { label: string } & Link
         className="relative flex w-full flex-row items-center justify-between overflow-hidden border border-[#FFE0E0] p-6"
         {...props}
       >
-        <Heading className="text-left" h={3}>
+        <Heading className="text-left" h={2}>
           {label}
         </Heading>
         <div className="h-8 w-8 rounded-full bg-linear-to-bl from-[#FF307C] to-[#FB76A7]" />
