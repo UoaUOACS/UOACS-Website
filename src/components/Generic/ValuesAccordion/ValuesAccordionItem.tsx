@@ -23,7 +23,7 @@ export const ValuesAccordionItem = ({
   onClick,
 }: ValuesAccordionItemProps) => {
   return (
-    <div className="flex flex-col gap-3 border-gray-300 border-b px-1 py-4" key={value.title}>
+    <div className="flex flex-col gap-3 border-gray-300 border-b px-1 py-4">
       <button
         className="flex cursor-pointer flex-row items-center justify-between bg-white"
         onClick={onClick}
