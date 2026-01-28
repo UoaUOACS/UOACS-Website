@@ -19,7 +19,7 @@ export interface ValuesAccordionProps {
 export const ValuesAccordion = ({ values }: ValuesAccordionProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   return (
-    <div className="w-full max-w-120">
+    <div className="w-full max-w-[30rem]">
       {values.map((value, index) => (
         <ValuesAccordionItem
           isOpen={openIndex === index}
