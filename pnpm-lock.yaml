@@ -17,6 +17,9 @@ importers:
       '@fortawesome/react-fontawesome':
         specifier: ^3.1.0
         version: 3.1.1(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.1)
+      '@heroicons/react':
+        specifier: ^2.2.0
+        version: 2.2.0(react@19.2.1)
       '@payloadcms/db-mongodb':
         specifier: 3.57.0
         version: 3.57.0(@aws-sdk/credential-providers@3.974.0)(payload@3.57.0(graphql@16.12.0)(typescript@5.9.3))
@@ -1078,6 +1081,11 @@ packages:
     peerDependencies:
       '@fortawesome/fontawesome-svg-core': ~6 || ~7
       react: ^18.0.0 || ^19.0.0
+
+  '@heroicons/react@2.2.0':
+    resolution: {integrity: sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==}
+    peerDependencies:
+      react: '>= 16 || ^19.0.0-rc'
 
   '@img/colour@1.0.0':
     resolution: {integrity: sha512-A5P/LfWGFSl6nsckYtjw9da+19jB8hkJ6ACTGcDfEJ0aE+l2n2El7dsVM7UVHZQ9s2lmYMWlrS21YLy2IR1LUw==}
@@ -5329,6 +5337,10 @@ snapshots:
   '@fortawesome/react-fontawesome@3.1.1(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.1)':
     dependencies:
       '@fortawesome/fontawesome-svg-core': 7.1.0
+      react: 19.2.1
+
+  '@heroicons/react@2.2.0(react@19.2.1)':
+    dependencies:
       react: 19.2.1
 
   '@img/colour@1.0.0': {}

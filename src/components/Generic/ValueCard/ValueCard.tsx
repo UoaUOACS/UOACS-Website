@@ -41,6 +41,7 @@ const borderColourClasses: Record<ValueCardProps["colour"], string> = {
  *   <p>Line 2</p>
  * </ValueCard>
  * ```
+ * @deprecated Use ValuesAccordion instead.
  */
 export const ValueCard = ({ title, colour, children }: ValueCardProps) => {
   return (

@@ -9,6 +9,9 @@ interface Value {
   content: React.ReactNode
 }
 
+/**
+ * @deprecated Use ValuesAccordion instead.
+ */
 export const ValuesCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0)
 

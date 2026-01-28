@@ -59,7 +59,7 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
       <div className="flex w-full flex-wrap justify-center gap-12">
         <div className="flex w-full max-w-md flex-col gap-4 md:w-auto">
           <div className="flex min-h-36 flex-col gap-2 bg-accent-purple-light p-4">
-            <Heading className="justify-start text-left" h={4}>
+            <Heading className="justify-start text-left" h={3}>
               Social Gatherings
             </Heading>
             <p>
@@ -68,7 +68,7 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
             </p>
           </div>
           <div className="flex min-h-36 flex-col gap-2 bg-accent-red-light p-4">
-            <Heading className="justify-start text-left" h={4}>
+            <Heading className="justify-start text-left" h={3}>
               Workshops
             </Heading>
             <p>
@@ -77,7 +77,7 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
             </p>
           </div>
           <div className="flex min-h-36 flex-col gap-2 bg-accent-yellow-light p-4">
-            <Heading className="justify-start text-left" h={4}>
+            <Heading className="justify-start text-left" h={3}>
               Collaborations
             </Heading>
             <p>
