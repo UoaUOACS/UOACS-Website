@@ -4,7 +4,7 @@ import { tv, type VariantProps } from "tailwind-variants"
  * Button variant configurations.
  * Consists of themes, sizes, and border options.
  */
-export const buttonVariants = tv({
+export const borderButtonVariants = tv({
   slots: {
     inner:
       "flex flex-row gap-4 items-center rounded-xl border-4 border-transparent bg-black p-4 font-mono text-white text-left transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50",
@@ -74,4 +74,4 @@ export const buttonVariants = tv({
 /**
  * Props for the button variant configuration.
  */
-export type ButtonVariantProps = VariantProps<typeof buttonVariants>
+export type BorderButtonVariantProps = VariantProps<typeof borderButtonVariants>

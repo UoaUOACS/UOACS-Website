@@ -1,13 +1,13 @@
 import { faDiscord } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import type { Meta, StoryObj } from "@storybook/react"
-import { Button } from "./Button"
+import { BorderButton } from "./BorderButton"
 
-type Story = StoryObj<typeof Button>
+type Story = StoryObj<typeof BorderButton>
 
-const meta: Meta<typeof Button> = {
-  title: "Primitive Components/Button",
-  component: Button,
+const meta: Meta<typeof BorderButton> = {
+  title: "Primitive Components/BorderButton",
+  component: BorderButton,
   argTypes: {
     children: { control: "text" },
     variant: { control: "object" },

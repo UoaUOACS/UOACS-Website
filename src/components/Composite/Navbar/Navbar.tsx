@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
-import { Button, Dropdown } from "@/components/Primitive"
+import { BorderButton, Dropdown } from "@/components/Primitive"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"
 
@@ -68,12 +68,12 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               .filter((link) => link.label.toLowerCase() !== "home")
               .map((link) => (
                 <Link className="rounded-2xl" href={link.href} key={link.href}>
-                  <Button
+                  <BorderButton
                     left={<div className="h-2 w-3 rounded-xs bg-primary" />}
                     variant={{ size: "navbar", theme: "ghost", border: "none" }}
                   >
                     {link.label.toUpperCase()}
-                  </Button>
+                  </BorderButton>
                 </Link>
               ))}
           </div>
@@ -91,12 +91,12 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
           rel="noopener noreferrer"
           target="_blank"
         >
-          <Button
+          <BorderButton
             left={<div className="h-2.5 w-2.5 rounded-[0.92px] bg-white" />}
             variant={{ size: "sm", theme: "dark" }}
           >
             JOIN US
-          </Button>
+          </BorderButton>
         </a>
       </nav>
     </>

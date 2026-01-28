@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { SponsorTicker } from "@/components/Generic"
-import { Button, Heading } from "@/components/Primitive"
+import { BorderButton, Heading } from "@/components/Primitive"
 import type { Sponsor } from "@/payload/payload-types"
 
 /**
@@ -29,15 +29,18 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
       </div>
       <SponsorTicker containerClassName="max-w-360" items={sponsors} />
       <Link href="/sponsors">
-        <Button borderClassName="md:hidden" variant={{ theme: "dark", size: "sm", border: true }}>
+        <BorderButton
+          borderClassName="md:hidden"
+          variant={{ theme: "dark", size: "sm", border: true }}
+        >
           SEE ALL SPONSORS
-        </Button>
-        <Button
+        </BorderButton>
+        <BorderButton
           borderClassName="hidden md:inline-flex"
           variant={{ theme: "dark", size: "md", border: true }}
         >
           SEE ALL SPONSORS
-        </Button>
+        </BorderButton>
       </Link>
     </div>
   )

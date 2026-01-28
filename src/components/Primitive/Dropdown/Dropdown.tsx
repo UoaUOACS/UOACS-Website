@@ -2,9 +2,9 @@
 
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
-import { Button } from "@/components/Primitive"
+import { BorderButton } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
-import type { ButtonVariantProps } from "../Button/variants"
+import type { BorderButtonVariantProps } from "../BorderButton/variants"
 import { DropdownOption, type DropdownOptionProps } from "./DropdownOption"
 import { type DropdownVariantProps, dropdownVariants } from "./variants"
 
@@ -27,11 +27,11 @@ export interface DropdownProps {
   /**
    * Variant configuration for the trigger button.
    */
-  triggerVariant?: ButtonVariantProps
+  triggerVariant?: BorderButtonVariantProps
   /**
    * Variant configuration for the dropdown options.
    */
-  optionVariant?: ButtonVariantProps
+  optionVariant?: BorderButtonVariantProps
   /**
    * Additional class names for the popover container.
    */
@@ -66,7 +66,7 @@ export const Dropdown = ({
 
   return (
     <div className="relative inline-flex">
-      <Button
+      <BorderButton
         aria-expanded={isOpen}
         className={triggerClassname}
         onClick={() => setIsOpen(!isOpen)}
@@ -89,7 +89,7 @@ export const Dropdown = ({
         variant={triggerVariant}
       >
         {label}
-      </Button>
+      </BorderButton>
       <AnimatePresence>
         {isOpen && (
           <motion.div

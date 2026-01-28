@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
 import { useState } from "react"
 import { ExecCard } from "@/components/Generic"
-import { Button, Heading } from "@/components/Primitive"
+import { BorderButton, Heading } from "@/components/Primitive"
 import type { Executive } from "@/payload/payload-types"
 import { EXECUTIVE_LEVEL_ORDER, ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 
@@ -98,7 +98,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
       </div>
       <div className="flex max-w-200 flex-row flex-wrap items-center justify-center gap-4">
         {currentTeams.map((team: string) => (
-          <Button
+          <BorderButton
             aria-pressed={selectedTeam === team}
             key={team}
             onClick={() => handleTeamSelect(team)}
@@ -113,7 +113,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
                 (exec.role?.teams ?? []).includes(toTeam(team)),
               ).length
             }]`}
-          </Button>
+          </BorderButton>
         ))}
       </div>
       <div className="grid w-full max-w-330 grid-cols-[repeat(auto-fill,128px)] justify-center gap-6 md:grid-cols-[repeat(auto-fill,200px)]">

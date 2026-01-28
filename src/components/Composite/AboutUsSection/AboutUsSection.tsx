@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Button } from "@/components/Primitive"
+import { BorderButton } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
 import type { Reel as ReelDocument } from "@/payload/payload-types"
 import { Reel } from "../Reel/Reel"
@@ -40,9 +40,9 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <Button borderClassName="w-fit" variant={{ theme: "dark", size: "sm" }}>
+            <BorderButton borderClassName="w-fit" variant={{ theme: "dark", size: "sm" }}>
               INTERESTED? JOIN US
-            </Button>
+            </BorderButton>
           </a>
           <p className="paragraph-sm font-medium">Membership is 100% free so come join us!</p>
         </div>
