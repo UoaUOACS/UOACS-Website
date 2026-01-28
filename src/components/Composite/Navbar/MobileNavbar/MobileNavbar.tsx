@@ -92,7 +92,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                 <MobileNavbarButton key={link.href} {...link} onClick={() => setIsOpen(false)} />
               ))}
             </div>
-            <div className="flex w-fit flex-row gap-6 text-2xl text-secondary">
+            <div className="flex w-fit flex-row gap-6 text-2xl text-gray-700">
               {socialLinks.map((link) => (
                 <a href={link.href} key={link.href} rel="noopener noreferrer" target="_blank">
                   <FontAwesomeIcon icon={link.icon} />
@@ -141,13 +141,13 @@ export const MobileNavbarButton = ({ label, ...props }: { label: string } & Link
   return (
     <motion.div animate="animate" initial="initial" whileHover="hover">
       <Link
-        className="relative flex w-full flex-row items-center justify-between overflow-hidden border border-[#FFE0E0] p-6"
+        className="relative flex w-full flex-row items-center justify-between overflow-hidden border border-orange-50 p-6"
         {...props}
       >
         <Heading className="text-left" h={2}>
           {label}
         </Heading>
-        <div className="h-8 w-8 rounded-full bg-linear-to-bl from-[#FF307C] to-[#FB76A7]" />
+        <div className="h-8 w-8 rounded-full bg-linear-to-bl from-pink-500 to-pink-400" />
         <motion.div
           className="-bottom-3 -translate-x-1/2 absolute left-1/2 h-6 w-2/3 rounded-full blur-3xl"
           transition={{ duration: 0.3, ease: "easeInOut" }}

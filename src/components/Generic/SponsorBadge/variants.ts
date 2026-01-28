@@ -7,23 +7,23 @@ import { tv, type VariantProps } from "tailwind-variants"
 export const sponsorBadgeVariants = tv({
   slots: {
     inner:
-      "flex flex-row gap-4 items-center border-4 border-transparent bg-black p-4 paragraph font-mono text-white text-left w-fit px-3 py-2",
+      "flex flex-row gap-4 items-center border-4 border-transparent p-4 paragraph font-mono text-white text-left w-fit px-3 py-2",
     border:
       "border-4 border-transparent rounded-xs cursor-pointer w-fit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black disabled:cursor-not-allowed disabled:opacity-50",
   },
   variants: {
     tier: {
       gold: {
-        inner: "bg-sponsor-gold text-sponsor-gold-text",
-        border: "border-sponsor-gold-border",
+        inner: "bg-sponsor-gold",
+        border: "border-orange-200-opaque",
       },
       silver: {
-        inner: "bg-sponsor-silver text-sponsor-silver-text",
-        border: "border-sponsor-silver-border",
+        inner: "bg-sponsor-silver",
+        border: "border-gray-300-opaque",
       },
       diamond: {
-        inner: "bg-sponsor-diamond text-sponsor-diamond-text",
-        border: "border-sponsor-diamond-border",
+        inner: "bg-sponsor-diamond",
+        border: "border-blue-200-opaque",
       },
     },
   },

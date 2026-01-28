@@ -8,30 +8,115 @@
   /* For Storybook */
   --font-inter: "Inter Tight", sans-serif;
 
-  --white: #f5f5f5;
-  --black: #000;
-  --dark-grey: #1a1a1a;
-  --primary: #ff307c;
-  --primary-border: #ff307c1a;
-  --secondary: #514d4d;
-  --secondary-border: #0000001a;
-  --secondary-light: #747474;
-  --accent-purple: #d5bef2;
-  --accent-purple-light: #763efc1a;
-  --accent-blue: #bad7f7;
-  --accent-red: #eabfcf;
-  --accent-red-light: #d96d951a;
-  --accent-yellow: #f8d5bc;
-  --accent-yellow-light: #ff95631a;
-  --accent-highlight: #ffecd7;
-  --sponsor-diamond: #99fffa;
-  --sponsor-diamond-border: #746cdf1a;
-  --sponsor-diamond-text: #0d0762;
-  --sponsor-gold: #ffcc99;
-  --sponsor-gold-border: #d5924f1a;
-  --sponsor-gold-text: #620707;
-  --sponsor-silver: #e8e8e8;
-  --sponsor-silver-border: #0000001a;
+  --pink-50: #fdf2f8;
+  --pink-100: #fce7f3;
+  --pink-200: #fccee8;
+  --pink-300: #fda5d5;
+  --pink-400: #ff609b;
+  --pink-500: #ff307c;
+  --pink-600: #c6005c;
+  --pink-700: #a3004c;
+  --pink-800: #6c0c36;
+  --pink-900: #510424;
+
+  --pink-50-opaque: #fdf2f81a;
+  --pink-100-opaque: #fce7f31a;
+  --pink-200-opaque: #fccee81a;
+  --pink-300-opaque: #fda5d51a;
+  --pink-400-opaque: #ff609b1a;
+  --pink-500-opaque: #ff307c1a;
+  --pink-600-opaque: #c6005c1a;
+  --pink-700-opaque: #a3004c1a;
+  --pink-800-opaque: #6c0c361a;
+  --pink-900-opaque: #5104241a;
+
+  --purple-50: #eedfff;
+  --purple-100: #e8d5ff;
+  --purple-200: #ddc2ff;
+  --purple-300: #cfabfd;
+  --purple-400: #af70ff;
+  --purple-500: #7632cd;
+  --purple-600: #5c10be;
+  --purple-700: #40048d;
+  --purple-800: #260353;
+  --purple-900: #1c033d;
+
+  --purple-50-opaque: #eedfff1a;
+  --purple-100-opaque: #e8d5ff1a;
+  --purple-200-opaque: #ddc2ff1a;
+  --purple-300-opaque: #cfabfd1a;
+  --purple-400-opaque: #af70ff1a;
+  --purple-500-opaque: #7632cd1a;
+  --purple-600-opaque: #5c10be1a;
+  --purple-700-opaque: #40048d1a;
+  --purple-800-opaque: #2603531a;
+  --purple-900-opaque: #1c033d1a;
+
+  --blue-50: #f0f9ff;
+  --blue-100: #dff2fe;
+  --blue-200: #74d4ff;
+  --blue-300: #51a4ff;
+  --blue-400: #00a6f4;
+  --blue-500: #0084d1;
+  --blue-600: #0069a8;
+  --blue-700: #00598a;
+  --blue-800: #024a70;
+  --blue-900: #052f4a;
+
+  --blue-50-opaque: #f0f9ff1a;
+  --blue-100-opaque: #dff2fe1a;
+  --blue-200-opaque: #74d4ff1a;
+  --blue-300-opaque: #51a4ff1a;
+  --blue-400-opaque: #00a6f41a;
+  --blue-500-opaque: #0084d11a;
+  --blue-600-opaque: #0069a81a;
+  --blue-700-opaque: #00598a1a;
+  --blue-800-opaque: #024a701a;
+  --blue-900-opaque: #052f4a1a;
+
+  --orange-50: #ffebdd;
+  --orange-100: #ffe5d3;
+  --orange-200: #ffc196;
+  --orange-300: #ff9c56;
+  --orange-400: #ff9245;
+  --orange-500: #fa771b;
+  --orange-600: #f46704;
+  --orange-700: #ba4d00;
+  --orange-800: #713205;
+  --orange-900: #2c1200;
+
+  --orange-50-opaque: #ffebdd1a;
+  --orange-100-opaque: #ffe5d31a;
+  --orange-200-opaque: #ffc1961a;
+  --orange-300-opaque: #ff9c561a;
+  --orange-400-opaque: #ff92451a;
+  --orange-500-opaque: #fa771b1a;
+  --orange-600-opaque: #f467041a;
+  --orange-700-opaque: #ba4d001a;
+  --orange-800-opaque: #7132051a;
+  --orange-900-opaque: #2c12001a;
+
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e5e5e5;
+  --gray-300: #d4d4d4;
+  --gray-400: #a1a1a1;
+  --gray-500: #737373;
+  --gray-600: #525252;
+  --gray-700: #404040;
+  --gray-800: #171717;
+  --gray-900: #0a0a0a;
+
+  --gray-50-opaque: #fafafa1a;
+  --gray-100-opaque: #f5f5f51a;
+  --gray-200-opaque: #e5e5e51a;
+  --gray-300-opaque: #d4d4d41a;
+  --gray-400-opaque: #a1a1a11a;
+  --gray-500-opaque: #7373731a;
+  --gray-600-opaque: #5252521a;
+  --gray-700-opaque: #4040401a;
+  --gray-800-opaque: #1717171a;
+  --gray-900-opaque: #0a0a0a1a;
 }
 
 @theme inline {
@@ -39,31 +124,134 @@
   --font-mono: "IBM Plex Mono", monospace;
   --font-inter: var(--font-inter);
 
-  --color-black: var(--black);
-  --color-white: var(--white);
-  --color-dark-grey: var(--dark-grey);
-  --color-primary: var(--primary);
-  --color-primary-border: var(--primary-border);
-  --color-secondary: var(--secondary);
-  --color-secondary-border: var(--secondary-border);
-  --color-secondary-light: var(--secondary-light);
-  --color-accent-purple: var(--accent-purple);
-  --color-accent-purple-light: var(--accent-purple-light);
-  --color-accent-blue: var(--accent-blue);
-  --color-accent-red: var(--accent-red);
-  --color-accent-red-light: var(--accent-red-light);
-  --color-accent-yellow: var(--accent-yellow);
-  --color-accent-yellow-light: var(--accent-yellow-light);
-  --color-accent-orange: var(--accent-orange);
-  --color-accent-highlight: var(--accent-highlight);
-  --color-sponsor-diamond: var(--sponsor-diamond);
-  --color-sponsor-diamond-border: var(--sponsor-diamond-border);
-  --color-sponsor-diamond-text: var(--sponsor-diamond-text);
-  --color-sponsor-gold: var(--sponsor-gold);
-  --color-sponsor-gold-border: var(--sponsor-gold-border);
-  --color-sponsor-gold-text: var(--sponsor-gold-text);
-  --color-sponsor-silver: var(--sponsor-silver);
-  --color-sponsor-silver-border: var(--sponsor-silver-border);
+  --color-pink-50: var(--pink-50);
+  --color-pink-100: var(--pink-100);
+  --color-pink-200: var(--pink-200);
+  --color-pink-300: var(--pink-300);
+  --color-pink-400: var(--pink-400);
+  --color-pink-500: var(--pink-500);
+  --color-pink-600: var(--pink-600);
+  --color-pink-700: var(--pink-700);
+  --color-pink-800: var(--pink-800);
+  --color-pink-900: var(--pink-900);
+
+  --color-pink-50-opaque: var(--pink-50-opaque);
+  --color-pink-100-opaque: var(--pink-100-opaque);
+  --color-pink-200-opaque: var(--pink-200-opaque);
+  --color-pink-300-opaque: var(--pink-300-opaque);
+  --color-pink-400-opaque: var(--pink-400-opaque);
+  --color-pink-500-opaque: var(--pink-500-opaque);
+  --color-pink-600-opaque: var(--pink-600-opaque);
+  --color-pink-700-opaque: var(--pink-700-opaque);
+  --color-pink-800-opaque: var(--pink-800-opaque);
+  --color-pink-900-opaque: var(--pink-900-opaque);
+
+  --color-purple-50: var(--purple-50);
+  --color-purple-100: var(--purple-100);
+  --color-purple-200: var(--purple-200);
+  --color-purple-300: var(--purple-300);
+  --color-purple-400: var(--purple-400);
+  --color-purple-500: var(--purple-500);
+  --color-purple-600: var(--purple-600);
+  --color-purple-700: var(--purple-700);
+  --color-purple-800: var(--purple-800);
+  --color-purple-900: var(--purple-900);
+
+  --color-purple-50-opaque: var(--purple-50-opaque);
+  --color-purple-100-opaque: var(--purple-100-opaque);
+  --color-purple-200-opaque: var(--purple-200-opaque);
+  --color-purple-300-opaque: var(--purple-300-opaque);
+  --color-purple-400-opaque: var(--purple-400-opaque);
+  --color-purple-500-opaque: var(--purple-500-opaque);
+  --color-purple-600-opaque: var(--purple-600-opaque);
+  --color-purple-700-opaque: var(--purple-700-opaque);
+  --color-purple-800-opaque: var(--purple-800-opaque);
+  --color-purple-900-opaque: var(--purple-900-opaque);
+
+  --color-blue-50: var(--blue-50);
+  --color-blue-100: var(--blue-100);
+  --color-blue-200: var(--blue-200);
+  --color-blue-300: var(--blue-300);
+  --color-blue-400: var(--blue-400);
+  --color-blue-500: var(--blue-500);
+  --color-blue-600: var(--blue-600);
+  --color-blue-700: var(--blue-700);
+  --color-blue-800: var(--blue-800);
+  --color-blue-900: var(--blue-900);
+
+  --color-blue-50-opaque: var(--blue-50-opaque);
+  --color-blue-100-opaque: var(--blue-100-opaque);
+  --color-blue-200-opaque: var(--blue-200-opaque);
+  --color-blue-300-opaque: var(--blue-300-opaque);
+  --color-blue-400-opaque: var(--blue-400-opaque);
+  --color-blue-500-opaque: var(--blue-500-opaque);
+  --color-blue-600-opaque: var(--blue-600-opaque);
+  --color-blue-700-opaque: var(--blue-700-opaque);
+  --color-blue-800-opaque: var(--blue-800-opaque);
+  --color-blue-900-opaque: var(--blue-900-opaque);
+
+  --color-orange-50: var(--orange-50);
+  --color-orange-100: var(--orange-100);
+  --color-orange-200: var(--orange-200);
+  --color-orange-300: var(--orange-300);
+  --color-orange-400: var(--orange-400);
+  --color-orange-500: var(--orange-500);
+  --color-orange-600: var(--orange-600);
+  --color-orange-700: var(--orange-700);
+  --color-orange-800: var(--orange-800);
+  --color-orange-900: var(--orange-900);
+
+  --color-orange-50-opaque: var(--orange-50-opaque);
+  --color-orange-100-opaque: var(--orange-100-opaque);
+  --color-orange-200-opaque: var(--orange-200-opaque);
+  --color-orange-300-opaque: var(--orange-300-opaque);
+  --color-orange-400-opaque: var(--orange-400-opaque);
+  --color-orange-500-opaque: var(--orange-500-opaque);
+  --color-orange-600-opaque: var(--orange-600-opaque);
+  --color-orange-700-opaque: var(--orange-700-opaque);
+  --color-orange-800-opaque: var(--orange-800-opaque);
+  --color-orange-900-opaque: var(--orange-900-opaque);
+
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+  --color-gray-900: var(--gray-900);
+
+  --color-gray-50-opaque: var(--gray-50-opaque);
+  --color-gray-100-opaque: var(--gray-100-opaque);
+  --color-gray-200-opaque: var(--gray-200-opaque);
+  --color-gray-300-opaque: var(--gray-300-opaque);
+  --color-gray-400-opaque: var(--gray-400-opaque);
+  --color-gray-500-opaque: var(--gray-500-opaque);
+  --color-gray-600-opaque: var(--gray-600-opaque);
+  --color-gray-700-opaque: var(--gray-700-opaque);
+  --color-gray-800-opaque: var(--gray-800-opaque);
+  --color-gray-900-opaque: var(--gray-900-opaque);
+
+  --color-black: var(--gray-900);
+  --color-white: var(--gray-50);
+  --color-secondary: var(--gray-400);
+  --color-primary: var(--pink-500);
+  --color-primary-opaque: var(--pink-500-opaque);
+
+  --color-brand-pink: var(--pink-400);
+  --color-brand-pink-opaque: var(--pink-400-opaque);
+  --color-brand-purple: var(--purple-400);
+  --color-brand-purple-opaque: var(--purple-400-opaque);
+  --color-brand-blue: var(--blue-400);
+  --color-brand-blue-opaque: var(--blue-400-opaque);
+  --color-brand-orange: var(--orange-500);
+  --color-brand-orange-opaque: var(--orange-400-opaque);
+
+  --color-sponsor-diamond: var(--blue-200);
+  --color-sponsor-gold: var(--orange-200);
+  --color-sponsor-silver: var(--gray-300);
 
   --text-2xs: 0.625rem;
   --text-xs: 0.75rem;

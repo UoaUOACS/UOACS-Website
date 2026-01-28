@@ -30,7 +30,7 @@ export const ExecCard = ({ exec }: ExecCardProps) => {
           width={200}
         />
       ) : (
-        <p className="flex aspect-square size-full max-h-32 max-w-32 items-center justify-center rounded-sm bg-gray-200 font-md text-secondary text-xl md:max-h-50 md:max-w-50">
+        <p className="flex aspect-square size-full max-h-32 max-w-32 items-center justify-center rounded-sm bg-gray-200 font-md text-gray-700 text-xl md:max-h-50 md:max-w-50">
           {exec.name
             ? exec.name
                 .split(" ")
@@ -43,7 +43,7 @@ export const ExecCard = ({ exec }: ExecCardProps) => {
       <div className="flex flex-col items-start gap-1">
         <p className="paragraph">{exec.name}</p>
         {exec.role.title && (
-          <p className="paragraph-xs font-medium text-secondary-light">{exec.role.title}</p>
+          <p className="paragraph-xs font-medium text-gray-500">{exec.role.title}</p>
         )}
       </div>
     </div>

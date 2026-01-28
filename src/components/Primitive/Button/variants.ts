@@ -15,15 +15,11 @@ export const buttonVariants = tv({
     theme: {
       primary: {
         inner: "bg-primary",
-        border: "border-primary-border",
-      },
-      secondary: {
-        inner: "bg-secondary",
-        border: "border-secondary-border",
+        border: "border-primary-opaque",
       },
       ghost: {
         inner: "bg-transparent text-black",
-        border: "border-gray-300",
+        border: "border-gray-900-opaque",
       },
       dark: {
         inner: "bg-black",

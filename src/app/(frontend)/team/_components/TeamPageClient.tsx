@@ -103,7 +103,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
             key={team}
             onClick={() => handleTeamSelect(team)}
             variant={{
-              theme: selectedTeam === team ? "secondary" : "light",
+              theme: selectedTeam === team ? "primary" : "light",
               size: "sm-wide",
               border: selectedTeam === team,
             }}
