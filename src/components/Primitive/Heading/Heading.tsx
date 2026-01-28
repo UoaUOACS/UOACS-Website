@@ -7,7 +7,7 @@ import { type HeadingVariants, headingVariants } from "./variants"
  */
 export interface HeadingProps {
   /**
-   * Heading level (1-6).
+   * Heading level (1-3).
    */
   h: HeadingVariants["h"]
   /**
@@ -31,7 +31,7 @@ export interface HeadingProps {
 /**
  * Heading component for displaying headings with optional period.
  *
- * @param h Heading level (1-6).
+ * @param h Heading level (1-3).
  * @param children Heading text content.
  * @param period Whether to display a period at the end of the heading.
  * @param className Additional class names for the heading element.

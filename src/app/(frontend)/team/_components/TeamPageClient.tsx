@@ -91,15 +91,10 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
   return (
     <>
       <div className="flex flex-col items-center gap-2 px-4 text-center">
-        <div className="relative">
-          <span className="absolute top-0 right-0 translate-x-1/2 text-gray-400 text-xl md:text-3xl">
-            {`[${currentExecs.length}]`}
-          </span>
-          <Heading h={1} period>
-            Our Team
-          </Heading>
-        </div>
-        <p className="text-md md:text-lg">These are the people who make this club possible.</p>
+        <Heading h={1} period>
+          Our Team
+        </Heading>
+        <p className="paragraph">These are the people who make this club possible.</p>
       </div>
       <div className="flex max-w-200 flex-row flex-wrap items-center justify-center gap-4">
         {currentTeams.map((team: string) => (
@@ -132,16 +127,13 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
       </div>
       <div className="flex flex-col items-center gap-2 px-4 text-center">
         <div className="relative">
-          <span className="absolute top-0 right-0 translate-x-1/2 text-gray-400 text-xl md:text-3xl">
-            {`[${pastExecs.length}]`}
-          </span>
           <Heading h={1} period>
             Past Executives
           </Heading>
         </div>
-        <p className="text-md md:text-lg">ex-uoacs executives</p>
+        <p className="paragraph">ex-uoacs executives</p>
       </div>
-      <div className="grid w-full max-w-300 grid-cols-[repeat(auto-fill,16rem)] justify-center gap-6 md:gap-18">
+      <div className="grid w-full max-w-330 grid-cols-[repeat(auto-fill,22.5rem)] justify-center gap-6 md:gap-18">
         {pastTeams.map((team: string) => {
           const execsInTeam = pastExecs.filter((exec: Executive) =>
             (exec.role?.teams ?? []).includes(toTeam(team)),
@@ -153,11 +145,11 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
               </p>
               {execsInTeam.map((exec: Executive) => (
                 <Link
-                  className="flex w-64 flex-row items-center justify-between p-2 font-inter"
+                  className="flex w-90 flex-row items-center justify-between p-2 font-inter"
                   href={exec.linkedin ?? "#"}
                   key={exec.id}
                 >
-                  <p>{exec.name}</p>
+                  <p className="paragraph">{exec.name}</p>
                   <FontAwesomeIcon fontSize={24} icon={faLinkedin} />
                 </Link>
               ))}

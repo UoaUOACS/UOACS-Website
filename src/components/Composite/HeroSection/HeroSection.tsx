@@ -17,12 +17,12 @@ export const HeroSection = () => {
     },
   ] as const
 
-  const START_YEAR = 2023
+  const START_YEAR = 2024
   const END_YEAR = new Date().getFullYear()
 
   return (
     <section className="flex w-full max-w-180 flex-col items-center justify-start gap-6 self-center md:items-start md:gap-18 md:self-start">
-      <p className="hidden font-mono text-sm md:block md:text-md">
+      <p className="hidden font-mono md:block">
         UNIVERSITY OF AUCKLAND
         <br />
         COMPUTER SCIENCE SOCIETY
@@ -40,7 +40,7 @@ export const HeroSection = () => {
             </Heading>
             <div className="mt-1.5 hidden h-1.5 w-full bg-linear-to-r from-primary to-[#2134FF00] md:block" />
           </div>
-          <p className="font-light leading-[100%]">
+          <p className="paragraph leading-[100%]">
             UOACS is the Computer Science student association for social gathering.
           </p>
         </div>

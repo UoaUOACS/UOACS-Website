@@ -6,7 +6,7 @@ import { VALUES } from "./ValuesSection.constants"
 export const ValuesSection = () => {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-10 md:gap-22">
-      <div className="flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-4 text-center">
         <div className="relative flex justify-center">
           <Heading h={2}>Our Values</Heading>
           <Image
@@ -17,9 +17,7 @@ export const ValuesSection = () => {
             width={75}
           />
         </div>
-        <p className="font-light text-md md:text-lg">
-          These principles guide our behaviors and who we are
-        </p>
+        <p className="paragraph">These principles guide our behaviors and who we are</p>
       </div>
       <ValuesAccordion values={VALUES} />
     </div>

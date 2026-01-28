@@ -69,7 +69,7 @@ export const Polaroid = ({
       <div style={mask_image_styles}>
         <Image alt="Photo of event" className="object-cover" fill src={url} style={reverse_rot} />
       </div>
-      <p className="w-full text-left font-mono text-2xs">{text.toUpperCase()}</p>
+      <p className="paragraph-xs w-full text-left font-mono">{text.toUpperCase()}</p>
     </div>
   )
 }
