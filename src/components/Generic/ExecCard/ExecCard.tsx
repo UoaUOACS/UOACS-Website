@@ -41,8 +41,10 @@ export const ExecCard = ({ exec }: ExecCardProps) => {
         </p>
       )}
       <div className="flex flex-col items-start gap-1">
-        <p className="h-4 text-sm md:text-md">{exec.name}</p>
-        {exec.role.title && <p className="text-2xs text-gray-500 md:text-xs">{exec.role.title}</p>}
+        <p className="paragraph">{exec.name}</p>
+        {exec.role.title && (
+          <p className="paragraph-xs font-medium text-gray-500">{exec.role.title}</p>
+        )}
       </div>
     </div>
   )

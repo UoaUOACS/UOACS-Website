@@ -50,7 +50,7 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
     <div className="flex w-full flex-col items-center gap-10 px-6 py-12">
       <div className="flex max-w-lg flex-col items-center gap-4 text-center">
         <Heading h={2}>Who We Are</Heading>
-        <p className="font-light text-md leading-[100%] md:text-lg">
+        <p className="paragraph">
           As well as being a social club, we also help out newer students through workshops and run
           industry related events to connect you with real companies.
         </p>

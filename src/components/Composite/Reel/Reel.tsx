@@ -44,10 +44,10 @@ export const Reel = ({ reel }: ReelProps) => {
         )}
       />
 
-      <div className="absolute bottom-0 left-0 p-4">
+      <div className="paragraph-sm absolute bottom-0 left-0 p-4 text-white">
         <a
           aria-label="Visit our Instagram Page @uoacs25"
-          className="mb-2 flex items-center gap-2 p-0 font-semibold text-sm text-white drop-shadow-md"
+          className="mb-2 flex items-center gap-2 p-0 font-semibold drop-shadow-md"
           href="https://www.instagram.com/uoacs25/"
           rel="noopener noreferrer"
           target="_blank"
@@ -63,7 +63,7 @@ export const Reel = ({ reel }: ReelProps) => {
         </a>
         <button
           className={cn(
-            "w-full cursor-pointer text-left text-sm text-white drop-shadow-md transition-all duration-300 ease-in-out",
+            "w-full cursor-pointer text-left drop-shadow-md transition-all duration-300 ease-in-out",
             isDescriptionExpanded ? "line-clamp-none" : "line-clamp-2",
           )}
           onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}

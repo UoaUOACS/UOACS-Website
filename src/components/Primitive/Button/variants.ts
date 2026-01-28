@@ -41,10 +41,10 @@ export const buttonVariants = tv({
         inner: "text-sm px-6 py-2 gap-2",
       },
       md: {
-        inner: "text-md p-4 gap-4",
+        inner: "paragraph p-4 gap-4",
       },
       "md-wide": {
-        inner: "text-md px-6 py-4 gap-4",
+        inner: "paragraph px-6 py-4 gap-4",
       },
       lg: {
         inner: "text-lg p-6 gap-6",

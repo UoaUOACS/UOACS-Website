@@ -26,13 +26,10 @@ export const Basic: Story = (args) => <Heading {...args} />
 
 export const Headings: Story = (args) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-1">
       <Heading {...args} h={1} />
       <Heading {...args} h={2} />
       <Heading {...args} h={3} />
-      <Heading {...args} h={4} />
-      <Heading {...args} h={5} />
-      <Heading {...args} h={6} />
     </div>
   )
 }
@@ -43,9 +40,6 @@ export const HeadingsWithPeriod: Story = (args) => {
       <Heading {...args} h={1} period />
       <Heading {...args} h={2} period />
       <Heading {...args} h={3} period />
-      <Heading {...args} h={4} period />
-      <Heading {...args} h={5} period />
-      <Heading {...args} h={6} period />
     </div>
   )
 }
