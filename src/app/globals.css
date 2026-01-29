@@ -351,4 +351,13 @@
       @apply text-sm;
     }
   }
+
+  .button-text {
+    @apply text-sm leading-[1.2] font-medium font-inter;
+  }
+  @media screen and (min-width: 768px) {
+    .button-text {
+      @apply text-base;
+    }
+  }
 }
