@@ -1,6 +1,7 @@
+import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { SponsorTicker } from "@/components/Generic"
-import { BorderButton, Heading } from "@/components/Primitive"
+import { Button, Heading } from "@/components/Primitive"
 import type { Sponsor } from "@/payload/payload-types"
 
 /**
@@ -29,18 +30,9 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
       </div>
       <SponsorTicker containerClassName="max-w-360" items={sponsors} />
       <Link href="/sponsors">
-        <BorderButton
-          borderClassName="md:hidden"
-          variant={{ theme: "dark", size: "sm", border: true }}
-        >
-          SEE ALL SPONSORS
-        </BorderButton>
-        <BorderButton
-          borderClassName="hidden md:inline-flex"
-          variant={{ theme: "dark", size: "md", border: true }}
-        >
-          SEE ALL SPONSORS
-        </BorderButton>
+        <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
+          See All Our Sponsors
+        </Button>
       </Link>
     </div>
   )

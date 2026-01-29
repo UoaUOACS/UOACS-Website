@@ -2,10 +2,11 @@
 
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { ArrowUpRightIcon, Bars3Icon } from "@heroicons/react/24/solid"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
-import { BorderButton, Dropdown } from "@/components/Primitive"
+import { Button, Dropdown } from "@/components/Primitive"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"
 
@@ -44,8 +45,8 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
   const dropdownOptions = socialLinks.map((socialLink) => ({
     label: (
       <span className="flex items-center gap-2">
-        <FontAwesomeIcon className="w-4" icon={socialLink.icon} />
         {socialLink.label}
+        <FontAwesomeIcon className="w-4" icon={socialLink.icon} />
       </span>
     ),
     href: socialLink.href,
@@ -62,42 +63,33 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
           </Link>
         </motion.div>
         <MobileNavbar links={links} socialLinks={socialLinks} />
-        <div className="hidden flex-row items-center gap-3 md:flex">
-          <div className="nowrap flex h-fit flex-row rounded-2xl bg-white">
+        <div className="hidden flex flex-row gap-5 md:flex nowrap">
+          <div className="flex flex-row items-center gap-5">
             {links
               .filter((link) => link.label.toLowerCase() !== "home")
               .map((link) => (
                 <Link className="rounded-2xl" href={link.href} key={link.href}>
-                  <BorderButton
-                    left={<div className="h-2 w-3 rounded-xs bg-primary" />}
-                    variant={{ size: "navbar", theme: "ghost", border: "none" }}
-                  >
-                    {link.label.toUpperCase()}
-                  </BorderButton>
+                  <Button theme="primary">{link.label}</Button>
                 </Link>
               ))}
+            <Dropdown
+              label="Socials"
+              options={dropdownOptions}
+              theme="primary"
+              triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
+            />
           </div>
-          <Dropdown
-            label="SOCIALS"
-            options={dropdownOptions}
-            optionVariant={{ size: "sm" }}
-            triggerVariant={{ size: "navbar", border: "none" }}
-            variant={{ size: "md" }}
-          />
-        </div>
-        <a
-          className="hidden lg:block"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <BorderButton
-            left={<div className="h-2.5 w-2.5 rounded-[0.92px] bg-white" />}
-            variant={{ size: "sm", theme: "dark" }}
+          <a
+            className="hidden lg:block"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
+            rel="noopener noreferrer"
+            target="_blank"
           >
-            JOIN US
-          </BorderButton>
-        </a>
+            <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
+              Join UOACS
+            </Button>
+          </a>
+        </div>
       </nav>
     </>
   )

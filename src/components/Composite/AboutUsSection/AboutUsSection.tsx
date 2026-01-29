@@ -1,5 +1,6 @@
+import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Image from "next/image"
-import { BorderButton } from "@/components/Primitive"
+import { Button } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
 import type { Reel as ReelDocument } from "@/payload/payload-types"
 import { Reel } from "../Reel/Reel"
@@ -40,9 +41,9 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <BorderButton borderClassName="w-fit" variant={{ theme: "dark", size: "sm" }}>
-              INTERESTED? JOIN US
-            </BorderButton>
+            <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
+              Interested? Join UOACS
+            </Button>
           </a>
           <p className="paragraph-sm font-medium">Membership is 100% free so come join us!</p>
         </div>
