@@ -1,12 +1,12 @@
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { BorderButton } from "../BorderButton/BorderButton"
-import { type BorderButtonVariantProps, borderButtonVariants } from "../BorderButton/variants"
+import { Button } from "../Button/Button"
+import { type ButtonVariantProps, buttonVariants } from "../Button/variants"
 
 /**
  * Props for the {@link DropdownOption} component.
  */
-export interface DropdownOptionProps {
+export interface DropdownOptionProps extends ButtonVariantProps {
   /**
    * A label for the dropdown option.
    */
@@ -19,10 +19,6 @@ export interface DropdownOptionProps {
    * An optional click handler for the dropdown option.
    */
   onClick?: () => void
-  /**
-   * Variant configuration for the button within the dropdown option.
-   */
-  variant?: BorderButtonVariantProps
 }
 
 /**
@@ -31,35 +27,19 @@ export interface DropdownOptionProps {
  * @param props {@link DropdownOptionProps} for the DropdownOption component.
  * @returns A styled dropdown option element.
  */
-export const DropdownOption = ({ label, href, onClick, variant }: DropdownOptionProps) => {
-  const mergedVariant = { border: false, size: "lg", ...variant } as BorderButtonVariantProps
-
+export const DropdownOption = ({ label, href, onClick, ...variant }: DropdownOptionProps) => {
   if (href) {
-    const { inner, border } = borderButtonVariants(mergedVariant)
+    const variantClasses = buttonVariants(variant)
     return (
-      <Link
-        className={cn(border(), "block w-full")}
-        href={href}
-        rel="noopener noreferrer"
-        role="menuitem"
-        target="_blank"
-      >
-        <div className={cn(inner(), "w-full justify-start whitespace-nowrap p-3")}>
-          {label || "Option"}
-        </div>
+      <Link href={href} rel="noopener noreferrer" role="menuitem" target="_blank">
+        <div className={cn(variantClasses, "whitespace-nowrap")}>{label || "Option"}</div>
       </Link>
     )
   }
 
   return (
-    <BorderButton
-      borderClassName="w-full"
-      className="w-full justify-start whitespace-nowrap p-3"
-      onClick={onClick}
-      role="menuitem"
-      variant={mergedVariant}
-    >
+    <Button className="whitespace-nowrap" onClick={onClick} role="menuitem" {...variant}>
       {label || "Option"}
-    </BorderButton>
+    </Button>
   )
 }

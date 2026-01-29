@@ -1,3 +1,4 @@
+import { Bars3Icon } from "@heroicons/react/24/solid"
 import type { Meta, StoryObj } from "@storybook/react"
 import { Dropdown } from "./Dropdown"
 
@@ -7,21 +8,12 @@ const meta: Meta<typeof Dropdown> = {
   argTypes: {
     label: { control: "text" },
     options: { control: "object" },
-    variant: {
-      control: "object",
-      description: "Variant configuration for theme, size",
-    },
-    triggerVariant: {
-      control: "object",
-      description: "Variant configuration for trigger button",
-    },
-    optionVariant: {
-      control: "object",
-      description: "Variant configuration for options",
-    },
+    triggerClassName: { control: "text" },
+    popoverClassName: { control: "text" },
+    triggerIcon: { control: false },
   },
   args: {
-    label: "SOCIALS",
+    label: "Socials",
     options: [
       {
         label: "Option 1",
@@ -38,32 +30,28 @@ const meta: Meta<typeof Dropdown> = {
 export default meta
 type Story = StoryObj<typeof Dropdown>
 
-export const Primary: Story = {
-  args: {
-    variant: { theme: "primary", size: "md" },
-  },
-}
+export const Primary: Story = {}
 
-export const MismatchedVariants: Story = {
+export const TriggerIcon: Story = {
   args: {
-    variant: { theme: "primary", size: "md" },
-    optionVariant: { theme: "dark" },
-    label: "MIXED THEME",
+    triggerIcon: <Bars3Icon className="h-6 w-6 text-white" />,
+  },
+  argTypes: {
+    triggerIcon: { control: false },
   },
 }
 
 export const LongOptions: Story = {
   args: {
-    variant: { theme: "primary", size: "md" },
-    label: "LONG OPTIONS",
+    label: "Long Options",
     options: [
       {
-        label: "This is a very long option that should expand the dropdown",
+        label: "This is a long option",
         href: "#",
       },
       { label: "Short one", href: "#" },
       {
-        label: "Another significantly lengthy option for testing purposes",
+        label: "Another long option",
         href: "#",
       },
     ],
@@ -72,8 +60,7 @@ export const LongOptions: Story = {
 
 export const ManyOptions: Story = {
   args: {
-    variant: { theme: "primary", size: "md" },
-    label: "MANY OPTIONS",
+    label: "Many Options",
     options: Array.from({ length: 10 }).map((_, i) => ({
       label: `Option ${i + 1}`,
       href: "#",
@@ -83,13 +70,12 @@ export const ManyOptions: Story = {
 
 export const IndividualOptionVariants: Story = {
   args: {
-    variant: { theme: "primary", size: "md" },
-    label: "RAINBOW",
+    label: "Rainbow",
     options: [
       { label: "Primary (Default)", href: "#" },
-      { label: "Dark", href: "#", variant: { theme: "dark" } },
-      { label: "Light", href: "#", variant: { theme: "light" } },
-      { label: "Ghost", href: "#", variant: { theme: "ghost" } },
+      { label: "Dark", href: "#", theme: "dark" },
+      { label: "Light", href: "#", theme: "light" },
+      { label: "Ghost", href: "#", theme: "ghost" },
     ],
   },
 }
