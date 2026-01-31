@@ -17,6 +17,7 @@ export default async function TeamPage() {
     collection: "executive",
     limit: 100,
     depth: 2,
+    sort: "createdAt",
   })
 
   return <TeamPageClient execs={execs} />
