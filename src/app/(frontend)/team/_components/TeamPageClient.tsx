@@ -150,7 +150,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
                   key={exec.id}
                 >
                   <p className="paragraph">{exec.name}</p>
-                  <FontAwesomeIcon fontSize={24} icon={faLinkedin} />
+                  {exec.linkedin && <FontAwesomeIcon fontSize={24} icon={faLinkedin} />}
                 </Link>
               ))}
             </div>
