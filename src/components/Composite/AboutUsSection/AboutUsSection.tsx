@@ -1,3 +1,4 @@
+import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Image from "next/image"
 import { Button } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
@@ -40,8 +41,8 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <Button borderClassName="w-fit" variant={{ theme: "dark", size: "sm" }}>
-              INTERESTED? JOIN US
+            <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
+              Interested? Join UOACS
             </Button>
           </a>
           <p className="paragraph-sm font-medium">Membership is 100% free so come join us!</p>

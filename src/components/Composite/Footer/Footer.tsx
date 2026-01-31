@@ -2,7 +2,7 @@ import { faDiscord, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "@/components/Primitive"
+import { BorderButton } from "@/components/Primitive"
 
 const SOCIAL_LINKS = [
   { icon: faDiscord, label: "Discord", href: "https://discord.gg/xSgqAmGE" },
@@ -27,7 +27,7 @@ export const Footer = () => {
       <div className="flex min-h-64 flex-col">
         <nav aria-label="Social media links" className="flex items-start gap-4">
           {SOCIAL_LINKS.map(({ icon, label, href }) => (
-            <Button
+            <BorderButton
               aria-label={label}
               key={label}
               variant={{ border: true, size: "sm", theme: "primary" }}
@@ -40,7 +40,7 @@ export const Footer = () => {
               >
                 <FontAwesomeIcon className="md:text-3xl" fontSize={24} icon={icon} />
               </a>
-            </Button>
+            </BorderButton>
           ))}
         </nav>
 
@@ -72,9 +72,9 @@ export const Footer = () => {
               rel="noopener"
               target="_blank"
             >
-              <Button variant={{ border: true, size: "sm", theme: "primary" }}>
+              <BorderButton variant={{ border: true, size: "sm", theme: "primary" }}>
                 INTERESTED? JOIN US
-              </Button>
+              </BorderButton>
             </a>
           </div>
         </div>

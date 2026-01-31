@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
 import { useEffect, useState } from "react"
-import { Button, Heading } from "@/components/Primitive"
+import { BorderButton, Heading } from "@/components/Primitive"
 import { ExitIcon } from "@/components/Primitive/Icons/ExitIcon"
 import { MenuIcon } from "@/components/Primitive/Icons/MenuIcon"
 import { cn } from "@/lib/utils"
@@ -52,13 +52,13 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
         <AnimatePresence>
           {!isOpen && (
             <motion.div layoutId="navbar-button">
-              <Button
+              <BorderButton
                 borderClassName="z-50 md:hidden"
                 onClick={() => setIsOpen(true)}
                 variant={{ size: "sm", theme: "primary", border: true }}
               >
                 <MenuIcon className="text-2xl" />
-              </Button>
+              </BorderButton>
             </motion.div>
           )}
         </AnimatePresence>
@@ -78,13 +78,13 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                 </Link>
               </motion.div>
               <motion.div layoutId="navbar-button">
-                <Button
+                <BorderButton
                   borderClassName="z-50"
                   onClick={() => setIsOpen(!isOpen)}
                   variant={{ size: "sm", theme: "primary", border: true }}
                 >
                   <ExitIcon className="text-2xl" />
-                </Button>
+                </BorderButton>
               </motion.div>
             </div>
             <div className="w-full">
@@ -104,12 +104,12 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <Button
+              <BorderButton
                 left={<div className="h-2.5 w-2.5 rounded-[0.92px] bg-white" />}
                 variant={{ size: "sm", theme: "dark" }}
               >
                 JOIN US
-              </Button>
+              </BorderButton>
             </a>
           </motion.div>
         )}

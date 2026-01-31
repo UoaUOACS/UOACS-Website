@@ -1,63 +1,65 @@
-import { faDiscord } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Bars3Icon } from "@heroicons/react/24/solid"
 import type { Meta, StoryObj } from "@storybook/react"
 import { Button } from "./Button"
-
-type Story = StoryObj<typeof Button>
+import { buttonVariants } from "./variants"
 
 const meta: Meta<typeof Button> = {
   title: "Primitive Components/Button",
   component: Button,
-  argTypes: {
-    children: { control: "text" },
-    variant: { control: "object" },
-    className: { control: "text" },
-    borderClassName: { control: "text" },
-    type: { control: "select", options: ["button", "submit", "reset"] },
-    left: { control: false },
-    right: { control: false },
-  },
   args: {
-    children: "INTERESTED? JOIN US",
-    variant: { border: true, size: "md", theme: "dark" },
+    children: "Button Type 2",
+    theme: "primary",
+  },
+  argTypes: {
+    theme: {
+      control: { type: "select" },
+      options: buttonVariants.variants.theme ? Object.keys(buttonVariants.variants.theme) : [],
+    },
+    left: { control: { type: "text" } },
+    right: { control: { type: "text" } },
   },
 }
 
 export default meta
+type Story = StoryObj<typeof Button>
 
-export const Basic: Story = {
-  args: {},
-}
+export const Primary: Story = {}
 
-export const IconButton: Story = {
+export const RightIcon: Story = {
   args: {
-    children: <FontAwesomeIcon fontSize={32} icon={faDiscord} />,
-    variant: { border: true, size: "sm", theme: "primary" },
+    right: <Bars3Icon className="h-6 w-6 text-white" />,
   },
   argTypes: {
-    children: { control: false },
-  },
-}
-
-export const Borderless: Story = {
-  args: {
-    children: "NO BORDER BUTTON",
-    variant: { border: false, size: "md", theme: "dark" },
+    right: { control: false },
   },
 }
 
 export const LeftIcon: Story = {
   args: {
-    children: "JOIN US ON DISCORD",
-    left: <FontAwesomeIcon fontSize={18} icon={faDiscord} />,
-    variant: { border: true, size: "md", theme: "primary" },
+    left: <Bars3Icon className="h-6 w-6 text-white" />,
+  },
+  argTypes: {
+    left: { control: false },
   },
 }
 
-export const RightIcon: Story = {
+export const Ghost: Story = {
   args: {
-    children: "JOIN US ON DISCORD",
-    right: <FontAwesomeIcon fontSize={18} icon={faDiscord} />,
-    variant: { border: true, size: "md", theme: "primary" },
+    theme: "ghost",
+    children: "Ghost Button",
+  },
+}
+
+export const Dark: Story = {
+  args: {
+    theme: "dark",
+    children: "Dark Button",
+  },
+}
+
+export const Light: Story = {
+  args: {
+    theme: "light",
+    children: "Light Button",
   },
 }

@@ -1,6 +1,6 @@
 import { faDiscord, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Heading } from "@/components/Primitive"
+import { BorderButton, Heading } from "@/components/Primitive"
 
 /**
  *
@@ -49,7 +49,7 @@ export const HeroSection = () => {
           className="flex w-fit items-start gap-2 self-center md:gap-4 md:self-start"
         >
           {SOCIAL_LINKS.map(({ icon, label, href }) => (
-            <Button
+            <BorderButton
               aria-label={label}
               key={label}
               variant={{ border: true, size: "sm", theme: "primary" }}
@@ -62,7 +62,7 @@ export const HeroSection = () => {
               >
                 <FontAwesomeIcon className="text-xl md:text-3xl" icon={icon} />
               </a>
-            </Button>
+            </BorderButton>
           ))}
         </nav>
       </div>
