@@ -59,9 +59,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html className={`${inter.variable} ${switzer.variable}`} lang="en">
       <body>
-        <div className="mx-auto flex w-full max-w-360 flex-col gap-9 px-4 py-6 md:px-12 lg:px-20">
+        <div className="mx-auto flex w-full max-w-360 flex-col gap-14 px-4 py-6 md:px-12 lg:px-20">
           <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />
-          <main className="flex flex-col items-center gap-9 py-9 md:gap-30">{children}</main>
+          <main className="flex flex-col items-center gap-14 py-9 md:gap-18">{children}</main>
         </div>
         <Footer />
       </body>
