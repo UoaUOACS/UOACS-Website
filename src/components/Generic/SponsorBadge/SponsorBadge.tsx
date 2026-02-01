@@ -10,6 +10,7 @@ export interface SponsorBadgeProps extends SponsorBadgeVariantProps {}
  *
  * @param tier The sponsorship tier to display
  * @returns A badge component representing the sponsorship tier
+ * @deprecated Use the `Container` component with appropriate styling instead.
  */
 export const SponsorBadge = ({ tier }: SponsorBadgeProps) => {
   const { border, inner } = sponsorBadgeVariants({ tier })
