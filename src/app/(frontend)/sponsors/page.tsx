@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { getPayload } from "payload"
-import { SponsorBadge } from "@/components/Generic"
-import { Heading, LazyImage } from "@/components/Primitive"
+import { Container, Heading, LazyImage } from "@/components/Primitive"
+import { cn } from "@/lib/utils"
 import type { Sponsor } from "@/payload/payload-types"
 import config from "@/payload.config"
 import { SPONSOR_TIER_ORDER, SponsorTier } from "@/types/enums"
@@ -18,6 +18,7 @@ export default async function SponsorsPage() {
 
   const { docs: sponsors }: { docs: Sponsor[] } = await payload.find({
     collection: "sponsor",
+    depth: 2,
   })
 
   const tiers = sponsors
@@ -36,61 +37,79 @@ export default async function SponsorsPage() {
 
   const tierSizes: Record<SponsorTier, { height: number; width: number }> = {
     [SponsorTier.DIAMOND]: {
-      height: 120,
-      width: 320,
+      height: 150,
+      width: 380,
     },
-    [SponsorTier.GOLD]: { height: 120, width: 320 },
-    [SponsorTier.SILVER]: { height: 80, width: 240 },
+    [SponsorTier.GOLD]: { height: 150, width: 380 },
+    [SponsorTier.SILVER]: { height: 80, width: 200 },
   }
 
   return (
     <>
-      <div className="flex flex-col items-center gap-2 px-4 text-center">
+      <div className="flex flex-col items-center gap-3 px-4 text-center md:gap-6">
         <Heading h={1} period>
           Our Sponsors
         </Heading>
-        <p className="paragraph">These are the organisations who make this club possible.</p>
+        <p className="paragraph text-gray-700">
+          These are the people that support us and make this club possible.
+        </p>
       </div>
-      <div className="flex max-w-330 flex-row flex-wrap items-center justify-center gap-x-24 gap-y-12">
+      <div className="flex w-full max-w-220 flex-col items-stretch justify-between gap-x-6 gap-y-12 md:flex-row md:flex-wrap">
         {tiers.map((tier) => (
-          <div className="flex flex-col items-center justify-center gap-9 md:gap-6" key={tier}>
-            <SponsorBadge tier={tier} />
-            <div className="flex flex-row flex-wrap items-center justify-center gap-x-18 gap-y-12 md:gap-24">
-              {sponsorsByTier[tier].map((sponsor) => {
-                const photo = sponsor.logo
-                let src: string | undefined
+          <Container
+            className="flex w-auto flex-1 flex-col justify-center gap-4 p-4 md:min-w-1/3 md:flex-row md:flex-wrap"
+            key={tier}
+            theme={tier as SponsorTier}
+            title={`${tier.charAt(0).toUpperCase() + tier.slice(1).toLowerCase()} Sponsor`}
+          >
+            {sponsorsByTier[tier].map((sponsor) => {
+              const photo = sponsor.logo
+              let src: string | undefined
 
-                if (!photo) {
-                  src = undefined
-                } else if (typeof photo === "string") {
-                  src = photo
-                } else if (typeof photo === "object" && photo !== null) {
-                  const maybeMedia = photo as { url?: string | null; thumbnailURL?: string | null }
-                  src = maybeMedia.url ?? maybeMedia.thumbnailURL ?? undefined
-                }
+              if (!photo) {
+                src = undefined
+              } else if (typeof photo === "string") {
+                src = photo
+              } else if (typeof photo === "object" && photo !== null) {
+                const maybeMedia = photo as { url?: string | null; thumbnailURL?: string | null }
+                src = maybeMedia.url ?? maybeMedia.thumbnailURL ?? undefined
+              }
 
-                if (!src) return null
+              if (!src) return null
 
-                return (
-                  <a
-                    className="relative flex items-center justify-center"
-                    href={sponsor.link || "#"}
-                    key={sponsor.name}
-                    rel="noopener noreferrer"
-                    style={{
-                      height: `${tierSizes[tier as SponsorTier].height}px`,
-                      width: `${tierSizes[tier as SponsorTier].width}px`,
-                    }}
-                    target="_blank"
-                  >
-                    <LazyImage alt={sponsor.name} src={src} {...tierSizes[tier as SponsorTier]} />
-                  </a>
-                )
-              })}
-            </div>
-          </div>
+              return (
+                <a
+                  className={cn(
+                    "flex flex-1 items-center justify-center rounded-lg p-6 transition-all duration-300 hover:bg-gray-500-opaque",
+                    sponsor.tier === SponsorTier.DIAMOND || sponsor.tier === SponsorTier.GOLD
+                      ? "h-[200px]"
+                      : "h-[150px]",
+                  )}
+                  href={sponsor.link || "#"}
+                  key={sponsor.name}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <LazyImage
+                    alt={sponsor.name}
+                    containerClassName="md:!w-full"
+                    src={src}
+                    {...tierSizes[tier as SponsorTier]}
+                  />
+                </a>
+              )
+            })}
+          </Container>
         ))}
       </div>
+      <p className="paragraph mx-auto max-w-96 text-center text-gray-700">
+        Interested in becoming our sponsors?
+        <br />
+        contact us via{" "}
+        <a className="text-pink-700 underline" href="mailto:outreach@uacs.org">
+          outreach@uoacs.org
+        </a>
+      </p>
     </>
   )
 }
