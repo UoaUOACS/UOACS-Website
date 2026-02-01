@@ -94,7 +94,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
         <Heading h={2} period>
           Our Team
         </Heading>
-        <p className="paragraph gray-700">These are the people who make this club possible.</p>
+        <p className="paragraph text-gray-700">These are the people who make this club possible.</p>
       </div>
       <div className="flex w-full flex-col items-center justify-center gap-12">
         <div className="hidden max-w-200 flex-row flex-wrap items-center justify-center gap-4 md:flex">
@@ -133,7 +133,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
             Past Executives
           </Heading>
         </div>
-        <p className="paragraph gray-700">UOACS Alumni</p>
+        <p className="paragraph text-gray-700">UOACS Alumni</p>
       </div>
       <div className="grid w-full grid-cols-1 justify-center gap-12 md:grid-cols-[repeat(auto-fill,22.5rem)] md:gap-x-16 md:gap-y-[4.5rem]">
         {pastTeams.map((team: string) => {
