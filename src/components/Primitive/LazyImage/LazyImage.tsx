@@ -56,7 +56,7 @@ export function LazyImage({
         onError={() => {
           setIsLoaded(true)
         }}
-        onLoadingComplete={() => {
+        onLoad={() => {
           setIsLoaded(true)
         }}
         width={width}
