@@ -1,5 +1,6 @@
 export * from "./BorderButton/BorderButton"
 export * from "./Button/Button"
+export * from "./Container/Container"
 export * from "./Dropdown/Dropdown"
 export * from "./Heading/Heading"
 export * from "./LazyImage/LazyImage"
