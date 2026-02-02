@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
 import { useState } from "react"
 import { ExecCard } from "@/components/Generic"
-import { BorderButton, Heading } from "@/components/Primitive"
+import { BorderButton, Container, Heading } from "@/components/Primitive"
 import type { Executive } from "@/payload/payload-types"
 import { EXECUTIVE_LEVEL_ORDER, ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 
@@ -91,69 +91,91 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
   return (
     <>
       <div className="flex flex-col items-center gap-2 px-4 text-center">
-        <Heading h={1} period>
+        <Heading h={2} period>
           Our Team
         </Heading>
-        <p className="paragraph">These are the people who make this club possible.</p>
+        <p className="paragraph text-gray-700">These are the people who make this club possible.</p>
       </div>
-      <div className="flex max-w-200 flex-row flex-wrap items-center justify-center gap-4">
-        {currentTeams.map((team: string) => (
-          <BorderButton
-            aria-pressed={selectedTeam === team}
-            key={team}
-            onClick={() => handleTeamSelect(team)}
-            variant={{
-              theme: selectedTeam === team ? "primary" : "light",
-              size: "sm-wide",
-              border: selectedTeam === team,
-            }}
-          >
-            {`${team.toUpperCase()} [${
-              currentExecs.filter((exec: Executive) =>
-                (exec.role?.teams ?? []).includes(toTeam(team)),
-              ).length
-            }]`}
-          </BorderButton>
-        ))}
-      </div>
-      <div className="grid w-full max-w-330 grid-cols-[repeat(auto-fill,128px)] justify-center gap-6 md:grid-cols-[repeat(auto-fill,200px)]">
-        {currentExecs
-          ?.filter((exec: Executive) =>
-            selectedTeam ? (exec.role?.teams ?? []).includes(toTeam(selectedTeam)) : true,
-          )
-          .map((exec: Executive) => (
-            <ExecCard exec={exec} key={exec.id} />
+      <div className="flex w-full flex-col items-center justify-center gap-12">
+        <div className="hidden max-w-200 flex-row flex-wrap items-center justify-center gap-4 md:flex">
+          {currentTeams.map((team: string) => (
+            <BorderButton
+              aria-pressed={selectedTeam === team}
+              key={team}
+              onClick={() => handleTeamSelect(team)}
+              variant={{
+                theme: selectedTeam === team ? "primary" : "light",
+                size: "sm-wide",
+                border: selectedTeam === team,
+              }}
+            >
+              {`${team.toUpperCase()} [${
+                currentExecs.filter((exec: Executive) =>
+                  (exec.role?.teams ?? []).includes(toTeam(team)),
+                ).length
+              }]`}
+            </BorderButton>
           ))}
+        </div>
+        <div className="grid w-full grid-cols-[repeat(auto-fit,128px)] justify-center gap-2 md:grid-cols-[repeat(auto-fit,200px)] md:gap-6">
+          {currentExecs
+            ?.filter((exec: Executive) =>
+              selectedTeam ? (exec.role?.teams ?? []).includes(toTeam(selectedTeam)) : true,
+            )
+            .map((exec: Executive) => (
+              <ExecCard exec={exec} key={exec.id} />
+            ))}
+        </div>
       </div>
       <div className="flex flex-col items-center gap-2 px-4 text-center">
         <div className="relative">
-          <Heading h={1} period>
+          <Heading h={2} period>
             Past Executives
           </Heading>
         </div>
-        <p className="paragraph">ex-uoacs executives</p>
+        <p className="paragraph text-gray-700">UOACS Alumni</p>
       </div>
-      <div className="grid w-full max-w-330 grid-cols-[repeat(auto-fill,22.5rem)] justify-center gap-6 md:gap-18">
+      <div className="grid w-full grid-cols-1 justify-center gap-12 md:grid-cols-[repeat(auto-fill,22.5rem)] md:gap-x-16 md:gap-y-[4.5rem]">
         {pastTeams.map((team: string) => {
           const execsInTeam = pastExecs.filter((exec: Executive) =>
             (exec.role?.teams ?? []).includes(toTeam(team)),
           )
           return (
-            <div key={team}>
-              <p className="font-medium font-mono text-lg">
-                {TEAM_DISPLAY_NAMES[team].toUpperCase()}
-              </p>
-              {execsInTeam.map((exec: Executive) => (
-                <Link
-                  className="flex w-90 flex-row items-center justify-between p-2 font-inter"
-                  href={exec.linkedin ?? "#"}
-                  key={exec.id}
-                >
-                  <p className="paragraph">{exec.name}</p>
-                  <FontAwesomeIcon fontSize={24} icon={faLinkedin} />
-                </Link>
-              ))}
-            </div>
+            <Container
+              className="flex w-full flex-col gap-0 px-3 py-6 md:gap-2.5"
+              key={team}
+              theme="primary"
+              title={TEAM_DISPLAY_NAMES[team]}
+            >
+              {execsInTeam.map((exec: Executive) =>
+                exec.linkedin ? (
+                  <Link
+                    className="flex w-full flex-row items-center justify-between rounded-sm px-3 py-1.5 font-inter transition-all duration-300 hover:bg-gray-600-opaque md:max-w-90"
+                    href={exec.linkedin}
+                    key={exec.id}
+                  >
+                    <p className="heading-4 font-normal">{exec.name}</p>
+                    {exec.linkedin && (
+                      <>
+                        <span className="hidden md:block">
+                          <FontAwesomeIcon fontSize={32} icon={faLinkedin} />
+                        </span>
+                        <span className="block md:hidden">
+                          <FontAwesomeIcon fontSize={28} icon={faLinkedin} />
+                        </span>
+                      </>
+                    )}
+                  </Link>
+                ) : (
+                  <p
+                    className="heading-4 w-full p-2 px-3 py-1.5 font-normal md:max-w-90"
+                    key={exec.id}
+                  >
+                    {exec.name}
+                  </p>
+                ),
+              )}
+            </Container>
           )
         })}
       </div>

@@ -63,7 +63,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
           </Link>
         </motion.div>
         <MobileNavbar links={links} socialLinks={socialLinks} />
-        <div className="hidden flex flex-row gap-5 md:flex nowrap">
+        <div className="nowrap flex hidden flex-row gap-5 md:flex">
           <div className="flex flex-row items-center gap-5">
             {links
               .filter((link) => link.label.toLowerCase() !== "home")

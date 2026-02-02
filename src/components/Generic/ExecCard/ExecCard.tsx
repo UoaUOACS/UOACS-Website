@@ -19,18 +19,18 @@ export const ExecCard = ({ exec }: ExecCardProps) => {
   }
 
   return (
-    <div className="flex flex-col items-start gap-3">
+    <div className="flex w-[6.75rem] flex-col items-start gap-2 md:w-[12.5rem] md:gap-3">
       {src ? (
         <Image
           alt={`${exec.name} photo`}
-          className="size-full max-h-32 max-w-32 rounded-sm object-cover md:max-h-50 md:max-w-50"
+          className="size-full h-[6.75rem] w-[6.75rem] rounded-md object-cover md:h-[12.5rem] md:w-[12.5rem]"
           height={200}
           priority
           src={src}
           width={200}
         />
       ) : (
-        <p className="flex aspect-square size-full max-h-32 max-w-32 items-center justify-center rounded-sm bg-gray-200 font-md text-gray-700 text-xl md:max-h-50 md:max-w-50">
+        <p className="flex aspect-square size-full h-[6.75rem] w-[6.75rem] items-center justify-center rounded-md bg-gray-200 font-md text-gray-700 text-xl md:h-[12.5rem] md:w-[12.5rem]">
           {exec.name
             ? exec.name
                 .split(" ")
