@@ -11,7 +11,7 @@ export const buttonVariants = tv({
       primary: "bg-primary text-white hover:bg-pink-400",
       ghost: "bg-transparent text-black hover:bg-gray-200",
       dark: "bg-black text-white hover:bg-gray-700",
-      light: "bg-gray-200 text-black hover:bg-gray-300",
+      light: "bg-gray-300 text-black hover:bg-gray-400",
     },
   },
   defaultVariants: {
