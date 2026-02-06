@@ -7,6 +7,7 @@ import Link from "next/link"
 import { Button } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
 import type { SocialLink } from "../Navbar/Navbar"
+import { NavbarGradient } from "../Navbar/NavbarGradient"
 
 /**
  * Props for the {@link Footer} component
@@ -52,7 +53,8 @@ const InterestedButton = ({ className }: { className?: string }) => (
  */
 export const Footer = ({ links, socialLinks }: FooterProps) => {
   return (
-    <footer className="grid w-full grid-cols-1 gap-4 bg-gray-800 p-5 text-white md:grid-cols-4 md:p-6">
+    <footer className="relative grid w-full grid-cols-1 gap-4 bg-gray-800 p-5 text-white md:grid-cols-4 md:p-6">
+      <NavbarGradient className="h-full translate-y-2/3 md:h-full md:translate-y-5/6" />
       <div className="flex flex-col gap-4">
         <div className="flex flex-row flex-wrap items-start justify-between gap-2">
           <p className="paragraph-sm text-gray-400">UOACS &copy; {new Date().getFullYear()}</p>
