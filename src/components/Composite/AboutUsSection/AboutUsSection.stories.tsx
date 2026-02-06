@@ -1,4 +1,4 @@
-import type { Meta, StoryFn } from "@storybook/react"
+import type { Meta, StoryFn } from "@storybook/nextjs-vite"
 import { mockReel } from "@/mocks/Reel.mock"
 import { AboutUsSection } from "./AboutUsSection"
 

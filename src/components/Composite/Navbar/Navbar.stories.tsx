@@ -1,5 +1,5 @@
 import { faDiscord, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-brands-svg-icons"
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { Navbar } from "./Navbar"
 
 const meta: Meta<typeof Navbar> = {

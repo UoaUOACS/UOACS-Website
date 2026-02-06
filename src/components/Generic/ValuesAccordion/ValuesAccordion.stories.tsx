@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { VALUES } from "@/components/Composite/ValuesSection/ValuesSection.constants"
 import { ValuesAccordion, type ValuesAccordionProps } from "./ValuesAccordion"
 
