@@ -27,6 +27,7 @@
     "@payloadcms/richtext-lexical": "3.75.0",
     "@payloadcms/storage-s3": "3.75.0",
     "@storybook/react": "^9.1.8",
+    "babel-plugin-react-compiler": "^1.0.0",
     "clsx": "^2.1.1",
     "graphql": "^16.11.0",
     "motion": "^12.23.24",
