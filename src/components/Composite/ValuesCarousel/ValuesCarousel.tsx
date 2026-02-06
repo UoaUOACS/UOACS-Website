@@ -150,7 +150,7 @@ export const ValuesCarousel = () => {
           </ValueCard>
 
           {/* Navigation buttons */}
-          <div className="-bottom-3 -right-3 absolute z-10 flex gap-0 rounded border border-gray-400 bg-white">
+          <div className="absolute -right-3 -bottom-3 z-10 flex gap-0 rounded border border-gray-400 bg-white">
             <button
               aria-label="Previous value"
               className="flex h-8 w-8 cursor-pointer items-center justify-center border-gray-400 border-r"
