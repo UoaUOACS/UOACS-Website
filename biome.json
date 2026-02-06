@@ -79,13 +79,28 @@
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
         "noUselessElse": "error",
-        "useConsistentCurlyBraces": "error"
+        "useConsistentCurlyBraces": "error",
+        "useComponentExportOnlyModules": "off"
       },
       "performance": {
         "noImgElement": "info"
       }
     }
   },
+  "overrides": [
+    {
+      "includes": ["**/*.stories.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useComponentExportOnlyModules": {
+              "level": "off"
+            }
+          }
+        }
+      }
+    }
+  ],
   "assist": {
     "actions": {
       "source": { "organizeImports": "on", "useSortedAttributes": "on" }
