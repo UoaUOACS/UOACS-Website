@@ -73,10 +73,7 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
         </nav>
       </div>
 
-      <nav
-        aria-label="Footer navigation"
-        className="hidden flex-col justify-end gap-4 pl-1 text-lg md:flex md:pl-20"
-      >
+      <nav aria-label="Footer navigation" className="hidden flex-col items-start gap-4 md:flex">
         <p className="paragraph-sm text-gray-400">Pages</p>
         {links.map(({ label, href }) => (
           <Link className="w-fit" href={href} key={label}>
