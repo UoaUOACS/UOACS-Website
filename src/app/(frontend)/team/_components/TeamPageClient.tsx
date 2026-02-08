@@ -1,11 +1,9 @@
 "use client"
 
-import { faLinkedin } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
 import { useState } from "react"
 import { ExecCard } from "@/components/Generic"
-import { BorderButton, Container, Heading } from "@/components/Primitive"
+import { BorderButton, Container, Heading, SocialIcon } from "@/components/Primitive"
 import type { Executive } from "@/payload/payload-types"
 import { EXECUTIVE_LEVEL_ORDER, ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 
@@ -155,16 +153,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
                     key={exec.id}
                   >
                     <p className="heading-4 font-normal">{exec.name}</p>
-                    {exec.linkedin && (
-                      <>
-                        <span className="hidden md:block">
-                          <FontAwesomeIcon fontSize={32} icon={faLinkedin} />
-                        </span>
-                        <span className="block md:hidden">
-                          <FontAwesomeIcon fontSize={28} icon={faLinkedin} />
-                        </span>
-                      </>
-                    )}
+                    {exec.linkedin && <SocialIcon.LinkedIn className="h-7 w-7 md:h-8 md:w-8" />}
                   </Link>
                 ) : (
                   <p

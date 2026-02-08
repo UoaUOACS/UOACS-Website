@@ -1,11 +1,10 @@
 "use client"
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
 import { useEffect, useState } from "react"
-import { BorderButton, Heading } from "@/components/Primitive"
+import { BorderButton, Heading, SocialIcon } from "@/components/Primitive"
 import { ExitIcon } from "@/components/Primitive/Icons/ExitIcon"
 import { MenuIcon } from "@/components/Primitive/Icons/MenuIcon"
 import { cn } from "@/lib/utils"
@@ -95,7 +94,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
             <div className="flex w-fit flex-row gap-6 text-2xl text-gray-700">
               {socialLinks.map((link) => (
                 <a href={link.href} key={link.href} rel="noopener noreferrer" target="_blank">
-                  <FontAwesomeIcon icon={link.icon} />
+                  <SocialIcon className="h-6 w-6" icon={link.icon} />
                 </a>
               ))}
             </div>

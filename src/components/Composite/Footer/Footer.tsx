@@ -1,15 +1,13 @@
-import { faDiscord, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import Link from "next/link"
-import { BorderButton } from "@/components/Primitive"
+import { BorderButton, SOCIAL_ICONS, SocialIcon } from "@/components/Primitive"
 
 const SOCIAL_LINKS = [
-  { icon: faDiscord, label: "Discord", href: "https://discord.gg/xSgqAmGE" },
-  { icon: faInstagram, label: "Instagram", href: "https://www.instagram.com/uoacs25/" },
-  { icon: faTiktok, label: "TikTok", href: "https://www.tiktok.com/@uoacs?lang=en-GB" },
+  { icon: SOCIAL_ICONS.Discord, label: "Discord", href: "https://discord.gg/xSgqAmGE" },
+  { icon: SOCIAL_ICONS.Instagram, label: "Instagram", href: "https://www.instagram.com/uoacs25/" },
+  { icon: SOCIAL_ICONS.TikTok, label: "TikTok", href: "https://www.tiktok.com/@uoacs?lang=en-GB" },
   {
-    icon: faLinkedin,
+    icon: SOCIAL_ICONS.LinkedIn,
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/university-of-auckland-compsci-society/posts/?feedView=all",
   },
@@ -38,7 +36,7 @@ export const Footer = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <FontAwesomeIcon className="md:text-3xl" fontSize={24} icon={icon} />
+                <SocialIcon className="h-7 w-6 md:h-7 md:w-7" icon={icon} />
               </a>
             </BorderButton>
           ))}

@@ -1,15 +1,11 @@
-import { config } from "@fortawesome/fontawesome-svg-core"
-import { faDiscord, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-brands-svg-icons"
 import { Inter_Tight } from "next/font/google"
 import localFont from "next/font/local"
 import type React from "react"
 import { Footer, Navbar } from "@/components/Composite"
 import type { SocialLink } from "@/components/Composite/Navbar/Navbar"
-import "@fortawesome/fontawesome-svg-core/styles.css"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
-
-config.autoAddCss = false
+import { SOCIAL_ICONS } from "@/components/Primitive"
 
 const inter = Inter_Tight({
   subsets: ["latin"],
@@ -43,12 +39,12 @@ const navbarLinks: { label: string; href: string }[] = [
   { label: "Our Sponsors", href: "/sponsors" },
 ]
 const navbarSocialLinks: SocialLink[] = [
-  { label: "Discord", icon: faDiscord, href: "https://discord.gg/xSgqAmGE" },
-  { label: "Instagram", icon: faInstagram, href: "https://www.instagram.com/uoacs25/" },
-  { label: "TikTok", icon: faTiktok, href: "https://www.tiktok.com/@uoacs?lang=en-GB" },
+  { label: "Discord", icon: SOCIAL_ICONS.Discord, href: "https://discord.gg/xSgqAmGE" },
+  { label: "Instagram", icon: SOCIAL_ICONS.Instagram, href: "https://www.instagram.com/uoacs25/" },
+  { label: "TikTok", icon: SOCIAL_ICONS.TikTok, href: "https://www.tiktok.com/@uoacs?lang=en-GB" },
   {
     label: "LinkedIn",
-    icon: faLinkedin,
+    icon: SOCIAL_ICONS.LinkedIn,
     href: "https://www.linkedin.com/company/university-of-auckland-compsci-society/posts/?feedView=all",
   },
 ]
