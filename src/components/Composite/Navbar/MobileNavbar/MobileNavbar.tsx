@@ -1,12 +1,11 @@
 "use client"
 
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
 import { useEffect, useState } from "react"
 import { BorderButton, Heading, SocialIcon } from "@/components/Primitive"
-import { ExitIcon } from "@/components/Primitive/Icons/ExitIcon"
-import { MenuIcon } from "@/components/Primitive/Icons/MenuIcon"
 import { cn } from "@/lib/utils"
 import type { NavbarProps } from "../Navbar"
 import { mobileNavbarVariants } from "./variants"
@@ -56,7 +55,8 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                 onClick={() => setIsOpen(true)}
                 variant={{ size: "sm", theme: "primary", border: true }}
               >
-                <MenuIcon className="text-2xl" />
+                {/* TODO: make something less janky */}
+                <Bars3Icon className="h-6 w-6 origin-center scale-[1.1] stroke-[2.5]" />
               </BorderButton>
             </motion.div>
           )}
@@ -82,7 +82,8 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                   onClick={() => setIsOpen(!isOpen)}
                   variant={{ size: "sm", theme: "primary", border: true }}
                 >
-                  <ExitIcon className="text-2xl" />
+                  {/* TODO: make something less janky */}
+                  <XMarkIcon className="h-6 w-6 origin-center scale-[1.1] stroke-[2.5]" />
                 </BorderButton>
               </motion.div>
             </div>
