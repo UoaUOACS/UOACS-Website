@@ -38,7 +38,7 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
     const updateScale = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth
-        setScale(Math.min(1, containerWidth / BASE_WIDTH))
+        setScale(Math.min(1, containerWidth / (1.1 * BASE_WIDTH)))
       }
     }
     updateScale()
@@ -93,7 +93,7 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
           style={{ height: BASE_HEIGHT * scale }}
         >
           <div
-            className="relative -left-5 origin-top-left"
+            className="relative origin-top-left"
             style={{
               width: BASE_WIDTH,
               height: BASE_HEIGHT,
