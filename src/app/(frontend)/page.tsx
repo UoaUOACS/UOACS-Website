@@ -33,7 +33,7 @@ export default async function HomePage() {
       <Image
         alt="Background Gradient"
         aria-hidden="true"
-        className="-z-1 pointer-events-none absolute top-0 left-0 hidden w-full md:block md:w-7/10"
+        className="pointer-events-none absolute top-0 left-0 -z-1 hidden w-full md:block md:w-7/10"
         height={1000}
         src="/home-gradient.svg"
         width={1000}

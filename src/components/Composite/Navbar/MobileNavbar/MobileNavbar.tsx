@@ -149,7 +149,7 @@ export const MobileNavbarButton = ({ label, ...props }: { label: string } & Link
         </Heading>
         <div className="h-8 w-8 rounded-full bg-linear-to-bl from-pink-500 to-pink-400" />
         <motion.div
-          className="-bottom-3 -translate-x-1/2 absolute left-1/2 h-6 w-2/3 rounded-full blur-3xl"
+          className="absolute -bottom-3 left-1/2 h-6 w-2/3 -translate-x-1/2 rounded-full blur-3xl"
           transition={{ duration: 0.3, ease: "easeInOut" }}
           variants={gradientVariants}
         />

@@ -59,7 +59,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />
           <main className="flex flex-col items-center gap-14 py-9 md:gap-18">{children}</main>
         </div>
-        <Footer />
+        <Footer links={navbarLinks} socialLinks={navbarSocialLinks} />
       </body>
     </html>
   )

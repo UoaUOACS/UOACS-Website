@@ -93,7 +93,7 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
           style={{ height: BASE_HEIGHT * scale }}
         >
           <div
-            className="-left-5 relative origin-top-left"
+            className="relative -left-5 origin-top-left"
             style={{
               width: BASE_WIDTH,
               height: BASE_HEIGHT,

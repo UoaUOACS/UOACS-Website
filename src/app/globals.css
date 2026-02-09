@@ -1,5 +1,4 @@
 /* For Storybook */
-/** biome-ignore-all lint/suspicious/noUnknownAtRules: @theme, @layer. and @screen required by tailwind */
 @import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&display=swap");
 
 @import "tailwindcss";
