@@ -7,26 +7,26 @@ import { tv, type VariantProps } from "tailwind-variants"
 export const borderButtonVariants = tv({
   slots: {
     inner:
-      "flex flex-row gap-4 items-center rounded-xl border-4 border-transparent bg-black p-4 font-mono text-white text-left transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50",
+      "flex flex-row gap-4 items-center rounded-xl border-4 border-transparent bg-black p-4 font-mono text-white text-left transition-colors duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-50",
     border:
       "rounded-2xl border-4 border-transparent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 ease-in-out",
   },
   variants: {
     theme: {
       primary: {
-        inner: "bg-primary",
+        inner: "bg-primary text-white hover:bg-pink-400",
         border: "border-primary-opaque",
       },
       ghost: {
-        inner: "bg-transparent text-black",
+        inner: "bg-transparent text-black hover:bg-gray-200",
         border: "border-gray-900-opaque",
       },
       dark: {
-        inner: "bg-black",
+        inner: "bg-black text-white hover:bg-gray-700",
         border: "border-gray-300",
       },
       light: {
-        inner: "bg-gray-300 text-black",
+        inner: "bg-gray-300 text-black hover:bg-gray-400",
         border: "border-gray-200",
       },
     },
