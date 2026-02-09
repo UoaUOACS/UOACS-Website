@@ -54,7 +54,7 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
             {index === 0 && (
               <Image
                 alt="Mascot"
-                className="-top-42.5 md:-top-47.5 -translate-x-1/2 -z-2 pointer-events-none absolute left-1/2"
+                className="pointer-events-none absolute -top-42.5 left-1/2 -z-2 -translate-x-1/2 md:-top-47.5"
                 height={360}
                 loading="lazy"
                 src="/mascot.png"

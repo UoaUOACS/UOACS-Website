@@ -11,7 +11,7 @@ export const ValuesSection = () => {
           <Heading h={2}>Our Values</Heading>
           <Image
             alt="react fragment"
-            className="-translate-y-1/2 absolute top-0 right-0 h-12 w-12 translate-x-full md:h-16 md:w-16"
+            className="absolute top-0 right-0 h-12 w-12 translate-x-full -translate-y-1/2 md:h-16 md:w-16"
             height={75}
             src="/react-fragment.svg"
             width={75}
