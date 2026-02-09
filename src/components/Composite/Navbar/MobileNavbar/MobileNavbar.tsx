@@ -106,12 +106,6 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              {/* <BorderButton
-                left={<div className="h-2.5 w-2.5 rounded-[0.92px] bg-white" />}
-                variant={{ size: "sm", theme: "dark" }}
-              >
-                JOIN US
-              </BorderButton> */}
               <Button className="col-span-4 rounded-b-none" theme="dark">
                 Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
               </Button>
