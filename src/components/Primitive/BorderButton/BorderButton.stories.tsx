@@ -1,6 +1,6 @@
 import { faDiscord } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { BorderButton } from "./BorderButton"
 
 type Story = StoryObj<typeof BorderButton>

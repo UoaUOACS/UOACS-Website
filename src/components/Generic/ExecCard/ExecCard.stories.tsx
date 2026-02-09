@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { mockExecutive, mockExecutiveWithPhoto } from "@/mocks/Executive.mock"
 import { ExecCard, type ExecCardProps } from "./ExecCard"
 
