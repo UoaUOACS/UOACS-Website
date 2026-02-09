@@ -1,9 +1,30 @@
+import { faDiscord, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-brands-svg-icons"
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { Footer } from "./Footer"
 
 const meta: Meta<typeof Footer> = {
   title: "Composite Components/Footer",
   component: Footer,
+  args: {
+    socialLinks: [
+      { label: "Discord", icon: faDiscord, href: "https://discord.gg/xSgqAmGE" },
+      { label: "Instagram", icon: faInstagram, href: "https://www.instagram.com/uoacs25/" },
+      { label: "TikTok", icon: faTiktok, href: "https://www.tiktok.com/@uoacs?lang=en-GB" },
+      {
+        label: "LinkedIn",
+        icon: faLinkedin,
+        href: "https://www.linkedin.com/company/university-of-auckland-compsci-society/posts/?feedView=all",
+      },
+    ],
+    links: [
+      { label: "MEET THE TEAM", href: "/team" },
+      { label: "OUR SPONSORS", href: "/sponsors" },
+    ],
+  },
+  argTypes: {
+    links: { control: "object" },
+    socialLinks: { control: "object" },
+  },
 }
 
 export default meta

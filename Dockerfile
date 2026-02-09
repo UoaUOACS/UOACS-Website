@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-ARG NODE_VERSION=22.19.0
+ARG NODE_VERSION=24.12.0
 FROM node:${NODE_VERSION}-alpine AS base
 
 ENV PNPM_HOME="/pnpm"
