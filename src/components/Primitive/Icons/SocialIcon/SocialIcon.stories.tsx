@@ -1,4 +1,4 @@
-import type { Meta, StoryFn, StoryObj } from "@storybook/react"
+import type { Meta, StoryFn, StoryObj } from "@storybook/nextjs-vite"
 import { SocialIcon } from "./namespace"
 import { SOCIAL_ICONS } from "./SocialIcon.constants"
 
