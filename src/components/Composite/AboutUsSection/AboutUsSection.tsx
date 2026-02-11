@@ -1,5 +1,4 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
-import Image from "next/image"
 import { Button } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
 import type { Reel as ReelDocument } from "@/payload/payload-types"
@@ -56,16 +55,6 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
       <div className="-z-1 mx-auto flex max-h-132 flex-row-reverse flex-wrap justify-center gap-4 md:flex-nowrap">
         {reels.map((reel, index) => (
           <div className={cn("relative", index === 0 ? "" : "hidden sm:inline")} key={reel.id}>
-            {index === 0 && (
-              <Image
-                alt="Mascot"
-                className="pointer-events-none absolute -top-42.5 left-1/2 -z-2 -translate-x-1/2 md:-top-47.5"
-                height={360}
-                loading="lazy"
-                src="/mascot.png"
-                width={360}
-              />
-            )}
             <Reel reel={reel} />
           </div>
         ))}
