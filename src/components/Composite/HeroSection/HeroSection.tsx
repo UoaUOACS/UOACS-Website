@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { BorderButton, Heading } from "@/components/Primitive"
 
 /**
- *
+ * HeroSection component for the homepage.
  */
 export const HeroSection = () => {
   const SOCIAL_LINKS = [
