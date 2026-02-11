@@ -29,21 +29,21 @@ export const HeroSection = () => {
         <br />
         {START_YEAR} - {END_YEAR}
       </p>
-      <div className="flex flex-col justify-center gap-12 md:justify-start">
+      <div className="flex flex-col justify-center gap-12 md:justify-start md:max-w-[32rem]">
         <div className="flex flex-col justify-center gap-6 text-center md:gap-12 md:text-left">
-          <div className="w-max max-w-screen self-center md:self-start">
+          <div className="self-center md:self-start">
             <Heading className="md:justify-start md:text-left" h={2}>
               Connecting Lives
             </Heading>
             <Heading className="md:justify-start md:text-left" h={2} period>
               Around Campus
             </Heading>
-            <div className="mt-1.5 hidden h-1.5 w-full bg-linear-to-r from-primary to-[#2134FF00] md:block" />
           </div>
-          <p className="paragraph leading-[100%]">
+          <p className="paragraph md:max-w-[28rem]">
             UOACS is the Computer Science student association for social gathering.
           </p>
         </div>
+        <div className="hidden h-1.5 w-full bg-linear-to-r from-primary to-[#2134FF00] md:block" />
         <nav
           aria-label="Social media links"
           className="flex w-fit items-start gap-2 self-center md:gap-4 md:self-start"
