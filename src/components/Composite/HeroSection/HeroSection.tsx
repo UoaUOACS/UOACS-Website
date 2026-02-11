@@ -43,7 +43,7 @@ export const HeroSection = () => {
             UOACS is the Computer Science student association for social gathering.
           </p>
         </div>
-        <div className="hidden h-1.5 w-full bg-linear-to-r from-primary to-[#2134FF00] md:block" />
+        <div className="hidden h-1.5 w-full bg-linear-to-r from-[#FF307C] to-[#2134FF] mask-[linear-gradient(to_right,white,transparent)] md:block" />
         <nav
           aria-label="Social media links"
           className="flex w-fit items-start gap-2 self-center md:gap-4 md:self-start"
