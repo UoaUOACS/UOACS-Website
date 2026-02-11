@@ -6,14 +6,19 @@ import type { Reel as ReelDocument } from "@/payload/payload-types"
 import { Reel } from "../Reel/Reel"
 
 /**
- *
+ * Props for the {@link AboutUsSection} component.
  */
 export interface AboutUsSectionProps {
+  /**
+   * An array of reels to display in the About Us section.
+   */
   reels: ReelDocument[]
 }
 
 /**
+ * AboutUsSection component for the homepage.
  *
+ * @param reels An array of reels to display in the About Us section.
  */
 export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
   return (
