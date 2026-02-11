@@ -61,7 +61,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       <body className="relative overflow-x-hidden">
         <div className="mx-auto flex w-full max-w-360 flex-col gap-14 md:gap-9 px-4 py-6 md:px-12 lg:px-20">
           <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />
-          <main className="flex flex-col items-center gap-14 py-9 md:gap-18">{children}</main>
+          <main className="flex flex-col items-center gap-14 py-9 md:gap-30">{children}</main>
         </div>
         <Footer links={navbarLinks} socialLinks={navbarSocialLinks} />
       </body>
