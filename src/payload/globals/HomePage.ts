@@ -11,7 +11,7 @@ export const HomePage: GlobalConfig = {
       type: "relationship",
       relationTo: "reel",
       hasMany: true,
-      maxRows: 2,
+      maxRows: 3,
     },
     {
       name: "polaroids",
