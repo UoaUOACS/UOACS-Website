@@ -42,7 +42,7 @@ export const SponsorTicker = ({ items, containerClassName }: SponsorTickerProps)
   const repeatedItems = [...items, ...items]
 
   return (
-    <div className={cn("relative overflow-hidden", containerClassName)}>
+    <div className={cn("relative max-w-full overflow-hidden", containerClassName)}>
       <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-24 bg-linear-to-r from-white to-transparent md:w-64" />
       <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-24 bg-linear-to-l from-white to-transparent md:w-64" />
 
