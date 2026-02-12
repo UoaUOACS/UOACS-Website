@@ -27,7 +27,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Create forward-pr branch and cherry-pick
+      - name: Create PR forward branch and cherry-pick
         id: cherry-pick
         run: |
           set -e
@@ -35,7 +35,7 @@ jobs:
           MERGE_COMMIT=${{ github.event.pull_request.merge_commit_sha }}
           BASE_SHA=${{ github.event.pull_request.base.sha }}
           PR_NUMBER=${{ github.event.pull_request.number }}
-          BRANCH_NAME="forward-pr/pr-${PR_NUMBER}-to-main"
+          BRANCH_NAME="pr-forward/pr-${PR_NUMBER}-to-main"
 
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
@@ -88,8 +88,8 @@ jobs:
             git reset --hard main
 
             # Create a marker file with instructions
-            cat > FORWARD_PORT_CONFLICT.md << EOF
-          # Forward Port Conflict
+            cat > PR_FORWARD_CONFLICT.md << EOF
+          # PR Forward Conflict
 
           Cherry-pick failed on commit: \`$FAILED_COMMIT\`
 
@@ -107,17 +107,17 @@ jobs:
           4. Continue with remaining commits if any
           5. Delete this file and push
           EOF
-            git add FORWARD_PORT_CONFLICT.md
-            git commit -m "chore: forward port PR #${PR_NUMBER} (CONFLICTS - manual resolution required)"
+            git add PR_FORWARD_CONFLICT.md
+            git commit -m "chore: forward PR PR #${PR_NUMBER} (CONFLICTS - manual resolution required)"
           else
             echo "conflict=false" >> $GITHUB_OUTPUT
 
             # Check if we actually have changes (might already be in main)
             if git diff --quiet main; then
-              echo "No changes to forward port - changes may already be in main"
+              echo "No changes to forward PR - changes may already be in main"
               echo "no_changes=true" >> $GITHUB_OUTPUT
               # Still push the branch so we can create a PR noting this
-              git commit --allow-empty -m "chore: forward port PR #${PR_NUMBER} (no changes - already in main)"
+              git commit --allow-empty -m "chore: forward PR PR #${PR_NUMBER} (no changes - already in main)"
             else
               echo "no_changes=false" >> $GITHUB_OUTPUT
             fi
@@ -141,8 +141,8 @@ jobs:
             let title, body, labels;
 
             if (noChanges) {
-              title = `[Forward Port] ${originalTitle}`;
-              body = `## Automatic forward port from \`${sourceBranch}\`
+              title = `[PR Forward] ${originalTitle}`;
+              body = `## Automatic PR forward from \`${sourceBranch}\`
 
             > **No changes detected** - these changes may already be in \`main\`.
 
@@ -150,14 +150,14 @@ jobs:
 
             ---
             Original PR: #${originalPR}`;
-              labels = ['forward-port', 'no-changes'];
+              labels = ['pr-forward', 'no-changes'];
             } else if (hasConflict) {
-              title = `[Forward Port] ${originalTitle}`;
-              body = `## Automatic forward port from \`${sourceBranch}\`
+              title = `[PR Forward] ${originalTitle}`;
+              body = `## Automatic PR forward from \`${sourceBranch}\`
 
             > **Cherry-pick had conflicts and requires manual resolution**
 
-            This PR was automatically created to forward port changes from #${originalPR}.
+            This PR was automatically created to forward PR changes from #${originalPR}.
 
             ### Manual steps required:
             1. Check out this branch locally:
@@ -165,23 +165,23 @@ jobs:
                git fetch origin
                git checkout ${branchName}
                \`\`\`
-            2. See \`FORWARD_PORT_CONFLICT.md\` for the commits that need cherry-picking
+            2. See \`PR_FORWARD_CONFLICT.md\` for the commits that need cherry-picking
             3. Cherry-pick and resolve conflicts
-            4. Delete \`FORWARD_PORT_CONFLICT.md\`
+            4. Delete \`PR_FORWARD_CONFLICT.md\`
             5. Push your changes
 
             ---
             Original PR: #${originalPR}`;
-              labels = ['forward-port', 'needs-manual-resolution'];
+              labels = ['pr-forward', 'needs-manual-resolution'];
             } else {
-              title = `[Forward Port] ${originalTitle}`;
-              body = `## Automatic forward port from \`${sourceBranch}\`
+              title = `[PR Forward] ${originalTitle}`;
+              body = `## Automatic PR forward from \`${sourceBranch}\`
 
-            This PR was automatically created to forward port changes from #${originalPR} to \`main\`.
+            This PR was automatically created to forward PR changes from #${originalPR} to \`main\`.
 
             ---
             Original PR: #${originalPR}`;
-              labels = ['forward-port'];
+              labels = ['pr-forward'];
             }
 
             const pr = await github.rest.pulls.create({
