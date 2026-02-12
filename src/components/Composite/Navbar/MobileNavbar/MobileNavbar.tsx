@@ -1,6 +1,7 @@
 "use client"
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
+import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
@@ -100,16 +101,18 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
               ))}
             </div>
             <a
+              className="grid grid-cols-4"
               href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
               rel="noopener noreferrer"
               target="_blank"
             >
-              <BorderButton
-                left={<div className="h-2.5 w-2.5 rounded-[0.92px] bg-white" />}
-                variant={{ size: "sm", theme: "dark" }}
-              >
-                JOIN US
-              </BorderButton>
+              <Button className="col-span-4 rounded-b-none" theme="dark">
+                Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
+              </Button>
+              <div className="bg-orange-400 h-0.5 w-full rounded-bl-[2px]" />
+              <div className="bg-blue-400 h-0.5 w-full" />
+              <div className="bg-purple-400 h-0.5 w-full" />
+              <div className="bg-pink-400 h-0.5 w-full rounded-br-[2px]" />
             </a>
           </motion.div>
         )}

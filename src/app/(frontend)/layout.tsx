@@ -53,8 +53,8 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
   return (
-    <html className={`${inter.variable} ${switzer.variable}`} lang="en">
-      <body>
+    <html className={`${inter.variable} ${switzer.variable} overflow-x-hidden`} lang="en">
+      <body className="relative overflow-x-hidden">
         <div className="mx-auto flex w-full max-w-360 flex-col gap-14 px-4 py-6 md:px-12 lg:px-20">
           <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />
           <main className="flex flex-col items-center gap-14 py-9 md:gap-18">{children}</main>
