@@ -3,7 +3,8 @@ name: Forward PR to Main Branch
 on:
   pull_request:
     types: [closed]
-    branches: [production]
+    branches:
+      - 'release/*'
 
 permissions:
   contents: write
