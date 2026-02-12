@@ -1,6 +1,5 @@
 import config from "@payload-config"
 import type { Metadata } from "next"
-import Image from "next/image"
 import { getPayload } from "payload"
 import { AboutUsSection, HeroSection, ValuesSection, WhoWeAreSection } from "@/components/Composite"
 import type { Reel } from "@/payload/payload-types"
@@ -30,14 +29,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <Image
-        alt="Background Gradient"
-        aria-hidden="true"
-        className="pointer-events-none absolute top-0 left-0 -z-1 hidden w-full md:block md:w-7/10"
-        height={1000}
-        src="/home-gradient.svg"
-        width={1000}
-      />
       <HeroSection />
       <AboutUsSection reels={resolvedReels} />
       <WhoWeAreSection polaroids={resolvedPolaroids} />

@@ -1,24 +1,27 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
-import Image from "next/image"
 import { Button } from "@/components/Primitive"
-import { cn } from "@/lib/utils"
 import type { Reel as ReelDocument } from "@/payload/payload-types"
 import { Reel } from "../Reel/Reel"
 
 /**
- *
+ * Props for the {@link AboutUsSection} component.
  */
 export interface AboutUsSectionProps {
+  /**
+   * An array of reels to display in the About Us section.
+   */
   reels: ReelDocument[]
 }
 
 /**
+ * AboutUsSection component for the homepage.
  *
+ * @param reels An array of reels to display in the About Us section.
  */
 export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
   return (
-    <div className="flex w-full flex-col gap-42 md:flex-row md:flex-wrap md:justify-between md:gap-12">
-      <div className="flex flex-1 flex-col gap-8 font-light leading-[100%] md:min-w-54 md:max-w-xl md:gap-12">
+    <div className="flex w-full flex-row justify-between gap-18 overflow-x-visible">
+      <div className="flex w-full flex-none flex-col items-center gap-8 md:w-auto md:max-w-lg md:items-start md:gap-12">
         <div className="paragraph flex flex-col gap-6">
           <p className="font-mono">
             {/** biome-ignore lint/suspicious/noCommentText: the // is not for a comment */}
@@ -34,7 +37,7 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
           lifelong friendships. We do this through our mix of social, industry, educational and
           competitive events.
         </p>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col items-center gap-6 md:items-start">
           <a
             className="w-fit"
             href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
@@ -48,22 +51,12 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
           <p className="paragraph-sm font-medium">Membership is 100% free so come join us!</p>
         </div>
       </div>
-      <div className="-z-1 mx-auto flex max-h-132 flex-row-reverse flex-wrap justify-center gap-4 md:flex-nowrap">
-        {reels.map((reel, index) => (
-          <div className={cn("relative", index === 0 ? "" : "hidden sm:inline")} key={reel.id}>
-            {index === 0 && (
-              <Image
-                alt="Mascot"
-                className="pointer-events-none absolute -top-42.5 left-1/2 -z-2 -translate-x-1/2 md:-top-47.5"
-                height={360}
-                loading="lazy"
-                src="/mascot.png"
-                width={360}
-              />
-            )}
-            <Reel reel={reel} />
-          </div>
-        ))}
+      <div className="-z-1 hidden flex-none md:flex">
+        <div className="flex h-full flex-row flex-nowrap justify-start gap-4 overflow-x-visible">
+          {reels.map((reel) => (
+            <Reel key={reel.id} reel={reel} />
+          ))}
+        </div>
       </div>
     </div>
   )
