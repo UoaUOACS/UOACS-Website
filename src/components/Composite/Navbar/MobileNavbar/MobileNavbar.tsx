@@ -1,14 +1,12 @@
 "use client"
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
 import { useEffect, useState } from "react"
-import { BorderButton, Button, Heading } from "@/components/Primitive"
-import { ExitIcon } from "@/components/Primitive/Icons/ExitIcon"
-import { MenuIcon } from "@/components/Primitive/Icons/MenuIcon"
+import { BorderButton, Button, Heading, SocialIcon } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
 import type { NavbarProps } from "../Navbar"
 import { mobileNavbarVariants } from "./variants"
@@ -58,7 +56,8 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                 onClick={() => setIsOpen(true)}
                 variant={{ size: "sm", theme: "primary", border: true }}
               >
-                <MenuIcon className="text-2xl" />
+                {/* TODO: make something less janky */}
+                <Bars3Icon className="h-6 w-6 origin-center scale-[1.1] stroke-[2.5]" />
               </BorderButton>
             </motion.div>
           )}
@@ -84,7 +83,8 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                   onClick={() => setIsOpen(!isOpen)}
                   variant={{ size: "sm", theme: "primary", border: true }}
                 >
-                  <ExitIcon className="text-2xl" />
+                  {/* TODO: make something less janky */}
+                  <XMarkIcon className="h-6 w-6 origin-center scale-[1.1] stroke-[2.5]" />
                 </BorderButton>
               </motion.div>
             </div>
@@ -96,7 +96,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
             <div className="flex w-fit flex-row gap-6 text-2xl text-gray-700">
               {socialLinks.map((link) => (
                 <a href={link.href} key={link.href} rel="noopener noreferrer" target="_blank">
-                  <FontAwesomeIcon icon={link.icon} />
+                  <SocialIcon className="h-6 w-6" icon={link.icon} />
                 </a>
               ))}
             </div>

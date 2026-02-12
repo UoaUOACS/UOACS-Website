@@ -1,10 +1,9 @@
 "use client"
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid"
 import { motion } from "motion/react"
 import Link from "next/link"
-import { Button } from "@/components/Primitive"
+import { Button, SocialIcon } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
 import type { SocialLink } from "../Navbar/Navbar"
 import { NavbarGradient } from "../Navbar/NavbarGradient"
@@ -69,7 +68,7 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <FontAwesomeIcon className="md:text-2xl" fontSize={20} icon={icon} />
+              <SocialIcon className="h-5 w-5" icon={icon} />
             </a>
           ))}
         </nav>

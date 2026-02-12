@@ -1,12 +1,11 @@
 "use client"
 
-import type { IconDefinition } from "@fortawesome/fontawesome-svg-core"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ArrowUpRightIcon, Bars3Icon } from "@heroicons/react/24/solid"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
-import { Button, Dropdown } from "@/components/Primitive"
+import { Button, Dropdown, type SocialIconName } from "@/components/Primitive"
+import { SocialIcon } from "@/components/Primitive/Icons"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"
 
@@ -29,7 +28,7 @@ export interface NavbarProps {
  */
 export interface SocialLink {
   label: string
-  icon: IconDefinition
+  icon: SocialIconName
   href: string
   onClick?: () => void
 }
@@ -46,7 +45,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
     label: (
       <span className="flex items-center gap-2">
         {socialLink.label}
-        <FontAwesomeIcon className="w-4" icon={socialLink.icon} />
+        <SocialIcon className="w-4" icon={socialLink.icon} />
       </span>
     ),
     href: socialLink.href,

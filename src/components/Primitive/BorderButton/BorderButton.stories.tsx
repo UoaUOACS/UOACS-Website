@@ -1,6 +1,5 @@
-import { faDiscord } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
+import { SocialIcon } from "../Icons"
 import { BorderButton } from "./BorderButton"
 
 type Story = StoryObj<typeof BorderButton>
@@ -31,7 +30,7 @@ export const Basic: Story = {
 
 export const IconButton: Story = {
   args: {
-    children: <FontAwesomeIcon fontSize={32} icon={faDiscord} />,
+    children: <SocialIcon.Discord className="h-8 w-8" />,
     variant: { border: true, size: "sm", theme: "primary" },
   },
   argTypes: {
@@ -49,7 +48,7 @@ export const Borderless: Story = {
 export const LeftIcon: Story = {
   args: {
     children: "JOIN US ON DISCORD",
-    left: <FontAwesomeIcon fontSize={18} icon={faDiscord} />,
+    left: <SocialIcon.Discord className="h-4 w-4" />,
     variant: { border: true, size: "md", theme: "primary" },
   },
 }
@@ -57,7 +56,7 @@ export const LeftIcon: Story = {
 export const RightIcon: Story = {
   args: {
     children: "JOIN US ON DISCORD",
-    right: <FontAwesomeIcon fontSize={18} icon={faDiscord} />,
+    right: <SocialIcon.Discord className="h-4 w-4" />,
     variant: { border: true, size: "md", theme: "primary" },
   },
 }
