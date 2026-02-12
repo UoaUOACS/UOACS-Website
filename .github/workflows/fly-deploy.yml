@@ -3,8 +3,8 @@
 name: Fly Deploy Production
 on:
   push:
-    branches:
-      - production
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:
