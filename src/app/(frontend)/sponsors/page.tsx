@@ -106,8 +106,8 @@ export default async function SponsorsPage() {
         Interested in becoming our sponsors?
         <br />
         contact us via{" "}
-        <a className="text-pink-700 underline" href="mailto:outreach@uacs.org">
-          outreach@uoacs.org
+        <a className="text-pink-700 underline" href="mailto:outreach@uoacs.co.nz">
+          outreach@uoacs.co.nz
         </a>
       </p>
     </>
