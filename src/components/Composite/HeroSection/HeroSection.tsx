@@ -1,4 +1,5 @@
-import { BorderButton, Heading, SOCIAL_ICONS, SocialIcon } from "@/components/Primitive"
+import { Heading, SOCIAL_ICONS, SocialIcon } from "@/components/Primitive"
+import { borderButtonVariants } from "@/components/Primitive/BorderButton/variants"
 
 /**
  * HeroSection component for the homepage.
@@ -54,22 +55,27 @@ export const HeroSection = () => {
           aria-label="Social media links"
           className="flex w-fit items-start gap-2 self-center md:gap-4 md:self-start"
         >
-          {SOCIAL_LINKS.map(({ icon, label, href }) => (
-            <BorderButton
-              aria-label={label}
-              key={label}
-              variant={{ border: true, size: "sm", theme: "primary" }}
-            >
+          {SOCIAL_LINKS.map(({ icon, label, href }) => {
+            const { border, inner } = borderButtonVariants({
+              border: true,
+              size: "sm",
+              theme: "primary",
+            })
+            return (
               <a
                 aria-label={`Visit our ${label}`}
+                className={border()}
                 href={href}
+                key={label}
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <SocialIcon className="h-6 w-6 md:h-7 md:w-7" icon={icon} />
+                <div className={inner()}>
+                  <SocialIcon className="h-6 w-6 md:h-7 md:w-7" icon={icon} />
+                </div>
               </a>
-            </BorderButton>
-          ))}
+            )
+          })}
         </nav>
       </div>
     </section>
