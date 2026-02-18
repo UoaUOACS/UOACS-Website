@@ -103,7 +103,7 @@ export const Dropdown = ({
           >
             {options.map((option) => (
               <motion.div
-                key={option.label?.toString()}
+                key={option.href ?? option.label?.toString()}
                 variants={{
                   open: { opacity: 1, y: 0 },
                   closed: { opacity: 0, y: -5 },
