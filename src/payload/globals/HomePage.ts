@@ -1,4 +1,8 @@
 import type { GlobalConfig } from "payload"
+import { Routes } from "@/lib/routes"
+import { makeRevalidateHooks } from "@/payload/hooks/revalidate"
+
+const { globalAfterChange } = makeRevalidateHooks([Routes.home])
 
 export const HomePage: GlobalConfig = {
   slug: "home-page",
@@ -21,4 +25,5 @@ export const HomePage: GlobalConfig = {
       maxRows: 3,
     },
   ],
+  hooks: { afterChange: [globalAfterChange] },
 }
