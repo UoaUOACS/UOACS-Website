@@ -27,11 +27,11 @@ export const Reel = ({ reel }: ReelProps) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   return (
-    <div className="relative h-128 min-w-72 cursor-pointer overflow-hidden rounded-xl">
+    <div className="relative h-128 min-w-72 cursor-pointer overflow-hidden rounded-xl bg-gray-900">
       <video
         aria-label={`Instagram Reel: ${reel.description}`}
         autoPlay
-        className="absolute inset-0 h-full w-full cursor-default object-cover"
+        className="absolute inset-0 my-auto w-full cursor-default object-cover"
         loop
         muted
         playsInline
