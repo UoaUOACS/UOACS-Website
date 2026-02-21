@@ -1,4 +1,8 @@
 import type { CollectionConfig } from "payload"
+import { Routes } from "@/lib/routes"
+import { makeRevalidateHooks } from "../hooks/revalidate"
+
+const { afterChange, afterDelete } = makeRevalidateHooks([Routes.home])
 
 export const Reel: CollectionConfig = {
   slug: "reel",
@@ -27,4 +31,5 @@ export const Reel: CollectionConfig = {
       },
     },
   ],
+  hooks: { afterChange: [afterChange], afterDelete: [afterDelete] },
 }
