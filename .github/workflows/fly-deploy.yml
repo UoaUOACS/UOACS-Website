@@ -22,7 +22,6 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           APP_NAME: uoacs-website
           CONFIG_FILE: fly.toml
-          ENVIRONMENT: prod
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
