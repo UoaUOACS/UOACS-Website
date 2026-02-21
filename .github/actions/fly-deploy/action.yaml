@@ -15,10 +15,6 @@ inputs:
     description: 'Name of the Fly.io application'
     required: false
     default: ''
-  ENVIRONMENT:
-    description: 'Deployment environment (staging or prod)'
-    required: false
-    default: 'staging'
   # Build Secrets
   DATABASE_URI:
     description: 'Database connection URI'
