@@ -1,5 +1,9 @@
 import type { CollectionConfig } from "payload"
+import { Routes } from "@/lib/routes"
 import { SponsorTier } from "@/types/enums"
+import { makeRevalidateHooks } from "../hooks/revalidate"
+
+const { afterChange, afterDelete } = makeRevalidateHooks([Routes.sponsors, Routes.home])
 
 export const Sponsor: CollectionConfig = {
   slug: "sponsor",
@@ -45,4 +49,5 @@ export const Sponsor: CollectionConfig = {
       },
     },
   ],
+  hooks: { afterChange: [afterChange], afterDelete: [afterDelete] },
 }

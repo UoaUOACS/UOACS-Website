@@ -1,5 +1,9 @@
 import type { CollectionConfig } from "payload"
+import { Routes } from "@/lib/routes"
 import { ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
+import { makeRevalidateHooks } from "../hooks/revalidate"
+
+const { afterChange, afterDelete } = makeRevalidateHooks([Routes.team])
 
 export const Executive: CollectionConfig = {
   slug: "executive",
@@ -81,4 +85,5 @@ export const Executive: CollectionConfig = {
       },
     },
   ],
+  hooks: { afterChange: [afterChange], afterDelete: [afterDelete] },
 }
