@@ -27,7 +27,7 @@ jobs:
           author_name: ${{ github.event.pull_request.user.login }}
           author_url: ${{ github.event.pull_request.user.html_url }}
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
-          image_url: https://opengraph.githubassets.com/1/${{ github.repository }}
+          image_url: 'https://opengraph.githubassets.com/${{ github.sha }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           button_label: 'View Pull Request'
           branch_info: '`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`'
 
@@ -43,7 +43,7 @@ jobs:
           author_name: ${{ github.event.pull_request.user.login }}
           author_url: ${{ github.event.pull_request.user.html_url }}
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
-          image_url: https://opengraph.githubassets.com/1/${{ github.repository }}
+          image_url: 'https://opengraph.githubassets.com/${{ github.sha }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           button_label: 'View Merged PR'
           branch_info: '`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`'
 
@@ -59,7 +59,7 @@ jobs:
           author_name: ${{ github.event.pull_request.user.login }}
           author_url: ${{ github.event.pull_request.user.html_url }}
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
-          image_url: https://opengraph.githubassets.com/1/${{ github.repository }}
+          image_url: 'https://opengraph.githubassets.com/${{ github.sha }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           button_label: 'View Closed PR'
 
       - name: Send notification on New Release
@@ -75,5 +75,5 @@ jobs:
           author_name: ${{ github.event.release.author.login }}
           author_url: ${{ github.event.release.author.html_url }}
           author_icon_url: ${{ github.event.release.author.avatar_url }}
-          image_url: https://opengraph.githubassets.com/1/${{ github.repository }}
+          image_url: 'https://opengraph.githubassets.com/${{ github.sha }}/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}'
           button_label: 'View Release'
