@@ -25,6 +25,7 @@ jobs:
           author_name: ${{ github.event.pull_request.user.login }}
           author_url: ${{ github.event.pull_request.user.html_url }}
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
+          image_url: https://opengraph.githubassets.com/1/${{ github.repository }}
           button_label: 'View Pull Request'
           branch_info: '`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`'
 
@@ -40,6 +41,7 @@ jobs:
           author_name: ${{ github.event.pull_request.user.login }}
           author_url: ${{ github.event.pull_request.user.html_url }}
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
+          image_url: https://opengraph.githubassets.com/1/${{ github.repository }}
           button_label: 'View Merged PR'
           branch_info: '`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`'
 
@@ -55,4 +57,5 @@ jobs:
           author_name: ${{ github.event.pull_request.user.login }}
           author_url: ${{ github.event.pull_request.user.html_url }}
           author_icon_url: ${{ github.event.pull_request.user.avatar_url }}
+          image_url: https://opengraph.githubassets.com/1/${{ github.repository }}
           button_label: 'View Closed PR'
