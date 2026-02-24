@@ -45,7 +45,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
     label: (
       <span className="flex items-center gap-2">
         {socialLink.label}
-        <SocialIcon className="w-4" icon={socialLink.icon} />
+        <SocialIcon className="w-4 h-fit" icon={socialLink.icon} />
       </span>
     ),
     href: socialLink.href,
