@@ -21,8 +21,7 @@ swap_size_mb = 256
     hard_limit = 25
     soft_limit = 20
 
-[checks]
-  [checks.alive]
+  [[http_service.checks]]
     grace_period = '30s'
     interval = '15s'
     method = 'GET'
