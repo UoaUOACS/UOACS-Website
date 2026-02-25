@@ -45,7 +45,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
     label: (
       <span className="flex items-center gap-2">
         {socialLink.label}
-        <SocialIcon className="w-4" icon={socialLink.icon} />
+        <SocialIcon className="h-fit w-4" icon={socialLink.icon} />
       </span>
     ),
     href: socialLink.href,
@@ -62,7 +62,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
           </Link>
         </motion.div>
         <MobileNavbar links={links} socialLinks={socialLinks} />
-        <div className="nowrap flex hidden flex-row gap-5 md:flex">
+        <div className="nowrap hidden flex-row gap-5 md:flex">
           <div className="flex flex-row items-center gap-5">
             {links
               .filter((link) => link.label.toLowerCase() !== "home")
