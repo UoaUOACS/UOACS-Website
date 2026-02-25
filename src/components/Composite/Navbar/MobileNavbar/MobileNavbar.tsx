@@ -109,10 +109,10 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
               <Button className="col-span-4 rounded-b-none" theme="dark">
                 Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
               </Button>
-              <div className="bg-orange-400 h-0.5 w-full rounded-bl-[2px]" />
-              <div className="bg-blue-400 h-0.5 w-full" />
-              <div className="bg-purple-400 h-0.5 w-full" />
-              <div className="bg-pink-400 h-0.5 w-full rounded-br-[2px]" />
+              <div className="h-0.5 w-full rounded-bl-[2px] bg-orange-400" />
+              <div className="h-0.5 w-full bg-blue-400" />
+              <div className="h-0.5 w-full bg-purple-400" />
+              <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
             </a>
           </motion.div>
         )}
