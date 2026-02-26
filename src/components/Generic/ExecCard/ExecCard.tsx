@@ -68,7 +68,7 @@ export const ExecCard = ({ exec }: ExecCardProps) => {
   }
 
   return (
-    <div className="flex w-[6.75rem] flex-col items-start gap-2 md:w-[12.5rem] md:gap-3">
+    <div className="flex w-fit flex-col items-start gap-1 p-2 md:gap-2 md:p-3">
       {photoSquare}
       {nameAndRole}
     </div>
