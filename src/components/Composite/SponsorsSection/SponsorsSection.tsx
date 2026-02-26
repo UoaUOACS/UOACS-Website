@@ -43,7 +43,8 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
         <ColourPalette className="top-0 right-0" />
         <Heading h={2}>Sponsored By</Heading>
         <p className="paragraph">
-          These are the people that support us and make this club possible.
+          These are the people that support us and make this club{" "}
+          <span className="text-brand-pink">possible</span>
         </p>
         <ColourPalette className="bottom-0 left-0 hidden md:grid" />
       </div>
