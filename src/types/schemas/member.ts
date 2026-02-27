@@ -12,10 +12,7 @@ export const memberSchema = z.object({
     error: "Please select a gender",
   }),
   phoneNumber: z.string().nullable().optional(),
-  otherMajors: z
-    .array(z.object({ major: z.string() }))
-    .nullable()
-    .optional(),
+  otherMajors: z.array(z.string()).nullable().optional(),
   studyYear: z.enum(
     ["first-year", "second-year", "third-year", "fourth-year", "fifth-year-or-above"],
     {
@@ -28,12 +25,4 @@ export const memberSchema = z.object({
   updatedAt: z.string(),
 }) satisfies z.ZodType<Member>
 
-export const createMemberSchema = memberSchema
-  .omit({ id: true, createdAt: true, updatedAt: true })
-  .extend({
-    otherMajors: z
-      .array(z.string())
-      .nullable()
-      .optional()
-      .transform((vals) => vals?.map((major) => ({ major })) ?? null),
-  })
+export const createMemberSchema = memberSchema.omit({ id: true, createdAt: true, updatedAt: true })
