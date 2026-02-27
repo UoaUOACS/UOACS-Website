@@ -29,7 +29,6 @@ export const Member: CollectionConfig = {
       name: "upi",
       type: "text",
       required: true,
-      unique: true,
       admin: {
         description: "University UPI of the member",
       },
@@ -47,7 +46,6 @@ export const Member: CollectionConfig = {
       name: "uoaID",
       type: "text",
       required: true,
-      unique: true,
       admin: {
         description: "University of Auckland student ID number",
       },
