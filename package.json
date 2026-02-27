@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@hookform/resolvers": "^5.2.2",
     "@payloadcms/db-mongodb": "3.75.0",
     "@payloadcms/next": "3.75.0",
     "@payloadcms/payload-cloud": "3.75.0",
