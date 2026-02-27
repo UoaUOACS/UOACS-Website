@@ -29,6 +29,7 @@ export const Member: CollectionConfig = {
       name: "upi",
       type: "text",
       required: true,
+      unique: true,
       admin: {
         description: "University UPI of the member",
       },
@@ -46,6 +47,7 @@ export const Member: CollectionConfig = {
       name: "uoaID",
       type: "text",
       required: true,
+      unique: true,
       admin: {
         description: "University of Auckland student ID number",
       },
@@ -68,9 +70,14 @@ export const Member: CollectionConfig = {
     },
     {
       name: "otherMajors",
-      type: "text",
-      hasMany: true,
+      type: "array",
       required: false,
+      fields: [
+        {
+          name: "major",
+          type: "text",
+        },
+      ],
       admin: {
         description: "Other majors the member is studying, if any",
       },
