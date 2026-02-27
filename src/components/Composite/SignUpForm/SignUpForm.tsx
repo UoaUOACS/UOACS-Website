@@ -1,8 +1,10 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import type { z } from "zod"
 import { Button } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
@@ -23,19 +25,37 @@ export const SignUpForm = () => {
     resolver: zodResolver(createMemberSchema),
   })
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const onSubmit = async (data: FormOutput) => {
+    router.prefetch("/")
     setLoading(true)
-    console.log("Submitting form with data:", data)
-    await Promise.all([
-      new Promise((resolve) =>
-        setTimeout(() => {
-          console.log("Form Data:", JSON.stringify(data))
-          resolve(undefined)
-        }, 1000),
-      ),
-    ])
-    setLoading(false)
+    await fetch("/api/sign-up", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 409) {
+            toast.warning(
+              "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
+            )
+          } else {
+            toast.error("An error occurred while submitting the form")
+          }
+          setLoading(false)
+          return
+        }
+        router.push("/")
+        toast.success("Successfully signed up!\nWe look forward to seeing you at our events!!")
+      })
+      .catch((err) => {
+        toast.error(err.message || "An error occurred while submitting the form")
+        setLoading(false)
+      })
   }
 
   return (
