@@ -1,6 +1,7 @@
 import { Inter_Tight } from "next/font/google"
 import localFont from "next/font/local"
 import type React from "react"
+import { Toaster } from "sonner"
 import { Footer, Navbar } from "@/components/Composite"
 import type { SocialLink } from "@/components/Composite/Navbar/Navbar"
 import "../globals.css"
@@ -55,6 +56,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html className={`${inter.variable} ${switzer.variable} overflow-x-hidden`} lang="en">
       <body className="relative overflow-x-hidden">
+        <Toaster />
         <div className="mx-auto flex w-full max-w-[1480px] flex-col gap-14 px-4 py-6 md:gap-9 md:px-12 lg:px-20">
           <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />
           <main className="flex flex-col items-center gap-14 py-9 md:gap-30">{children}</main>
