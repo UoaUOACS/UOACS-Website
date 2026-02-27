@@ -26,3 +26,13 @@ export const mockExecutiveWithPhoto: Executive = {
     updatedAt: "2024-05-01T12:00:00Z",
   },
 }
+
+export const mockExecutiveWithLinkedin: Executive = {
+  ...mockExecutiveWithPhoto,
+  linkedin: "https://www.linkedin.com/in/joshua-li",
+}
+
+export const mockExecutiveWithLinkedinFallback: Executive = {
+  ...mockExecutive,
+  linkedin: "https://www.linkedin.com/in/joshua-li",
+}

@@ -1,5 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { mockExecutive, mockExecutiveWithPhoto } from "@/mocks/Executive.mock"
+import {
+  mockExecutive,
+  mockExecutiveWithLinkedin,
+  mockExecutiveWithLinkedinFallback,
+  mockExecutiveWithPhoto,
+} from "@/mocks/Executive.mock"
 import { ExecCard, type ExecCardProps } from "./ExecCard"
 
 const meta: Meta<ExecCardProps> = {
@@ -19,5 +24,17 @@ export const Default: Story = {}
 export const Fallback: Story = {
   args: {
     exec: mockExecutive,
+  },
+}
+
+export const WithLinkedIn: Story = {
+  args: {
+    exec: mockExecutiveWithLinkedin,
+  },
+}
+
+export const FallbackWithLinkedIn: Story = {
+  args: {
+    exec: mockExecutiveWithLinkedinFallback,
   },
 }

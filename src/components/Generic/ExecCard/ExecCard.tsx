@@ -18,19 +18,19 @@ export const ExecCard = ({ exec }: ExecCardProps) => {
     src = maybeMedia.url ?? maybeMedia.thumbnailURL ?? undefined
   }
 
-  return (
-    <div className="flex w-[6.75rem] flex-col items-start gap-2 md:w-[12.5rem] md:gap-3">
+  const photoSquare = (
+    <div className="relative h-[6.75rem] w-[6.75rem] overflow-hidden rounded-md md:h-[12.5rem] md:w-[12.5rem]">
       {src ? (
         <Image
           alt={`${exec.name} photo`}
-          className="size-full h-[6.75rem] w-[6.75rem] rounded-md object-cover md:h-[12.5rem] md:w-[12.5rem]"
+          className="size-full object-cover"
           height={200}
           priority
           src={src}
           width={200}
         />
       ) : (
-        <p className="flex aspect-square size-full h-[6.75rem] w-[6.75rem] items-center justify-center rounded-md bg-gray-200 font-md text-gray-700 text-xl md:h-[12.5rem] md:w-[12.5rem]">
+        <p className="flex aspect-square size-full items-center justify-center bg-gray-200 font-md text-gray-700 text-xl">
           {exec.name
             ? exec.name
                 .split(" ")
@@ -40,12 +40,37 @@ export const ExecCard = ({ exec }: ExecCardProps) => {
             : ""}
         </p>
       )}
-      <div className="flex flex-col items-start gap-1">
-        <p className="paragraph">{exec.name}</p>
-        {exec.role.title && (
-          <p className="paragraph-xs font-medium text-gray-500">{exec.role.title}</p>
-        )}
-      </div>
+    </div>
+  )
+
+  const nameAndRole = (
+    <div className="flex flex-col items-start gap-1">
+      <p className="paragraph">{exec.name}</p>
+      {exec.role.title && (
+        <p className="paragraph-xs font-medium text-gray-500">{exec.role.title}</p>
+      )}
+    </div>
+  )
+
+  if (exec.linkedin) {
+    return (
+      <a
+        aria-label={`${exec.name} LinkedIn profile`}
+        className="group flex w-fit flex-col items-start gap-1 rounded-md p-2 transition-colors duration-300 hover:bg-gray-600-opaque md:gap-2 md:p-3"
+        href={exec.linkedin}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        {photoSquare}
+        {nameAndRole}
+      </a>
+    )
+  }
+
+  return (
+    <div className="flex w-fit flex-col items-start gap-1 p-2 md:gap-2 md:p-3">
+      {photoSquare}
+      {nameAndRole}
     </div>
   )
 }
