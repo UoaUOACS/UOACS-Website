@@ -157,14 +157,6 @@ export const SignUpForm = () => {
         type="text"
       />
 
-      {/* <Input
-        {...register("codingLanguage")}
-        
-        error={errors.codingLanguage?.message}
-        label="If you were a coding language, what would you be?"
-        type="text"
-      /> */}
-
       <Input
         {...register("eventWishlist")}
         error={errors.eventWishlist?.message}
