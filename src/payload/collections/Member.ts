@@ -70,14 +70,9 @@ export const Member: CollectionConfig = {
     },
     {
       name: "otherMajors",
-      type: "array",
+      type: "text",
+      hasMany: true,
       required: false,
-      fields: [
-        {
-          name: "major",
-          type: "text",
-        },
-      ],
       admin: {
         description: "Other majors the member is studying, if any",
       },
