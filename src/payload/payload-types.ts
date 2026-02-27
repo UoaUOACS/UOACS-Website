@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     user: User;
     media: Media;
+    member: Member;
     executive: Executive;
     sponsor: Sponsor;
     reel: Reel;
@@ -82,6 +83,7 @@ export interface Config {
   collectionsSelect: {
     user: UserSelect<false> | UserSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    member: MemberSelect<false> | MemberSelect<true>;
     executive: ExecutiveSelect<false> | ExecutiveSelect<true>;
     sponsor: SponsorSelect<false> | SponsorSelect<true>;
     reel: ReelSelect<false> | ReelSelect<true>;
@@ -170,6 +172,61 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "member".
+ */
+export interface Member {
+  id: string;
+  /**
+   * First name of the member
+   */
+  firstName: string;
+  /**
+   * Last name of the member
+   */
+  lastName: string;
+  /**
+   * University UPI of the member
+   */
+  upi: string;
+  /**
+   * Email address of the member, either uni or personal
+   */
+  email: string;
+  /**
+   * University of Auckland student ID number
+   */
+  uoaID: string;
+  /**
+   * Gender of the member
+   */
+  gender: string;
+  /**
+   * Phone number of the member
+   */
+  phoneNumber?: string | null;
+  otherMajors?:
+    | {
+        major?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Current year of study at university
+   */
+  studyYear: 'first-year' | 'second-year' | 'third-year' | 'fourth-year' | 'fifth-year-or-above';
+  /**
+   * How the member heard about UOACS
+   */
+  heardAboutUs: string;
+  /**
+   * If they were a programming language, this is what they would be
+   */
+  codingLanguage?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -302,6 +359,10 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
+        relationTo: 'member';
+        value: string | Member;
+      } | null)
+    | ({
         relationTo: 'executive';
         value: string | Executive;
       } | null)
@@ -399,6 +460,30 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "member_select".
+ */
+export interface MemberSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  upi?: T;
+  email?: T;
+  uoaID?: T;
+  gender?: T;
+  phoneNumber?: T;
+  otherMajors?:
+    | T
+    | {
+        major?: T;
+        id?: T;
+      };
+  studyYear?: T;
+  heardAboutUs?: T;
+  codingLanguage?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
