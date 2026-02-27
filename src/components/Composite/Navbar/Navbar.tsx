@@ -78,16 +78,11 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
             />
           </div>
-          <a
-            className="hidden lg:block"
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
+          <Link href="/sign-up">
             <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
               Join UOACS
             </Button>
-          </a>
+          </Link>
         </div>
       </nav>
     </>
