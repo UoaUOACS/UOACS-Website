@@ -207,12 +207,10 @@ export interface Member {
    * Phone number of the member
    */
   phoneNumber?: string | null;
-  otherMajors?:
-    | {
-        major?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  /**
+   * Other majors the member is studying, if any
+   */
+  otherMajors?: string[] | null;
   /**
    * Current year of study at university
    */
@@ -222,9 +220,9 @@ export interface Member {
    */
   heardAboutUs: string;
   /**
-   * If they were a programming language, this is what they would be
+   * What kinds of events the member would like to see in the future
    */
-  codingLanguage?: string | null;
+  eventWishList?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -473,15 +471,10 @@ export interface MemberSelect<T extends boolean = true> {
   uoaID?: T;
   gender?: T;
   phoneNumber?: T;
-  otherMajors?:
-    | T
-    | {
-        major?: T;
-        id?: T;
-      };
+  otherMajors?: T;
   studyYear?: T;
   heardAboutUs?: T;
-  codingLanguage?: T;
+  eventWishList?: T;
   updatedAt?: T;
   createdAt?: T;
 }
