@@ -7,9 +7,27 @@ on:
   workflow_dispatch:
 
 jobs:
+  pr-stack:
+    name: PR Stack Check
+    runs-on: ubuntu-latest
+    outputs:
+      skip_ci: ${{ steps.check.outputs.skip_ci }}
+    steps:
+      - name: Check if CI should run
+        id: check
+        run: |
+          RESPONSE=$(curl -s -X POST https://pr-stack.fly.dev/ci-check \
+            -H "Content-Type: application/json" \
+            -d '${{ toJson(github.event) }}')
+          echo "Response: $RESPONSE"
+          SKIP_CI=$(echo "$RESPONSE" | jq -r '.skipCI')
+          echo "skip_ci=$SKIP_CI" >> $GITHUB_OUTPUT
+
   lint:
     name: Linting
     runs-on: ubuntu-latest
+    needs: [pr-stack]
+    if: needs.pr-stack.outputs.skip_ci != 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,8 +40,9 @@ jobs:
 
   setup:
     name: Setup
-    needs: [lint]
+    needs: [lint, pr-stack]
     runs-on: ubuntu-latest
+    if: needs.pr-stack.outputs.skip_ci != 'true'
     steps:
       - uses: actions/checkout@v4
 
