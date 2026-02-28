@@ -62,7 +62,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
           </Link>
         </motion.div>
         <MobileNavbar links={links} socialLinks={socialLinks} />
-        <div className="nowrap hidden flex-row gap-5 md:flex">
+        <div className="nowrap hidden flex-row md:flex lg:gap-5">
           <div className="flex flex-row items-center gap-5">
             {links
               .filter((link) => link.label.toLowerCase() !== "home")
@@ -75,10 +75,11 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               label="Socials"
               options={dropdownOptions}
               theme="primary"
+              triggerClassName="hidden lg:flex"
               triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
             />
           </div>
-          <Link className="hidden lg:block" href="/sign-up">
+          <Link href="/sign-up">
             <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
               Join UOACS
             </Button>
