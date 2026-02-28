@@ -17,6 +17,7 @@ const meta: Meta<typeof Button> = {
     },
     left: { control: { type: "text" } },
     right: { control: { type: "text" } },
+    disabled: { control: { type: "boolean" } },
   },
 }
 
@@ -61,5 +62,11 @@ export const Light: Story = {
   args: {
     theme: "light",
     children: "Light Button",
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
   },
 }
