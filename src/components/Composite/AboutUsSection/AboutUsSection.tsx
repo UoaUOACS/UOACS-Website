@@ -51,7 +51,7 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
           <p className="paragraph-sm font-medium">Membership is 100% free so come join us!</p>
         </div>
       </div>
-      <div className="-z-1 hidden flex-none md:flex">
+      <div className="hidden flex-none md:flex">
         <div className="flex h-full flex-row flex-nowrap justify-start gap-4 overflow-x-visible">
           {reels.map((reel) => (
             <Reel key={reel.id} reel={reel} />
