@@ -7,9 +7,6 @@ const { afterChange, afterDelete } = makeRevalidateHooks([Routes.sponsors, Route
 
 export const Sponsor: CollectionConfig = {
   slug: "sponsor",
-  access: {
-    read: () => true,
-  },
   admin: {
     useAsTitle: "name",
   },

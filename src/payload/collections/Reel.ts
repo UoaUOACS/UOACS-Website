@@ -6,9 +6,6 @@ const { afterChange, afterDelete } = makeRevalidateHooks([Routes.home])
 
 export const Reel: CollectionConfig = {
   slug: "reel",
-  access: {
-    read: () => true,
-  },
   admin: {
     useAsTitle: "description",
   },
