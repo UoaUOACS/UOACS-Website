@@ -6,9 +6,6 @@ const { globalAfterChange } = makeRevalidateHooks([Routes.home])
 
 export const HomePage: GlobalConfig = {
   slug: "home-page",
-  access: {
-    read: () => true,
-  },
   fields: [
     {
       name: "reels",
