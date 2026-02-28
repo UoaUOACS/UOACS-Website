@@ -111,7 +111,7 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                   return (
                     <li key={option}>
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors duration-300 hover:bg-gray-400-opaque"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors duration-300 hover:bg-gray-400-opaque"
                         onClick={() => toggle(option)}
                         type="button"
                       >
