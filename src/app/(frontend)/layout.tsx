@@ -39,7 +39,7 @@ const navbarLinks: { label: string; href: string }[] = [
   { label: "Our Sponsors", href: "/sponsors" },
 ]
 const navbarSocialLinks: SocialLink[] = [
-  { label: "Discord", icon: SOCIAL_ICONS.Discord, href: "https://discord.gg/xSgqAmGE" },
+  { label: "Discord", icon: SOCIAL_ICONS.Discord, href: "https://discord.gg/HsG73WdWFm" },
   { label: "Instagram", icon: SOCIAL_ICONS.Instagram, href: "https://www.instagram.com/uoacs25/" },
   { label: "TikTok", icon: SOCIAL_ICONS.TikTok, href: "https://www.tiktok.com/@uoacs?lang=en-GB" },
   {

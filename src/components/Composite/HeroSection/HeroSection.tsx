@@ -5,7 +5,7 @@ import { BorderButton, Heading, SOCIAL_ICONS, SocialIcon } from "@/components/Pr
  */
 export const HeroSection = () => {
   const SOCIAL_LINKS = [
-    { icon: SOCIAL_ICONS.Discord, label: "Discord", href: "https://discord.gg/xSgqAmGE" },
+    { icon: SOCIAL_ICONS.Discord, label: "Discord", href: "https://discord.gg/HsG73WdWFm" },
     {
       icon: SOCIAL_ICONS.Instagram,
       label: "Instagram",
