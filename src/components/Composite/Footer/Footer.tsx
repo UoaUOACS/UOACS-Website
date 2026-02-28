@@ -29,11 +29,7 @@ export interface FooterProps {
  * @param className optional additional class names to apply to the button
  */
 const InterestedButton = ({ className }: { className?: string }) => (
-  <a
-    href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
-    rel="noopener"
-    target="_blank"
-  >
+  <Link href="/sign-up">
     <Button
       className={cn("whitespace-nowrap", className)}
       right={<ArrowUpRightIcon className="h-4 w-4 text-white" />}
@@ -41,7 +37,7 @@ const InterestedButton = ({ className }: { className?: string }) => (
     >
       Interested? Join UOACS
     </Button>
-  </a>
+  </Link>
 )
 
 /**

@@ -100,12 +100,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                 </a>
               ))}
             </div>
-            <a
-              className="grid grid-cols-4"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdV530DNIMfGaQJwllWgLq22gsZpIutlHU2NwImHjmJyjWrQQ/viewform"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
+            <Link className="grid grid-cols-4" href="/sign-up">
               <Button className="col-span-4 rounded-b-none" theme="dark">
                 Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
               </Button>
@@ -113,7 +108,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
               <div className="h-0.5 w-full bg-blue-400" />
               <div className="h-0.5 w-full bg-purple-400" />
               <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
-            </a>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
