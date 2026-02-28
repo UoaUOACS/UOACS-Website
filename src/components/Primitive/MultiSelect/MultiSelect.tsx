@@ -2,7 +2,7 @@
 
 import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
-import { forwardRef, useEffect, useId, useRef, useState } from "react"
+import { forwardRef, useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "../Button/Button"
 
@@ -36,7 +36,6 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
     const [isOpen, setIsOpen] = useState(false)
     const [customValue, setCustomValue] = useState("")
     const containerRef = useRef<HTMLDivElement>(null)
-    const id = useId()
 
     useEffect(() => {
       const handleMouseDown = (e: MouseEvent) => {
@@ -61,14 +60,14 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
         className={cn("flex w-full flex-col justify-start gap-1 font-mono", containerClassName)}
         ref={containerRef}
       >
-        <label className="font-medium text-gray-700 text-sm" htmlFor={id}>
+        <label className="font-medium text-gray-700 text-sm" htmlFor={label}>
           {label}
           {required && <span className="ml-1 text-brand-pink">*</span>}
         </label>
         <div className="relative">
           <button
             className="flex min-h-11 w-full flex-wrap items-center gap-1.5 rounded border border-gray-300 px-3 py-2 text-left"
-            id={id}
+            id={label}
             onClick={() => setIsOpen((prev) => !prev)}
             ref={ref}
             type="button"

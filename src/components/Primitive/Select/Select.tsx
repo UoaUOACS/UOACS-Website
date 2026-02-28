@@ -2,7 +2,7 @@
 
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
-import { forwardRef, useEffect, useId, useRef, useState } from "react"
+import { forwardRef, useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 
 export type SelectOption = string | { label: string; value: string }
@@ -34,7 +34,6 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
   ) => {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
-    const id = useId()
 
     useEffect(() => {
       const handleMouseDown = (e: MouseEvent) => {
@@ -61,14 +60,14 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
         className={cn("flex w-full flex-col justify-start gap-1 font-mono", containerClassName)}
         ref={containerRef}
       >
-        <label className="font-medium text-gray-700 text-sm" htmlFor={id}>
+        <label className="font-medium text-gray-700 text-sm" htmlFor={label}>
           {label}
           {required && <span className="ml-1 text-brand-pink">*</span>}
         </label>
         <div className="relative">
           <button
             className="flex min-h-11 w-full items-center rounded border border-gray-300 px-3 py-2 text-left text-sm"
-            id={id}
+            id={label}
             onClick={() => setIsOpen((prev) => !prev)}
             ref={ref}
             type="button"
