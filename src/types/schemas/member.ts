@@ -3,11 +3,11 @@ import type { Member } from "@/payload/payload-types"
 
 export const memberSchema = z.object({
   id: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  upi: z.string(),
-  email: z.email(),
-  uoaID: z.string(),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  upi: z.string().min(1, "UPI is required"),
+  email: z.email({ error: "Please enter a valid email" }),
+  uoaID: z.string().min(1, "UOA ID is required"),
   gender: z.enum(["Male", "Female", "Other", "Prefer not to say"], {
     error: "Please select a gender",
   }),
@@ -19,7 +19,7 @@ export const memberSchema = z.object({
       error: "Please select a year of study",
     },
   ),
-  heardAboutUs: z.string(),
+  heardAboutUs: z.string().min(1, "This field is required"),
   eventWishlist: z.string().nullable().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
