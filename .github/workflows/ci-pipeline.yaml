@@ -15,6 +15,7 @@ jobs:
     steps:
       - name: Check if CI should run
         id: check
+        continue-on-error: true
         run: |
           RESPONSE=$(curl -s -X POST https://pr-stack.fly.dev/ci-check \
             -H "Content-Type: application/json" \
