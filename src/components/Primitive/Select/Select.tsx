@@ -95,7 +95,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                   <li key={optValue}>
                     <button
                       className={cn(
-                        "flex w-full items-center px-3 py-2 text-sm transition-colors duration-300 hover:bg-gray-400-opaque",
+                        "flex w-full items-center px-3 py-2 text-left text-sm transition-colors duration-300 hover:bg-gray-400-opaque",
                         optValue === value &&
                           "pointer-events-none bg-primary font-medium text-white",
                       )}
