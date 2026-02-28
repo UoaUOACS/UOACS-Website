@@ -78,7 +78,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
             />
           </div>
-          <Link href="/sign-up">
+          <Link className="hidden lg:block" href="/sign-up">
             <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
               Join UOACS
             </Button>
