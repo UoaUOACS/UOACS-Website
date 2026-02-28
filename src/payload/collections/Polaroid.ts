@@ -6,9 +6,6 @@ const { afterChange, afterDelete } = makeRevalidateHooks([Routes.home])
 
 export const Polaroid: CollectionConfig = {
   slug: "polaroid",
-  access: {
-    read: () => true,
-  },
   admin: {
     useAsTitle: "caption",
   },

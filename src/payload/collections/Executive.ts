@@ -7,9 +7,6 @@ const { afterChange, afterDelete } = makeRevalidateHooks([Routes.team])
 
 export const Executive: CollectionConfig = {
   slug: "executive",
-  access: {
-    read: () => true,
-  },
   admin: {
     useAsTitle: "name",
   },
