@@ -4,12 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { toast } from "sonner"
 import type { z } from "zod"
 import { Button } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
 import { MultiSelect } from "@/components/Primitive/MultiSelect/MultiSelect"
 import { Select } from "@/components/Primitive/Select/Select"
+import { toast } from "@/lib/toast"
 import { createMemberSchema } from "@/types/schemas/member"
 
 type FormInput = z.input<typeof createMemberSchema>
@@ -40,20 +40,27 @@ export const SignUpForm = () => {
       .then((response) => {
         if (!response.ok) {
           if (response.status === 409) {
-            toast.warning(
-              "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
-            )
+            toast.warning({
+              description:
+                "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
+            })
           } else {
-            toast.error("An error occurred while submitting the form")
+            toast.error({
+              description: "An error occurred while submitting the form",
+            })
           }
           setLoading(false)
           return
         }
         router.push("/")
-        toast.success("Successfully signed up!\nWe look forward to seeing you at our events!!")
+        toast.success({
+          description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
+        })
       })
       .catch((err) => {
-        toast.error(err.message || "An error occurred while submitting the form")
+        toast.error({
+          description: err.message || "An error occurred while submitting the form",
+        })
         setLoading(false)
       })
   }
