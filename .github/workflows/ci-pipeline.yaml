@@ -16,13 +16,15 @@ jobs:
       - name: Check if CI should run
         id: check
         continue-on-error: true
+        env:
+          EVENT_JSON: ${{ toJson(github.event) }}
         run: |
           RESPONSE=$(curl -s -X POST https://pr-stack.fly.dev/ci-check \
             -H "Content-Type: application/json" \
-            -d '${{ toJson(github.event) }}')
+            -d "$EVENT_JSON")
           echo "Response: $RESPONSE"
-          SKIP_CI=$(echo "$RESPONSE" | jq -r '.skipCI')
-          echo "skip_ci=$SKIP_CI" >> $GITHUB_OUTPUT
+          SKIP_CI=$(echo "$RESPONSE" | jq -r '.skipCI' 2>/dev/null) || SKIP_CI="false"
+          echo "skip_ci=${SKIP_CI:-false}" >> $GITHUB_OUTPUT
 
   lint:
     name: Linting
