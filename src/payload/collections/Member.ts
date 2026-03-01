@@ -77,8 +77,9 @@ export const Member: CollectionConfig = {
       hasMany: true,
       required: false,
       validate: (value, { siblingData }) => {
+        const data = siblingData as { compsciStudent?: boolean }
         const majors = value as string[] | null | undefined
-        if (!siblingData.compsciStudent && (!majors || majors.length === 0)) {
+        if (!data.compsciStudent && (!majors || majors.length === 0)) {
           return "Non-CS members must provide at least one major"
         }
         return true
