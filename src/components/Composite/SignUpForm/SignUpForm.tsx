@@ -20,10 +20,12 @@ export const SignUpForm = () => {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(createMemberSchema),
   })
+  const isCompsciStudent = watch("compsciStudent", true)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -179,7 +181,7 @@ export const SignUpForm = () => {
             <MultiSelect
               customTextInput
               error={errors.otherMajors?.message}
-              label="Other Majors (if any)"
+              label={isCompsciStudent ? "Other Majors (if any)" : "Other Majors"}
               onChange={field.onChange}
               options={[
                 "Information and Technology Management",
@@ -188,6 +190,7 @@ export const SignUpForm = () => {
                 "Mathematics",
               ]}
               ref={field.ref}
+              required={!isCompsciStudent}
               value={field.value ?? []}
             />
           )}
