@@ -25,7 +25,7 @@ export const SignUpForm = () => {
   } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(createMemberSchema),
   })
-  const isCompsciStudent = watch("compsciStudent", true)
+  const isCompsciStudent = watch("compsciStudent")
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -134,7 +134,6 @@ export const SignUpForm = () => {
 
       <Controller
         control={control}
-        defaultValue={true}
         name="compsciStudent"
         render={({ field }) => (
           <Radio
@@ -145,7 +144,7 @@ export const SignUpForm = () => {
             optionsClassName="flex-row"
             ref={field.ref}
             required
-            value={field.value ? "Yes" : "No"}
+            value={field.value === undefined ? undefined : field.value ? "Yes" : "No"}
           />
         )}
       />
@@ -180,7 +179,7 @@ export const SignUpForm = () => {
             <MultiSelect
               customTextInput
               error={errors.otherMajors?.message}
-              label={isCompsciStudent ? "Other Majors (if any)" : "Other Majors"}
+              label={isCompsciStudent === true ? "Other Majors (if any)" : "Other Majors"}
               onChange={field.onChange}
               options={[
                 "Information and Technology Management",
@@ -189,7 +188,7 @@ export const SignUpForm = () => {
                 "Mathematics",
               ]}
               ref={field.ref}
-              required={!isCompsciStudent}
+              required={isCompsciStudent !== true}
               value={field.value ?? []}
             />
           )}
