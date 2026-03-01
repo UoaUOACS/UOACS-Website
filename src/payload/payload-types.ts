@@ -208,6 +208,10 @@ export interface Member {
    */
   phoneNumber?: string | null;
   /**
+   * Whether the member is a computer science student
+   */
+  compsciStudent: boolean;
+  /**
    * Other majors the member is studying, if any
    */
   otherMajors?: string[] | null;
@@ -471,6 +475,7 @@ export interface MemberSelect<T extends boolean = true> {
   uoaID?: T;
   gender?: T;
   phoneNumber?: T;
+  compsciStudent?: T;
   otherMajors?: T;
   studyYear?: T;
   heardAboutUs?: T;

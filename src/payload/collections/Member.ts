@@ -64,6 +64,14 @@ export const Member: CollectionConfig = {
       },
     },
     {
+      name: "compsciStudent",
+      type: "checkbox",
+      required: true,
+      admin: {
+        description: "Whether the member is a computer science student",
+      },
+    },
+    {
       name: "otherMajors",
       type: "text",
       hasMany: true,

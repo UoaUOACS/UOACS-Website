@@ -12,6 +12,7 @@ export const memberSchema = z.object({
     error: "Please select a gender",
   }),
   phoneNumber: z.string().nullable().optional(),
+  compsciStudent: z.boolean(),
   otherMajors: z.array(z.string()).nullable().optional(),
   studyYear: z.enum(
     ["first-year", "second-year", "third-year", "fourth-year", "fifth-year-or-above"],
