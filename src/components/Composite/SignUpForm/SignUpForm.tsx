@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import type { z } from "zod"
-import { Button } from "@/components/Primitive"
+import { Button, Radio } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
 import { MultiSelect } from "@/components/Primitive/MultiSelect/MultiSelect"
 import { Select } from "@/components/Primitive/Select/Select"
@@ -127,6 +127,24 @@ export const SignUpForm = () => {
             ref={field.ref}
             required
             value={field.value ?? ""}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        defaultValue={true}
+        name="compsciStudent"
+        render={({ field }) => (
+          <Radio
+            error={errors.compsciStudent?.message}
+            label="Are you a computer science student?"
+            onChange={(value) => field.onChange(value === "Yes")}
+            options={["Yes", "No"]}
+            optionsClassName="flex-row"
+            ref={field.ref}
+            required
+            value={field.value ? "Yes" : "No"}
           />
         )}
       />
