@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 }
 
 type PrivacySection = {
+  id: string
   heading: string
   content: string
 }
@@ -49,8 +50,8 @@ export default async function PrivacyPage() {
         {sections.length === 0 ? (
           <p className="paragraph text-gray-500">Privacy policy coming soon.</p>
         ) : (
-          sections.map((section, i) => (
-            <div className="flex flex-col gap-2" key={`${section.heading}-${i}`}>
+          sections.map((section) => (
+            <div className="flex flex-col gap-2" key={section.id}>
               <h3 className="paragraph font-semibold">{section.heading}</h3>
               <p className="paragraph whitespace-pre-line text-gray-700">{section.content}</p>
             </div>
