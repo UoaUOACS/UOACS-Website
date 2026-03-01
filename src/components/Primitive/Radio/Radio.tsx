@@ -1,6 +1,6 @@
 "use client"
 
-import { forwardRef, useState } from "react"
+import { forwardRef } from "react"
 import { cn } from "@/lib/utils"
 import { RadioOption } from "./RadioOption"
 
@@ -20,25 +20,28 @@ export const Radio = forwardRef<HTMLDivElement, RadioProps>(
     { options, label, error, containerClassName, optionsClassName, required, onChange, value },
     ref,
   ) => {
-    const [selected, setSelected] = useState<string | null>(value || null)
-
     const toggle = (option: string) => {
-      if (selected === option) return
-      setSelected(option)
+      if (value === option) return
       onChange?.(option)
     }
 
     return (
       <div className={cn("flex w-full flex-col justify-start gap-1 font-mono", containerClassName)}>
-        <label className="block font-medium text-gray-700 text-sm" htmlFor={label}>
+        <span className="block font-medium text-gray-700 text-sm" id={`${label}-label`}>
           {label}
           {required && <span className="ml-1 text-brand-pink">*</span>}
-        </label>
-        <div className={cn("flex flex-col items-start gap-2", optionsClassName)} ref={ref}>
+        </span>
+        <div
+          aria-labelledby={`${label}-label`}
+          className={cn("flex flex-col items-start gap-2", optionsClassName)}
+          ref={ref}
+          role="radiogroup"
+        >
           {options.map((option) => (
             <RadioOption
-              checked={selected === option}
+              checked={value === option}
               key={option}
+              name={label}
               option={option}
               toggle={toggle}
             />
