@@ -76,6 +76,13 @@ export const Member: CollectionConfig = {
       type: "text",
       hasMany: true,
       required: false,
+      validate: (value, { siblingData }) => {
+        const majors = value as string[] | null | undefined
+        if (!siblingData.compsciStudent && (!majors || majors.length === 0)) {
+          return "Non-CS members must provide at least one major"
+        }
+        return true
+      },
       admin: {
         description: "Other majors the member is studying, if any",
       },
