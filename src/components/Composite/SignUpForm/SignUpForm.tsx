@@ -32,39 +32,38 @@ export const SignUpForm = () => {
   const onSubmit = async (data: FormOutput) => {
     router.prefetch("/")
     setLoading(true)
-    await fetch("/api/sign-up", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 409) {
-            toast.warning({
-              description:
-                "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
-            })
-          } else {
-            toast.error({
-              description: "An error occurred while submitting the form",
-            })
-          }
-          setLoading(false)
-          return
+    try {
+      const response = await fetch("/api/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+      if (!response.ok) {
+        if (response.status === 409) {
+          toast.warning({
+            description:
+              "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
+          })
+        } else {
+          toast.error({
+            description: "An error occurred while submitting the form",
+          })
         }
-        router.push("/")
-        toast.success({
-          description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
-        })
+        return
+      }
+      router.push("/")
+      toast.success({
+        description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
       })
-      .catch((err) => {
-        toast.error({
-          description: err.message || "An error occurred while submitting the form",
-        })
-        setLoading(false)
+    } catch {
+      toast.error({
+        description: "An error occurred while submitting the form",
       })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
