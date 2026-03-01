@@ -64,10 +64,26 @@ export const Member: CollectionConfig = {
       },
     },
     {
+      name: "compsciStudent",
+      type: "checkbox",
+      required: true,
+      admin: {
+        description: "Whether the member is a computer science student",
+      },
+    },
+    {
       name: "otherMajors",
       type: "text",
       hasMany: true,
       required: false,
+      validate: (value, { siblingData }) => {
+        const data = siblingData as { compsciStudent?: boolean }
+        const majors = value as string[] | null | undefined
+        if (!data.compsciStudent && (!majors || majors.length === 0)) {
+          return "Non-CS members must provide at least one major"
+        }
+        return true
+      },
       admin: {
         description: "Other majors the member is studying, if any",
       },

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import type { z } from "zod"
-import { Button } from "@/components/Primitive"
+import { Button, Radio } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
 import { MultiSelect } from "@/components/Primitive/MultiSelect/MultiSelect"
 import { Select } from "@/components/Primitive/Select/Select"
@@ -21,49 +21,50 @@ export const SignUpForm = () => {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(createMemberSchema),
   })
+  const isCompsciStudent = watch("compsciStudent")
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const onSubmit = async (data: FormOutput) => {
     router.prefetch("/")
     setLoading(true)
-    await fetch("/api/sign-up", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 409) {
-            toast.warning({
-              description:
-                "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
-            })
-          } else {
-            toast.error({
-              description: "An error occurred while submitting the form",
-            })
-          }
-          setLoading(false)
-          return
+    try {
+      const response = await fetch("/api/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+      if (!response.ok) {
+        if (response.status === 409) {
+          toast.warning({
+            description:
+              "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
+          })
+        } else {
+          toast.error({
+            description: "An error occurred while submitting the form",
+          })
         }
-        router.push("/")
-        toast.success({
-          description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
-        })
+        return
+      }
+      router.push("/")
+      toast.success({
+        description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
       })
-      .catch((err) => {
-        toast.error({
-          description: err.message || "An error occurred while submitting the form",
-        })
-        setLoading(false)
+    } catch {
+      toast.error({
+        description: "An error occurred while submitting the form",
       })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -132,6 +133,23 @@ export const SignUpForm = () => {
         )}
       />
 
+      <Controller
+        control={control}
+        name="compsciStudent"
+        render={({ field }) => (
+          <Radio
+            error={errors.compsciStudent?.message}
+            label="Are you a computer science student?"
+            onChange={(value) => field.onChange(value === "Yes")}
+            options={["Yes", "No"]}
+            optionsClassName="flex-row"
+            ref={field.ref}
+            required
+            value={field.value === undefined ? undefined : field.value ? "Yes" : "No"}
+          />
+        )}
+      />
+
       <div className="item-center flex w-full flex-col justify-start gap-2 md:flex-row md:gap-4">
         <Controller
           control={control}
@@ -162,7 +180,7 @@ export const SignUpForm = () => {
             <MultiSelect
               customTextInput
               error={errors.otherMajors?.message}
-              label="Other Majors (if any)"
+              label={isCompsciStudent === true ? "Other Majors (if any)" : "Other Majors"}
               onChange={field.onChange}
               options={[
                 "Information and Technology Management",
@@ -171,6 +189,7 @@ export const SignUpForm = () => {
                 "Mathematics",
               ]}
               ref={field.ref}
+              required={isCompsciStudent !== true}
               value={field.value ?? []}
             />
           )}

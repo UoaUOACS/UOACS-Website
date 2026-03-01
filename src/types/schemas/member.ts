@@ -12,6 +12,9 @@ export const memberSchema = z.object({
     error: "Please select a gender",
   }),
   phoneNumber: z.string().nullable().optional(),
+  compsciStudent: z.boolean({
+    error: "Please indicate whether you are a computer science student",
+  }),
   otherMajors: z.array(z.string()).nullable().optional(),
   studyYear: z.enum(
     ["first-year", "second-year", "third-year", "fourth-year", "fifth-year-or-above"],
@@ -25,4 +28,14 @@ export const memberSchema = z.object({
   updatedAt: z.string(),
 }) satisfies z.ZodType<Member>
 
-export const createMemberSchema = memberSchema.omit({ id: true, createdAt: true, updatedAt: true })
+export const createMemberSchema = memberSchema
+  .omit({ id: true, createdAt: true, updatedAt: true })
+  .superRefine((data, ctx) => {
+    if (!data.compsciStudent && (!data.otherMajors || data.otherMajors.length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Please enter your major(s)",
+        path: ["otherMajors"],
+      })
+    }
+  })
