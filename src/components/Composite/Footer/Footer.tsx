@@ -52,7 +52,15 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
       <NavbarGradient className="h-full translate-y-2/3 md:h-full md:translate-y-5/6" />
       <div className="flex flex-col gap-4">
         <div className="flex flex-row flex-wrap items-start justify-between gap-2">
-          <p className="paragraph-sm text-gray-400">UOACS &copy; {new Date().getFullYear()}</p>
+          <div className="flex flex-col gap-1">
+            <p className="paragraph-sm text-gray-400">UOACS &copy; {new Date().getFullYear()}</p>
+            <Link
+              className="paragraph-xs w-fit text-gray-400 transition-colors hover:text-white"
+              href="/privacy"
+            >
+              Privacy Policy
+            </Link>
+          </div>
           <InterestedButton className="md:hidden" />
         </div>
         <nav aria-label="Social media links" className="flex flex-row items-start gap-4">

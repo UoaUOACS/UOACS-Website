@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
@@ -190,6 +191,14 @@ export const SignUpForm = () => {
         label="What kinds of events would you like to see us host?"
         type="text"
       />
+
+      <p className="paragraph-xs text-gray-500">
+        By signing up, you agree to our{" "}
+        <Link className="underline transition-colors hover:text-gray-700" href="/privacy">
+          Privacy Policy
+        </Link>
+        .
+      </p>
 
       <Button disabled={loading} theme="dark" type="submit">
         {loading ? "Submitting..." : "Sign Up"}
