@@ -44,7 +44,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html className={`${inter.variable} ${switzer.variable} overflow-x-hidden`} lang="en">
-      <body className="relative flex min-h-[100dvh] flex-col overflow-x-hidden">
+      <body className="relative flex min-h-screen flex-col overflow-x-hidden">
         <Toaster />
         <div className="mx-auto flex w-full max-w-[1480px] grow flex-col gap-14 px-4 py-6 md:gap-9 md:px-12 lg:px-20">
           <Navbar links={navbarLinks} socialLinks={SOCIAL_LINKS} />
