@@ -89,7 +89,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
   return (
     <>
       <div className="flex flex-col items-center gap-2 px-4 text-center">
-        <Heading h={2} period>
+        <Heading h={1} period>
           Our Team
         </Heading>
         <p className="paragraph text-gray-700">These are the people who make this club possible.</p>
@@ -127,7 +127,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
       </div>
       <div className="flex flex-col items-center gap-2 px-4 text-center">
         <div className="relative">
-          <Heading h={2} period>
+          <Heading h={1} period>
             Past Executives
           </Heading>
         </div>
