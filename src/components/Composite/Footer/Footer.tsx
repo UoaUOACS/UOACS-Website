@@ -3,9 +3,9 @@
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid"
 import { motion } from "motion/react"
 import Link from "next/link"
+import type { SocialLink } from "@/components/Generic"
 import { Button, SocialIcon } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
-import type { SocialLink } from "../Navbar/Navbar"
 import { NavbarGradient } from "../Navbar/NavbarGradient"
 
 /**

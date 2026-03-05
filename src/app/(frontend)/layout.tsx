@@ -3,10 +3,9 @@ import localFont from "next/font/local"
 import type React from "react"
 import { Toaster } from "sonner"
 import { Footer, Navbar } from "@/components/Composite"
-import type { SocialLink } from "@/components/Composite/Navbar/Navbar"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
-import { SOCIAL_ICONS } from "@/components/Primitive"
+import { SOCIAL_LINKS } from "@/lib/constants"
 
 const inter = Inter_Tight({
   subsets: ["latin"],
@@ -39,16 +38,6 @@ const navbarLinks: { label: string; href: string }[] = [
   { label: "Meet The Team", href: "/team" },
   { label: "Our Sponsors", href: "/sponsors" },
 ]
-const navbarSocialLinks: SocialLink[] = [
-  { label: "Discord", icon: SOCIAL_ICONS.Discord, href: "https://discord.gg/HsG73WdWFm" },
-  { label: "Instagram", icon: SOCIAL_ICONS.Instagram, href: "https://www.instagram.com/uoacs25/" },
-  { label: "TikTok", icon: SOCIAL_ICONS.TikTok, href: "https://www.tiktok.com/@uoacs?lang=en-GB" },
-  {
-    label: "LinkedIn",
-    icon: SOCIAL_ICONS.LinkedIn,
-    href: "https://www.linkedin.com/company/university-of-auckland-compsci-society/posts/?feedView=all",
-  },
-]
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
@@ -58,10 +47,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       <body className="relative flex min-h-[100dvh] flex-col overflow-x-hidden">
         <Toaster />
         <div className="mx-auto flex w-full max-w-[1480px] grow flex-col gap-14 px-4 py-6 md:gap-9 md:px-12 lg:px-20">
-          <Navbar links={navbarLinks} socialLinks={navbarSocialLinks} />
+          <Navbar links={navbarLinks} socialLinks={SOCIAL_LINKS} />
           <main className="flex grow flex-col items-center gap-14 py-9 md:gap-30">{children}</main>
         </div>
-        <Footer links={navbarLinks} socialLinks={navbarSocialLinks} />
+        <Footer links={navbarLinks} socialLinks={SOCIAL_LINKS} />
       </body>
     </html>
   )
