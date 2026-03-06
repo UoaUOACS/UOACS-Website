@@ -1,0 +1,50 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "labels": ["dependencies", "renovate-bot"],
+  "timezone": "Pacific/Auckland",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 10,
+  "commitMessagePrefix": "chore(deps):",
+  "dependencyDashboard": true,
+  "rebaseWhen": "conflicted",
+  "packageRules": [
+    {
+      "description": "Group Payload CMS related dependencies",
+      "groupName": "Payload CMS",
+      "matchPackageNames": ["payload", "@payloadcms/**"]
+    },
+    {
+      "description": "Group React related dependencies",
+      "groupName": "React",
+      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"]
+    },
+    {
+      "description": "Group Storybook related dependencies",
+      "groupName": "Storybook",
+      "matchPackageNames": ["storybook", "@storybook/**", "@chromatic-com/storybook"]
+    },
+    {
+      "description": "Group Vitest related dependencies",
+      "groupName": "Vitest",
+      "matchPackageNames": ["vitest", "@vitest/**"]
+    },
+    {
+      "description": "TypeScript type definitions",
+      "groupName": "TypeScript types",
+      "matchPackagePatterns": ["^@types/"],
+      "excludePackageNames": ["@types/react", "@types/react-dom"]
+    },
+    {
+      "description": "Node.js version",
+      "groupName": "Node.js",
+      "matchPackageNames": ["node"]
+    },
+    {
+      "description": "pnpm version",
+      "groupName": "pnpm",
+      "matchPackageNames": ["pnpm"]
+    }
+  ],
+  "vulnerabilityAlerts": { "labels": ["security"], "automerge": false }
+}
