@@ -1,28 +1,11 @@
-import { BorderButton, Heading, SOCIAL_ICONS, SocialIcon } from "@/components/Primitive"
+import { SocialLinks } from "@/components/Generic"
+import { Heading } from "@/components/Primitive"
+import { SOCIAL_LINKS } from "@/lib/constants"
 
 /**
  * HeroSection component for the homepage.
  */
 export const HeroSection = () => {
-  const SOCIAL_LINKS = [
-    { icon: SOCIAL_ICONS.Discord, label: "Discord", href: "https://discord.gg/HsG73WdWFm" },
-    {
-      icon: SOCIAL_ICONS.Instagram,
-      label: "Instagram",
-      href: "https://www.instagram.com/uoacs25/",
-    },
-    {
-      icon: SOCIAL_ICONS.TikTok,
-      label: "TikTok",
-      href: "https://www.tiktok.com/@uoacs?lang=en-GB",
-    },
-    {
-      icon: SOCIAL_ICONS.LinkedIn,
-      label: "LinkedIn",
-      href: "https://www.linkedin.com/company/university-of-auckland-compsci-society/posts/?feedView=all",
-    },
-  ] as const
-
   const START_YEAR = 2024
 
   return (
@@ -49,27 +32,7 @@ export const HeroSection = () => {
           </p>
         </div>
         <div className="mask-[linear-gradient(to_right,white,transparent)] hidden h-1.5 w-full bg-linear-to-r from-[#FF307C] to-[#2134FF] md:block" />
-        <nav
-          aria-label="Social media links"
-          className="flex w-fit items-start gap-2 self-center md:gap-4 md:self-start"
-        >
-          {SOCIAL_LINKS.map(({ icon, label, href }) => (
-            <BorderButton
-              aria-label={label}
-              key={label}
-              variant={{ border: true, size: "sm", theme: "primary" }}
-            >
-              <a
-                aria-label={`Visit our ${label}`}
-                href={href}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <SocialIcon className="h-6 w-6 md:h-7 md:w-7" icon={icon} />
-              </a>
-            </BorderButton>
-          ))}
-        </nav>
+        <SocialLinks links={SOCIAL_LINKS} />
       </div>
     </section>
   )

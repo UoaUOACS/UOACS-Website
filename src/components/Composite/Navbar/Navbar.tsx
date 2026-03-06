@@ -4,7 +4,8 @@ import { ArrowUpRightIcon, Bars3Icon } from "@heroicons/react/24/solid"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
-import { Button, Dropdown, type SocialIconName } from "@/components/Primitive"
+import type { SocialLink } from "@/components/Generic"
+import { Button, Dropdown } from "@/components/Primitive"
 import { SocialIcon } from "@/components/Primitive/Icons"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"
@@ -24,16 +25,6 @@ export interface NavbarProps {
 }
 
 /**
- * A single social link: an icon, a label and a destination.
- */
-export interface SocialLink {
-  label: string
-  icon: SocialIconName
-  href: string
-  onClick?: () => void
-}
-
-/**
  * A Navbar component that includes a logo, navigation links, social media dropdown, and a join button.
  *
  * @param links Links to be displayed in the center of the navbar.
@@ -49,7 +40,6 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
       </span>
     ),
     href: socialLink.href,
-    onClick: socialLink.onClick,
   }))
 
   return (
