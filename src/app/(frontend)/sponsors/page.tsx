@@ -1,9 +1,8 @@
 import type { Metadata } from "next"
-import { getPayload } from "payload"
 import { Container, Heading, LazyImage } from "@/components/Primitive"
+import { payload } from "@/lib/payload"
 import { cn } from "@/lib/utils"
 import type { Sponsor } from "@/payload/payload-types"
-import config from "@/payload.config"
 import { SPONSOR_TIER_ORDER, SponsorTier } from "@/types/enums"
 
 export const metadata: Metadata = {
@@ -13,9 +12,6 @@ export const metadata: Metadata = {
 }
 
 export default async function SponsorsPage() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-
   const { docs: sponsors }: { docs: Sponsor[] } = await payload.find({
     collection: "sponsor",
     depth: 2,
