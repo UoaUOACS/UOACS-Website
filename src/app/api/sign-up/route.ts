@@ -1,11 +1,9 @@
-import { getPayload, ValidationError } from "payload"
-import payloadConfig from "@/payload.config"
+import { ValidationError } from "payload"
+import { payload } from "@/lib/payload"
 import { createMemberSchema } from "@/types/schemas/member"
 
 export async function POST(request: Request) {
   const member = createMemberSchema.parse(await request.json())
-
-  const payload = await getPayload({ config: payloadConfig })
 
   try {
     const createdMember = await payload.create({
