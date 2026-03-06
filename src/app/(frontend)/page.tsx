@@ -1,7 +1,6 @@
-import config from "@payload-config"
 import type { Metadata } from "next"
-import { getPayload } from "payload"
 import { AboutUsSection, HeroSection, ValuesSection, WhoWeAreSection } from "@/components/Composite"
+import { payload } from "@/lib/payload"
 import type { Reel } from "@/payload/payload-types"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"
 
@@ -11,9 +10,6 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-
   const homePage = await payload.findGlobal({
     slug: "home-page",
   })
