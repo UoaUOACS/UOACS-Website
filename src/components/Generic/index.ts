@@ -1,5 +1,6 @@
 export * from "./ExecCard/ExecCard"
 export * from "./Polaroid/Polaroid"
+export * from "./SocialLinks/SocialLinks"
 export * from "./SponsorBadge/SponsorBadge"
 export * from "./SponsorTicker/SponsorTicker"
 export * from "./ValueCard/ValueCard"
