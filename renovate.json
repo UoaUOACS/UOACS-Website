@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
+  "gitAuthor": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
   "labels": ["dependencies", "renovate-bot"],
   "timezone": "Pacific/Auckland",
   "prHourlyLimit": 2,
