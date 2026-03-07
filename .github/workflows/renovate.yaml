@@ -50,12 +50,11 @@ jobs:
           sudo chown -R 12021:0 /tmp/renovate/
           ls -R $cache_dir
 
-      - name: Run renovate
+      - name: Run Renovate
         uses: renovatebot/github-action@v46.1.3
         with:
           configurationFile: renovate.json
           token: ${{ secrets.RENOVATE_TOKEN }}
-          renovate-version: 46.1.3
         env:
           RENOVATE_REPOSITORY_CACHE: ${{ github.event.inputs.repoCache || 'enabled' }}
 
