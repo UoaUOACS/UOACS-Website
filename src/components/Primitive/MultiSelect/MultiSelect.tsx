@@ -2,7 +2,7 @@
 
 import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
-import { type RefObject, useEffect, useRef, useState } from "react"
+import { type Ref, useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "../Button/Button"
 
@@ -16,7 +16,7 @@ interface MultiSelectProps {
   containerClassName?: string
   required?: boolean
   placeholder?: string
-  ref?: RefObject<HTMLButtonElement | null>
+  ref?: Ref<HTMLButtonElement>
 }
 
 export const MultiSelect = ({

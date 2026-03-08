@@ -1,6 +1,6 @@
 "use client"
 
-import type { RefObject } from "react"
+import type { Ref } from "react"
 import { cn } from "@/lib/utils"
 import { RadioOption } from "./RadioOption"
 
@@ -13,7 +13,7 @@ export interface RadioProps {
   required?: boolean
   onChange?: (option: string) => void
   value?: string
-  ref?: RefObject<HTMLDivElement | null>
+  ref?: Ref<HTMLDivElement>
 }
 
 export const Radio = ({

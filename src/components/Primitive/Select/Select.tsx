@@ -2,7 +2,7 @@
 
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
-import { type RefObject, useEffect, useRef, useState } from "react"
+import { type Ref, useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 
 export type SelectOption = string | { label: string; value: string }
@@ -16,7 +16,7 @@ export interface SelectProps {
   containerClassName?: string
   required?: boolean
   placeholder?: string
-  ref?: RefObject<HTMLButtonElement | null>
+  ref?: Ref<HTMLButtonElement>
 }
 
 export const Select = ({
