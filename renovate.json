@@ -33,8 +33,7 @@
     {
       "description": "TypeScript type definitions",
       "groupName": "TypeScript types",
-      "matchPackagePatterns": ["^@types/"],
-      "excludePackageNames": ["@types/react", "@types/react-dom"]
+      "matchPackageNames": ["/^@types//", "!@types/react", "!@types/react-dom"]
     },
     {
       "description": "Node.js version",
@@ -47,5 +46,8 @@
       "matchPackageNames": ["pnpm"]
     }
   ],
-  "vulnerabilityAlerts": { "labels": ["security"], "automerge": false }
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "automerge": false
+  }
 }
