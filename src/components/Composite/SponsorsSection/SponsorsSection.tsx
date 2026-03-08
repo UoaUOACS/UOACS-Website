@@ -2,9 +2,9 @@ import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { SponsorTicker } from "@/components/Generic"
 import { Button, Heading, LazyImage } from "@/components/Primitive"
+import { TIER_SIZES } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import type { Sponsor } from "@/payload/payload-types"
-import { SponsorTier } from "@/types/enums"
 
 /**
  * Props for the {@link SponsorsSection} component
@@ -54,14 +54,6 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
           {sponsors.map((sponsor) => {
-            const tierSizes: Record<SponsorTier, { height: number; width: number }> = {
-              [SponsorTier.DIAMOND]: {
-                height: 120,
-                width: 320,
-              },
-              [SponsorTier.GOLD]: { height: 120, width: 320 },
-              [SponsorTier.SILVER]: { height: 80, width: 240 },
-            }
             const photo = sponsor.logo
             let src: string | undefined
 
@@ -81,9 +73,9 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
                 <LazyImage
                   alt={sponsor.name || "Sponsor Logo"}
                   className="max-h-full max-w-full object-contain"
-                  height={tierSizes[sponsor.tier]?.height}
+                  height={TIER_SIZES[sponsor.tier]?.height}
                   src={src}
-                  width={tierSizes[sponsor.tier]?.width}
+                  width={TIER_SIZES[sponsor.tier]?.width}
                 />
               </Link>
             )
