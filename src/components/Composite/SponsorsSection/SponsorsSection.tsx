@@ -1,9 +1,10 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { SponsorTicker } from "@/components/Generic"
-import { Button, Heading } from "@/components/Primitive"
+import { Button, Heading, LazyImage } from "@/components/Primitive"
 import { cn } from "@/lib/utils"
 import type { Sponsor } from "@/payload/payload-types"
+import { SponsorTier } from "@/types/enums"
 
 /**
  * Props for the {@link SponsorsSection} component
@@ -39,7 +40,7 @@ const ColourPalette = ({ className }: { className: string }) => {
 export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
   return (
     <div className="flex max-w-360 flex-col items-center justify-center gap-6 overflow-hidden md:gap-12">
-      <div className="relative flex flex-col items-center gap-6 px-4 py-12 text-center md:py-12">
+      <div className="relative flex flex-col items-center gap-6 px-4 pt-12 pb-6 text-center md:py-12">
         <ColourPalette className="top-0 right-0" />
         <Heading h={2}>Sponsored By</Heading>
         <p className="paragraph">
@@ -48,7 +49,47 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
         </p>
         <ColourPalette className="bottom-0 left-0 hidden md:grid" />
       </div>
-      <SponsorTicker containerClassName="max-w-360" items={sponsors} />
+      {sponsors.length > 2 ? (
+        <SponsorTicker containerClassName="max-w-360" items={sponsors} />
+      ) : (
+        <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
+          {sponsors.map((sponsor) => {
+            const tierSizes: Record<SponsorTier, { height: number; width: number }> = {
+              [SponsorTier.DIAMOND]: {
+                height: 120,
+                width: 320,
+              },
+              [SponsorTier.GOLD]: { height: 120, width: 320 },
+              [SponsorTier.SILVER]: { height: 80, width: 240 },
+            }
+            const photo = sponsor.logo
+            let src: string | undefined
+
+            if (!photo) {
+              src = undefined
+            } else if (typeof photo === "string") {
+              src = photo
+            } else if (typeof photo === "object" && photo !== null) {
+              const maybeMedia = photo as { url?: string | null; thumbnailURL?: string | null }
+              src = maybeMedia.url ?? maybeMedia.thumbnailURL ?? undefined
+            }
+
+            if (!src) return null
+
+            return (
+              <Link href="/sponsors" key={sponsor.id}>
+                <LazyImage
+                  alt={sponsor.name || "Sponsor Logo"}
+                  className="max-h-full max-w-full object-contain"
+                  height={tierSizes[sponsor.tier]?.height}
+                  src={src}
+                  width={tierSizes[sponsor.tier]?.width}
+                />
+              </Link>
+            )
+          })}
+        </div>
+      )}
       <Link href="/sponsors">
         <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
           See All Our Sponsors
