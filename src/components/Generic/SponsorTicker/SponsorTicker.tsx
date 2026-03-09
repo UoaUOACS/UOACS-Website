@@ -3,9 +3,10 @@
 import Link from "next/link"
 import { SmartTicker } from "react-smart-ticker"
 import { LazyImage } from "@/components/Primitive"
+import { TIER_SIZES } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import type { Sponsor } from "@/payload/payload-types"
-import { SponsorTier } from "@/types/enums"
+import type { SponsorTier } from "@/types/enums"
 
 /**
  * Props for the SponsorTicker component
@@ -29,15 +30,6 @@ export interface SponsorTickerProps {
  * @returns a sponsor ticker component
  */
 export const SponsorTicker = ({ items, containerClassName }: SponsorTickerProps) => {
-  const tierSizes: Record<SponsorTier, { height: number; width: number }> = {
-    [SponsorTier.DIAMOND]: {
-      height: 120,
-      width: 320,
-    },
-    [SponsorTier.GOLD]: { height: 120, width: 320 },
-    [SponsorTier.SILVER]: { height: 80, width: 240 },
-  }
-
   // Duplicate items to cover full width of page
   const repeatedItems = [
     ...items.map((item) => ({ ...item, _key: `original-${item.id}` })),
@@ -76,9 +68,9 @@ export const SponsorTicker = ({ items, containerClassName }: SponsorTickerProps)
               <LazyImage
                 alt={sponsor.name || "Sponsor Logo"}
                 className="max-h-full max-w-full object-contain"
-                height={tierSizes[sponsor.tier as SponsorTier].height}
+                height={TIER_SIZES[sponsor.tier as SponsorTier].height}
                 src={src}
-                width={tierSizes[sponsor.tier as SponsorTier].width}
+                width={TIER_SIZES[sponsor.tier as SponsorTier].width}
               />
             </Link>
           )

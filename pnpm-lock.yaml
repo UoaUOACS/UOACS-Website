@@ -58,7 +58,7 @@ importers:
         version: 7.71.2(react@19.2.4)
       react-smart-ticker:
         specifier: ^1.6.7
-        version: 1.6.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 1.6.8(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       sharp:
         specifier: ^0.34.4
         version: 0.34.5
@@ -3183,8 +3183,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  react-smart-ticker@1.6.7:
-    resolution: {integrity: sha512-6eXtQTL4Qy/LUxZPMXVSY2XHqXCQyF1P6WrRrKgM2Mk2hZ+HRhvnMUZzvvPkKTgYt/HvpQ7v3LCihKUWOUJjvg==}
+  react-smart-ticker@1.6.8:
+    resolution: {integrity: sha512-N3Z81AkD44HfJMp3yR+drbog5gDhcSDxdDEEMhgOEBVFMSc5QUDfXVgFIXFnvrfi2lzv2zu+BzHyU+2QRtxO1Q==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -7604,7 +7604,7 @@ snapshots:
       - '@types/react'
       - supports-color
 
-  react-smart-ticker@1.6.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  react-smart-ticker@1.6.8(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
