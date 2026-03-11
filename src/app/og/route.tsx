@@ -3,11 +3,10 @@ import { join } from "node:path"
 import { ImageResponse } from "next/og"
 
 export const runtime = "nodejs"
-export const revalidate = false
-export const size = { width: 1200, height: 630 }
-export const contentType = "image/png"
 
-export default async function Image() {
+const size = { width: 1200, height: 630 }
+
+export async function GET() {
   const fontsDir = join(process.cwd(), "public", "fonts")
 
   const [interTightData, switzerData, ibmPlexMonoData, logoSvgData] = await Promise.all([
@@ -69,7 +68,7 @@ export default async function Image() {
               fontFamily: "Inter Tight",
               fontSize: 72,
               fontWeight: 600,
-              color: "#171717", // gray-900
+              color: "#171717",
               lineHeight: 1.05,
               display: "flex",
             }}
@@ -126,7 +125,7 @@ export default async function Image() {
           zIndex: 1,
         }}
       >
-        {/** biome-ignore lint/performance/noImgElement: opengraph image doesn't have a next image */}
+        {/* biome-ignore lint/performance/noImgElement: opengraph image doesn't have a next image */}
         <img alt="UOACS" height={40} src={logoBase64} width={168} />
 
         <div

@@ -48,10 +48,18 @@ export const metadata: Metadata = {
     siteName: "UOACS",
     type: "website",
     locale: "en_NZ",
+    images: [
+      {
+        url: "/og",
+        width: 1200,
+        height: 630,
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@uoacs25",
+    images: ["/og"],
   },
 }
 
