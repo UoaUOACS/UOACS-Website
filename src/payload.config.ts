@@ -1,6 +1,7 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
+import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { s3Storage } from "@payloadcms/storage-s3"
 import { buildConfig } from "payload"
@@ -62,6 +63,17 @@ export default buildConfig({
         },
         region: process.env.S3_REGION,
       },
+    }),
+    importExportPlugin({
+      collections: [
+        {
+          slug: "member",
+          export: {
+            disableSave: true,
+          },
+          import: false,
+        },
+      ],
     }),
   ],
 })
