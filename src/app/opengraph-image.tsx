@@ -11,8 +11,8 @@ export default async function Image() {
   const fontsDir = join(process.cwd(), "public", "fonts")
 
   const [interTightData, switzerData, logoSvgData] = await Promise.all([
-    readFile(join(fontsDir, "InterTight-SemiBold.woff2")),
-    readFile(join(fontsDir, "Switzer-Variable.woff2")),
+    readFile(join(fontsDir, "InterTight-SemiBold.ttf")),
+    readFile(join(fontsDir, "Switzer-Regular.ttf")),
     readFile(join(process.cwd(), "public", "uoacs-logo.svg")),
   ])
 
