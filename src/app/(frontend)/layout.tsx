@@ -19,10 +19,20 @@ const switzer = localFont({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? "http://localhost:3000"),
   description: "University of Auckland Computer Society - Join our community of CS students!",
   title: {
     default: "UOACS",
     template: "%s - UOACS",
+  },
+  openGraph: {
+    siteName: "UOACS",
+    type: "website",
+    locale: "en_NZ",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@uoacs25",
   },
 }
 
