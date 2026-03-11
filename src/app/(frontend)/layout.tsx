@@ -1,4 +1,3 @@
-import { Inter_Tight } from "next/font/google"
 import localFont from "next/font/local"
 import type React from "react"
 import { Toaster } from "sonner"
@@ -7,9 +6,10 @@ import "../globals.css"
 import type { Metadata, Viewport } from "next"
 import { SOCIAL_LINKS } from "@/lib/constants"
 
-const inter = Inter_Tight({
-  subsets: ["latin"],
+const inter = localFont({
+  src: "../../../public/fonts/InterTight-Variable.woff2",
   variable: "--font-inter",
+  display: "swap",
 })
 
 const switzer = localFont({
