@@ -31,7 +31,10 @@ export interface SponsorTickerProps {
  */
 export const SponsorTicker = ({ items, containerClassName }: SponsorTickerProps) => {
   // Duplicate items to cover full width of page
-  const repeatedItems = [...items, ...items]
+  const repeatedItems = [
+    ...items.map((item) => ({ ...item, _key: `original-${item.id}` })),
+    ...items.map((item) => ({ ...item, _key: `copy-${item.id}` })),
+  ]
 
   return (
     <div className={cn("relative max-w-full overflow-hidden", containerClassName)}>
@@ -39,7 +42,7 @@ export const SponsorTicker = ({ items, containerClassName }: SponsorTickerProps)
       <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-24 bg-linear-to-l from-white to-transparent md:w-64" />
 
       <SmartTicker isText={false} pauseOnHover>
-        {repeatedItems.map((sponsor, index) => {
+        {repeatedItems.map((sponsor) => {
           const logo = sponsor.logo
           let src: string | undefined
 
@@ -58,7 +61,7 @@ export const SponsorTicker = ({ items, containerClassName }: SponsorTickerProps)
             <Link
               className="mx-3 flex shrink-0 items-center justify-center px-3 md:mx-12 md:px-6"
               href={sponsor.link || "#"}
-              key={`${sponsor.id}-${index}`}
+              key={sponsor._key}
               rel="noopener noreferrer"
               target="_blank"
             >
