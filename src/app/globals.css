@@ -1,10 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  /* For Storybook */
-  --font-inter: "Inter Tight", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
-
   --pink-50: #fdf2f8;
   --pink-100: #fce7f3;
   --pink-200: #fccee8;

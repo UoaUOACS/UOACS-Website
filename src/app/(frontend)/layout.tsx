@@ -8,12 +8,14 @@ import { SOCIAL_LINKS } from "@/lib/constants"
 
 const inter = localFont({
   src: "../../../public/fonts/InterTight-Variable.woff2",
+  weight: "100 900",
   variable: "--font-inter",
   display: "swap",
 })
 
 const switzer = localFont({
   src: "../../../public/fonts/Switzer-Variable.woff2",
+  weight: "100 900",
   variable: "--font-switzer",
   display: "swap",
 })
