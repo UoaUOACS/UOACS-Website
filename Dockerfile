@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.4
+# syntax=docker/dockerfile:1.22
 ARG NODE_VERSION=24.12.0
 FROM node:${NODE_VERSION}-alpine AS base
 
