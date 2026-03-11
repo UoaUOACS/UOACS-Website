@@ -10,9 +10,10 @@ export const contentType = "image/png"
 export default async function Image() {
   const fontsDir = join(process.cwd(), "public", "fonts")
 
-  const [interTightData, switzerData, logoSvgData] = await Promise.all([
+  const [interTightData, switzerData, ibmPlexMonoData, logoSvgData] = await Promise.all([
     readFile(join(fontsDir, "InterTight-SemiBold.ttf")),
     readFile(join(fontsDir, "Switzer-Regular.ttf")),
+    readFile(join(fontsDir, "IBMPlexMono-Regular.ttf")),
     readFile(join(process.cwd(), "public", "uoacs-logo.svg")),
   ])
 
@@ -23,11 +24,11 @@ export default async function Image() {
       style={{
         width: 1200,
         height: 630,
-        background: "#0a0a0a",
+        background: "#ffffff",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: "72px 80px",
+        padding: "60px 80px 48px 80px",
         position: "relative",
         overflow: "hidden",
       }}
@@ -35,80 +36,85 @@ export default async function Image() {
       <div
         style={{
           position: "absolute",
-          top: -180,
-          right: -180,
-          width: 560,
-          height: 560,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, #8A40E7 0%, #C861A7 55%, transparent 80%)",
-          opacity: 0.5,
+          top: -950,
+          left: 0,
+          right: 0,
+          height: 1000,
+          borderRadius: "25%",
+          background: "linear-gradient(180deg, #8A40E7 0%, #C861A7 41%, #F27F76 67%, #FF9961 100%)",
+          opacity: 0.35,
+          filter: "blur(80px)",
           display: "flex",
         }}
       />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 28, zIndex: 1 }}>
         <div
           style={{
-            fontFamily: "Switzer",
-            fontSize: 14,
+            fontFamily: "IBM Plex Mono",
+            fontSize: 16,
             fontWeight: 400,
-            color: "#a1a1a1",
-            letterSpacing: "0.12em",
+            color: "#525252",
+            letterSpacing: "0.08em",
             textTransform: "uppercase",
             display: "flex",
           }}
         >
-          University of Auckland / Computer Science Society / Est. 2024
+          University of Auckland Computer Science Society / Est. 2024
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
           <div
             style={{
               fontFamily: "Inter Tight",
-              fontSize: 88,
+              fontSize: 72,
               fontWeight: 600,
-              color: "#fafafa",
-              lineHeight: 1,
+              color: "#171717", // gray-900
+              lineHeight: 1.05,
               display: "flex",
             }}
           >
-            Connecting Lives /
+            Connecting Lives
           </div>
           <div
             style={{
               fontFamily: "Inter Tight",
-              fontSize: 88,
+              fontSize: 72,
               fontWeight: 600,
-              lineHeight: 1,
+              color: "#171717",
+              lineHeight: 1.05,
               display: "flex",
               alignItems: "baseline",
-              gap: 0,
             }}
           >
-            <span style={{ color: "#fafafa" }}>Around Campus</span>
-            <span style={{ color: "#ff307c" }}>■</span>
+            <span style={{ display: "flex" }}>Around Campus</span>
           </div>
         </div>
 
         <div
           style={{
-            width: 400,
-            height: 2,
-            background: "linear-gradient(to right, #FF307C, #2134FF, transparent)",
+            width: 640,
+            height: 4,
             display: "flex",
+            borderRadius: 2,
+            background:
+              "linear-gradient(to right, #FF307C 0%, #9932C0 35%, #d9d0e8 50%, #ffffff 65%)",
           }}
         />
 
         <div
           style={{
-            fontFamily: "Switzer",
-            fontSize: 18,
+            fontFamily: "IBM Plex Mono",
+            fontSize: 24,
             fontWeight: 400,
-            color: "#a1a1a1",
+            color: "#525252",
+            letterSpacing: "0.08em",
             display: "flex",
+            gap: 12,
+            alignItems: "center",
           }}
         >
-          UOACS is the Computer Science student association for social gathering.
+          Social Events · Technical Workshops · Industry Opportunities
         </div>
       </div>
 
@@ -117,6 +123,7 @@ export default async function Image() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-end",
+          zIndex: 1,
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -124,16 +131,34 @@ export default async function Image() {
 
         <div
           style={{
-            fontFamily: "Switzer",
+            fontFamily: "IBM Plex Mono",
             fontSize: 18,
             fontWeight: 400,
             color: "#525252",
-            letterSpacing: "0.04em",
+            letterSpacing: "0.08em",
             display: "flex",
           }}
         >
-          uoacs.nz
+          uoacs.co.nz
         </div>
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: 1200,
+          height: 6,
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <div style={{ flex: 1, background: "#fa771b", display: "flex" }} />
+        <div style={{ flex: 1, background: "#0084d1", display: "flex" }} />
+        <div style={{ flex: 1, background: "#7632cd", display: "flex" }} />
+        <div style={{ flex: 1, background: "#ff307c", display: "flex" }} />
+        <div style={{ flex: 1, background: "#171717", display: "flex" }} />
       </div>
     </div>,
     {
@@ -148,6 +173,12 @@ export default async function Image() {
         {
           name: "Switzer",
           data: switzerData,
+          weight: 400,
+          style: "normal",
+        },
+        {
+          name: "IBM Plex Mono",
+          data: ibmPlexMonoData,
           weight: 400,
           style: "normal",
         },
