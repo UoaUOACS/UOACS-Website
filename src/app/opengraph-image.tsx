@@ -126,7 +126,7 @@ export default async function Image() {
           zIndex: 1,
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {/** biome-ignore lint/performance/noImgElement: opengraph image doesn't have a next image */}
         <img alt="UOACS" height={40} src={logoBase64} width={168} />
 
         <div
