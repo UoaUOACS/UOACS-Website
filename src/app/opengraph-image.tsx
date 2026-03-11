@@ -32,7 +32,6 @@ export default async function Image() {
         overflow: "hidden",
       }}
     >
-      {/* Ambient gradient blob — top-right */}
       <div
         style={{
           position: "absolute",
@@ -47,9 +46,7 @@ export default async function Image() {
         }}
       />
 
-      {/* Content */}
       <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-        {/* Eyebrow */}
         <div
           style={{
             fontFamily: "Switzer",
@@ -64,7 +61,6 @@ export default async function Image() {
           University of Auckland / Computer Science Society / Est. 2024
         </div>
 
-        {/* Main heading */}
         <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
           <div
             style={{
@@ -94,7 +90,6 @@ export default async function Image() {
           </div>
         </div>
 
-        {/* Gradient divider */}
         <div
           style={{
             width: 400,
@@ -104,7 +99,6 @@ export default async function Image() {
           }}
         />
 
-        {/* Tagline */}
         <div
           style={{
             fontFamily: "Switzer",
@@ -118,7 +112,6 @@ export default async function Image() {
         </div>
       </div>
 
-      {/* Bottom row */}
       <div
         style={{
           display: "flex",
@@ -126,11 +119,9 @@ export default async function Image() {
           alignItems: "flex-end",
         }}
       >
-        {/* Logo */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img alt="UOACS" height={40} src={logoBase64} width={168} />
 
-        {/* URL */}
         <div
           style={{
             fontFamily: "Switzer",
