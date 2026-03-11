@@ -3,6 +3,7 @@
 :root {
   /* For Storybook */
   --font-inter: "Inter Tight", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
 
   --pink-50: #fdf2f8;
   --pink-100: #fce7f3;
@@ -117,7 +118,7 @@
 
 @theme inline {
   --font-switzer: var(--font-switzer);
-  --font-mono: "IBM Plex Mono", monospace;
+  --font-mono: var(--font-mono);
   --font-inter: var(--font-inter);
 
   --color-pink-50: var(--pink-50);

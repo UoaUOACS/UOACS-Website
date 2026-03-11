@@ -18,6 +18,23 @@ const switzer = localFont({
   display: "swap",
 })
 
+const mono = localFont({
+  src: [
+    {
+      path: "../../../public/fonts/IBMPlexMono-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../../public/fonts/IBMPlexMono-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+  ],
+  variable: "--font-mono",
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? "http://localhost:3000"),
   description: "University of Auckland Computer Society - Join our community of CS students!",
@@ -53,7 +70,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
   return (
-    <html className={`${inter.variable} ${switzer.variable} overflow-x-hidden`} lang="en">
+    <html
+      className={`${inter.variable} ${switzer.variable} ${mono.variable} overflow-x-hidden`}
+      lang="en"
+    >
       <body className="relative flex min-h-screen flex-col overflow-x-hidden">
         <Toaster />
         <div className="mx-auto flex w-full max-w-[1480px] grow flex-col gap-14 px-4 py-6 md:gap-9 md:px-12 lg:px-20">
