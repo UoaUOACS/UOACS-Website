@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Heading } from "@/components/Primitive"
-import { payload } from "@/lib/payload"
+import { payload, Slugs } from "@/lib/payload"
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -19,7 +19,9 @@ type PrivacyPolicyGlobal = {
 }
 
 export default async function PrivacyPage() {
-  const policy = (await payload.findGlobal({ slug: "privacy-policy" })) as PrivacyPolicyGlobal
+  const policy = (await payload.findGlobal({
+    slug: Slugs.Globals.privacyPolicy,
+  })) as PrivacyPolicyGlobal
 
   const sections = policy.sections ?? []
   const updatedAt = policy.updatedAt ? new Date(policy.updatedAt) : null

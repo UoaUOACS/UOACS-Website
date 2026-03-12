@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { AboutUsSection, HeroSection, ValuesSection, WhoWeAreSection } from "@/components/Composite"
-import { getSocialLinks, payload } from "@/lib/payload"
+import { getSocialLinks } from "@/lib/helpers"
+import { payload, Slugs } from "@/lib/payload"
 import type { Reel } from "@/payload/payload-types"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const [homePage, socialLinks] = await Promise.all([
-    payload.findGlobal({ slug: "home-page" }),
+    payload.findGlobal({ slug: Slugs.Globals.homePage }),
     getSocialLinks(),
   ])
 

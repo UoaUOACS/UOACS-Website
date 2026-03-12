@@ -2,7 +2,7 @@ import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { SocialLinks } from "@/components/Generic"
 import { Button, Heading } from "@/components/Primitive"
-import { getSocialLinks } from "@/lib/payload"
+import { getSocialLinks } from "@/lib/helpers"
 
 export default async function NotFoundPage() {
   const socialLinks = await getSocialLinks()

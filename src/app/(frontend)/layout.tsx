@@ -4,7 +4,7 @@ import { Toaster } from "sonner"
 import { Footer, Navbar } from "@/components/Composite"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
-import { getSocialLinks } from "@/lib/payload"
+import { getSocialLinks } from "@/lib/helpers"
 
 const inter = localFont({
   src: "../../../public/fonts/InterTight-Variable.woff2",
