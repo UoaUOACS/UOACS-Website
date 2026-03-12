@@ -43,6 +43,9 @@ export const Member: CollectionConfig = {
       name: "uoaID",
       type: "text",
       required: true,
+      hooks: {
+        beforeChange: [({ value }) => (typeof value === "number" ? String(value) : value)],
+      },
       admin: {
         description: "University of Auckland student ID number",
       },
