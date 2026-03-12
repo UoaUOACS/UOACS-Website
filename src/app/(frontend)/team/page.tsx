@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { payload } from "@/lib/payload"
+import { payload, Slugs } from "@/lib/payload"
 import type { Executive } from "@/payload/payload-types"
 import { TeamPageClient } from "./_components/TeamPageClient"
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function TeamPage() {
   const execs: { docs: Executive[] } = await payload.find({
-    collection: "executive",
+    collection: Slugs.Collections.executive,
     limit: 100,
     depth: 2,
     sort: "createdAt",

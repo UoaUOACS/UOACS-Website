@@ -6,6 +6,7 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { s3Storage } from "@payloadcms/storage-s3"
 import { buildConfig } from "payload"
 import sharp from "sharp"
+import { Slugs } from "./lib/slugs"
 import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
@@ -15,6 +16,7 @@ import { Sponsor } from "./payload/collections/Sponsor"
 import { User } from "./payload/collections/User"
 import { HomePage } from "./payload/globals/HomePage"
 import { PrivacyPolicy } from "./payload/globals/PrivacyPolicy"
+import { SocialLinks } from "./payload/globals/SocialLinks"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,7 +30,7 @@ export default buildConfig({
     },
   },
   collections: [User, Media, Member, Executive, Sponsor, Reel, Polaroid],
-  globals: [HomePage, PrivacyPolicy],
+  globals: [HomePage, PrivacyPolicy, SocialLinks],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,
@@ -67,7 +69,7 @@ export default buildConfig({
     importExportPlugin({
       collections: [
         {
-          slug: "member",
+          slug: Slugs.Collections.member,
           export: {
             disableSave: true,
             disableJobsQueue: true,

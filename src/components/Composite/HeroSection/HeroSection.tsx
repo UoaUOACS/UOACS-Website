@@ -1,11 +1,10 @@
-import { SocialLinks } from "@/components/Generic"
+import { type SocialLink, SocialLinks } from "@/components/Generic"
 import { Heading } from "@/components/Primitive"
-import { SOCIAL_LINKS } from "@/lib/constants"
 
 /**
  * HeroSection component for the homepage.
  */
-export const HeroSection = () => {
+export const HeroSection = ({ socialLinks }: { socialLinks: SocialLink[] }) => {
   const START_YEAR = 2024
 
   return (
@@ -32,7 +31,7 @@ export const HeroSection = () => {
           </p>
         </div>
         <div className="mask-[linear-gradient(to_right,white,transparent)] hidden h-1.5 w-full bg-linear-to-r from-[#FF307C] to-[#2134FF] md:block" />
-        <SocialLinks links={SOCIAL_LINKS} />
+        <SocialLinks links={socialLinks} />
       </div>
     </section>
   )
