@@ -10,7 +10,7 @@ import { Button, Radio } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
 import { MultiSelect } from "@/components/Primitive/MultiSelect/MultiSelect"
 import { Select } from "@/components/Primitive/Select/Select"
-import { Routes } from "@/lib/routes"
+import { ApiRoutes, Routes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
 import { createMemberSchema } from "@/types/schemas/member"
 
@@ -35,7 +35,7 @@ export const SignUpForm = () => {
     router.prefetch(Routes.home)
     setLoading(true)
     try {
-      const response = await fetch("/api/sign-up", {
+      const response = await fetch(ApiRoutes.signUp, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

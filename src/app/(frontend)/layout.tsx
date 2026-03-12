@@ -5,7 +5,7 @@ import { Footer, Navbar } from "@/components/Composite"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
 import { SOCIAL_LINKS } from "@/lib/constants"
-import { Routes } from "@/lib/routes"
+import { ApiRoutes, Routes } from "@/lib/routes"
 
 const inter = localFont({
   src: "../../../public/fonts/InterTight-Variable.woff2",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     locale: "en_NZ",
     images: [
       {
-        url: "/og",
+        url: ApiRoutes.og,
         width: 1200,
         height: 630,
         type: "image/png",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og"],
+    images: [ApiRoutes.og],
   },
 }
 
