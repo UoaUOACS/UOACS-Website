@@ -2,7 +2,7 @@ import type { GlobalConfig } from "payload"
 import { Routes } from "@/lib/routes"
 import { makeRevalidateHooks } from "@/payload/hooks/revalidate"
 
-const { globalAfterChange } = makeRevalidateHooks([Routes.privacy])
+const { globalAfterChange } = makeRevalidateHooks([Routes.PRIVACY])
 
 export const PrivacyPolicy: GlobalConfig = {
   slug: "privacy-policy",

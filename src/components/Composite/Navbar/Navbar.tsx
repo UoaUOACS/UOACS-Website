@@ -48,7 +48,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
       <NavbarGradient />
       <nav className="flex flex-row items-center justify-between">
         <motion.div layoutId="navbar-logo">
-          <Link className="z-50" href={Routes.home}>
+          <Link className="z-50" href={Routes.HOME}>
             <Image alt="UOACS Logo" height={40} src="/uoacs-logo-bw.svg" width={167} />
           </Link>
         </motion.div>
@@ -70,7 +70,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
             />
           </div>
-          <Link href={Routes.signUp}>
+          <Link href={Routes.SIGN_UP}>
             <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
               Join UOACS
             </Button>

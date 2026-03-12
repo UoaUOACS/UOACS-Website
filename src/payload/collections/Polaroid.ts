@@ -2,7 +2,7 @@ import type { CollectionConfig } from "payload"
 import { Routes } from "@/lib/routes"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 
-const { afterChange, afterDelete } = makeRevalidateHooks([Routes.home])
+const { afterChange, afterDelete } = makeRevalidateHooks([Routes.HOME])
 
 export const Polaroid: CollectionConfig = {
   slug: "polaroid",

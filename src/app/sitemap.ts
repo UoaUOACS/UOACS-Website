@@ -17,22 +17,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${baseUrl}${Routes.team}`,
+      url: `${baseUrl}${Routes.TEAM}`,
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: `${baseUrl}${Routes.sponsors}`,
+      url: `${baseUrl}${Routes.SPONSORS}`,
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: `${baseUrl}${Routes.signUp}`,
+      url: `${baseUrl}${Routes.SIGN_UP}`,
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: `${baseUrl}${Routes.privacy}`,
+      url: `${baseUrl}${Routes.PRIVACY}`,
       lastModified: new Date(),
       priority: 0.5,
     },

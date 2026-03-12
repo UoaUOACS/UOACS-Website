@@ -40,7 +40,7 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
           competitive events.
         </p>
         <div className="flex flex-col items-center gap-6 md:items-start">
-          <Link className="w-fit" href={Routes.signUp}>
+          <Link className="w-fit" href={Routes.SIGN_UP}>
             <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
               Interested? Join UOACS
             </Button>

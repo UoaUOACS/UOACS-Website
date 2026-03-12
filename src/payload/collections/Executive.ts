@@ -3,7 +3,7 @@ import { Routes } from "@/lib/routes"
 import { ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 
-const { afterChange, afterDelete } = makeRevalidateHooks([Routes.team])
+const { afterChange, afterDelete } = makeRevalidateHooks([Routes.TEAM])
 
 export const Executive: CollectionConfig = {
   slug: "executive",

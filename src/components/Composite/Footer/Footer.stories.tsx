@@ -26,8 +26,8 @@ const meta: Meta<typeof Footer> = {
       },
     ],
     links: [
-      { label: "MEET THE TEAM", href: Routes.team },
-      { label: "OUR SPONSORS", href: Routes.sponsors },
+      { label: "MEET THE TEAM", href: Routes.TEAM },
+      { label: "OUR SPONSORS", href: Routes.SPONSORS },
     ],
   },
   argTypes: {

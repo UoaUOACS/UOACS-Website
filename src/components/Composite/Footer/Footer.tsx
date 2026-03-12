@@ -30,7 +30,7 @@ export interface FooterProps {
  * @param className optional additional class names to apply to the button
  */
 const InterestedButton = ({ className }: { className?: string }) => (
-  <Link href={Routes.signUp}>
+  <Link href={Routes.SIGN_UP}>
     <Button
       className={cn("whitespace-nowrap", className)}
       right={<ArrowUpRightIcon className="h-4 w-4 text-white" />}
@@ -57,7 +57,7 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
             <p className="paragraph-sm text-gray-400">UOACS &copy; {new Date().getFullYear()}</p>
             <Link
               className="paragraph-xs w-fit text-gray-400 transition-colors hover:text-white"
-              href={Routes.privacy}
+              href={Routes.PRIVACY}
             >
               Privacy Policy
             </Link>

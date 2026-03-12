@@ -13,7 +13,7 @@ export default function NotFoundPage() {
           <Heading h={1}>404</Heading>
           <p className="paragraph">The page you are looking for does not exist.</p>
         </div>
-        <Link href={Routes.home}>
+        <Link href={Routes.HOME}>
           <Button right={<ArrowRightIcon className="size-5" />} theme="dark">
             Go Home
           </Button>

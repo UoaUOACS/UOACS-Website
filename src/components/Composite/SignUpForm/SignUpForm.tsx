@@ -32,10 +32,10 @@ export const SignUpForm = () => {
   const router = useRouter()
 
   const onSubmit = async (data: FormOutput) => {
-    router.prefetch(Routes.home)
+    router.prefetch(Routes.HOME)
     setLoading(true)
     try {
-      const response = await fetch(ApiRoutes.signUp, {
+      const response = await fetch(ApiRoutes.SIGN_UP, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export const SignUpForm = () => {
         }
         return
       }
-      router.push(Routes.home)
+      router.push(Routes.HOME)
       toast.success({
         description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
       })
@@ -214,7 +214,7 @@ export const SignUpForm = () => {
 
       <p className="paragraph-xs text-gray-500">
         By signing up, you agree to our{" "}
-        <Link className="underline transition-colors hover:text-gray-700" href={Routes.privacy}>
+        <Link className="underline transition-colors hover:text-gray-700" href={Routes.PRIVACY}>
           Privacy Policy
         </Link>
         .

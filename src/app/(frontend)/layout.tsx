@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     locale: "en_NZ",
     images: [
       {
-        url: ApiRoutes.og,
+        url: ApiRoutes.OG,
         width: 1200,
         height: 630,
         type: "image/png",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    images: [ApiRoutes.og],
+    images: [ApiRoutes.OG],
   },
 }
 
@@ -72,9 +72,9 @@ export const viewport: Viewport = {
 }
 
 const navbarLinks: { label: string; href: string }[] = [
-  { label: "Home", href: Routes.home },
-  { label: "Meet The Team", href: Routes.team },
-  { label: "Our Sponsors", href: Routes.sponsors },
+  { label: "Home", href: Routes.HOME },
+  { label: "Meet The Team", href: Routes.TEAM },
+  { label: "Our Sponsors", href: Routes.SPONSORS },
 ]
 
 export default async function RootLayout(props: { children: React.ReactNode }) {

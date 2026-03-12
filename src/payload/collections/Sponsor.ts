@@ -3,7 +3,7 @@ import { Routes } from "@/lib/routes"
 import { SponsorTier } from "@/types/enums"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 
-const { afterChange, afterDelete } = makeRevalidateHooks([Routes.sponsors, Routes.home])
+const { afterChange, afterDelete } = makeRevalidateHooks([Routes.SPONSORS, Routes.HOME])
 
 export const Sponsor: CollectionConfig = {
   slug: "sponsor",
