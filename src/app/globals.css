@@ -1,12 +1,6 @@
-/* For Storybook */
-@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&display=swap");
-
 @import "tailwindcss";
 
 :root {
-  /* For Storybook */
-  --font-inter: "Inter Tight", sans-serif;
-
   --pink-50: #fdf2f8;
   --pink-100: #fce7f3;
   --pink-200: #fccee8;
@@ -120,7 +114,7 @@
 
 @theme inline {
   --font-switzer: var(--font-switzer);
-  --font-mono: "IBM Plex Mono", monospace;
+  --font-mono: var(--font-mono);
   --font-inter: var(--font-inter);
 
   --color-pink-50: var(--pink-50);
