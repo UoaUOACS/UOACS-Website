@@ -71,7 +71,6 @@ export default buildConfig({
           export: {
             disableSave: true,
           },
-          import: false,
         },
       ],
     }),
