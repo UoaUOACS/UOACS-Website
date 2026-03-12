@@ -106,10 +106,12 @@ export interface Config {
   globals: {
     'home-page': HomePage;
     'privacy-policy': PrivacyPolicy;
+    'social-links': SocialLink;
   };
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     'privacy-policy': PrivacyPolicySelect<false> | PrivacyPolicySelect<true>;
+    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
   };
   locale: null;
   widgets: {
@@ -876,6 +878,19 @@ export interface PrivacyPolicy {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links".
+ */
+export interface SocialLink {
+  id: string;
+  discordHref: string;
+  instagramHref: string;
+  tiktokHref: string;
+  linkedinHref: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -897,6 +912,19 @@ export interface PrivacyPolicySelect<T extends boolean = true> {
         content?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  discordHref?: T;
+  instagramHref?: T;
+  tiktokHref?: T;
+  linkedinHref?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

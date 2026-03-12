@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { AboutUsSection, HeroSection, ValuesSection, WhoWeAreSection } from "@/components/Composite"
-import { payload } from "@/lib/payload"
+import { getSocialLinks } from "@/lib/helpers"
+import { payload, Slugs } from "@/lib/payload"
 import type { Reel } from "@/payload/payload-types"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"
 
@@ -10,9 +11,10 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const homePage = await payload.findGlobal({
-    slug: "home-page",
-  })
+  const [homePage, socialLinks] = await Promise.all([
+    payload.findGlobal({ slug: Slugs.Globals.homePage }),
+    getSocialLinks(),
+  ])
 
   const rawReels = (homePage?.reels ?? []) as (string | Reel | null | undefined)[]
   const resolvedReels: Reel[] = rawReels.filter((reel) => {
@@ -25,7 +27,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection />
+      <HeroSection socialLinks={socialLinks} />
       <AboutUsSection reels={resolvedReels} />
       <WhoWeAreSection polaroids={resolvedPolaroids} />
       <ValuesSection />

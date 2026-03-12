@@ -1,12 +1,13 @@
 import type { CollectionConfig } from "payload"
 import { Routes } from "@/lib/routes"
+import { Slugs } from "@/lib/slugs"
 import { ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 
 const { afterChange, afterDelete } = makeRevalidateHooks([Routes.team])
 
 export const Executive: CollectionConfig = {
-  slug: "executive",
+  slug: Slugs.Collections.executive,
   admin: {
     useAsTitle: "name",
   },

@@ -2,9 +2,10 @@ import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { SocialLinks } from "@/components/Generic"
 import { Button, Heading } from "@/components/Primitive"
-import { SOCIAL_LINKS } from "@/lib/constants"
+import { getSocialLinks } from "@/lib/helpers"
 
-export default function NotFoundPage() {
+export default async function NotFoundPage() {
+  const socialLinks = await getSocialLinks()
   return (
     <div className="flex grow flex-col items-center justify-center gap-30">
       <div className="flex max-w-64 flex-col items-center justify-center gap-6 text-center">
@@ -20,7 +21,7 @@ export default function NotFoundPage() {
       </div>
       <div className="flex flex-col items-center gap-3">
         <p className="paragraph-sm font-medium">Our Socials:</p>
-        <SocialLinks links={SOCIAL_LINKS} />
+        <SocialLinks links={socialLinks} />
       </div>
     </div>
   )

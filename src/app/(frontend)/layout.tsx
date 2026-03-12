@@ -4,7 +4,7 @@ import { Toaster } from "sonner"
 import { Footer, Navbar } from "@/components/Composite"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
-import { SOCIAL_LINKS } from "@/lib/constants"
+import { getSocialLinks } from "@/lib/helpers"
 
 const inter = localFont({
   src: "../../../public/fonts/InterTight-Variable.woff2",
@@ -79,6 +79,8 @@ const navbarLinks: { label: string; href: string }[] = [
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
+  const socialLinks = await getSocialLinks()
+
   return (
     <html
       className={`${inter.variable} ${switzer.variable} ${mono.variable} overflow-x-hidden`}
@@ -87,10 +89,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       <body className="relative flex min-h-screen flex-col overflow-x-hidden">
         <Toaster />
         <div className="mx-auto flex w-full max-w-[1480px] grow flex-col gap-14 px-4 py-6 md:gap-9 md:px-12 lg:px-20">
-          <Navbar links={navbarLinks} socialLinks={SOCIAL_LINKS} />
+          <Navbar links={navbarLinks} socialLinks={socialLinks} />
           <main className="flex grow flex-col items-center gap-14 py-9 md:gap-30">{children}</main>
         </div>
-        <Footer links={navbarLinks} socialLinks={SOCIAL_LINKS} />
+        <Footer links={navbarLinks} socialLinks={socialLinks} />
       </body>
     </html>
   )
