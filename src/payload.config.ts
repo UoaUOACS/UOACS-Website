@@ -15,6 +15,7 @@ import { Sponsor } from "./payload/collections/Sponsor"
 import { User } from "./payload/collections/User"
 import { HomePage } from "./payload/globals/HomePage"
 import { PrivacyPolicy } from "./payload/globals/PrivacyPolicy"
+import { SocialLinks } from "./payload/globals/SocialLinks"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,7 +29,7 @@ export default buildConfig({
     },
   },
   collections: [User, Media, Member, Executive, Sponsor, Reel, Polaroid],
-  globals: [HomePage, PrivacyPolicy],
+  globals: [HomePage, PrivacyPolicy, SocialLinks],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,
