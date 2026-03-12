@@ -4,10 +4,10 @@ import { Slugs } from "@/lib/slugs"
 import { makeRevalidateHooks } from "@/payload/hooks/revalidate"
 
 const { globalAfterChange } = makeRevalidateHooks([
-  Routes.home,
-  Routes.team,
-  Routes.sponsors,
-  Routes.privacy,
+  Routes.HOME,
+  Routes.TEAM,
+  Routes.SPONSORS,
+  Routes.PRIVACY,
 ])
 
 export const SocialLinks: GlobalConfig = {
