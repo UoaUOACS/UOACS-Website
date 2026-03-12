@@ -3,6 +3,7 @@ import Link from "next/link"
 import { SocialLinks } from "@/components/Generic"
 import { Button, Heading } from "@/components/Primitive"
 import { SOCIAL_LINKS } from "@/lib/constants"
+import { Routes } from "@/lib/routes"
 
 export default function NotFoundPage() {
   return (
@@ -12,7 +13,7 @@ export default function NotFoundPage() {
           <Heading h={1}>404</Heading>
           <p className="paragraph">The page you are looking for does not exist.</p>
         </div>
-        <Link href="/">
+        <Link href={Routes.home}>
           <Button right={<ArrowRightIcon className="size-5" />} theme="dark">
             Go Home
           </Button>

@@ -5,6 +5,7 @@ import { Footer, Navbar } from "@/components/Composite"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
 import { SOCIAL_LINKS } from "@/lib/constants"
+import { Routes } from "@/lib/routes"
 
 const inter = localFont({
   src: "../../../public/fonts/InterTight-Variable.woff2",
@@ -71,9 +72,9 @@ export const viewport: Viewport = {
 }
 
 const navbarLinks: { label: string; href: string }[] = [
-  { label: "Home", href: "/" },
-  { label: "Meet The Team", href: "/team" },
-  { label: "Our Sponsors", href: "/sponsors" },
+  { label: "Home", href: Routes.home },
+  { label: "Meet The Team", href: Routes.team },
+  { label: "Our Sponsors", href: Routes.sponsors },
 ]
 
 export default async function RootLayout(props: { children: React.ReactNode }) {

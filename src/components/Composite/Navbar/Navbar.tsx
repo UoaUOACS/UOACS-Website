@@ -7,6 +7,7 @@ import Link from "next/link"
 import type { SocialLink } from "@/components/Generic"
 import { Button, Dropdown } from "@/components/Primitive"
 import { SocialIcon } from "@/components/Primitive/Icons"
+import { Routes } from "@/lib/routes"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"
 
@@ -47,7 +48,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
       <NavbarGradient />
       <nav className="flex flex-row items-center justify-between">
         <motion.div layoutId="navbar-logo">
-          <Link className="z-50" href="/">
+          <Link className="z-50" href={Routes.home}>
             <Image alt="UOACS Logo" height={40} src="/uoacs-logo-bw.svg" width={167} />
           </Link>
         </motion.div>
@@ -69,7 +70,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
             />
           </div>
-          <Link href="/sign-up">
+          <Link href={Routes.signUp}>
             <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
               Join UOACS
             </Button>

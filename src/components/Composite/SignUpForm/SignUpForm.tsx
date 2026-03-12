@@ -10,6 +10,7 @@ import { Button, Radio } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
 import { MultiSelect } from "@/components/Primitive/MultiSelect/MultiSelect"
 import { Select } from "@/components/Primitive/Select/Select"
+import { Routes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
 import { createMemberSchema } from "@/types/schemas/member"
 
@@ -31,7 +32,7 @@ export const SignUpForm = () => {
   const router = useRouter()
 
   const onSubmit = async (data: FormOutput) => {
-    router.prefetch("/")
+    router.prefetch(Routes.home)
     setLoading(true)
     try {
       const response = await fetch("/api/sign-up", {
@@ -54,7 +55,7 @@ export const SignUpForm = () => {
         }
         return
       }
-      router.push("/")
+      router.push(Routes.home)
       toast.success({
         description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
       })
@@ -213,7 +214,7 @@ export const SignUpForm = () => {
 
       <p className="paragraph-xs text-gray-500">
         By signing up, you agree to our{" "}
-        <Link className="underline transition-colors hover:text-gray-700" href="/privacy">
+        <Link className="underline transition-colors hover:text-gray-700" href={Routes.privacy}>
           Privacy Policy
         </Link>
         .

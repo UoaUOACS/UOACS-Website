@@ -5,6 +5,7 @@ import { motion } from "motion/react"
 import Link from "next/link"
 import type { SocialLink } from "@/components/Generic"
 import { Button, SocialIcon } from "@/components/Primitive"
+import { Routes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
 import { NavbarGradient } from "../Navbar/NavbarGradient"
 
@@ -29,7 +30,7 @@ export interface FooterProps {
  * @param className optional additional class names to apply to the button
  */
 const InterestedButton = ({ className }: { className?: string }) => (
-  <Link href="/sign-up">
+  <Link href={Routes.signUp}>
     <Button
       className={cn("whitespace-nowrap", className)}
       right={<ArrowUpRightIcon className="h-4 w-4 text-white" />}
@@ -56,7 +57,7 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
             <p className="paragraph-sm text-gray-400">UOACS &copy; {new Date().getFullYear()}</p>
             <Link
               className="paragraph-xs w-fit text-gray-400 transition-colors hover:text-white"
-              href="/privacy"
+              href={Routes.privacy}
             >
               Privacy Policy
             </Link>
