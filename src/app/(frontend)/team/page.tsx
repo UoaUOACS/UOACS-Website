@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function TeamPage() {
   const execs: { docs: Executive[] } = await payload.find({
-    collection: Slugs.Collections.executive,
+    collection: Slugs.Collections.EXECUTIVE,
     limit: 100,
     depth: 2,
     sort: "createdAt",

@@ -7,7 +7,7 @@ import { makeRevalidateHooks } from "../hooks/revalidate"
 const { afterChange, afterDelete } = makeRevalidateHooks([Routes.TEAM])
 
 export const Executive: CollectionConfig = {
-  slug: Slugs.Collections.executive,
+  slug: Slugs.Collections.EXECUTIVE,
   admin: {
     useAsTitle: "name",
   },

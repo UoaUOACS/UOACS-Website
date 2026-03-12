@@ -2,7 +2,7 @@ import type { CollectionConfig } from "payload"
 import { Slugs } from "@/lib/slugs"
 
 export const Member: CollectionConfig = {
-  slug: Slugs.Collections.member,
+  slug: Slugs.Collections.MEMBER,
   admin: {
     useAsTitle: "email",
   },

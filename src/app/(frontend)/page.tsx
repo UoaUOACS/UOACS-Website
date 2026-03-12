@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const [homePage, socialLinks] = await Promise.all([
-    payload.findGlobal({ slug: Slugs.Globals.homePage }),
+    payload.findGlobal({ slug: Slugs.Globals.HOME_PAGE }),
     getSocialLinks(),
   ])
 

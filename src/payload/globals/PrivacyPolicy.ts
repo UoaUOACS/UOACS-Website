@@ -6,7 +6,7 @@ import { makeRevalidateHooks } from "@/payload/hooks/revalidate"
 const { globalAfterChange } = makeRevalidateHooks([Routes.PRIVACY])
 
 export const PrivacyPolicy: GlobalConfig = {
-  slug: Slugs.Globals.privacyPolicy,
+  slug: Slugs.Globals.PRIVACY_POLICY,
   fields: [
     {
       name: "sections",

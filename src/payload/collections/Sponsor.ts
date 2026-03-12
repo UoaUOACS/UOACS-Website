@@ -7,7 +7,7 @@ import { makeRevalidateHooks } from "../hooks/revalidate"
 const { afterChange, afterDelete } = makeRevalidateHooks([Routes.SPONSORS, Routes.HOME])
 
 export const Sponsor: CollectionConfig = {
-  slug: Slugs.Collections.sponsor,
+  slug: Slugs.Collections.SPONSOR,
   admin: {
     useAsTitle: "name",
   },

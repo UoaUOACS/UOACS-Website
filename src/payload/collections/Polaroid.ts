@@ -6,7 +6,7 @@ import { makeRevalidateHooks } from "../hooks/revalidate"
 const { afterChange, afterDelete } = makeRevalidateHooks([Routes.HOME])
 
 export const Polaroid: CollectionConfig = {
-  slug: Slugs.Collections.polaroid,
+  slug: Slugs.Collections.POLAROID,
   admin: {
     useAsTitle: "caption",
   },

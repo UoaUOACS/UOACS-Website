@@ -2,7 +2,7 @@ import type { CollectionConfig } from "payload"
 import { Slugs } from "@/lib/slugs"
 
 export const Media: CollectionConfig = {
-  slug: Slugs.Collections.media,
+  slug: Slugs.Collections.MEDIA,
   access: {
     read: () => true,
   },

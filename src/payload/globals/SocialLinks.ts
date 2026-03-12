@@ -11,7 +11,7 @@ const { globalAfterChange } = makeRevalidateHooks([
 ])
 
 export const SocialLinks: GlobalConfig = {
-  slug: Slugs.Globals.socialLinks,
+  slug: Slugs.Globals.SOCIAL_LINKS,
   fields: [
     {
       name: "discordHref",

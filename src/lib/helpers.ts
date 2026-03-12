@@ -4,7 +4,7 @@ import { Slugs } from "./slugs"
 
 export async function getSocialLinks(): Promise<SocialLink[]> {
   const { discordHref, instagramHref, tiktokHref, linkedinHref } = await payload.findGlobal({
-    slug: Slugs.Globals.socialLinks,
+    slug: Slugs.Globals.SOCIAL_LINKS,
   })
   return [
     { icon: "discord", label: "Discord", href: discordHref ?? "" },

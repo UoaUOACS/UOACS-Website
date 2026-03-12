@@ -20,7 +20,7 @@ type PrivacyPolicyGlobal = {
 
 export default async function PrivacyPage() {
   const policy = (await payload.findGlobal({
-    slug: Slugs.Globals.privacyPolicy,
+    slug: Slugs.Globals.PRIVACY_POLICY,
   })) as PrivacyPolicyGlobal
 
   const sections = policy.sections ?? []
