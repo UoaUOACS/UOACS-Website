@@ -1,7 +1,8 @@
 import type { CollectionConfig } from "payload"
+import { Slugs } from "@/lib/slugs"
 
 export const Member: CollectionConfig = {
-  slug: "member",
+  slug: Slugs.Collections.member,
   admin: {
     useAsTitle: "email",
   },

@@ -1,5 +1,6 @@
 import type { GlobalConfig } from "payload"
 import { Routes } from "@/lib/routes"
+import { Slugs } from "@/lib/slugs"
 import { makeRevalidateHooks } from "@/payload/hooks/revalidate"
 
 const { globalAfterChange } = makeRevalidateHooks([
@@ -10,7 +11,7 @@ const { globalAfterChange } = makeRevalidateHooks([
 ])
 
 export const SocialLinks: GlobalConfig = {
-  slug: "social-links",
+  slug: Slugs.Globals.socialLinks,
   fields: [
     {
       name: "discordHref",

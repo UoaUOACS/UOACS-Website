@@ -6,6 +6,7 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { s3Storage } from "@payloadcms/storage-s3"
 import { buildConfig } from "payload"
 import sharp from "sharp"
+import { Slugs } from "./lib/slugs"
 import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
@@ -68,7 +69,7 @@ export default buildConfig({
     importExportPlugin({
       collections: [
         {
-          slug: "member",
+          slug: Slugs.Collections.member,
           export: {
             disableSave: true,
             disableJobsQueue: true,

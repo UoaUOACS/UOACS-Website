@@ -1,12 +1,13 @@
 import type { CollectionConfig } from "payload"
 import { Routes } from "@/lib/routes"
+import { Slugs } from "@/lib/slugs"
 import { SponsorTier } from "@/types/enums"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 
 const { afterChange, afterDelete } = makeRevalidateHooks([Routes.sponsors, Routes.home])
 
 export const Sponsor: CollectionConfig = {
-  slug: "sponsor",
+  slug: Slugs.Collections.sponsor,
   admin: {
     useAsTitle: "name",
   },
