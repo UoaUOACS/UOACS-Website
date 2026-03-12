@@ -1,19 +1,11 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
-import { type SocialLink, SocialLinks } from "@/components/Generic"
+import { SocialLinks } from "@/components/Generic"
 import { Button, Heading } from "@/components/Primitive"
-import { payload } from "@/lib/payload"
+import { getSocialLinks } from "@/lib/payload"
 
 export default async function NotFoundPage() {
-  const { discordHref, instagramHref, tiktokHref, linkedinHref } = await payload.findGlobal({
-    slug: "social-links",
-  })
-  const socialLinks: SocialLink[] = [
-    { icon: "discord", label: "Discord", href: discordHref ?? "" },
-    { icon: "instagram", label: "Instagram", href: instagramHref ?? "" },
-    { icon: "tiktok", label: "TikTok", href: tiktokHref ?? "" },
-    { icon: "linkedin", label: "LinkedIn", href: linkedinHref ?? "" },
-  ]
+  const socialLinks = await getSocialLinks()
   return (
     <div className="flex grow flex-col items-center justify-center gap-30">
       <div className="flex max-w-64 flex-col items-center justify-center gap-6 text-center">

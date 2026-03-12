@@ -4,8 +4,7 @@ import { Toaster } from "sonner"
 import { Footer, Navbar } from "@/components/Composite"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
-import type { SocialLink } from "@/components/Generic"
-import { payload } from "@/lib/payload"
+import { getSocialLinks } from "@/lib/payload"
 
 const inter = localFont({
   src: "../../../public/fonts/InterTight-Variable.woff2",
@@ -80,15 +79,7 @@ const navbarLinks: { label: string; href: string }[] = [
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
-  const { discordHref, instagramHref, tiktokHref, linkedinHref } = await payload.findGlobal({
-    slug: "social-links",
-  })
-  const socialLinks: SocialLink[] = [
-    { icon: "discord", label: "Discord", href: discordHref ?? "" },
-    { icon: "instagram", label: "Instagram", href: instagramHref ?? "" },
-    { icon: "tiktok", label: "TikTok", href: tiktokHref ?? "" },
-    { icon: "linkedin", label: "LinkedIn", href: linkedinHref ?? "" },
-  ]
+  const socialLinks = await getSocialLinks()
 
   return (
     <html

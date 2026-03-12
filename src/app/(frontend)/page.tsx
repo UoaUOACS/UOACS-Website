@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { AboutUsSection, HeroSection, ValuesSection, WhoWeAreSection } from "@/components/Composite"
-import type { SocialLink } from "@/components/Generic"
-import { payload } from "@/lib/payload"
+import { getSocialLinks, payload } from "@/lib/payload"
 import type { Reel } from "@/payload/payload-types"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"
 
@@ -11,17 +10,10 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [homePage, { discordHref, instagramHref, tiktokHref, linkedinHref }] = await Promise.all([
+  const [homePage, socialLinks] = await Promise.all([
     payload.findGlobal({ slug: "home-page" }),
-    payload.findGlobal({ slug: "social-links" }),
+    getSocialLinks(),
   ])
-
-  const socialLinks: SocialLink[] = [
-    { icon: "discord", label: "Discord", href: discordHref ?? "" },
-    { icon: "instagram", label: "Instagram", href: instagramHref ?? "" },
-    { icon: "tiktok", label: "TikTok", href: tiktokHref ?? "" },
-    { icon: "linkedin", label: "LinkedIn", href: linkedinHref ?? "" },
-  ]
 
   const rawReels = (homePage?.reels ?? []) as (string | Reel | null | undefined)[]
   const resolvedReels: Reel[] = rawReels.filter((reel) => {
