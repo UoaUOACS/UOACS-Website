@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next"
+import { Routes } from "@/lib/routes"
 
 export const dynamic = "force-static"
 
@@ -16,22 +17,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${baseUrl}/team`,
+      url: `${baseUrl}${Routes.TEAM}`,
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/sponsors`,
+      url: `${baseUrl}${Routes.SPONSORS}`,
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/sign-up`,
+      url: `${baseUrl}${Routes.SIGN_UP}`,
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/privacy`,
+      url: `${baseUrl}${Routes.PRIVACY}`,
       lastModified: new Date(),
       priority: 0.5,
     },

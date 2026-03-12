@@ -3,10 +3,10 @@ import { Routes } from "@/lib/routes"
 import { Slugs } from "@/lib/slugs"
 import { makeRevalidateHooks } from "@/payload/hooks/revalidate"
 
-const { globalAfterChange } = makeRevalidateHooks([Routes.home])
+const { globalAfterChange } = makeRevalidateHooks([Routes.HOME])
 
 export const HomePage: GlobalConfig = {
-  slug: Slugs.Globals.homePage,
+  slug: Slugs.Globals.HOME_PAGE,
   fields: [
     {
       name: "reels",

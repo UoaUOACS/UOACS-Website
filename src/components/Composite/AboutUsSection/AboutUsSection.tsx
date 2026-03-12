@@ -1,6 +1,7 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { Button } from "@/components/Primitive"
+import { Routes } from "@/lib/routes"
 import type { Reel as ReelDocument } from "@/payload/payload-types"
 import { Reel } from "../Reel/Reel"
 
@@ -39,7 +40,7 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
           competitive events.
         </p>
         <div className="flex flex-col items-center gap-6 md:items-start">
-          <Link className="w-fit" href="/sign-up">
+          <Link className="w-fit" href={Routes.SIGN_UP}>
             <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
               Interested? Join UOACS
             </Button>

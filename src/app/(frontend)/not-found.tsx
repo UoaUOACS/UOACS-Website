@@ -3,6 +3,7 @@ import Link from "next/link"
 import { SocialLinks } from "@/components/Generic"
 import { Button, Heading } from "@/components/Primitive"
 import { getSocialLinks } from "@/lib/helpers"
+import { Routes } from "@/lib/routes"
 
 export default async function NotFoundPage() {
   const socialLinks = await getSocialLinks()
@@ -13,7 +14,7 @@ export default async function NotFoundPage() {
           <Heading h={1}>404</Heading>
           <p className="paragraph">The page you are looking for does not exist.</p>
         </div>
-        <Link href="/">
+        <Link href={Routes.HOME}>
           <Button right={<ArrowRightIcon className="size-5" />} theme="dark">
             Go Home
           </Button>

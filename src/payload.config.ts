@@ -69,7 +69,7 @@ export default buildConfig({
     importExportPlugin({
       collections: [
         {
-          slug: Slugs.Collections.member,
+          slug: Slugs.Collections.MEMBER,
           export: {
             disableSave: true,
             disableJobsQueue: true,

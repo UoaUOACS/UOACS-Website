@@ -3,10 +3,10 @@ import { Routes } from "@/lib/routes"
 import { Slugs } from "@/lib/slugs"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 
-const { afterChange, afterDelete } = makeRevalidateHooks([Routes.home])
+const { afterChange, afterDelete } = makeRevalidateHooks([Routes.HOME])
 
 export const Polaroid: CollectionConfig = {
-  slug: Slugs.Collections.polaroid,
+  slug: Slugs.Collections.POLAROID,
   admin: {
     useAsTitle: "caption",
   },

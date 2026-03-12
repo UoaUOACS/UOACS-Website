@@ -7,6 +7,7 @@ import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
 import { useEffect, useState } from "react"
 import { BorderButton, Button, Heading, SocialIcon } from "@/components/Primitive"
+import { Routes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
 import type { NavbarProps } from "../Navbar"
 import { mobileNavbarVariants } from "./variants"
@@ -73,7 +74,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
           >
             <div className="flex w-full flex-row items-center justify-between px-4">
               <motion.div layoutId="navbar-logo">
-                <Link href="/" onClick={() => setIsOpen(false)}>
+                <Link href={Routes.HOME} onClick={() => setIsOpen(false)}>
                   <Image alt="UOACS Logo" height={40} src="/uoacs-logo-bw.svg" width={167} />
                 </Link>
               </motion.div>
@@ -100,7 +101,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                 </a>
               ))}
             </div>
-            <Link className="grid grid-cols-4" href="/sign-up">
+            <Link className="grid grid-cols-4" href={Routes.SIGN_UP}>
               <Button className="col-span-4 rounded-b-none" theme="dark">
                 Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
               </Button>

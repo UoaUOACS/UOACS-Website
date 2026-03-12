@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function SponsorsPage() {
   const { docs: sponsors }: { docs: Sponsor[] } = await payload.find({
-    collection: Slugs.Collections.sponsor,
+    collection: Slugs.Collections.SPONSOR,
     depth: 2,
   })
 

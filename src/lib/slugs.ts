@@ -1,17 +1,17 @@
 export const Slugs = {
   Collections: {
-    executive: "executive",
-    media: "media",
-    member: "member",
-    polaroid: "polaroid",
-    reel: "reel",
-    sponsor: "sponsor",
-    user: "user",
+    EXECUTIVE: "executive",
+    MEDIA: "media",
+    MEMBER: "member",
+    POLAROID: "polaroid",
+    REEL: "reel",
+    SPONSOR: "sponsor",
+    USER: "user",
   },
   Globals: {
-    homePage: "home-page",
-    privacyPolicy: "privacy-policy",
-    socialLinks: "social-links",
+    HOME_PAGE: "home-page",
+    PRIVACY_POLICY: "privacy-policy",
+    SOCIAL_LINKS: "social-links",
   },
 } as const
 

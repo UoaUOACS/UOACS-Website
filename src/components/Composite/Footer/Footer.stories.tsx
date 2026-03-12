@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { SOCIAL_ICONS } from "@/components/Primitive"
+import { Routes } from "@/lib/routes"
 import { Footer } from "./Footer"
 
 const meta: Meta<typeof Footer> = {
@@ -25,8 +26,8 @@ const meta: Meta<typeof Footer> = {
       },
     ],
     links: [
-      { label: "MEET THE TEAM", href: "/team" },
-      { label: "OUR SPONSORS", href: "/sponsors" },
+      { label: "MEET THE TEAM", href: Routes.TEAM },
+      { label: "OUR SPONSORS", href: Routes.SPONSORS },
     ],
   },
   argTypes: {

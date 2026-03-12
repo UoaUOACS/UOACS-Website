@@ -3,10 +3,10 @@ import { Routes } from "@/lib/routes"
 import { Slugs } from "@/lib/slugs"
 import { makeRevalidateHooks } from "@/payload/hooks/revalidate"
 
-const { globalAfterChange } = makeRevalidateHooks([Routes.privacy])
+const { globalAfterChange } = makeRevalidateHooks([Routes.PRIVACY])
 
 export const PrivacyPolicy: GlobalConfig = {
-  slug: Slugs.Globals.privacyPolicy,
+  slug: Slugs.Globals.PRIVACY_POLICY,
   fields: [
     {
       name: "sections",

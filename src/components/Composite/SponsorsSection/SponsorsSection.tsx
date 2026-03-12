@@ -3,6 +3,7 @@ import Link from "next/link"
 import { SponsorTicker } from "@/components/Generic"
 import { Button, Heading, LazyImage } from "@/components/Primitive"
 import { TIER_SIZES } from "@/lib/constants"
+import { Routes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
 import type { Sponsor } from "@/payload/payload-types"
 
@@ -69,7 +70,7 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
             if (!src) return null
 
             return (
-              <Link href="/sponsors" key={sponsor.id}>
+              <Link href={Routes.SPONSORS} key={sponsor.id}>
                 <LazyImage
                   alt={sponsor.name || "Sponsor Logo"}
                   className="max-h-full max-w-full object-contain"
@@ -82,7 +83,7 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
           })}
         </div>
       )}
-      <Link href="/sponsors">
+      <Link href={Routes.SPONSORS}>
         <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
           See All Our Sponsors
         </Button>
