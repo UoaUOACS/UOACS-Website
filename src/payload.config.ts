@@ -70,6 +70,10 @@ export default buildConfig({
           slug: "member",
           export: {
             disableSave: true,
+            disableJobsQueue: true,
+          },
+          import: {
+            disableJobsQueue: true,
           },
         },
       ],
