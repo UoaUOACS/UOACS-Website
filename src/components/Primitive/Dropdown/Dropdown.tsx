@@ -1,7 +1,7 @@
 "use client"
 
 import { AnimatePresence, motion, stagger } from "motion/react"
-import { type ReactNode, useState } from "react"
+import { type ReactNode, useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "../Button/Button"
 import type { ButtonVariantProps } from "../Button/variants"
@@ -49,9 +49,25 @@ export const Dropdown = ({
   ...buttonVariantProps
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const listener = (event: MouseEvent | TouchEvent) => {
+      if (!ref.current || ref.current.contains(event.target as Node)) {
+        return
+      }
+      setIsOpen(false)
+    }
+    document.addEventListener("mousedown", listener)
+    document.addEventListener("touchstart", listener)
+    return () => {
+      document.removeEventListener("mousedown", listener)
+      document.removeEventListener("touchstart", listener)
+    }
+  }, [])
 
   return (
-    <div className="relative inline-flex">
+    <div className="relative inline-flex" ref={ref}>
       <Button
         aria-expanded={isOpen}
         className={triggerClassName}
