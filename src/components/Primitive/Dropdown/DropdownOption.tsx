@@ -38,7 +38,7 @@ export const DropdownOption = ({ label, href, onClick, ...variant }: DropdownOpt
   }
 
   return (
-    <Button className="whitespace-nowrap" onClick={onClick} role="menuitem" {...variant}>
+    <Button className="z-5 whitespace-nowrap" onClick={onClick} role="menuitem" {...variant}>
       {label || "Option"}
     </Button>
   )
