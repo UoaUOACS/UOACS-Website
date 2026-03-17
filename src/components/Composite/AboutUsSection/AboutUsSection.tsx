@@ -13,6 +13,10 @@ export interface AboutUsSectionProps {
    * An array of reels to display in the About Us section.
    */
   reels: ReelDocument[]
+  /**
+   * The Instagram profile URL, passed through to each {@link Reel}.
+   */
+  instagramHref: string
 }
 
 /**
@@ -20,7 +24,7 @@ export interface AboutUsSectionProps {
  *
  * @param reels An array of reels to display in the About Us section.
  */
-export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
+export const AboutUsSection = ({ reels, instagramHref }: AboutUsSectionProps) => {
   return (
     <div className="flex w-full flex-row justify-between gap-18 overflow-x-visible">
       <div className="flex w-full flex-none flex-col items-center gap-8 md:w-auto md:max-w-lg md:items-start md:gap-12">
@@ -51,7 +55,7 @@ export const AboutUsSection = ({ reels }: AboutUsSectionProps) => {
       <div className="hidden flex-none md:flex">
         <div className="flex h-full flex-row flex-nowrap justify-start gap-4 overflow-x-visible">
           {reels.map((reel) => (
-            <Reel key={reel.id} reel={reel} />
+            <Reel instagramHref={instagramHref} key={reel.id} reel={reel} />
           ))}
         </div>
       </div>

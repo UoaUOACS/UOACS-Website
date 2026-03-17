@@ -10,6 +10,7 @@ const meta: Meta<typeof Reel> = {
   },
   args: {
     reel: mockReel,
+    instagramHref: "https://www.instagram.com/uoacs25/",
   },
 }
 
@@ -24,7 +25,7 @@ export const Primary: Story = (args) => {
   )
 }
 
-export const LongDescription: Story = ({ reel }) => {
+export const LongDescription: Story = ({ reel, instagramHref }) => {
   const longDescriptionReel = {
     ...reel,
     description:
@@ -33,7 +34,7 @@ export const LongDescription: Story = ({ reel }) => {
 
   return (
     <div className="w-80">
-      <Reel reel={longDescriptionReel} />
+      <Reel instagramHref={instagramHref} reel={longDescriptionReel} />
     </div>
   )
 }

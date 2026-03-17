@@ -13,6 +13,10 @@ export interface ReelProps {
    * The {@link ReelType} data including video and description.
    */
   reel: ReelType
+  /**
+   * The Instagram profile URL, used for the handle link.
+   */
+  instagramHref: string
 }
 
 /**
@@ -21,8 +25,9 @@ export interface ReelProps {
  * @param {ReelType} reel The reel data including video and description.
  * @returns The rendered Reel component.
  */
-export const Reel = ({ reel }: ReelProps) => {
+export const Reel = ({ reel, instagramHref }: ReelProps) => {
   const src = typeof reel.video === "string" ? reel.video : reel.video?.url || ""
+  const handle = instagramHref.replace(/\/$/, "").split("/").pop() ?? ""
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
@@ -46,9 +51,9 @@ export const Reel = ({ reel }: ReelProps) => {
 
       <div className="paragraph-sm absolute bottom-0 left-0 p-4 text-white">
         <a
-          aria-label="Visit our Instagram Page @uoacs25"
+          aria-label={`Visit our Instagram Page @${handle}`}
           className="mb-2 flex items-center gap-2 p-0 font-semibold drop-shadow-md"
-          href="https://www.instagram.com/uoacs25/"
+          href={instagramHref}
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -59,7 +64,7 @@ export const Reel = ({ reel }: ReelProps) => {
             src="/uoacs-icon.svg"
             width={32}
           />
-          <span>uoacs25</span>
+          <span>{handle}</span>
         </a>
         <button
           className={cn(
