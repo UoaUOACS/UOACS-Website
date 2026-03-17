@@ -25,10 +25,12 @@ export default async function HomePage() {
     return typeof polaroid === "object" && polaroid !== null
   })
 
+  const instagramHref = socialLinks.find((l) => l.icon === "instagram")?.href ?? ""
+
   return (
     <>
       <HeroSection socialLinks={socialLinks} />
-      <AboutUsSection reels={resolvedReels} />
+      <AboutUsSection instagramHref={instagramHref} reels={resolvedReels} />
       <WhoWeAreSection polaroids={resolvedPolaroids} />
       <ValuesSection />
       <SponsorsServerSection />

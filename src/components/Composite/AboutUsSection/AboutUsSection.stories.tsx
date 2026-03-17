@@ -7,6 +7,7 @@ const meta: Meta<typeof AboutUsSection> = {
   component: AboutUsSection,
   args: {
     reels: [mockReel, mockReel],
+    instagramHref: "https://www.instagram.com/uoacs25/",
   },
 }
 
