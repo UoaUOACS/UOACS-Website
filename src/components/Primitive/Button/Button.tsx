@@ -9,6 +9,7 @@ export interface ButtonProps
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   left?: React.ReactNode
   right?: React.ReactNode
+  ref?: React.Ref<HTMLButtonElement>
 }
 
 /**

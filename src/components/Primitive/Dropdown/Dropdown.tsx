@@ -1,7 +1,7 @@
 "use client"
 
 import { AnimatePresence, motion, stagger } from "motion/react"
-import { type ReactNode, useState } from "react"
+import { type ReactNode, useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "../Button/Button"
 import type { ButtonVariantProps } from "../Button/variants"
@@ -49,12 +49,28 @@ export const Dropdown = ({
   ...buttonVariantProps
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const listener = (event: MouseEvent | TouchEvent) => {
+      if (!ref.current || ref.current.contains(event.target as Node)) {
+        return
+      }
+      setIsOpen(false)
+    }
+    document.addEventListener("mousedown", listener)
+    document.addEventListener("touchstart", listener)
+    return () => {
+      document.removeEventListener("mousedown", listener)
+      document.removeEventListener("touchstart", listener)
+    }
+  }, [])
 
   return (
-    <div className="relative inline-flex">
+    <div className="relative inline-flex" ref={ref}>
       <Button
         aria-expanded={isOpen}
-        className={triggerClassName}
+        className={cn("z-20", triggerClassName)}
         onClick={() => setIsOpen(!isOpen)}
         right={
           triggerIcon || (
@@ -83,7 +99,7 @@ export const Dropdown = ({
           <motion.div
             animate="open"
             className={cn(
-              "absolute top-full right-0 z-10 mt-2 flex origin-top flex-col items-end gap-2 rounded-2xl",
+              "absolute top-full right-0 z-5 mt-2 flex origin-top flex-col items-end gap-2 rounded-2xl",
               popoverClassName,
             )}
             exit="closed"
