@@ -11,14 +11,14 @@ const inter = localFont({
   src: "../../../public/fonts/InterTight-Variable.woff2",
   weight: "100 900",
   variable: "--font-inter",
-  display: "swap",
+  display: "optional",
 })
 
 const switzer = localFont({
   src: "../../../public/fonts/Switzer-Variable.woff2",
   weight: "100 900",
   variable: "--font-switzer",
-  display: "swap",
+  display: "optional",
 })
 
 const mono = localFont({
@@ -35,7 +35,7 @@ const mono = localFont({
     },
   ],
   variable: "--font-mono",
-  display: "swap",
+  display: "optional",
 })
 
 export const metadata: Metadata = {

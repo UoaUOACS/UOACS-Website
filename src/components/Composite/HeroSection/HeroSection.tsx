@@ -16,7 +16,7 @@ export const HeroSection = ({ socialLinks }: { socialLinks: SocialLink[] }) => {
         <br />
         EST. {START_YEAR}
       </p>
-      <div className="flex flex-col justify-center gap-12 md:max-w-[32rem] md:justify-start">
+      <div className="flex flex-col justify-center gap-12 md:max-w-[38rem] md:justify-start">
         <div className="flex flex-col justify-center gap-6 text-center md:gap-12 md:text-left">
           <div className="self-center md:self-start">
             <Heading className="md:justify-start md:text-left" h={2}>
