@@ -1,0 +1,52 @@
+name: Renovate Backport to Release Branch
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  renovate-backport:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'renovate/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Detect latest release branch
+        id: detect-release
+        run: |
+          LATEST=$(git branch -r | grep -E 'origin/release/v[0-9]+\.[0-9]+\.x$' | sort -V | tail -1 | xargs | sed 's|origin/||')
+          if [ -z "$LATEST" ]; then
+            echo "No concrete release branch found, skipping backport"
+            echo "branch=" >> $GITHUB_OUTPUT
+          else
+            echo "Latest release branch: $LATEST"
+            echo "branch=$LATEST" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Skip if no release branch
+        if: steps.detect-release.outputs.branch == ''
+        run: echo "No release branch detected — nothing to backport."
+
+      - name: Cherry-pick and create backport PR
+        if: steps.detect-release.outputs.branch != ''
+        uses: ./.github/actions/cherry-pick-and-pr
+        with:
+          merge-commit-sha: ${{ github.event.pull_request.merge_commit_sha }}
+          base-sha: ${{ github.event.pull_request.base.sha }}
+          pr-number: ${{ github.event.pull_request.number }}
+          source-branch: main
+          target-branch: ${{ steps.detect-release.outputs.branch }}
+          forward-branch-prefix: renovate-backport
+          base-label: renovate-backport
+          pr-title-prefix: '[Renovate Backport]'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
