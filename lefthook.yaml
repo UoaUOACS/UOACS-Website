@@ -13,6 +13,21 @@ pre-commit:
         - "pnpm-lock.yaml"
         - "**/importMap.js"
         - "**/payload-types.ts"
+        - "**/*.md"
+        - "**/.github/"
+        - "**/.next"
+        - "**/dist"
+        - "**/.turbo"
+        - "**/.vscode"
+        - "**/coverage"
+        - "**/.vercel"
+        - "**/node_modules"
       run: |
         pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
       stage_fixed: true
+
+post-checkout:
+  commands:
+    pnpm:
+      glob: "{package.json,pnpm-lock.yaml}"
+      run: pnpm install
