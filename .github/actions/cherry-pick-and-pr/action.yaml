@@ -1,0 +1,256 @@
+name: Cherry-pick and Create PR
+description: >
+  Cherry-picks commits from a merged PR onto a target branch and opens a PR.
+  Requires the calling workflow to have checked out with fetch-depth: 0 and a token.
+
+inputs:
+  merge-commit-sha:
+    required: true
+    description: SHA of the merge commit
+  base-sha:
+    required: true
+    description: Base SHA of the PR (used to determine the commit range)
+  pr-number:
+    required: true
+    description: Original PR number
+  source-branch:
+    required: true
+    description: Branch the PR was merged into (used in the created PR body)
+  target-branch:
+    required: true
+    description: Branch to cherry-pick onto
+  forward-branch-prefix:
+    required: false
+    default: pr-forward
+    description: Prefix for the created branch name
+  base-label:
+    required: false
+    default: pr-forward
+    description: Base label applied to the created PR
+  pr-title-prefix:
+    required: false
+    default: '[PR Forward]'
+    description: Prefix for the created PR title
+  github-token:
+    required: true
+    description: Token for PR creation and git push
+
+outputs:
+  pr-url:
+    description: URL of the created PR
+    value: ${{ steps.create-pr.outputs.pr-url }}
+  branch-name:
+    description: Name of the created branch
+    value: ${{ steps.cherry-pick.outputs.branch_name }}
+  conflict:
+    description: 'true if cherry-pick had conflicts'
+    value: ${{ steps.cherry-pick.outputs.conflict }}
+
+runs:
+  using: composite
+  steps:
+    - name: Configure Git
+      shell: bash
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Cherry-pick commits onto target branch
+      id: cherry-pick
+      shell: bash
+      env:
+        MERGE_COMMIT: ${{ inputs.merge-commit-sha }}
+        BASE_SHA: ${{ inputs.base-sha }}
+        PR_NUMBER: ${{ inputs.pr-number }}
+        TARGET_BRANCH: ${{ inputs.target-branch }}
+        FORWARD_BRANCH_PREFIX: ${{ inputs.forward-branch-prefix }}
+      run: |
+        set -e
+
+        # Sanitize target branch name for use in the branch name (replace / with -)
+        TARGET_BRANCH_SLUG="${TARGET_BRANCH//\//-}"
+        BRANCH_NAME="${FORWARD_BRANCH_PREFIX}/pr-${PR_NUMBER}-to-${TARGET_BRANCH_SLUG}"
+
+        echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+        # Delete remote branch if it exists (allows re-runs)
+        if ! DELETE_OUTPUT=$(git push origin --delete "$BRANCH_NAME" 2>&1); then
+          if ! echo "$DELETE_OUTPUT" | grep -q "remote ref does not exist"; then
+            echo "Failed to delete remote branch '$BRANCH_NAME': $DELETE_OUTPUT" >&2
+            exit 1
+          fi
+        fi
+
+        # Checkout target branch and create new branch
+        git switch "$TARGET_BRANCH"
+        git pull origin "$TARGET_BRANCH"
+        git switch -c "$BRANCH_NAME"
+
+        # Determine commits to cherry-pick based on merge strategy
+        # For merge commits: get commits from the merged branch
+        # For squash commits: use the squash commit itself
+        if git rev-parse "$MERGE_COMMIT^2" >/dev/null 2>&1; then
+          # Merge commit - get the commits from the feature branch
+          COMMITS=$(git log --reverse --format="%H" "$BASE_SHA".."$MERGE_COMMIT^2")
+        else
+          # Squash merge - use the merge commit directly
+          COMMITS="$MERGE_COMMIT"
+        fi
+
+        if [ -z "$COMMITS" ]; then
+          echo "No commits found to cherry-pick"
+          COMMITS="$MERGE_COMMIT"
+        fi
+
+        echo "Commits to cherry-pick:"
+        echo "$COMMITS"
+
+        # Cherry-pick each commit individually (preserves history)
+        FAILED=false
+        FAILED_COMMIT=""
+        for COMMIT in $COMMITS; do
+          echo "Cherry-picking $COMMIT"
+          if ! git cherry-pick "$COMMIT"; then
+            FAILED=true
+            FAILED_COMMIT="$COMMIT"
+            break
+          fi
+        done
+
+        if [ "$FAILED" = true ]; then
+          echo "conflict=true" >> $GITHUB_OUTPUT
+
+          # Abort the failed cherry-pick
+          git cherry-pick --abort || true
+
+          # Reset branch to clean state
+          git reset --hard "$TARGET_BRANCH"
+
+          # Create a marker file with instructions
+          cat > PR_FORWARD_CONFLICT.md << EOF
+        # PR Forward Conflict
+
+        Cherry-pick failed on commit: \`$FAILED_COMMIT\`
+
+        ## Original PR: #${PR_NUMBER}
+
+        ## Commits to cherry-pick:
+        \`\`\`
+        $COMMITS
+        \`\`\`
+
+        ## Manual resolution steps:
+        1. Check out this branch: \`git checkout $BRANCH_NAME\`
+        2. Cherry-pick manually: \`git cherry-pick $FAILED_COMMIT\`
+        3. Resolve conflicts
+        4. Continue with remaining commits if any
+        5. Delete this file and push
+        EOF
+          git add PR_FORWARD_CONFLICT.md
+          git commit -m "chore: forward PR #${PR_NUMBER} (CONFLICTS - manual resolution required)"
+        else
+          echo "conflict=false" >> $GITHUB_OUTPUT
+
+          # Check if we actually have changes (might already be in target branch)
+          if git diff --quiet "$TARGET_BRANCH"; then
+            echo "No changes to cherry-pick - changes may already be in $TARGET_BRANCH"
+            echo "no_changes=true" >> $GITHUB_OUTPUT
+            git commit --allow-empty -m "chore: forward PR #${PR_NUMBER} (no changes - already in ${TARGET_BRANCH})"
+          else
+            echo "no_changes=false" >> $GITHUB_OUTPUT
+          fi
+        fi
+
+        git push -u origin "$BRANCH_NAME"
+
+    - name: Create Pull Request
+      id: create-pr
+      uses: actions/github-script@v6
+      env:
+        BASE_LABEL: ${{ inputs.base-label }}
+        PR_TITLE_PREFIX: ${{ inputs.pr-title-prefix }}
+        SOURCE_BRANCH: ${{ inputs.source-branch }}
+        TARGET_BRANCH: ${{ inputs.target-branch }}
+        PR_NUMBER_INPUT: ${{ inputs.pr-number }}
+        BRANCH_NAME: ${{ steps.cherry-pick.outputs.branch_name }}
+        HAS_CONFLICT: ${{ steps.cherry-pick.outputs.conflict }}
+        NO_CHANGES: ${{ steps.cherry-pick.outputs.no_changes }}
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const hasConflict = process.env.HAS_CONFLICT === 'true';
+          const noChanges = process.env.NO_CHANGES === 'true';
+          const originalPR = parseInt(process.env.PR_NUMBER_INPUT);
+          const sourceBranch = process.env.SOURCE_BRANCH;
+          const targetBranch = process.env.TARGET_BRANCH;
+          const branchName = process.env.BRANCH_NAME;
+          const baseLabel = process.env.BASE_LABEL;
+          const titlePrefix = process.env.PR_TITLE_PREFIX;
+
+          // Safely get title - avoid template literal injection
+          const originalTitle = context.payload.pull_request.title;
+
+          let title, body, labels;
+
+          if (noChanges) {
+            title = `${titlePrefix} ${originalTitle}`;
+            body = `## Automatic PR forward from \`${sourceBranch}\`
+
+          > **No changes detected** - these changes may already be in \`${targetBranch}\`.
+
+          Please verify and close this PR if the changes are already present.
+
+          ---
+          Original PR: #${originalPR}`;
+            labels = [baseLabel, 'no-changes'];
+          } else if (hasConflict) {
+            title = `${titlePrefix} ${originalTitle}`;
+            body = `## Automatic PR forward from \`${sourceBranch}\`
+
+          > **Cherry-pick had conflicts and requires manual resolution**
+
+          This PR was automatically created to forward PR changes from #${originalPR}.
+
+          ### Manual steps required:
+          1. Check out this branch locally:
+             \`\`\`bash
+             git fetch origin
+             git checkout ${branchName}
+             \`\`\`
+          2. See \`PR_FORWARD_CONFLICT.md\` for the commits that need cherry-picking
+          3. Cherry-pick and resolve conflicts
+          4. Delete \`PR_FORWARD_CONFLICT.md\`
+          5. Push your changes
+
+          ---
+          Original PR: #${originalPR}`;
+            labels = [baseLabel, 'needs-manual-resolution'];
+          } else {
+            title = `${titlePrefix} ${originalTitle}`;
+            body = `## Automatic PR forward from \`${sourceBranch}\`
+
+          This PR was automatically created to forward PR changes from #${originalPR} to \`${targetBranch}\`.
+
+          ---
+          Original PR: #${originalPR}`;
+            labels = [baseLabel];
+          }
+
+          const pr = await github.rest.pulls.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: title,
+            body: body,
+            head: branchName,
+            base: targetBranch
+          });
+
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: pr.data.number,
+            labels: labels
+          });
+
+          core.setOutput('pr-url', pr.data.html_url);
+          console.log(`Created PR #${pr.data.number}: ${pr.data.html_url}`);
