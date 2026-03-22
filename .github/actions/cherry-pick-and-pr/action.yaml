@@ -165,7 +165,7 @@ runs:
 
     - name: Create Pull Request
       id: create-pr
-      uses: actions/github-script@v6
+      uses: actions/github-script@v8
       env:
         BASE_LABEL: ${{ inputs.base-label }}
         PR_TITLE_PREFIX: ${{ inputs.pr-title-prefix }}
