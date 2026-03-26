@@ -60,6 +60,14 @@ export const Polaroid = ({
     width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
   }
+  const image_styles = {
+    position: "absolute" as const,
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    ...reverse_rot,
+  }
 
   return (
     <div
@@ -67,7 +75,15 @@ export const Polaroid = ({
       style={transform_styles}
     >
       <div style={mask_image_styles}>
-        <Image alt="Photo of event" className="object-cover" fill src={url} style={reverse_rot} />
+        <Image
+          alt="Photo of event"
+          className="object-cover"
+          height={POLAROID_HEIGHT}
+          sizes={`${IMAGE_WIDTH}px`}
+          src={url}
+          style={image_styles}
+          width={IMAGE_WIDTH + 2 * PADDING}
+        />
       </div>
       <p className="paragraph-xs w-full text-left font-mono">{text.toUpperCase()}</p>
     </div>
