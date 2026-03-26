@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
-import { SponsorTicker } from "@/components/Generic"
-import { Button, Heading, LazyImage } from "@/components/Primitive"
+import { Section, SponsorTicker } from "@/components/Generic"
+import { Button, LazyImage } from "@/components/Primitive"
 import { TIER_SIZES } from "@/lib/constants"
 import { Routes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
@@ -40,16 +40,17 @@ const ColourPalette = ({ className }: { className: string }) => {
  */
 export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
   return (
-    <div className="flex max-w-360 flex-col items-center justify-center gap-6 overflow-hidden md:gap-12">
-      <div className="relative flex flex-col items-center gap-6 px-4 pt-12 pb-6 text-center md:py-12">
-        <ColourPalette className="top-0 right-0" />
-        <Heading h={2}>Sponsored By</Heading>
-        <p className="paragraph">
-          These are the people that support us and make this club{" "}
-          <span className="text-brand-pink">possible</span>
-        </p>
-        <ColourPalette className="bottom-0 left-0 hidden md:grid" />
-      </div>
+    <Section
+      className="max-w-360 overflow-hidden"
+      subtitle="These are the people that support us and make this club possible."
+      title="Sponsored By"
+      titleOverlay={
+        <>
+          <ColourPalette className="-top-12 right-0" />
+          <ColourPalette className="top-full left-0 mt-6 hidden md:grid" />
+        </>
+      }
+    >
       {sponsors.length > 2 ? (
         <SponsorTicker containerClassName="max-w-360" items={sponsors} />
       ) : (
@@ -88,6 +89,6 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
           See All Our Sponsors
         </Button>
       </Link>
-    </div>
+    </Section>
   )
 }
