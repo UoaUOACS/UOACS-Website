@@ -10,7 +10,7 @@ export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode
 }
 
-export const Section = ({
+export function Section({
   title,
   titleProps,
   titleOverlay,
@@ -19,21 +19,23 @@ export const Section = ({
   children,
   className,
   ...rest
-}: SectionProps) => {
+}: SectionProps) {
+  const heading = (
+    <Heading h={2} {...titleProps}>
+      {title}
+    </Heading>
+  )
+
   return (
     <section className={cn("flex w-full flex-col items-center gap-10", className)} {...rest}>
       <div className="flex flex-col items-center gap-2 px-4 text-center">
         {titleOverlay ? (
           <div className="relative flex justify-center">
-            <Heading h={2} {...titleProps}>
-              {title}
-            </Heading>
+            {heading}
             {titleOverlay}
           </div>
         ) : (
-          <Heading h={2} {...titleProps}>
-            {title}
-          </Heading>
+          heading
         )}
         {subtitle && (
           <p className={cn("paragraph max-w-lg text-gray-700", subtitleClassName)}>{subtitle}</p>
