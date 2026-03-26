@@ -1,7 +1,7 @@
+import { spawn } from "node:child_process"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
-import ffmpeg from "fluent-ffmpeg"
 
 const TARGET_SIZE_BYTES = 9 * 1024 * 1024 // 9MB
 const AUDIO_BITRATE_KBPS = 128
@@ -28,51 +28,86 @@ export async function compressVideo(inputBuffer: Buffer): Promise<Buffer> {
   }
 }
 
-function getVideoDuration(filePath: string): Promise<number> {
+async function getVideoDuration(filePath: string): Promise<number> {
   return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
-      if (err) return reject(err)
-      const duration = metadata.format.duration
-      if (!duration) return reject(new Error("Could not determine video duration"))
+    const proc = spawn("ffprobe", [
+      "-v",
+      "error",
+      "-show_entries",
+      "format=duration",
+      "-of",
+      "default=noprint_wrappers=1:nokey=1",
+      filePath,
+    ])
+    let stdout = ""
+    let stderr = ""
+    proc.stdout.on("data", (chunk) => {
+      stdout += chunk
+    })
+    proc.stderr.on("data", (chunk) => {
+      stderr += chunk
+    })
+    proc.on("close", (code) => {
+      if (code !== 0) return reject(new Error(`ffprobe exited ${code}: ${stderr}`))
+      const duration = Number.parseFloat(stdout.trim())
+      if (!Number.isFinite(duration)) return reject(new Error("Could not determine video duration"))
       resolve(duration)
     })
   })
 }
 
-function twoPassEncode(
+async function runFfmpeg(args: string[]): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const proc = spawn("ffmpeg", args)
+    let stderr = ""
+    proc.stderr.on("data", (chunk) => {
+      stderr += chunk
+    })
+    proc.on("close", (code) => {
+      if (code !== 0) return reject(new Error(`ffmpeg exited ${code}: ${stderr}`))
+      resolve()
+    })
+  })
+}
+
+async function twoPassEncode(
   input: string,
   output: string,
   videoBitrateKbps: number,
   passlogDir: string,
 ): Promise<void> {
   const passlogPrefix = path.join(passlogDir, "ffmpeg2pass")
-  return new Promise((resolve, reject) => {
-    ffmpeg(input)
-      .outputOptions([
-        "-c:v libx264",
-        `-b:v ${videoBitrateKbps}k`,
-        "-pass 1",
-        `-passlogfile ${passlogPrefix}`,
-        "-an",
-        "-f null",
-      ])
-      .output("/dev/null")
-      .on("end", () => {
-        ffmpeg(input)
-          .outputOptions([
-            "-c:v libx264",
-            `-b:v ${videoBitrateKbps}k`,
-            "-pass 2",
-            `-passlogfile ${passlogPrefix}`,
-            "-c:a aac",
-            `-b:a ${AUDIO_BITRATE_KBPS}k`,
-          ])
-          .output(output)
-          .on("end", () => resolve())
-          .on("error", reject)
-          .run()
-      })
-      .on("error", reject)
-      .run()
-  })
+  await runFfmpeg([
+    "-i",
+    input,
+    "-c:v",
+    "libx264",
+    "-b:v",
+    `${videoBitrateKbps}k`,
+    "-pass",
+    "1",
+    "-passlogfile",
+    passlogPrefix,
+    "-an",
+    "-f",
+    "null",
+    "/dev/null",
+  ])
+  await runFfmpeg([
+    "-i",
+    input,
+    "-c:v",
+    "libx264",
+    "-b:v",
+    `${videoBitrateKbps}k`,
+    "-pass",
+    "2",
+    "-passlogfile",
+    passlogPrefix,
+    "-c:a",
+    "aac",
+    "-b:a",
+    `${AUDIO_BITRATE_KBPS}k`,
+    output,
+  ])
 }
