@@ -42,6 +42,7 @@ RUN --mount=type=secret,id=DATABASE_URI \
 
 # Stage 3: Production runner (minimal image)
 FROM base AS runner
+RUN apk add --no-cache ffmpeg
 WORKDIR /app
 
 ENV NODE_ENV=production
