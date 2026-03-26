@@ -42,12 +42,18 @@ export const SponsorsSection = ({ sponsors }: SponsorsSectionProps) => {
   return (
     <Section
       className="max-w-360 overflow-hidden"
-      subtitle="These are the people that support us and make this club possible."
+      headerClassName="pt-12 pb-6 md:py-12"
+      subtitle={
+        <>
+          These are the people that support us and make this club{" "}
+          <span className="text-brand-pink">possible</span>
+        </>
+      }
       title="Sponsored By"
       titleOverlay={
         <>
-          <ColourPalette className="-top-12 right-0" />
-          <ColourPalette className="top-full left-0 mt-6 hidden md:grid" />
+          <ColourPalette className="top-0 right-0" />
+          <ColourPalette className="bottom-0 left-0 hidden md:grid" />
         </>
       }
     >
