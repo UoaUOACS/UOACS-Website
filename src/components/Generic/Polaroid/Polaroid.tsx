@@ -17,71 +17,66 @@ export interface PolaroidProps {
   /**
    * Offset from left edge of parent element
    */
-  x_offset: number
+  xOffset: number
   /**
    * Offset from top edge of parent element
    */
-  y_offset: number
+  yOffset: number
   /**
    * Rotation in degrees between 0 and 360
    */
   rotation: number
 }
 
-export const Polaroid = ({
-  text,
-  url,
-  x_offset = 0,
-  y_offset = 0,
-  rotation = 0,
-}: PolaroidProps) => {
+export const Polaroid = ({ text, url, xOffset = 0, yOffset = 0, rotation = 0 }: PolaroidProps) => {
   // Math for transforming Image
-  const rotrad = (rotation / 180) * Math.PI
-  const image_width: number =
-    Math.abs(IMAGE_WIDTH * Math.cos(rotrad)) + Math.abs(IMAGE_HEIGHT * Math.sin(rotrad))
-  const scale_factor = (image_width / IMAGE_WIDTH) * 0.91
-  const image_center = PADDING + IMAGE_HEIGHT / 2
-  const rotation_offset = POLAROID_HEIGHT / 2 - image_center
-  const x_translate = rotation_offset
+  const rotationRadians = (rotation / 180) * Math.PI
+  const imageWidth: number =
+    Math.abs(IMAGE_WIDTH * Math.cos(rotationRadians)) +
+    Math.abs(IMAGE_HEIGHT * Math.sin(rotationRadians))
+  const scaleFactor = (imageWidth / IMAGE_WIDTH) * 0.91
+  const imageCenter = PADDING + IMAGE_HEIGHT / 2
+  const rotationOffset = POLAROID_HEIGHT / 2 - imageCenter
+  const xTranslate = rotationOffset
 
   // Styles applied from Math
-  const transform_styles = {
-    left: `${x_offset}px`,
-    top: `${y_offset}px`,
+  const transformStyles = {
+    left: `${xOffset}px`,
+    top: `${yOffset}px`,
     rotate: `${rotation}deg`,
     height: `${POLAROID_HEIGHT}px`,
     padding: PADDING,
   }
-  const reverse_rot = {
-    transform: `translate(0,${-x_translate}px ) rotate(-${rotation}deg) scale(${scale_factor})`,
+  const reverseRotation = {
+    transform: `translate(0,${-xTranslate}px ) rotate(-${rotation}deg) scale(${scaleFactor})`,
   }
-  const mask_image_styles = {
+  const maskImageStyles = {
     clipPath: `rect(0px ${IMAGE_WIDTH}px ${IMAGE_HEIGHT}px 0px round 1%)`,
     width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
   }
-  const image_styles = {
+  const imageStyles = {
     position: "absolute" as const,
     top: 0,
     left: 0,
     width: "100%",
     height: "100%",
-    ...reverse_rot,
+    ...reverseRotation,
   }
 
   return (
     <div
       className="absolute inline-flex flex-col items-center gap-3 rounded-sm bg-white shadow-lg"
-      style={transform_styles}
+      style={transformStyles}
     >
-      <div style={mask_image_styles}>
+      <div style={maskImageStyles}>
         <Image
           alt="Photo of event"
           className="object-cover"
           height={POLAROID_HEIGHT}
           sizes={`${IMAGE_WIDTH}px`}
           src={url}
-          style={image_styles}
+          style={imageStyles}
           width={IMAGE_WIDTH + 2 * PADDING}
         />
       </div>
