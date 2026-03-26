@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { ExecCard } from "@/components/Generic"
-import { BorderButton, Container, Heading, SocialIcon } from "@/components/Primitive"
+import { ExecCard, Section } from "@/components/Generic"
+import { BorderButton, Container, SocialIcon } from "@/components/Primitive"
 import type { Executive } from "@/payload/payload-types"
 import { EXECUTIVE_LEVEL_ORDER, ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 
@@ -88,15 +88,11 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
 
   return (
     <>
-      <div className="flex w-full flex-col items-center gap-14 md:gap-18">
-        <div className="flex flex-col items-center gap-2 px-4 text-center">
-          <Heading h={1} period>
-            Our Team
-          </Heading>
-          <p className="paragraph text-gray-700">
-            These are the people who make this club possible.
-          </p>
-        </div>
+      <Section
+        subtitle="These are the people who make this club possible."
+        title="Our Team"
+        titleProps={{ h: 1, period: true }}
+      >
         <div className="flex w-full flex-col items-center justify-center gap-12">
           <div className="hidden max-w-200 flex-row flex-wrap items-center justify-center gap-4 md:flex">
             {currentTeams.map((team: string) => (
@@ -128,16 +124,8 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
               ))}
           </div>
         </div>
-      </div>
-      <div className="flex w-full flex-col items-center gap-14 md:gap-18">
-        <div className="flex flex-col items-center gap-2 px-4 text-center">
-          <div className="relative">
-            <Heading h={1} period>
-              Past Executives
-            </Heading>
-          </div>
-          <p className="paragraph text-gray-700">UOACS Alumni</p>
-        </div>
+      </Section>
+      <Section subtitle="UOACS Alumni" title="Past Executives" titleProps={{ h: 1, period: true }}>
         <div className="grid w-full grid-cols-1 justify-center gap-12 md:grid-cols-[repeat(auto-fill,22.5rem)] md:gap-x-16 md:gap-y-[4.5rem]">
           {pastTeams.map((team: string) => {
             const execsInTeam = pastExecs.filter((exec: Executive) =>
@@ -173,7 +161,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
             )
           })}
         </div>
-      </div>
+      </Section>
     </>
   )
 }

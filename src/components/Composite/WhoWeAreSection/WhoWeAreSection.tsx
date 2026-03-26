@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Polaroid } from "@/components/Generic"
+import { Polaroid, Section } from "@/components/Generic"
 import { Heading } from "@/components/Primitive"
 import type { Polaroid as PolaroidType } from "@/payload/payload-types"
 
@@ -47,15 +47,10 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
   }, [])
 
   return (
-    <div className="flex w-full flex-col items-center gap-10 px-6 py-12">
-      <div className="flex max-w-lg flex-col items-center gap-4 text-center">
-        <Heading h={2}>Who We Are</Heading>
-        <p className="paragraph">
-          As well as being a social club, we also help out newer students through workshops and run
-          industry related events to connect you with real companies.
-        </p>
-      </div>
-
+    <Section
+      subtitle="As well as being a social club, we also help out newer students through workshops and run industry related events to connect you with real companies."
+      title="Who We Are"
+    >
       <div className="flex w-full flex-wrap justify-center gap-12">
         <div className="flex w-full max-w-md flex-col gap-4 md:w-auto">
           <div className="flex min-h-36 flex-col gap-2 bg-accent-purple-light p-4">
@@ -130,6 +125,6 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </Section>
   )
 }

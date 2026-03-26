@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { Container, Heading, LazyImage } from "@/components/Primitive"
+import { Section } from "@/components/Generic"
+import { Container, LazyImage } from "@/components/Primitive"
 import { payload, Slugs } from "@/lib/payload"
 import { cn } from "@/lib/utils"
 import type { Sponsor } from "@/payload/payload-types"
@@ -41,15 +42,11 @@ export default async function SponsorsPage() {
   }
 
   return (
-    <>
-      <div className="flex flex-col items-center gap-3 px-4 text-center md:gap-6">
-        <Heading h={1} period>
-          Our Sponsors
-        </Heading>
-        <p className="paragraph text-gray-700">
-          These are the people that support us and make this club possible.
-        </p>
-      </div>
+    <Section
+      subtitle="These are the people that support us and make this club possible."
+      title="Our Sponsors"
+      titleProps={{ h: 1, period: true }}
+    >
       <div className="flex w-full max-w-220 flex-col items-stretch justify-between gap-x-6 gap-y-12 md:flex-row md:flex-wrap">
         {tiers.map((tier) => (
           <Container
@@ -106,6 +103,6 @@ export default async function SponsorsPage() {
           outreach@uoacs.co.nz
         </a>
       </p>
-    </>
+    </Section>
   )
 }
