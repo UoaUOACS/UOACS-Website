@@ -89,7 +89,6 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
   return (
     <>
       <Section
-        // className="gap-14 md:gap-18"
         subtitle="These are the people who make this club possible."
         title="Our Team"
         titleProps={{ h: 1, period: true }}
@@ -126,12 +125,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
           </div>
         </div>
       </Section>
-      <Section
-        // className="gap-14 md:gap-18"
-        subtitle="UOACS Alumni"
-        title="Past Executives"
-        titleProps={{ h: 1, period: true }}
-      >
+      <Section subtitle="UOACS Alumni" title="Past Executives" titleProps={{ h: 1, period: true }}>
         <div className="grid w-full grid-cols-1 justify-center gap-12 md:grid-cols-[repeat(auto-fill,22.5rem)] md:gap-x-16 md:gap-y-[4.5rem]">
           {pastTeams.map((team: string) => {
             const execsInTeam = pastExecs.filter((exec: Executive) =>
