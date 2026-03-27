@@ -117,8 +117,8 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
                   rotation={preset.rotation}
                   text={polaroid.caption}
                   url={src}
-                  x_offset={preset.x}
-                  y_offset={preset.y}
+                  xOffset={preset.x}
+                  yOffset={preset.y}
                 />
               )
             })}

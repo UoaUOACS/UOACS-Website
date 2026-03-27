@@ -7,15 +7,15 @@ const meta: Meta<typeof Polaroid> = {
   argTypes: {
     text: { control: "text" },
     url: { control: "text" },
-    x_offset: { control: "number" },
-    y_offset: { control: "number" },
+    xOffset: { control: "number" },
+    yOffset: { control: "number" },
     rotation: { control: "number" },
   },
   args: {
     text: "Pool Night",
     url: "media/Pool.jpeg",
-    x_offset: 50,
-    y_offset: 50,
+    xOffset: 50,
+    yOffset: 50,
     rotation: 0,
   },
 }
@@ -33,8 +33,8 @@ export const Multiple: Story = (args) => {
         {...{
           text: "Pool Night 2 electric Bogaloo",
           url: "/media/Pool.jpeg",
-          x_offset: 400,
-          y_offset: 110,
+          xOffset: 400,
+          yOffset: 110,
           rotation: 12,
         }}
       />
@@ -42,8 +42,8 @@ export const Multiple: Story = (args) => {
         {...{
           text: "JoshLi because thats only other image here",
           url: "/media/JoshLi.jpeg",
-          x_offset: 700,
-          y_offset: 160,
+          xOffset: 700,
+          yOffset: 160,
           rotation: 45,
         }}
       />
