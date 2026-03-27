@@ -6,7 +6,6 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { s3Storage } from "@payloadcms/storage-s3"
 import { buildConfig } from "payload"
 import sharp from "sharp"
-import { UPLOAD_SIZE_LIMIT_BYTES } from "./lib/constants"
 import { Slugs } from "./lib/slugs"
 import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
@@ -50,7 +49,7 @@ export default buildConfig({
   sharp,
   upload: {
     limits: {
-      fileSize: UPLOAD_SIZE_LIMIT_BYTES,
+      fileSize: 33_554_432, // 32MB
     },
   },
   plugins: [
