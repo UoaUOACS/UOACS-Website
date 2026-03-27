@@ -2,25 +2,72 @@ import { spawn } from "node:child_process"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
+import { UPLOAD_SIZE_LIMIT_BYTES } from "./constants"
 
-const TARGET_SIZE_BYTES = 9 * 1024 * 1024 // 9MB
-const AUDIO_BITRATE_KBPS = 128
+const VIDEO_BITRATE_KBPS = 2000
 
 export async function compressVideo(inputBuffer: Buffer): Promise<Buffer> {
-  if (inputBuffer.length <= TARGET_SIZE_BYTES) return inputBuffer
-
   const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "uoacs-video-"))
-  const inputPath = path.join(tmpDir, "input.mp4")
+  const rawPath = path.join(tmpDir, "raw.mp4")
+  const sourcePath = path.join(tmpDir, "source.mp4")
   const outputPath = path.join(tmpDir, "output.mp4")
 
   try {
-    await fs.writeFile(inputPath, inputBuffer)
+    await fs.writeFile(rawPath, inputBuffer)
+    await runFfprobe(rawPath)
+    // Normalize to a faststart MP4 so single-pass encoding can read container
+    // metadata reliably. Fall back to a full transcode if the copy remux fails
+    // (e.g. unsupported codec or minor container errors).
+    try {
+      await runFfmpeg([
+        "-analyzeduration",
+        "100M",
+        "-i",
+        rawPath,
+        "-c",
+        "copy",
+        "-movflags",
+        "faststart",
+        sourcePath,
+      ])
+    } catch {
+      await runFfmpeg([
+        "-probesize",
+        "100M",
+        "-analyzeduration",
+        "100M",
+        "-fflags",
+        "+genpts+discardcorrupt",
+        "-err_detect",
+        "ignore_err",
+        "-i",
+        rawPath,
+        "-c:v",
+        "libx264",
+        "-an",
+        "-movflags",
+        "faststart",
+        sourcePath,
+      ])
+    }
 
-    const duration = await getVideoDuration(inputPath)
-    const targetBitrateKbps =
-      Math.floor((TARGET_SIZE_BYTES * 8) / 1024 / duration) - AUDIO_BITRATE_KBPS
-
-    await twoPassEncode(inputPath, outputPath, targetBitrateKbps, tmpDir)
+    let bitrateKbps = VIDEO_BITRATE_KBPS
+    while (true) {
+      await runFfmpeg([
+        "-i",
+        sourcePath,
+        "-c:v",
+        "libx264",
+        "-b:v",
+        `${bitrateKbps}k`,
+        "-an",
+        outputPath,
+      ])
+      const { size } = await fs.stat(outputPath)
+      if (size <= UPLOAD_SIZE_LIMIT_BYTES) break
+      bitrateKbps = Math.floor(bitrateKbps / 2)
+      await fs.rm(outputPath, { force: true })
+    }
 
     return await fs.readFile(outputPath)
   } finally {
@@ -28,30 +75,16 @@ export async function compressVideo(inputBuffer: Buffer): Promise<Buffer> {
   }
 }
 
-async function getVideoDuration(filePath: string): Promise<number> {
+async function runFfprobe(inputPath: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const proc = spawn("ffprobe", [
-      "-v",
-      "error",
-      "-show_entries",
-      "format=duration",
-      "-of",
-      "default=noprint_wrappers=1:nokey=1",
-      filePath,
-    ])
-    let stdout = ""
+    const proc = spawn("ffprobe", ["-v", "error", inputPath])
     let stderr = ""
-    proc.stdout.on("data", (chunk) => {
-      stdout += chunk
-    })
     proc.stderr.on("data", (chunk) => {
       stderr += chunk
     })
     proc.on("close", (code) => {
       if (code !== 0) return reject(new Error(`ffprobe exited ${code}: ${stderr}`))
-      const duration = Number.parseFloat(stdout.trim())
-      if (!Number.isFinite(duration)) return reject(new Error("Could not determine video duration"))
-      resolve(duration)
+      resolve()
     })
   })
 }
@@ -68,46 +101,4 @@ async function runFfmpeg(args: string[]): Promise<void> {
       resolve()
     })
   })
-}
-
-async function twoPassEncode(
-  input: string,
-  output: string,
-  videoBitrateKbps: number,
-  passlogDir: string,
-): Promise<void> {
-  const passlogPrefix = path.join(passlogDir, "ffmpeg2pass")
-  await runFfmpeg([
-    "-i",
-    input,
-    "-c:v",
-    "libx264",
-    "-b:v",
-    `${videoBitrateKbps}k`,
-    "-pass",
-    "1",
-    "-passlogfile",
-    passlogPrefix,
-    "-an",
-    "-f",
-    "null",
-    "/dev/null",
-  ])
-  await runFfmpeg([
-    "-i",
-    input,
-    "-c:v",
-    "libx264",
-    "-b:v",
-    `${videoBitrateKbps}k`,
-    "-pass",
-    "2",
-    "-passlogfile",
-    passlogPrefix,
-    "-c:a",
-    "aac",
-    "-b:a",
-    `${AUDIO_BITRATE_KBPS}k`,
-    output,
-  ])
 }
