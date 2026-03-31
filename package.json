@@ -65,7 +65,7 @@
     "typescript": "^5",
     "vitest": "^4.0.18"
   },
-  "packageManager": "pnpm@10.27.0",
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@tailwindcss/oxide",
