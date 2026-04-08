@@ -11,6 +11,7 @@ export type Route = (typeof Routes)[keyof typeof Routes]
 export const ApiRoutes = {
   SIGN_UP: "/api/sign-up",
   HEALTH: "/api/health",
+  WALLET_TEST: "/api/wallet_test",
   OG: "/og",
 } as const
 
