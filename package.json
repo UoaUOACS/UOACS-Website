@@ -14,7 +14,8 @@
     "types:generate": "payload generate:types && next typegen",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "postinstall": "lefthook install"
+    "postinstall": "lefthook install",
+    "migrate:user-admin": "tsx --env-file=.env src/scripts/user-admin-migration.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
