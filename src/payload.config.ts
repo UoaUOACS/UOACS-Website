@@ -7,13 +7,13 @@ import { s3Storage } from "@payloadcms/storage-s3"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Slugs } from "./lib/slugs"
+import { Admin } from "./payload/collections/Admin"
 import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
 import { Polaroid } from "./payload/collections/Polaroid"
 import { Reel } from "./payload/collections/Reel"
 import { Sponsor } from "./payload/collections/Sponsor"
-import { User } from "./payload/collections/User"
 import { HomePage } from "./payload/globals/HomePage"
 import { PrivacyPolicy } from "./payload/globals/PrivacyPolicy"
 import { SocialLinks } from "./payload/globals/SocialLinks"
@@ -23,13 +23,13 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    user: User.slug,
+    user: Admin.slug,
     importMap: {
       baseDir: path.resolve(dirname),
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [User, Media, Member, Executive, Sponsor, Reel, Polaroid],
+  collections: [Admin, Media, Member, Executive, Sponsor, Reel, Polaroid],
   globals: [HomePage, PrivacyPolicy, SocialLinks],
   editor: lexicalEditor(),
   graphQL: {

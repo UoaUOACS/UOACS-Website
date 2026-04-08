@@ -14,7 +14,8 @@
     "types:generate": "payload generate:types && next typegen",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "postinstall": "lefthook install"
+    "postinstall": "lefthook install",
+    "migrate:user-admin": "tsx --env-file=.env src/scripts/user-admin-migration.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -56,9 +57,11 @@
     "@vitest/browser": "^4.0.18",
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
+    "mongodb": "^7.1.1",
     "playwright": "^1.58.1",
     "storybook": "^10.2.7",
     "tailwindcss": "^4.1.18",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.0.18"
   },
