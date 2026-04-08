@@ -6,7 +6,7 @@ export const Slugs = {
     POLAROID: "polaroid",
     REEL: "reel",
     SPONSOR: "sponsor",
-    USER: "user",
+    ADMIN: "admin",
   },
   Globals: {
     HOME_PAGE: "home-page",

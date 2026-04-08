@@ -63,11 +63,11 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
-    user: UserAuthOperations;
+    admin: AdminAuthOperations;
   };
   blocks: {};
   collections: {
-    user: User;
+    admin: Admin;
     media: Media;
     member: Member;
     executive: Executive;
@@ -84,7 +84,7 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    user: UserSelect<false> | UserSelect<true>;
+    admin: AdminSelect<false> | AdminSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     member: MemberSelect<false> | MemberSelect<true>;
     executive: ExecutiveSelect<false> | ExecutiveSelect<true>;
@@ -117,7 +117,7 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: Admin;
   jobs: {
     tasks: {
       createCollectionExport: TaskCreateCollectionExport;
@@ -130,7 +130,7 @@ export interface Config {
     workflows: unknown;
   };
 }
-export interface UserAuthOperations {
+export interface AdminAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -150,9 +150,9 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "user".
+ * via the `definition` "admin".
  */
-export interface User {
+export interface Admin {
   id: string;
   updatedAt: string;
   createdAt: string;
@@ -171,7 +171,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
-  collection: 'user';
+  collection: 'admin';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -539,8 +539,8 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'user';
-        value: string | User;
+        relationTo: 'admin';
+        value: string | Admin;
       } | null)
     | ({
         relationTo: 'media';
@@ -568,8 +568,8 @@ export interface PayloadLockedDocument {
       } | null);
   globalSlug?: string | null;
   user: {
-    relationTo: 'user';
-    value: string | User;
+    relationTo: 'admin';
+    value: string | Admin;
   };
   updatedAt: string;
   createdAt: string;
@@ -581,8 +581,8 @@ export interface PayloadLockedDocument {
 export interface PayloadPreference {
   id: string;
   user: {
-    relationTo: 'user';
-    value: string | User;
+    relationTo: 'admin';
+    value: string | Admin;
   };
   key?: string | null;
   value?:
@@ -610,9 +610,9 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "user_select".
+ * via the `definition` "admin_select".
  */
-export interface UserSelect<T extends boolean = true> {
+export interface AdminSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -948,7 +948,16 @@ export interface TaskCreateCollectionExport {
     id: string;
     name: string;
     batchSize?: number | null;
-    collectionSlug: 'user' | 'media' | 'member' | 'executive' | 'sponsor' | 'reel' | 'polaroid' | 'exports' | 'imports';
+    collectionSlug:
+      | 'admin'
+      | 'media'
+      | 'member'
+      | 'executive'
+      | 'sponsor'
+      | 'reel'
+      | 'polaroid'
+      | 'exports'
+      | 'imports';
     drafts?: ('yes' | 'no') | null;
     exportCollection: string;
     fields?: string[] | null;
