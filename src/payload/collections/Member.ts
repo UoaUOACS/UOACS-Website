@@ -8,6 +8,16 @@ export const Member: CollectionConfig = {
   },
   fields: [
     {
+      name: "betterAuthUserId",
+      type: "text",
+      required: false,
+      unique: true,
+      admin: {
+        description: "ID of the corresponding user authentication in Better Auth, if any",
+        readOnly: true,
+      },
+    },
+    {
       name: "firstName",
       type: "text",
       required: true,
