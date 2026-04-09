@@ -1,13 +1,22 @@
+import type { User } from "better-auth"
 import { ValidationError } from "payload"
+import { auth } from "@/lib/auth"
 import { payload } from "@/lib/payload"
 import type { Member } from "@/payload/payload-types"
-import { createMemberSchema } from "@/types/schemas/member"
-import { Slugs } from "./../lib/slugs"
+import { type CreateMemberInput, createMemberSchema } from "@/types/schemas/member"
+import { type CreateUserInput, createUserSchema } from "@/types/schemas/user"
 
 export class DuplicateFieldError extends Error {
   constructor(public readonly field: string) {
     super("Value already in use")
     this.name = "DuplicateFieldError"
+  }
+}
+
+export class BetterAuthSignUpError extends Error {
+  constructor() {
+    super("Better Auth sign up failed")
+    this.name = "BetterAuthSignUpError"
   }
 }
 
@@ -29,6 +38,18 @@ export class AuthService {
         throw new DuplicateFieldError(field)
       }
       throw err
+    }
+  }
+
+  public async signUpBetterAuth(data: CreateUserInput): Promise<User> {
+    const signUpData = createUserSchema.parse(data)
+    try {
+      const result = await auth.api.signUpEmail({
+        body: signUpData,
+      })
+      return result.user
+    } catch {
+      throw new BetterAuthSignUpError()
     }
   }
 }
