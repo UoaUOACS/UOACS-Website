@@ -31,6 +31,8 @@ RUN --mount=type=secret,id=DATABASE_URI \
     --mount=type=secret,id=S3_SECRET_ACCESS_KEY \
     --mount=type=secret,id=S3_REGION \
     --mount=type=secret,id=S3_BUCKET \
+    --mount=type=secret,id=NODE_ENV \
+    --mount=type=secret,id=BETTER_AUTH_SECRET \
     sh -c 'export DATABASE_URI=$(cat /run/secrets/DATABASE_URI) && \
            export PAYLOAD_SECRET=$(cat /run/secrets/PAYLOAD_SECRET) && \
            export NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL) && \
