@@ -200,6 +200,10 @@ export interface Media {
 export interface Member {
   id: string;
   /**
+   * ID of the corresponding user authentication in Better Auth, if any
+   */
+  betterAuthUserId?: string | null;
+  /**
    * First name of the member
    */
   firstName: string;
@@ -654,6 +658,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "member_select".
  */
 export interface MemberSelect<T extends boolean = true> {
+  betterAuthUserId?: T;
   firstName?: T;
   lastName?: T;
   upi?: T;
