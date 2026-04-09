@@ -52,4 +52,9 @@ export class AuthService {
       throw new BetterAuthSignUpError()
     }
   }
+
+  public async rollbackBetterAuthSignUp(userId: string): Promise<void> {
+    const context = await auth.$context
+    await context.internalAdapter.deleteUser(userId)
+  }
 }
