@@ -44,6 +44,10 @@ export class AuthService {
         const field = err.data.errors.find((e) => e.message === "Value must be unique")?.path ?? ""
         throw new DuplicateFieldError(field)
       }
+      console.error("[AuthService] signUpPayloadMember failed, Better Auth user rolled back", {
+        betterAuthUserId,
+        error: err,
+      })
       throw err
     }
   }
@@ -70,6 +74,7 @@ export class AuthService {
   public async rollbackBetterAuthSignUp(userId: string): Promise<void> {
     try {
       const context = await auth.$context
+      await context.internalAdapter.deleteAccounts(userId)
       await context.internalAdapter.deleteUser(userId)
     } catch (err) {
       console.error(
@@ -80,6 +85,8 @@ export class AuthService {
   }
 
   public async linkExistingMember(email: string, betterAuthUserId: string): Promise<Member> {
+    let alreadyRolledBack = false
+
     try {
       const existing = await payload.find({
         collection: Slugs.Collections.MEMBER,
@@ -88,18 +95,31 @@ export class AuthService {
       })
 
       if (existing.docs.length === 0) {
+        alreadyRolledBack = true
         await this.rollbackBetterAuthSignUp(betterAuthUserId)
         throw new DuplicateFieldError("email")
       }
 
       const result = await payload.update({
         collection: Slugs.Collections.MEMBER,
-        where: { email: { equals: email } },
+        where: { email: { equals: email }, betterAuthUserId: { exists: false } },
         data: { betterAuthUserId },
       })
+
+      if (result.docs.length === 0) {
+        alreadyRolledBack = true
+        await this.rollbackBetterAuthSignUp(betterAuthUserId)
+        throw new DuplicateFieldError("email")
+      }
+
       return result.docs[0]
     } catch (err) {
-      if (!(err instanceof DuplicateFieldError)) {
+      if (!alreadyRolledBack) {
+        console.error("[AuthService] linkExistingMember failed, rolling back Better Auth user", {
+          email,
+          betterAuthUserId,
+          error: err,
+        })
         await this.rollbackBetterAuthSignUp(betterAuthUserId)
       }
       throw err
