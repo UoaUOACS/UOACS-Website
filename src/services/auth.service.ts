@@ -1,4 +1,5 @@
 import type { User } from "better-auth"
+import { isAPIError } from "better-auth/utils"
 import { ValidationError } from "payload"
 import { auth } from "@/lib/auth"
 import { payload } from "@/lib/payload"
@@ -15,9 +16,10 @@ export class DuplicateFieldError extends Error {
 }
 
 export class BetterAuthSignUpError extends Error {
-  constructor() {
+  constructor(cause?: unknown) {
     super("Better Auth sign up failed")
     this.name = "BetterAuthSignUpError"
+    if (cause !== undefined) this.cause = cause
   }
 }
 
@@ -53,8 +55,15 @@ export class AuthService {
         body: signUpData,
       })
       return result.user
-    } catch {
-      throw new BetterAuthSignUpError()
+    } catch (err) {
+      if (isAPIError(err) && err.body?.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
+        throw new DuplicateFieldError("email")
+      }
+      console.error("[AuthService] signUpBetterAuth unexpected error", {
+        email: data.email,
+        error: err,
+      })
+      throw new BetterAuthSignUpError(err)
     }
   }
 
