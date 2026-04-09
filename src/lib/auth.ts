@@ -8,7 +8,7 @@ if (!process.env.BETTER_AUTH_SECRET || !process.env.NEXT_PUBLIC_URL) {
 
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
-  url: process.env.NEXT_PUBLIC_URL,
+  baseURL: process.env.NEXT_PUBLIC_URL,
   adapter: mongodbAdapter(mongoClient.db()),
   emailAndPassword: {
     enabled: true,
