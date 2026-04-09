@@ -1,7 +1,7 @@
 import { ZodError } from "zod"
 import { payload } from "@/lib/payload"
 import { Slugs } from "@/lib/slugs"
-import { AuthService, BetterAuthSignUpError, DuplicateFieldError } from "@/services/auth.service"
+import { AuthService, DuplicateFieldError } from "@/services/auth.service"
 import { signUpSchema } from "@/types/schemas/sign-up"
 
 export async function POST(request: Request) {
@@ -38,9 +38,7 @@ export async function POST(request: Request) {
         status: 409,
       })
     }
-    if (err instanceof BetterAuthSignUpError) {
-      return new Response(JSON.stringify({ error: "Email already registered" }), { status: 409 })
-    }
+    console.error("[POST /api/sign-up] Unhandled error", { error: err })
     throw err
   }
 }
