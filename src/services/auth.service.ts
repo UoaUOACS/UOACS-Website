@@ -81,6 +81,17 @@ export class AuthService {
 
   public async linkExistingMember(email: string, betterAuthUserId: string): Promise<Member> {
     try {
+      const existing = await payload.find({
+        collection: Slugs.Collections.MEMBER,
+        where: { email: { equals: email }, betterAuthUserId: { exists: false } },
+        limit: 1,
+      })
+
+      if (existing.docs.length === 0) {
+        await this.rollbackBetterAuthSignUp(betterAuthUserId)
+        throw new DuplicateFieldError("email")
+      }
+
       const result = await payload.update({
         collection: Slugs.Collections.MEMBER,
         where: { email: { equals: email } },
@@ -88,7 +99,9 @@ export class AuthService {
       })
       return result.docs[0]
     } catch (err) {
-      await this.rollbackBetterAuthSignUp(betterAuthUserId)
+      if (!(err instanceof DuplicateFieldError)) {
+        await this.rollbackBetterAuthSignUp(betterAuthUserId)
+      }
       throw err
     }
   }
