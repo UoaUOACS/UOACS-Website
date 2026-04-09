@@ -2,6 +2,7 @@ import type { User } from "better-auth"
 import { ValidationError } from "payload"
 import { auth } from "@/lib/auth"
 import { payload } from "@/lib/payload"
+import { Slugs } from "@/lib/slugs"
 import type { Member } from "@/payload/payload-types"
 import { type CreateMemberInput, createMemberSchema } from "@/types/schemas/member"
 import { type CreateUserInput, createUserSchema } from "@/types/schemas/user"
@@ -56,5 +57,18 @@ export class AuthService {
   public async rollbackBetterAuthSignUp(userId: string): Promise<void> {
     const context = await auth.$context
     await context.internalAdapter.deleteUser(userId)
+  }
+
+  public async linkExistingMember(email: string, betterAuthUserId: string): Promise<Member> {
+    try {
+      const result = await payload.update({
+        collection: Slugs.Collections.MEMBER,
+        where: { email: { equals: email } },
+        data: { betterAuthUserId },
+      })
+      return result.docs[0]
+    } catch (err) {
+      throw err
+    }
   }
 }
