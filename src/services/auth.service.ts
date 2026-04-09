@@ -1,5 +1,5 @@
 import type { User } from "better-auth"
-import { isAPIError } from "better-auth/utils"
+import { isAPIError } from "better-auth/api"
 import { ValidationError } from "payload"
 import { auth } from "@/lib/auth"
 import { payload } from "@/lib/payload"
@@ -68,8 +68,15 @@ export class AuthService {
   }
 
   public async rollbackBetterAuthSignUp(userId: string): Promise<void> {
-    const context = await auth.$context
-    await context.internalAdapter.deleteUser(userId)
+    try {
+      const context = await auth.$context
+      await context.internalAdapter.deleteUser(userId)
+    } catch (err) {
+      console.error(
+        "[AuthService] CRITICAL: Failed to rollback Better Auth user. Record leaked and requires manual cleanup.",
+        { betterAuthUserId: userId, error: err },
+      )
+    }
   }
 
   public async linkExistingMember(email: string, betterAuthUserId: string): Promise<Member> {
