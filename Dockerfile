@@ -38,6 +38,8 @@ RUN --mount=type=secret,id=DATABASE_URI \
            export S3_SECRET_ACCESS_KEY=$(cat /run/secrets/S3_SECRET_ACCESS_KEY) && \
            export S3_REGION=$(cat /run/secrets/S3_REGION) && \
            export S3_BUCKET=$(cat /run/secrets/S3_BUCKET) && \
+           export NODE_ENV=$(cat /run/secrets/NODE_ENV) && \
+           export BETTER_AUTH_SECRET=$(cat /run/secrets/BETTER_AUTH_SECRET) && \
            pnpm run build'
 
 # Stage 3: Production runner (minimal image)
