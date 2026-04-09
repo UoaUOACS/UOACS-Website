@@ -30,8 +30,15 @@ export async function POST(request: Request) {
 
     return new Response(JSON.stringify(member), { status: 201 })
   } catch (err) {
+    if (err instanceof SyntaxError) {
+      return new Response(JSON.stringify({ error: "Invalid JSON body" }), { status: 400 })
+    }
     if (err instanceof ZodError) {
-      return new Response(JSON.stringify({ error: err.issues }), { status: 400 })
+      const fieldErrors = err.issues.map((issue) => ({
+        field: issue.path.join("."),
+        message: issue.message,
+      }))
+      return new Response(JSON.stringify({ error: fieldErrors }), { status: 400 })
     }
     if (err instanceof DuplicateFieldError) {
       return new Response(JSON.stringify({ error: "Value already in use", field: err.field }), {
