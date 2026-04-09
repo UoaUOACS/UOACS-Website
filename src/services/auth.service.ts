@@ -22,15 +22,19 @@ export class BetterAuthSignUpError extends Error {
 }
 
 export class AuthService {
-  public async signUpPayloadMember(data: Response["json"]): Promise<Member> {
+  public async signUpPayloadMember(
+    data: CreateMemberInput,
+    betterAuthUserId: string,
+  ): Promise<Member> {
     const memberData = createMemberSchema.parse(data)
 
     try {
       return await payload.create({
         collection: Slugs.Collections.MEMBER,
-        data: memberData,
+        data: { ...memberData, betterAuthUserId },
       })
     } catch (err) {
+      await this.rollbackBetterAuthSignUp(betterAuthUserId)
       if (
         err instanceof ValidationError &&
         err.data?.errors?.some((e) => e.message === "Value must be unique")
@@ -68,6 +72,7 @@ export class AuthService {
       })
       return result.docs[0]
     } catch (err) {
+      await this.rollbackBetterAuthSignUp(betterAuthUserId)
       throw err
     }
   }
