@@ -56,8 +56,12 @@ export const MemberStep = () => {
   const isCompsciStudent = watch("compsciStudent")
 
   const onSubmit = async (step2Data: FormOutput) => {
+    if (!step1) {
+      toast.error({ description: "Something went wrong. Please start over." })
+      reset()
+      return
+    }
     setStep2(step2Data)
-    if (!step1) return
     router.prefetch(Routes.HOME)
     setLoading(true)
     try {

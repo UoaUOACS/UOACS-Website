@@ -17,7 +17,7 @@ type FormInput = z.input<typeof createUserSchema>
 type FormOutput = z.output<typeof createUserSchema>
 
 export const UserStep = () => {
-  const { setStep1, nextStep } = useSignUpFormStore()
+  const { setStep1, nextStep, reset } = useSignUpFormStore()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -59,6 +59,7 @@ export const UserStep = () => {
         return
       }
 
+      reset()
       router.push(Routes.HOME)
       toast.success({
         description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
