@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import type { z as zType } from "zod"
 import { z } from "zod"
@@ -39,7 +39,7 @@ type FormInput = zType.input<typeof step2Schema>
 type FormOutput = zType.output<typeof step2Schema>
 
 export const MemberStep = () => {
-  const { step1, setStep2, prevStep, reset } = useSignUpFormStore()
+  const { step1, step2, setStep2, prevStep, reset } = useSignUpFormStore()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -48,10 +48,16 @@ export const MemberStep = () => {
     register,
     handleSubmit,
     watch,
+    getValues,
+    reset: resetForm,
     formState: { errors },
   } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(step2Schema),
   })
+
+  useEffect(() => {
+    if (step2) resetForm(step2)
+  }, [step2, resetForm])
 
   const isCompsciStudent = watch("compsciStudent")
 
@@ -222,7 +228,14 @@ export const MemberStep = () => {
       </p>
 
       <div className="flex w-full gap-2">
-        <Button onClick={prevStep} theme="light" type="button">
+        <Button
+          onClick={() => {
+            setStep2(getValues())
+            prevStep()
+          }}
+          theme="light"
+          type="button"
+        >
           Back
         </Button>
         <Button disabled={loading} theme="dark" type="submit">
