@@ -18,7 +18,8 @@ export async function POST(request: Request) {
     })
 
     const baUser = await authService.signUpBetterAuth({
-      name: `${memberData.firstName} ${memberData.lastName}`,
+      firstName: memberData.firstName,
+      lastName: memberData.lastName,
       email: memberData.email,
       password,
     })

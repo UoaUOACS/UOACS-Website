@@ -56,7 +56,11 @@ export class AuthService {
     const signUpData = createUserSchema.parse(data)
     try {
       const result = await auth.api.signUpEmail({
-        body: signUpData,
+        body: {
+          name: `${data.firstName} ${data.lastName}`,
+          email: data.email,
+          password: data.password,
+        },
       })
       return result.user
     } catch (err) {
