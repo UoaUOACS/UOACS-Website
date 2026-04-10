@@ -39,7 +39,7 @@ type FormInput = zType.input<typeof step2Schema>
 type FormOutput = zType.output<typeof step2Schema>
 
 export const MemberStep = () => {
-  const { step1, setStep2: _, prevStep, reset } = useSignUpFormStore()
+  const { step1, setStep2, prevStep, reset } = useSignUpFormStore()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -56,6 +56,7 @@ export const MemberStep = () => {
   const isCompsciStudent = watch("compsciStudent")
 
   const onSubmit = async (step2Data: FormOutput) => {
+    setStep2(step2Data)
     if (!step1) return
     router.prefetch(Routes.HOME)
     setLoading(true)
