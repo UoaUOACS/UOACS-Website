@@ -2,10 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
-import { checkMemberExists } from "@/actions/member.actions"
+import { checkMemberExists, checkUserExists } from "@/actions/member.actions"
 import { Button } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
 import { ApiRoutes, Routes } from "@/lib/routes"
@@ -17,23 +17,39 @@ type FormInput = z.input<typeof createUserSchema>
 type FormOutput = z.output<typeof createUserSchema>
 
 export const UserStep = () => {
-  const { setStep1, nextStep, reset } = useSignUpFormStore()
+  const { step1, setStep1, nextStep, reset } = useSignUpFormStore()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const {
     register,
     handleSubmit,
+    reset: resetForm,
     formState: { errors },
   } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(createUserSchema),
   })
 
+  useEffect(() => {
+    if (step1) resetForm(step1)
+  }, [step1, resetForm])
+
   const onSubmit = async (data: FormOutput) => {
     setLoading(true)
     const { confirmPassword: _, ...userData } = data
     try {
-      const memberExists = await checkMemberExists(userData.email)
+      const [memberExists, userExists] = await Promise.all([
+        checkMemberExists(userData.email),
+        checkUserExists(userData.email),
+      ])
+
+      if (userExists) {
+        toast.warning({
+          description:
+            "An account with that email already exists.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
+        })
+        return
+      }
 
       if (!memberExists) {
         setStep1(userData)
@@ -45,7 +61,7 @@ export const UserStep = () => {
       const response = await fetch(ApiRoutes.SIGN_UP, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...userData, existingMember: true }),
+        body: JSON.stringify({ ...data, existingMember: true }),
       })
 
       if (!response.ok) {
