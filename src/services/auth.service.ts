@@ -6,7 +6,7 @@ import { payload } from "@/lib/payload"
 import { Slugs } from "@/lib/slugs"
 import type { Member } from "@/payload/payload-types"
 import { type CreateMemberInput, createMemberSchema } from "@/types/schemas/member"
-import { type CreateUserInput, createUserSchema } from "@/types/schemas/user"
+import type { CreateUserInput } from "@/types/schemas/user"
 
 export class DuplicateFieldError extends Error {
   constructor(public readonly field: string) {
@@ -53,7 +53,6 @@ export class AuthService {
   }
 
   public async signUpBetterAuth(data: CreateUserInput): Promise<User> {
-    const signUpData = createUserSchema.parse(data)
     try {
       const result = await auth.api.signUpEmail({
         body: {
@@ -94,7 +93,7 @@ export class AuthService {
     try {
       const existing = await payload.find({
         collection: Slugs.Collections.MEMBER,
-        where: { email: { equals: email }, betterAuthUserId: { exists: false } },
+        where: { email: { equals: email }, betterAuthUserId: { equals: null } },
         limit: 1,
       })
 
@@ -104,19 +103,14 @@ export class AuthService {
         throw new DuplicateFieldError("email")
       }
 
-      const result = await payload.update({
+      const existingDoc = existing.docs[0]
+      await payload.db.updateOne({
         collection: Slugs.Collections.MEMBER,
-        where: { email: { equals: email }, betterAuthUserId: { exists: false } },
+        id: existingDoc.id,
         data: { betterAuthUserId },
       })
 
-      if (result.docs.length === 0) {
-        alreadyRolledBack = true
-        await this.rollbackBetterAuthSignUp(betterAuthUserId)
-        throw new DuplicateFieldError("email")
-      }
-
-      return result.docs[0]
+      return { ...existingDoc, betterAuthUserId }
     } catch (err) {
       if (!alreadyRolledBack) {
         console.error("[AuthService] linkExistingMember failed, rolling back Better Auth user", {
