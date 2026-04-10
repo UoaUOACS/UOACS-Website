@@ -104,11 +104,17 @@ export class AuthService {
       }
 
       const existingDoc = existing.docs[0]
-      await payload.db.updateOne({
+      const result = await payload.db.updateOne({
         collection: Slugs.Collections.MEMBER,
         id: existingDoc.id,
         data: { betterAuthUserId },
       })
+
+      if (!result) {
+        alreadyRolledBack = true
+        await this.rollbackBetterAuthSignUp(betterAuthUserId)
+        throw new DuplicateFieldError("email")
+      }
 
       return { ...existingDoc, betterAuthUserId }
     } catch (err) {
