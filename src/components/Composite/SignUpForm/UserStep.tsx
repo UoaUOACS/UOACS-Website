@@ -31,11 +31,12 @@ export const UserStep = () => {
 
   const onSubmit = async (data: FormOutput) => {
     setLoading(true)
+    const { confirmPassword: _, ...userData } = data
     try {
-      const memberExists = await checkMemberExists(data.email)
+      const memberExists = await checkMemberExists(userData.email)
 
       if (!memberExists) {
-        setStep1(data)
+        setStep1(userData)
         nextStep()
         return
       }
@@ -44,7 +45,7 @@ export const UserStep = () => {
       const response = await fetch(ApiRoutes.SIGN_UP, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, existingMember: true }),
+        body: JSON.stringify({ ...userData, existingMember: true }),
       })
 
       if (!response.ok) {
@@ -106,6 +107,14 @@ export const UserStep = () => {
         {...register("password")}
         error={errors.password?.message}
         label="Password"
+        required
+        type="password"
+      />
+
+      <Input
+        {...register("confirmPassword")}
+        error={errors.confirmPassword?.message}
+        label="Confirm Password"
         required
         type="password"
       />
