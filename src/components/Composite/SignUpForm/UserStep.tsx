@@ -61,7 +61,7 @@ export const UserStep = () => {
       const response = await fetch(ApiRoutes.SIGN_UP, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, existingMember: true }),
+        body: JSON.stringify({ ...userData, existingMember: true }),
       })
 
       if (!response.ok) {
