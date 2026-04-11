@@ -1,3 +1,4 @@
+import crypto from "node:crypto"
 import type { User } from "better-auth"
 import { isAPIError } from "better-auth/api"
 import { ValidationError } from "payload"
@@ -128,5 +129,37 @@ export class AuthService {
       }
       throw err
     }
+  }
+
+  public generateVerificationCode(): string {
+    return Math.floor(100000 + Math.random() * 900000).toString()
+  }
+
+  public async createVerificationCode(email: string, code: string): Promise<string> {
+    const hashedCode = this.hashVerificationCode(code)
+
+    await payload.create({
+      collection: Slugs.Collections.EMAIL_VERIFICATION_CODE,
+      data: {
+        email: email,
+        hashedCode: hashedCode,
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // expires in 10 minutes
+      },
+    })
+
+    return code
+  }
+
+  private hashVerificationCode(code: string): string {
+    return crypto.createHash("sha256").update(code).digest("hex")
+  }
+
+  public verifyVerificationCode(code: string, hash: string): boolean {
+    const codeHash = Buffer.from(this.hashVerificationCode(code), "hex")
+    const hashBuffer = Buffer.from(hash, "hex")
+    if (codeHash.length !== hashBuffer.length) {
+      return false
+    }
+    return crypto.timingSafeEqual(codeHash, hashBuffer)
   }
 }
