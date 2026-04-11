@@ -88,7 +88,7 @@ export const MemberStep = () => {
         return
       }
       reset()
-      router.push(Routes.HOME)
+      router.push(Routes.LOGIN)
       toast.success({
         description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
       })
