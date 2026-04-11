@@ -35,7 +35,6 @@ export const UserStep = () => {
   }, [step1, resetForm])
 
   const onSubmit = async (data: FormOutput) => {
-    setLoading(true)
     const { confirmPassword: _, ...userData } = data
     try {
       const [memberExists, userExists] = await Promise.all([
@@ -57,6 +56,7 @@ export const UserStep = () => {
         return
       }
 
+      setLoading(true)
       router.prefetch(Routes.HOME)
       const response = await fetch(ApiRoutes.SIGN_UP, {
         method: "POST",
