@@ -90,7 +90,7 @@ export const UserStep = () => {
 
   return (
     <>
-      <p className="paragraph-md text-gray-500 -mt-4">
+      <p className="paragraph-md -mt-4 mb-4 text-gray-500">
         If you have already signed up as a member, go ahead and add a password to finish creating
         your UOACS account.
         <br />
