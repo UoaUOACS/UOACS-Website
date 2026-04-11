@@ -89,55 +89,64 @@ export const UserStep = () => {
   }
 
   return (
-    <form
-      className="flex w-full flex-col items-start justify-center gap-4"
-      noValidate
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="item-center flex w-full flex-col justify-start gap-2 md:flex-row md:gap-4">
+    <>
+      <p className="paragraph-md text-gray-500 -mt-4">
+        If you have already signed up as a member, go ahead and add a password to finish creating
+        your UOACS account.
+        <br />
+        If you haven&apos;t signed up as a member before, no worries! Just fill out this form and we
+        will create a membership for you.
+      </p>
+      <form
+        className="flex w-full flex-col items-start justify-center gap-4"
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="item-center flex w-full flex-col justify-start gap-2 md:flex-row md:gap-4">
+          <Input
+            {...register("firstName")}
+            error={errors.firstName?.message}
+            label="First Name"
+            required
+            type="text"
+          />
+          <Input
+            {...register("lastName")}
+            error={errors.lastName?.message}
+            label="Last Name"
+            required
+            type="text"
+          />
+        </div>
+
         <Input
-          {...register("firstName")}
-          error={errors.firstName?.message}
-          label="First Name"
+          {...register("email")}
+          error={errors.email?.message}
+          label="Email"
           required
-          type="text"
+          type="email"
         />
+
         <Input
-          {...register("lastName")}
-          error={errors.lastName?.message}
-          label="Last Name"
+          {...register("password")}
+          error={errors.password?.message}
+          label="Password"
           required
-          type="text"
+          type="password"
         />
-      </div>
 
-      <Input
-        {...register("email")}
-        error={errors.email?.message}
-        label="Email"
-        required
-        type="email"
-      />
+        <Input
+          {...register("confirmPassword")}
+          error={errors.confirmPassword?.message}
+          label="Confirm Password"
+          required
+          type="password"
+        />
 
-      <Input
-        {...register("password")}
-        error={errors.password?.message}
-        label="Password"
-        required
-        type="password"
-      />
-
-      <Input
-        {...register("confirmPassword")}
-        error={errors.confirmPassword?.message}
-        label="Confirm Password"
-        required
-        type="password"
-      />
-
-      <Button disabled={loading} theme="dark" type="submit">
-        {loading ? "Loading..." : "Next"}
-      </Button>
-    </form>
+        <Button disabled={loading} theme="dark" type="submit">
+          {loading ? "Loading..." : "Next"}
+        </Button>
+      </form>
+    </>
   )
 }
