@@ -6,7 +6,7 @@ import { UserStep } from "./UserStep"
 
 export const SignUpForm = () => {
   const { currentStep } = useSignUpFormStore()
-  const STEPS = [UserStep, MemberStep]
+  const STEPS = [UserStep, MemberStep] // TODO: add Email Verification Step
   const CurrentStep = STEPS[currentStep]
 
   return <CurrentStep />
