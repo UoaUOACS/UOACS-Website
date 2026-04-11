@@ -162,4 +162,21 @@ export class AuthService {
     }
     return crypto.timingSafeEqual(codeHash, hashBuffer)
   }
+
+  public async getVerificationCode(
+    email: string,
+  ): Promise<{ hashedCode: string; expiresAt: string } | null> {
+    const result = await payload.find({
+      collection: Slugs.Collections.EMAIL_VERIFICATION_CODE,
+      where: { email: { equals: email } },
+      limit: 1,
+    })
+
+    if (result.docs.length === 0) {
+      return null
+    }
+
+    const doc = result.docs[0]
+    return { hashedCode: doc.hashedCode, expiresAt: doc.expiresAt }
+  }
 }
