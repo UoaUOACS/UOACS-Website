@@ -8,6 +8,7 @@ import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Slugs } from "./lib/slugs"
 import { Admin } from "./payload/collections/Admin"
+import { EmailVerificationCode } from "./payload/collections/EmailVerificationCode"
 import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
@@ -29,7 +30,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Admin, Media, Member, Executive, Sponsor, Reel, Polaroid],
+  collections: [Admin, Media, Member, Executive, Sponsor, Reel, Polaroid, EmailVerificationCode],
   globals: [HomePage, PrivacyPolicy, SocialLinks],
   editor: lexicalEditor(),
   graphQL: {
