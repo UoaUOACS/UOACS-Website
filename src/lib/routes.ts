@@ -10,6 +10,9 @@ export const Routes = {
 export type Route = (typeof Routes)[keyof typeof Routes]
 
 export const ApiRoutes = {
+  ADMIN: {
+    MEMBERS: (id: string) => `/api/admin/members/${id}`,
+  } as const,
   SIGN_UP: "/api/sign-up",
   HEALTH: "/api/health",
   OG: "/og",
