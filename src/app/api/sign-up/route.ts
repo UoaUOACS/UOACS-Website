@@ -3,7 +3,7 @@ import { payload } from "@/lib/payload"
 import { Slugs } from "@/lib/slugs"
 import { AuthService, DuplicateFieldError } from "@/services/auth.service"
 import { signUpSchema } from "@/types/schemas/sign-up"
-import { createUserSchema } from "@/types/schemas/user"
+import { createUserServerSchema } from "@/types/schemas/user"
 
 export async function POST(request: Request) {
   const authService = new AuthService()
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const body = await request.json()
 
     if (body?.existingMember === true) {
-      const user = createUserSchema.parse(body)
+      const user = createUserServerSchema.parse(body)
       const baUser = await authService.signUpBetterAuth(user)
       const member = await authService.linkExistingMember(user.email, baUser.id)
       return new Response(JSON.stringify(member), { status: 201 })
