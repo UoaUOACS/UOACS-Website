@@ -1,6 +1,7 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
+import { nodemailerAdapter } from "@payloadcms/email-nodemailer"
 import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { s3Storage } from "@payloadcms/storage-s3"
@@ -47,6 +48,21 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
   }),
+  email:
+    process.env.NODE_ENV === "production"
+      ? nodemailerAdapter({
+          defaultFromAddress: "noreply@uoacs.co.nz",
+          defaultFromName: "UOACS",
+          transportOptions: {
+            host: "smtp.resend.com",
+            port: 465,
+            auth: {
+              user: "resend",
+              pass: process.env.SMTP_PASS,
+            },
+          },
+        })
+      : undefined,
   sharp,
   upload: {
     limits: {
