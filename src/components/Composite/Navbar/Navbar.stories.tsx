@@ -6,6 +6,11 @@ import { Navbar } from "./Navbar"
 const meta: Meta<typeof Navbar> = {
   title: "Composite Components/Navbar",
   component: Navbar,
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
   args: {
     socialLinks: [
       { label: "Discord", icon: SOCIAL_ICONS.Discord, href: "https://discord.gg/xSgqAmGE" },
