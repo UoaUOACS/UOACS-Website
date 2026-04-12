@@ -5,8 +5,10 @@ import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { BorderButton, Button, Heading, SocialIcon } from "@/components/Primitive"
+import { authClient } from "@/lib/auth-client"
 import { Routes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
 import type { NavbarProps } from "../Navbar"
@@ -20,6 +22,15 @@ import { mobileNavbarVariants } from "./variants"
  */
 export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const { data: session, isPending } = authClient.useSession()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    setIsOpen(false)
+    await authClient.signOut()
+    router.push(Routes.HOME)
+    router.refresh()
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -101,15 +112,38 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                 </a>
               ))}
             </div>
-            <Link className="grid grid-cols-4" href={Routes.SIGN_UP}>
-              <Button className="col-span-4 rounded-b-none" theme="dark">
-                Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
-              </Button>
-              <div className="h-0.5 w-full rounded-bl-[2px] bg-orange-400" />
-              <div className="h-0.5 w-full bg-blue-400" />
-              <div className="h-0.5 w-full bg-purple-400" />
-              <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
-            </Link>
+            {!isPending &&
+              (session ? (
+                <div className="flex w-full flex-col items-center gap-3 px-4">
+                  <span className="paragraph-sm text-gray-700">
+                    Signed in as <span className="font-semibold">{session.user.name}</span>
+                  </span>
+                  <Button className="w-full" onClick={handleLogout} theme="dark">
+                    Logout <ArrowRightIcon className="h-3 w-3" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex w-full flex-col">
+                  <Link href={Routes.LOGIN} onClick={() => setIsOpen(false)}>
+                    <Button className="w-full rounded-none" theme="primary">
+                      Log In
+                    </Button>
+                  </Link>
+                  <Link
+                    className="grid grid-cols-4"
+                    href={Routes.SIGN_UP}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Button className="col-span-4 rounded-b-none" theme="dark">
+                      Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
+                    </Button>
+                    <div className="h-0.5 w-full rounded-bl-[2px] bg-orange-400" />
+                    <div className="h-0.5 w-full bg-blue-400" />
+                    <div className="h-0.5 w-full bg-purple-400" />
+                    <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
+                  </Link>
+                </div>
+              ))}
           </motion.div>
         )}
       </AnimatePresence>
