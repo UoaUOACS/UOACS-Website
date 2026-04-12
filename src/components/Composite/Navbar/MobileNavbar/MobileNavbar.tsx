@@ -112,36 +112,34 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                 </a>
               ))}
             </div>
-            {!isPending &&
-              (session ? (
-                <div className="flex w-full flex-col items-center gap-3 px-4">
+            <div className="flex flex-col items-center gap-4">
+              {!isPending &&
+                (session ? (
                   <Dropdown
                     label={session.user.name.split(" ")[0].toUpperCase()}
                     options={[{ label: "Logout", onClick: handleLogout, theme: "dark" }]}
                     theme="dark"
                     triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
                   />
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-4">
+                ) : (
                   <Link href={Routes.LOGIN} onClick={() => setIsOpen(false)}>
                     <Button theme="primary">Log In</Button>
                   </Link>
-                  <Link
-                    className="grid grid-cols-4"
-                    href={Routes.SIGN_UP}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Button className="col-span-4 rounded-b-none" theme="dark">
-                      Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
-                    </Button>
-                    <div className="h-0.5 w-full rounded-bl-[2px] bg-orange-400" />
-                    <div className="h-0.5 w-full bg-blue-400" />
-                    <div className="h-0.5 w-full bg-purple-400" />
-                    <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
-                  </Link>
-                </div>
-              ))}
+                ))}
+              <Link
+                className="grid grid-cols-4"
+                href={Routes.SIGN_UP}
+                onClick={() => setIsOpen(false)}
+              >
+                <Button className="col-span-4 rounded-b-none" theme="dark">
+                  Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
+                </Button>
+                <div className="h-0.5 w-full rounded-bl-[2px] bg-orange-400" />
+                <div className="h-0.5 w-full bg-blue-400" />
+                <div className="h-0.5 w-full bg-purple-400" />
+                <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
+              </Link>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
