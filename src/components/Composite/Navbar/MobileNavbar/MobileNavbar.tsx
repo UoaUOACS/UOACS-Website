@@ -122,11 +122,9 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                   />
                 </div>
               ) : (
-                <div className="flex w-full flex-col">
+                <div className="flex flex-col items-center gap-4">
                   <Link href={Routes.LOGIN} onClick={() => setIsOpen(false)}>
-                    <Button className="w-full rounded-none" theme="primary">
-                      Log In
-                    </Button>
+                    <Button theme="primary">Log In</Button>
                   </Link>
                   <Link
                     className="grid grid-cols-4"
