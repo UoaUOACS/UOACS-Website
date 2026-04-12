@@ -115,12 +115,12 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
             {!isPending &&
               (session ? (
                 <div className="flex w-full flex-col items-center gap-3 px-4">
-                  <span className="paragraph-sm text-gray-700">
-                    Signed in as <span className="font-semibold">{session.user.name}</span>
-                  </span>
                   <Button className="w-full" onClick={handleLogout} theme="dark">
                     Logout <ArrowRightIcon className="h-3 w-3" />
                   </Button>
+                  <span className="paragraph-sm text-gray-700 uppercase">
+                    {session.user.name.split(" ")[0]}
+                  </span>
                 </div>
               ) : (
                 <div className="flex w-full flex-col">

@@ -84,10 +84,12 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
           {!isPending &&
             (session ? (
               <div className="flex flex-row items-center gap-3">
-                <span className="paragraph-sm text-gray-700">{session.user.name}</span>
                 <Button onClick={handleLogout} theme="dark">
                   Logout
                 </Button>
+                <span className="paragraph-sm text-gray-700 uppercase">
+                  {session.user.name.split(" ")[0]}
+                </span>
               </div>
             ) : (
               <div className="flex flex-row items-center gap-3">
