@@ -87,6 +87,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
                 label={session.user.name.split(" ")[0].toUpperCase()}
                 options={[{ label: "Logout", onClick: handleLogout, theme: "dark" }]}
                 theme="dark"
+                triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
               />
             ) : (
               <div className="flex flex-row items-center gap-3">
