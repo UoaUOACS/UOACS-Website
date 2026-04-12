@@ -5,6 +5,11 @@ export const Member: CollectionConfig = {
   slug: Slugs.Collections.MEMBER,
   admin: {
     useAsTitle: "email",
+    components: {
+      edit: {
+        beforeDocumentControls: ["@/payload/components/DeleteMemberButton#DeleteMemberButton"],
+      },
+    },
   },
   fields: [
     {
