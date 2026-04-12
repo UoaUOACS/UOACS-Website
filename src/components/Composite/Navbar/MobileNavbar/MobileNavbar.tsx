@@ -7,7 +7,7 @@ import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { BorderButton, Button, Heading, SocialIcon } from "@/components/Primitive"
+import { BorderButton, Button, Dropdown, Heading, SocialIcon } from "@/components/Primitive"
 import { authClient } from "@/lib/auth-client"
 import { Routes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
@@ -115,12 +115,11 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
             {!isPending &&
               (session ? (
                 <div className="flex w-full flex-col items-center gap-3 px-4">
-                  <Button className="w-full" onClick={handleLogout} theme="dark">
-                    Logout <ArrowRightIcon className="h-3 w-3" />
-                  </Button>
-                  <span className="paragraph-sm text-gray-700 uppercase">
-                    {session.user.name.split(" ")[0]}
-                  </span>
+                  <Dropdown
+                    label={session.user.name.split(" ")[0].toUpperCase()}
+                    options={[{ label: "Logout", onClick: handleLogout, theme: "dark" }]}
+                    theme="dark"
+                  />
                 </div>
               ) : (
                 <div className="flex w-full flex-col">

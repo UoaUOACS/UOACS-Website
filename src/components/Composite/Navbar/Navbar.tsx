@@ -83,14 +83,11 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
           </div>
           {!isPending &&
             (session ? (
-              <div className="flex flex-row items-center gap-3">
-                <Button onClick={handleLogout} theme="dark">
-                  Logout
-                </Button>
-                <span className="paragraph-sm text-gray-700 uppercase">
-                  {session.user.name.split(" ")[0]}
-                </span>
-              </div>
+              <Dropdown
+                label={session.user.name.split(" ")[0].toUpperCase()}
+                options={[{ label: "Logout", onClick: handleLogout, theme: "dark" }]}
+                theme="dark"
+              />
             ) : (
               <div className="flex flex-row items-center gap-3">
                 <Link href={Routes.LOGIN}>
