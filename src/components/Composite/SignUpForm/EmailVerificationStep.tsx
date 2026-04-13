@@ -44,7 +44,7 @@ export const EmailVerificationStep = () => {
     cooldownRef.current = id
   }
 
-  const sendOtp = async () => {
+  const sendVerificationCode = async () => {
     if (!step1) return
     setResendCooldown(RESEND_COOLDOWN_S)
     try {
@@ -183,7 +183,7 @@ export const EmailVerificationStep = () => {
         <button
           className="paragraph-sm text-gray-500 underline disabled:cursor-not-allowed disabled:opacity-50"
           disabled={resendCooldown > 0}
-          onClick={sendOtp}
+          onClick={sendVerificationCode}
           type="button"
         >
           {resendCooldown > 0 ? `Resend code in ${resendCooldown}s` : "Resend code"}
