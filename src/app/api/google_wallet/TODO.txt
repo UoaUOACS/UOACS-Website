@@ -19,7 +19,6 @@ So far what's been written:
 - API route at /api/google_wallet, currently provides unauthenticated access to the above functions using a mock member.
 
 TODO:
-- Allow create of private service account keys for authentication and JWT signing
 - Replicate digital pass design and hard code to "@/lib/wallet_integration"
 - Add member authentication to api route, so that the *digital pass object* can be generated for that specific member
 - Call on the api from a front end page
