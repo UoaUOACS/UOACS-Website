@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { ZodError } from "zod"
 import { AuthService } from "@/services/auth.service"
 import { PayloadEmailService } from "@/services/email/payload-email.service"
 import { sendCodeSchema, verifyCodeSchema } from "@/types/schemas/verification-code"
@@ -18,8 +19,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { email: parsedEmail } = sendCodeSchema.parse(body)
     email = parsedEmail
-  } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
+  } catch (err) {
+    if (err instanceof SyntaxError || err instanceof ZodError) {
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
+    }
+    console.error("[SignUp/verification-code] Unexpected error parsing request body", { err })
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 
   const code = authService.generateVerificationCode()
@@ -66,8 +71,12 @@ export async function PUT(request: NextRequest) {
     const { email: parsedEmail, code: parsedCode } = verifyCodeSchema.parse(body)
     email = parsedEmail
     code = parsedCode
-  } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
+  } catch (err) {
+    if (err instanceof SyntaxError || err instanceof ZodError) {
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
+    }
+    console.error("[SignUp/verification-code] Unexpected error parsing request body", { err })
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 
   try {
@@ -84,12 +93,19 @@ export async function PUT(request: NextRequest) {
     if (!matchingCode) {
       return NextResponse.json({ error: "Invalid verification code" }, { status: 400 })
     }
+  } catch (error) {
+    console.error("[SignUp/verification-code] Failed to look up verification codes", { error })
+    return NextResponse.json({ error: "Failed to verify code" }, { status: 500 })
+  }
 
+  try {
     await authService.deleteVerificationCodes(email)
-
     memberExists = await authService.checkMemberExists(email)
   } catch (error) {
-    console.error("[SignUp/verification-code] Failed to verify code", { error })
+    console.error("[SignUp/verification-code] Code was valid but post-verification step failed", {
+      email,
+      error,
+    })
     return NextResponse.json({ error: "Failed to verify code" }, { status: 500 })
   }
 
