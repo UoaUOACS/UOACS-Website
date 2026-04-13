@@ -1,9 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { z } from "zod"
 import { AuthService } from "@/services/auth.service"
 import { PayloadEmailService } from "@/services/email/payload-email.service"
-
-const sendCodeSchema = z.object({ email: z.email() })
+import { sendCodeSchema } from "@/types/schemas/verification-code"
 
 export async function POST(request: NextRequest) {
   const authService = new AuthService()

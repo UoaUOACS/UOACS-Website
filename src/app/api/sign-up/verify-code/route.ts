@@ -1,11 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { z } from "zod"
 import { AuthService } from "@/services/auth.service"
-
-const verifyCodeSchema = z.object({
-  email: z.email(),
-  code: z.string().length(6).regex(/^\d+$/),
-})
+import { verifyCodeSchema } from "@/types/schemas/verification-code"
 
 export async function POST(request: NextRequest) {
   const authService = new AuthService()
