@@ -97,16 +97,11 @@ export function Navbar({ links, socialLinks, initialSession }: NavbarProps) {
               triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
             />
           ) : (
-            <div className="flex flex-row items-center gap-3">
-              <Link href={Routes.LOGIN}>
-                <Button theme="primary">Log In</Button>
-              </Link>
-              <Link href={Routes.SIGN_UP}>
-                <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
-                  Join UOACS
-                </Button>
-              </Link>
-            </div>
+            <Link href={Routes.LOGIN}>
+              <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
+                Log In
+              </Button>
+            </Link>
           )}
         </div>
       </nav>
