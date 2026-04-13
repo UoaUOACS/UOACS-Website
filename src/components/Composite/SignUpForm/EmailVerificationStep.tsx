@@ -63,6 +63,7 @@ export const EmailVerificationStep = () => {
         return
       }
       startCooldown()
+      toast.success({ description: "Verification email sent! Please check your inbox." })
     } catch {
       setResendCooldown(0)
       toast.error({ description: "Failed to send verification email. Please try again." })
