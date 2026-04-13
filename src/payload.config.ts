@@ -48,21 +48,20 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
   }),
-  email:
-    process.env.NODE_ENV === "production"
-      ? nodemailerAdapter({
-          defaultFromAddress: "noreply@uoacs.co.nz",
-          defaultFromName: "UOACS",
-          transportOptions: {
-            host: "smtp.resend.com",
-            port: 465,
-            auth: {
-              user: "resend",
-              pass: process.env.SMTP_PASS,
-            },
+  email: process.env.SMTP_PASS
+    ? nodemailerAdapter({
+        defaultFromAddress: "noreply@uoacs.co.nz",
+        defaultFromName: "UOACS",
+        transportOptions: {
+          host: "smtp.resend.com",
+          port: 465,
+          auth: {
+            user: "resend",
+            pass: process.env.SMTP_PASS,
           },
-        })
-      : undefined,
+        },
+      })
+    : undefined,
   sharp,
   upload: {
     limits: {
