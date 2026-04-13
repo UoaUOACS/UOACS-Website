@@ -13,7 +13,11 @@ export const ApiRoutes = {
   ADMIN: {
     MEMBERS: (id: string | number | undefined) => `/api/admin/members/${id ?? ""}`,
   } as const,
-  SIGN_UP: "/api/sign-up",
+  SIGN_UP: {
+    ROOT: "/api/sign-up",
+    SEND_OTP: "/api/sign-up/send-code",
+    VERIFY_OTP: "/api/sign-up/verify-code",
+  } as const,
   HEALTH: "/api/health",
   OG: "/og",
 } as const
