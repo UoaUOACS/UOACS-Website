@@ -5,8 +5,10 @@ import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { BorderButton, Button, Heading, SocialIcon } from "@/components/Primitive"
+import { authClient } from "@/lib/auth-client"
 import { Routes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
 import type { NavbarProps } from "../Navbar"
@@ -18,8 +20,18 @@ import { mobileNavbarVariants } from "./variants"
  * @param links Links to be displayed in the mobile navbar.
  * @param socialLinks Social links to be displayed in the mobile navbar.
  */
-export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
+export const MobileNavbar = ({ links, socialLinks, initialSession }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const { data: hookSession, isPending } = authClient.useSession()
+  const session = isPending ? initialSession : hookSession
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    setIsOpen(false)
+    await authClient.signOut()
+    router.push(Routes.HOME)
+    router.refresh()
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -101,15 +113,35 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                 </a>
               ))}
             </div>
-            <Link className="grid grid-cols-4" href={Routes.SIGN_UP}>
-              <Button className="col-span-4 rounded-b-none" theme="dark">
-                Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
-              </Button>
-              <div className="h-0.5 w-full rounded-bl-[2px] bg-orange-400" />
-              <div className="h-0.5 w-full bg-blue-400" />
-              <div className="h-0.5 w-full bg-purple-400" />
-              <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
-            </Link>
+            <div className="flex flex-col items-center gap-4">
+              {session ? (
+                <div className="flex flex-row items-center gap-2">
+                  <Button theme="dark">{session.user.name.split(" ")[0].toUpperCase()}</Button>
+                  <Button onClick={handleLogout} theme="dark">
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Link
+                    className="grid grid-cols-4"
+                    href={Routes.SIGN_UP}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Button className="col-span-4 rounded-b-none" theme="dark">
+                      Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
+                    </Button>
+                    <div className="h-0.5 w-full rounded-bl-[2px] bg-orange-400" />
+                    <div className="h-0.5 w-full bg-blue-400" />
+                    <div className="h-0.5 w-full bg-purple-400" />
+                    <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
+                  </Link>
+                  <Link href={Routes.LOGIN} onClick={() => setIsOpen(false)}>
+                    <Button theme="primary">Log In</Button>
+                  </Link>
+                </>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

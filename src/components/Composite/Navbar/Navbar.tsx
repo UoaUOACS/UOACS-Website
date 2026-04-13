@@ -4,12 +4,16 @@ import { ArrowUpRightIcon, Bars3Icon } from "@heroicons/react/24/solid"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import type { SocialLink } from "@/components/Generic"
 import { Button, Dropdown } from "@/components/Primitive"
 import { SocialIcon } from "@/components/Primitive/Icons"
+import { authClient } from "@/lib/auth-client"
 import { Routes } from "@/lib/routes"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"
+
+type Session = typeof authClient.$Infer.Session
 
 /**
  * Props for the {@link Navbar} component.
@@ -23,6 +27,11 @@ export interface NavbarProps {
    * Social links to be displayed in the dropdown on the right of the navbar's middle.
    */
   socialLinks: SocialLink[]
+  /**
+   * Session fetched on the server, used as the initial value before the
+   * client session hook resolves. Prevents a flash/skeleton on first paint.
+   */
+  initialSession?: Session | null
 }
 
 /**
@@ -32,7 +41,17 @@ export interface NavbarProps {
  * @param socialLinks Social links to be displayed in the dropdown on the right of the navbar's middle.
  * @returns A Navbar component with logo, navigation links, social dropdown, and join button.
  */
-export function Navbar({ links, socialLinks }: NavbarProps) {
+export function Navbar({ links, socialLinks, initialSession }: NavbarProps) {
+  const { data: hookSession, isPending } = authClient.useSession()
+  const session = isPending ? initialSession : hookSession
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await authClient.signOut()
+    router.push(Routes.HOME)
+    router.refresh()
+  }
+
   const dropdownOptions = socialLinks.map((socialLink) => ({
     label: (
       <span className="flex items-center gap-2">
@@ -52,7 +71,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
             <Image alt="UOACS Logo" height={40} src="/uoacs-logo-bw.svg" width={167} />
           </Link>
         </motion.div>
-        <MobileNavbar links={links} socialLinks={socialLinks} />
+        <MobileNavbar initialSession={initialSession} links={links} socialLinks={socialLinks} />
         <div className="nowrap hidden flex-row md:flex lg:gap-5">
           <div className="flex flex-row items-center gap-5">
             {links
@@ -70,11 +89,20 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
             />
           </div>
-          <Link href={Routes.SIGN_UP}>
-            <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
-              Join UOACS
-            </Button>
-          </Link>
+          {session ? (
+            <Dropdown
+              label={session.user.name.split(" ")[0].toUpperCase()}
+              options={[{ label: "Logout", onClick: handleLogout, theme: "dark" }]}
+              theme="dark"
+              triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
+            />
+          ) : (
+            <Link href={Routes.LOGIN}>
+              <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
+                Log In
+              </Button>
+            </Link>
+          )}
         </div>
       </nav>
     </>
