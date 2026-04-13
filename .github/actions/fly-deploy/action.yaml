@@ -44,8 +44,8 @@ inputs:
   BETTER_AUTH_SECRET:
     description: 'Secret key for Better Auth'
     required: true
-  SMTP_PASS:
-    description: 'SMTP password'
+  RESEND_API_KEY:
+    description: 'Resend API key'
     required: true
 
 runs:
@@ -67,7 +67,7 @@ runs:
           S3_BUCKET="${{ inputs.S3_BUCKET }}" \
           NODE_ENV="${{ inputs.NODE_ENV }}" \
           BETTER_AUTH_SECRET="${{ inputs.BETTER_AUTH_SECRET }}" \
-          SMTP_PASS="${{ inputs.SMTP_PASS }}" \
+          RESEND_API_KEY="${{ inputs.RESEND_API_KEY }}" \
           -a ${{ inputs.APP_NAME }}
       shell: bash
       env:
@@ -85,7 +85,7 @@ runs:
           --build-secret S3_BUCKET="${{ inputs.S3_BUCKET }}" \
           --build-secret NODE_ENV="${{ inputs.NODE_ENV }}" \
           --build-secret BETTER_AUTH_SECRET="${{ inputs.BETTER_AUTH_SECRET }}" \
-          --build-secret SMTP_PASS="${{ inputs.SMTP_PASS }}" \
+          --build-secret RESEND_API_KEY="${{ inputs.RESEND_API_KEY }}" \
           -a ${{ inputs.APP_NAME }}
       shell: bash
       env:

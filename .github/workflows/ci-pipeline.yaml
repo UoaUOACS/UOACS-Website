@@ -167,7 +167,7 @@ jobs:
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
           NODE_ENV: ${{ vars.NODE_ENV }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: pnpm build
 
   build-storybook:
