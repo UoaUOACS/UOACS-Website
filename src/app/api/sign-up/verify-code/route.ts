@@ -1,43 +1,47 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 import { AuthService } from "@/services/auth.service"
+
+const verifyCodeSchema = z.object({
+  email: z.email(),
+  code: z.string().length(6).regex(/^\d+$/),
+})
 
 export async function POST(request: NextRequest) {
   const authService = new AuthService()
+  let memberExists = false
 
+  let email: string
+  let code: string
   try {
-    const { email, code } = await request.json()
-
-    const result = await authService.getVerificationCode(email)
-    if (!result) {
-      return new NextResponse(
-        JSON.stringify({ error: "No verification code found for this email" }),
-        {
-          status: 404,
-        },
-      )
-    }
-
-    const { hashedCode, expiresAt } = result
-
-    if (new Date() > new Date(expiresAt)) {
-      return new NextResponse(JSON.stringify({ error: "Verification code has expired" }), {
-        status: 400,
-      })
-    }
-
-    const isVerified = authService.verifyVerificationCode(code, hashedCode)
-
-    if (!isVerified) {
-      return new NextResponse(JSON.stringify({ error: "Invalid verification code" }), {
-        status: 400,
-      })
-    }
-  } catch (error) {
-    console.error("[SignUp] Failed to verify code", { error })
-    return new NextResponse(JSON.stringify({ error: "Failed to verify code" }), {
-      status: 500,
-    })
+    const body = await request.json()
+    ;({ email, code } = verifyCodeSchema.parse(body))
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
   }
 
-  return new NextResponse(JSON.stringify({ message: "Verification successful" }))
+  try {
+    const unexpired = await authService.getUnexpiredVerificationCodes(email)
+
+    if (unexpired.length === 0) {
+      return NextResponse.json({ error: "expired" }, { status: 400 })
+    }
+
+    const matchingCode = unexpired.find((c) =>
+      authService.verifyVerificationCode(code, c.hashedCode),
+    )
+
+    if (!matchingCode) {
+      return NextResponse.json({ error: "Invalid verification code" }, { status: 400 })
+    }
+
+    await authService.deleteVerificationCodes(email)
+
+    memberExists = await authService.checkMemberExists(email)
+  } catch (error) {
+    console.error("[SignUp] Failed to verify code", { error })
+    return NextResponse.json({ error: "Failed to verify code" }, { status: 500 })
+  }
+
+  return NextResponse.json({ message: "Verification successful", memberExists })
 }
