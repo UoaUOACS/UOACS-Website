@@ -10,7 +10,9 @@ export async function POST(request: NextRequest) {
   let code: string
   try {
     const body = await request.json()
-    ;({ email, code } = verifyCodeSchema.parse(body))
+    const { email: parsedEmail, code: parsedCode } = verifyCodeSchema.parse(body)
+    email = parsedEmail
+    code = parsedCode
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
   }

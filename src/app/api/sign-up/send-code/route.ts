@@ -9,7 +9,8 @@ export async function POST(request: NextRequest) {
   let email: string
   try {
     const body = await request.json()
-    ;({ email } = sendCodeSchema.parse(body))
+    const { email: parsedEmail } = sendCodeSchema.parse(body)
+    email = parsedEmail
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
   }
