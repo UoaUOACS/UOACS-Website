@@ -39,3 +39,5 @@ export const createMemberSchema = memberSchema
       })
     }
   })
+
+export type CreateMemberInput = z.infer<typeof createMemberSchema>

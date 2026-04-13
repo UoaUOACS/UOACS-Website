@@ -5,8 +5,23 @@ export const Member: CollectionConfig = {
   slug: Slugs.Collections.MEMBER,
   admin: {
     useAsTitle: "email",
+    components: {
+      edit: {
+        beforeDocumentControls: ["@/payload/components/DeleteMemberButton#DeleteMemberButton"],
+      },
+    },
   },
   fields: [
+    {
+      name: "betterAuthUserId",
+      type: "text",
+      required: false,
+      unique: true,
+      admin: {
+        description: "ID of the corresponding user authentication in Better Auth, if any",
+        readOnly: true,
+      },
+    },
     {
       name: "firstName",
       type: "text",

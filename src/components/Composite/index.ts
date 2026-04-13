@@ -1,6 +1,7 @@
 export * from "./AboutUsSection/AboutUsSection"
 export * from "./Footer/Footer"
 export * from "./HeroSection/HeroSection"
+export * from "./LoginForm/LoginForm"
 export * from "./Navbar/Navbar"
 export * from "./Reel/Reel"
 export * from "./SignUpForm/SignUpForm"

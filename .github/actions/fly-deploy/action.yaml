@@ -37,6 +37,13 @@ inputs:
   S3_BUCKET:
     description: 'S3 Bucket Name'
     required: true
+  NODE_ENV:
+    description: 'Node environment (e.g., development, production)'
+    required: false
+    default: 'production'
+  BETTER_AUTH_SECRET:
+    description: 'Secret key for Better Auth'
+    required: true
 
 runs:
   using: composite
@@ -55,6 +62,8 @@ runs:
           S3_SECRET_ACCESS_KEY="${{ inputs.S3_SECRET_ACCESS_KEY }}" \
           S3_REGION="${{ inputs.S3_REGION }}" \
           S3_BUCKET="${{ inputs.S3_BUCKET }}" \
+          NODE_ENV="${{ inputs.NODE_ENV }}" \
+          BETTER_AUTH_SECRET="${{ inputs.BETTER_AUTH_SECRET }}" \
           -a ${{ inputs.APP_NAME }}
       shell: bash
       env:
@@ -70,6 +79,8 @@ runs:
           --build-secret S3_SECRET_ACCESS_KEY="${{ inputs.S3_SECRET_ACCESS_KEY }}" \
           --build-secret S3_REGION="${{ inputs.S3_REGION }}" \
           --build-secret S3_BUCKET="${{ inputs.S3_BUCKET }}" \
+          --build-secret NODE_ENV="${{ inputs.NODE_ENV }}" \
+          --build-secret BETTER_AUTH_SECRET="${{ inputs.BETTER_AUTH_SECRET }}" \
           -a ${{ inputs.APP_NAME }}
       shell: bash
       env:
