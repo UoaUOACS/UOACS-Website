@@ -3,10 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/Primitive"
-import { Input } from "@/components/Primitive/Input/Input"
+import { PinInput } from "@/components/Primitive/PinInput/PinInput"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
@@ -27,7 +27,7 @@ export const EmailVerificationStep = () => {
   const router = useRouter()
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<OtpForm>({ resolver: zodResolver(otpSchema) })
@@ -160,14 +160,18 @@ export const EmailVerificationStep = () => {
         noValidate
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Input
-          {...register("code")}
-          error={errors.code?.message}
-          inputMode="numeric"
-          label="Verification Code"
-          maxLength={6}
-          required
-          type="text"
+        <Controller
+          control={control}
+          name="code"
+          render={({ field }) => (
+            <PinInput
+              error={errors.code?.message}
+              label="Verification Code"
+              onChange={field.onChange}
+              required
+              value={field.value ?? ""}
+            />
+          )}
         />
 
         <div className="flex w-full gap-2">
