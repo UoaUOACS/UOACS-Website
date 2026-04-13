@@ -182,7 +182,7 @@ export const EmailVerificationStep = () => {
         </div>
 
         <button
-          className="paragraph-sm text-gray-500 underline disabled:cursor-not-allowed disabled:opacity-50"
+          className="paragraph-sm cursor-pointer text-gray-500 underline disabled:cursor-not-allowed disabled:opacity-50"
           disabled={resendCooldown > 0}
           onClick={sendVerificationCode}
           type="button"
