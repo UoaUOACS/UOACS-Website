@@ -36,7 +36,7 @@ export const UserStep = () => {
     setSubmitting(true)
     try {
       setStep1(userData)
-      const response = await fetch(ApiRoutes.SIGN_UP.SEND_OTP, {
+      const response = await fetch(ApiRoutes.SIGN_UP.VERIFICATION_CODE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userData.email }),

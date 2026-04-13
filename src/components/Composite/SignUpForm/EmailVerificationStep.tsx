@@ -51,7 +51,7 @@ export const EmailVerificationStep = () => {
     if (!step1) return
     setResendCooldown(RESEND_COOLDOWN_S)
     try {
-      const response = await fetch(ApiRoutes.SIGN_UP.SEND_OTP, {
+      const response = await fetch(ApiRoutes.SIGN_UP.VERIFICATION_CODE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: step1.email }),
@@ -95,8 +95,8 @@ export const EmailVerificationStep = () => {
 
     setSubmitting(true)
     try {
-      const verifyResponse = await fetch(ApiRoutes.SIGN_UP.VERIFY_OTP, {
-        method: "POST",
+      const verifyResponse = await fetch(ApiRoutes.SIGN_UP.VERIFICATION_CODE, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: step1.email, code }),
       })

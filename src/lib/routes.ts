@@ -15,8 +15,7 @@ export const ApiRoutes = {
   } as const,
   SIGN_UP: {
     ROOT: "/api/sign-up",
-    SEND_OTP: "/api/sign-up/send-code",
-    VERIFY_OTP: "/api/sign-up/verify-code",
+    VERIFICATION_CODE: "/api/sign-up/verification-code",
   } as const,
   HEALTH: "/api/health",
   OG: "/og",
