@@ -4,18 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { z } from "zod"
 import { Button } from "@/components/Primitive"
 import { PinInput } from "@/components/Primitive/PinInput/PinInput"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
+import {
+  type EmailVerificationCodeForm,
+  emailVerificationCodeFormSchema,
+} from "@/types/schemas/verification-code"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
-
-const otpSchema = z.object({
-  code: z.string().length(6, "Please enter a 6-digit code").regex(/^\d+$/, "Code must be numeric"),
-})
-
-type OtpForm = z.infer<typeof otpSchema>
 
 const RESEND_COOLDOWN_S = 60
 
@@ -30,7 +27,7 @@ export const EmailVerificationStep = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<OtpForm>({ resolver: zodResolver(otpSchema) })
+  } = useForm<EmailVerificationCodeForm>({ resolver: zodResolver(emailVerificationCodeFormSchema) })
 
   const startCooldown = () => {
     if (cooldownRef.current) clearInterval(cooldownRef.current)
@@ -86,7 +83,7 @@ export const EmailVerificationStep = () => {
     return () => clearInterval(id)
   }, [])
 
-  const onSubmit = async ({ code }: OtpForm) => {
+  const onSubmit = async ({ code }: EmailVerificationCodeForm) => {
     if (!step1) {
       toast.error({ description: "Something went wrong. Please start over." })
       reset()
