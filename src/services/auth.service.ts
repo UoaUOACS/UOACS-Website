@@ -129,4 +129,16 @@ export class AuthService {
       throw err
     }
   }
+
+  public async userToMember(user: User): Promise<Member | null> {
+    const res = await payload.find({
+      collection: Slugs.Collections.MEMBER,
+      where: {
+        betterAuthUserId: { equals: user.id }, // "betterAuthUserId" is a field entry from @/payload/collections/Member.ts
+      },
+      limit: 1,
+    })
+
+    return res.docs[0] ?? null
+  }
 }

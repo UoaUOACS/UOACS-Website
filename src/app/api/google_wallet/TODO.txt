@@ -16,10 +16,9 @@ So far what's been written:
     - "initialiseClass", which POSTs a hard coded *digital pass class* to Google's servers
     - "passFromMember", which creates a *digital pass object* for a given member
     - "linkFromMember", which signs a JWT linked to a member's *digital pass object* and returns an add to wallet link
-- API route at /api/google_wallet, currently provides unauthenticated access to the above functions using a mock member.
+- API route at /api/google_wallet
 
 TODO:
 - Replicate digital pass design and hard code to "@/lib/wallet_integration"
-- Add member authentication to api route, so that the *digital pass object* can be generated for that specific member
 - Call on the api from a front end page
-- Request validation on Google pay and wallet console
+- Validation on Google pay and wallet console

@@ -36,5 +36,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}${Routes.GOOGLE_WALLET}`,
+      lastModified: new Date(),
+      priority: 0.5,
+    },
   ]
 }
