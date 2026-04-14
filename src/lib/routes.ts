@@ -14,7 +14,10 @@ export const ApiRoutes = {
   ADMIN: {
     MEMBERS: (id: string | number | undefined) => `/api/admin/members/${id ?? ""}`,
   } as const,
-  SIGN_UP: "/api/sign-up",
+  SIGN_UP: {
+    ROOT: "/api/sign-up",
+    VERIFICATION_CODE: "/api/sign-up/verification-code",
+  } as const,
   HEALTH: "/api/health",
   GOOGLE_WALLET: "/api/google_wallet",
   OG: "/og",

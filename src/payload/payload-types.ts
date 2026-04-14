@@ -74,6 +74,7 @@ export interface Config {
     sponsor: Sponsor;
     reel: Reel;
     polaroid: Polaroid;
+    'email-verification-code': EmailVerificationCode;
     exports: Export;
     imports: Import;
     'payload-kv': PayloadKv;
@@ -91,6 +92,7 @@ export interface Config {
     sponsor: SponsorSelect<false> | SponsorSelect<true>;
     reel: ReelSelect<false> | ReelSelect<true>;
     polaroid: PolaroidSelect<false> | PolaroidSelect<true>;
+    'email-verification-code': EmailVerificationCodeSelect<false> | EmailVerificationCodeSelect<true>;
     exports: ExportsSelect<false> | ExportsSelect<true>;
     imports: ImportsSelect<false> | ImportsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -354,6 +356,18 @@ export interface Polaroid {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-verification-code".
+ */
+export interface EmailVerificationCode {
+  id: string;
+  email: string;
+  hashedCode: string;
+  expiresAt: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "exports".
  */
 export interface Export {
@@ -569,6 +583,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'polaroid';
         value: string | Polaroid;
+      } | null)
+    | ({
+        relationTo: 'email-verification-code';
+        value: string | EmailVerificationCode;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -722,6 +740,17 @@ export interface ReelSelect<T extends boolean = true> {
 export interface PolaroidSelect<T extends boolean = true> {
   caption?: T;
   image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-verification-code_select".
+ */
+export interface EmailVerificationCodeSelect<T extends boolean = true> {
+  email?: T;
+  hashedCode?: T;
+  expiresAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -961,6 +990,7 @@ export interface TaskCreateCollectionExport {
       | 'sponsor'
       | 'reel'
       | 'polaroid'
+      | 'email-verification-code'
       | 'exports'
       | 'imports';
     drafts?: ('yes' | 'no') | null;

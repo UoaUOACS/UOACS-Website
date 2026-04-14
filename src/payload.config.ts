@@ -1,6 +1,7 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
+import { resendAdapter } from "@payloadcms/email-resend"
 import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { s3Storage } from "@payloadcms/storage-s3"
@@ -8,6 +9,7 @@ import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Slugs } from "./lib/slugs"
 import { Admin } from "./payload/collections/Admin"
+import { EmailVerificationCode } from "./payload/collections/EmailVerificationCode"
 import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
@@ -29,7 +31,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Admin, Media, Member, Executive, Sponsor, Reel, Polaroid],
+  collections: [Admin, Media, Member, Executive, Sponsor, Reel, Polaroid, EmailVerificationCode],
   globals: [HomePage, PrivacyPolicy, SocialLinks],
   editor: lexicalEditor(),
   graphQL: {
@@ -46,6 +48,13 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
   }),
+  email: process.env.RESEND_API_KEY
+    ? resendAdapter({
+        defaultFromAddress: "noreply@uoacs.co.nz",
+        defaultFromName: "UOACS",
+        apiKey: process.env.RESEND_API_KEY,
+      })
+    : undefined,
   sharp,
   upload: {
     limits: {

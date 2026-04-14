@@ -71,7 +71,7 @@ export const MemberStep = () => {
     router.prefetch(Routes.HOME)
     setLoading(true)
     try {
-      const response = await fetch(ApiRoutes.SIGN_UP, {
+      const response = await fetch(ApiRoutes.SIGN_UP.ROOT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...step1, ...step2Data }),
