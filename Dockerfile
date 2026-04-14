@@ -33,6 +33,7 @@ RUN --mount=type=secret,id=DATABASE_URI \
     --mount=type=secret,id=S3_BUCKET \
     --mount=type=secret,id=NODE_ENV \
     --mount=type=secret,id=BETTER_AUTH_SECRET \
+    --mount=type=secret,id=SMTP_PASS \
     sh -c 'export DATABASE_URI=$(cat /run/secrets/DATABASE_URI) && \
            export PAYLOAD_SECRET=$(cat /run/secrets/PAYLOAD_SECRET) && \
            export NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL) && \
@@ -42,6 +43,7 @@ RUN --mount=type=secret,id=DATABASE_URI \
            export S3_BUCKET=$(cat /run/secrets/S3_BUCKET) && \
            export NODE_ENV=$(cat /run/secrets/NODE_ENV) && \
            export BETTER_AUTH_SECRET=$(cat /run/secrets/BETTER_AUTH_SECRET) && \
+           export SMTP_PASS=$(cat /run/secrets/SMTP_PASS) && \
            pnpm run build'
 
 # Stage 3: Production runner (minimal image)

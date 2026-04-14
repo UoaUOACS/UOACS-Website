@@ -7,6 +7,7 @@ export const Slugs = {
     REEL: "reel",
     SPONSOR: "sponsor",
     ADMIN: "admin",
+    EMAIL_VERIFICATION_CODE: "email-verification-code",
   },
   Globals: {
     HOME_PAGE: "home-page",

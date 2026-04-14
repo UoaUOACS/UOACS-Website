@@ -1,14 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
-import { checkMemberExists, checkUserExists } from "@/actions/member.actions"
 import { Button } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
-import { ApiRoutes, Routes } from "@/lib/routes"
+import { ApiRoutes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
 import { createUserSchema } from "@/types/schemas/user"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
@@ -17,9 +15,8 @@ type FormInput = z.input<typeof createUserSchema>
 type FormOutput = z.output<typeof createUserSchema>
 
 export const UserStep = () => {
-  const { step1, setStep1, nextStep, reset } = useSignUpFormStore()
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const { step1, setStep1, nextStep } = useSignUpFormStore()
+  const [submitting, setSubmitting] = useState(false)
 
   const {
     register,
@@ -36,55 +33,27 @@ export const UserStep = () => {
 
   const onSubmit = async (data: FormOutput) => {
     const { confirmPassword: _, ...userData } = data
+    setSubmitting(true)
     try {
-      const [memberExists, userExists] = await Promise.all([
-        checkMemberExists(userData.email),
-        checkUserExists(userData.email),
-      ])
-
-      if (userExists) {
-        toast.warning({
-          description:
-            "An account with that email already exists.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
-        })
-        return
-      }
-
-      if (!memberExists) {
-        setStep1(userData)
-        nextStep()
-        return
-      }
-
-      setLoading(true)
-      router.prefetch(Routes.HOME)
-      const response = await fetch(ApiRoutes.SIGN_UP, {
+      setStep1(userData)
+      const response = await fetch(ApiRoutes.SIGN_UP.VERIFICATION_CODE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...userData, existingMember: true }),
+        body: JSON.stringify({ email: userData.email }),
       })
-
       if (!response.ok) {
-        if (response.status === 409) {
-          toast.warning({
-            description:
-              "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
-          })
+        if (response.status === 429) {
+          toast.warning({ description: "Please wait before requesting another code." })
         } else {
-          toast.error({ description: "An error occurred while submitting the form" })
+          toast.error({ description: "Failed to send verification email. Please try again." })
         }
         return
       }
-
-      reset()
-      router.push(Routes.LOGIN)
-      toast.success({
-        description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
-      })
+      nextStep()
     } catch {
       toast.error({ description: "An error occurred while submitting the form" })
     } finally {
-      setLoading(false)
+      setSubmitting(false)
     }
   }
 
@@ -143,8 +112,8 @@ export const UserStep = () => {
           type="password"
         />
 
-        <Button disabled={loading} theme="dark" type="submit">
-          {loading ? "Loading..." : "Next"}
+        <Button disabled={submitting} theme="dark" type="submit">
+          {submitting ? "Sending..." : "Next"}
         </Button>
       </form>
     </>

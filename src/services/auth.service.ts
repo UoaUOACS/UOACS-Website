@@ -1,3 +1,4 @@
+import crypto from "node:crypto"
 import type { User } from "better-auth"
 import { isAPIError } from "better-auth/api"
 import { ValidationError } from "payload"
@@ -128,5 +129,77 @@ export class AuthService {
       }
       throw err
     }
+  }
+
+  public async checkMemberExists(email: string): Promise<boolean> {
+    const result = await payload.find({
+      collection: Slugs.Collections.MEMBER,
+      where: { email: { equals: email }, betterAuthUserId: { equals: null } },
+      limit: 1,
+    })
+    return result.docs.length > 0
+  }
+
+  public generateVerificationCode(): string {
+    return crypto.randomInt(100000, 1000000).toString()
+  }
+
+  public async createVerificationCode(email: string, code: string): Promise<string> {
+    await payload.delete({
+      collection: Slugs.Collections.EMAIL_VERIFICATION_CODE,
+      where: { email: { equals: email } },
+    })
+
+    const hashedCode = this.hashVerificationCode(code)
+
+    await payload.create({
+      collection: Slugs.Collections.EMAIL_VERIFICATION_CODE,
+      data: {
+        email: email,
+        hashedCode: hashedCode,
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // expires in 10 minutes
+      },
+    })
+
+    return code
+  }
+
+  private hashVerificationCode(code: string): string {
+    return crypto.createHash("sha256").update(code).digest("hex")
+  }
+
+  public verifyVerificationCode(code: string, hash: string): boolean {
+    const codeHash = Buffer.from(this.hashVerificationCode(code), "hex")
+    const hashBuffer = Buffer.from(hash, "hex")
+    if (codeHash.length !== hashBuffer.length) {
+      return false
+    }
+    return crypto.timingSafeEqual(codeHash, hashBuffer)
+  }
+
+  public async getUnexpiredVerificationCodes(
+    email: string,
+  ): Promise<Array<{ id: string; hashedCode: string; expiresAt: string }>> {
+    const result = await payload.find({
+      collection: Slugs.Collections.EMAIL_VERIFICATION_CODE,
+      where: {
+        email: { equals: email },
+        expiresAt: { greater_than: new Date().toISOString() },
+      },
+      limit: 100,
+    })
+
+    return result.docs.map((doc) => ({
+      id: doc.id,
+      hashedCode: doc.hashedCode,
+      expiresAt: doc.expiresAt,
+    }))
+  }
+
+  public async deleteVerificationCodes(email: string): Promise<void> {
+    await payload.delete({
+      collection: Slugs.Collections.EMAIL_VERIFICATION_CODE,
+      where: { email: { equals: email } },
+    })
   }
 }

@@ -17,6 +17,9 @@ importers:
       '@payloadcms/db-mongodb':
         specifier: 3.80.0
         version: 3.80.0(@aws-sdk/credential-providers@3.984.0)(payload@3.80.0(graphql@16.13.1)(typescript@5.9.3))
+      '@payloadcms/email-resend':
+        specifier: 3.80.0
+        version: 3.80.0(payload@3.80.0(graphql@16.13.1)(typescript@5.9.3))
       '@payloadcms/next':
         specifier: 3.80.0
         version: 3.80.0(@types/react@19.2.14)(graphql@16.13.1)(monaco-editor@0.55.1)(next@16.2.1(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(payload@3.80.0(graphql@16.13.1)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
@@ -1403,6 +1406,12 @@ packages:
 
   '@payloadcms/email-nodemailer@3.80.0':
     resolution: {integrity: sha512-+XXMkzUgPKErsguJIfLlkd75FnO8k1TcqK0XNCN51+uwTYZFmKc08wiL1oU+wxS52qa1HFhh0ObJ5ZJH4c04Ew==}
+    engines: {node: ^18.20.2 || >=20.9.0}
+    peerDependencies:
+      payload: 3.80.0
+
+  '@payloadcms/email-resend@3.80.0':
+    resolution: {integrity: sha512-ykTI9ZKqFWTaFIzeFcQ1kv04SekJhoHcN2FaYQy/r1p9nE4rpZWkh9dMlSu/fTirYqZ2CQVUtuq26AVENNSSSg==}
     engines: {node: ^18.20.2 || >=20.9.0}
     peerDependencies:
       payload: 3.80.0
@@ -5874,6 +5883,10 @@ snapshots:
   '@payloadcms/email-nodemailer@3.80.0(payload@3.80.0(graphql@16.13.1)(typescript@5.9.3))':
     dependencies:
       nodemailer: 7.0.12
+      payload: 3.80.0(graphql@16.13.1)(typescript@5.9.3)
+
+  '@payloadcms/email-resend@3.80.0(payload@3.80.0(graphql@16.13.1)(typescript@5.9.3))':
+    dependencies:
       payload: 3.80.0(graphql@16.13.1)(typescript@5.9.3)
 
   '@payloadcms/graphql@3.80.0(graphql@16.13.1)(payload@3.80.0(graphql@16.13.1)(typescript@5.9.3))(typescript@5.9.3)':
