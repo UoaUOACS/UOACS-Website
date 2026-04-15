@@ -18,3 +18,4 @@ export async function initialiseClass(
 console.log("updating class ...")
 console.log(await initialiseClass(google_auth, identity))
 console.log("... class updated")
+process.exit(0)
