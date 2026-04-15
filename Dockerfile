@@ -34,6 +34,8 @@ RUN --mount=type=secret,id=DATABASE_URI \
     --mount=type=secret,id=NODE_ENV \
     --mount=type=secret,id=BETTER_AUTH_SECRET \
     --mount=type=secret,id=SMTP_PASS \
+    --mount=type=secret,id=GOOGLE_WALLET_ISSUER_ID \
+    --mount=type=secret,id=GOOGLE_WALLET_SERVICE_ACCOUNT_KEY \
     sh -c 'export DATABASE_URI=$(cat /run/secrets/DATABASE_URI) && \
            export PAYLOAD_SECRET=$(cat /run/secrets/PAYLOAD_SECRET) && \
            export NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL) && \
@@ -44,6 +46,8 @@ RUN --mount=type=secret,id=DATABASE_URI \
            export NODE_ENV=$(cat /run/secrets/NODE_ENV) && \
            export BETTER_AUTH_SECRET=$(cat /run/secrets/BETTER_AUTH_SECRET) && \
            export SMTP_PASS=$(cat /run/secrets/SMTP_PASS) && \
+           export GOOGLE_WALLET_ISSUER_ID=$(cat /run/secrets/GOOGLE_WALLET_ISSUER_ID) && \
+           export GOOGLE_WALLET_SERVICE_ACCOUNT_KEY=$(cat /run/secrets/GOOGLE_WALLET_SERVICE_ACCOUNT_KEY) && \
            pnpm run build'
 
 # Stage 3: Production runner (minimal image)
