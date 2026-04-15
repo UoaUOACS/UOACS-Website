@@ -13,8 +13,6 @@ export interface WalletPassClassPayload {
   id: string
   issuerName: string
   reviewStatus?: "UNDER_REVIEW" | "DRAFT" | "APPROVED" | "REJECTED"
-  /** Any additional fields supported by the Generic pass class */
-  [key: string]: unknown
 }
 
 export interface WalletPassObjectPayload {
@@ -23,8 +21,6 @@ export interface WalletPassObjectPayload {
   /** Fully qualified class ID this object belongs to */
   classId: string
   state?: "ACTIVE" | "COMPLETED" | "EXPIRED" | "INACTIVE"
-  /** Any additional fields supported by the Generic pass object */
-  [key: string]: unknown
 }
 
 export interface ServiceAccountCredentials {
