@@ -1,7 +1,12 @@
 import type { GoogleAuth } from "google-auth-library"
-import * as jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+export interface ClassIdentity {
+  issuerId: string
+  classId: string
+}
 
 export interface WalletPassClassPayload {
   /** Fully qualified class ID: "<issuerId>.<classId>" */

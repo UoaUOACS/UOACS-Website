@@ -15,7 +15,8 @@
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
     "postinstall": "lefthook install",
-    "migrate:user-admin": "tsx --env-file=.env src/scripts/user-admin-migration.ts"
+    "migrate:user-admin": "tsx --env-file=.env src/scripts/user-admin-migration.ts",
+    "update:google-wallet-class": "tsx --env-file=.env src/scripts/update-google-wallet-class.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -58,6 +59,7 @@
     "@storybook/addon-vitest": "^10.2.7",
     "@storybook/nextjs-vite": "^10.2.7",
     "@tailwindcss/postcss": "^4",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24",
     "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",

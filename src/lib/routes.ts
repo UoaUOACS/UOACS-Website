@@ -19,7 +19,10 @@ export const ApiRoutes = {
     VERIFICATION_CODE: "/api/sign-up/verification-code",
   } as const,
   HEALTH: "/api/health",
-  GOOGLE_WALLET: "/api/google_wallet",
+  GOOGLE_WALLET: {
+    LINK: "/api/google-wallet/link",
+    PASS: "/api/google-wallet/link",
+  },
   OG: "/og",
 } as const
 
