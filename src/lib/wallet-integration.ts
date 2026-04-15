@@ -39,7 +39,7 @@ export function linkFromMember(
 }
 
 if (!process.env.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY) {
-  throw new Error("GOOGLE_WALLET_SERIVE_ACCOUNT_KEY environment variable is not set")
+  throw new Error("GOOGLE_WALLET_SERVICE_ACCOUNT_KEY environment variable is not set")
 }
 
 if (!process.env.GOOGLE_WALLET_ISSUER_ID) {
