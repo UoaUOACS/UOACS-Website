@@ -131,7 +131,7 @@ export class AuthService {
     }
   }
 
-  public async userToMember(user: User): Promise<Member | null> {
+  public async getMemberFromUser(user: User): Promise<Member | null> {
     const res = await payload.find({
       collection: Slugs.Collections.MEMBER,
       where: {

@@ -54,7 +54,7 @@ export const credentials = {
   private_key: data.private_key,
 }
 
-export const google_auth = new GoogleAuth({
+export const googleAuth = new GoogleAuth({
   // Oauth for posting digital pass classes and objects
   credentials: credentials,
   scopes: ["https://www.googleapis.com/auth/wallet_object.issuer"],
@@ -75,7 +75,7 @@ export async function checkValidateRequest(_request: Request): Promise<Response 
   }
 
   const authService = new AuthService()
-  const member = await authService.userToMember(session.user)
+  const member = await authService.getMemberFromUser(session.user)
 
   if (!member) {
     return new Response("Member doesn't have betterAuthUserId field", { status: 500 })
