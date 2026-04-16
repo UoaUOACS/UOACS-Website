@@ -1,3 +1,4 @@
+import type { walletobjects_v1 } from "@googleapis/walletobjects"
 import type { GoogleAuth } from "google-auth-library"
 import jwt from "jsonwebtoken"
 
@@ -8,14 +9,17 @@ export interface ClassIdentity {
   classId: string
 }
 
-export interface WalletPassClassPayload {
+export type GenericClass = walletobjects_v1.Schema$GenericClass
+export type GenericObject = walletobjects_v1.Schema$GenericObject
+
+export interface WalletPassClassPayload extends GenericClass {
   /** Fully qualified class ID: "<issuerId>.<classId>" */
   id: string
   issuerName: string
   reviewStatus?: "UNDER_REVIEW" | "DRAFT" | "APPROVED" | "REJECTED"
 }
 
-export interface WalletPassObjectPayload {
+export interface WalletPassObjectPayload extends GenericObject {
   /** Fully qualified object ID: "<issuerId>.<objectId>" */
   id: string
   /** Fully qualified class ID this object belongs to */

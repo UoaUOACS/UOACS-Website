@@ -1,32 +1,12 @@
 import { GoogleAuth } from "google-auth-library"
 import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
-import type {
-  ClassIdentity,
-  ServiceAccountCredentials,
-  WalletPassObjectPayload,
-} from "@/lib/wallet-basics"
-import { createPassObject, generateWalletLink } from "@/lib/wallet-basics"
+import type { ClassIdentity, ServiceAccountCredentials } from "@/lib/wallet-basics"
+import { generateWalletLink } from "@/lib/wallet-basics"
 import type { Member } from "@/payload/payload-types"
 import { AuthService } from "@/services/auth.service"
-import { passObject } from "./wallet-designs"
 
-export async function passFromMember(
-  auth: GoogleAuth,
-  member: Member,
-  classIdentity: ClassIdentity,
-): Promise<Record<string, unknown>> {
-  const objectinfo: WalletPassObjectPayload = {
-    id: `${classIdentity.issuerId}.${member.id}`,
-    classId: `${classIdentity.issuerId}.${classIdentity.classId}`,
-    state: "ACTIVE",
-    ...passObject(member),
-  }
-
-  return createPassObject(auth, objectinfo)
-}
-
-export function linkFromMember(
+export function getLinkFromMember(
   member: Member,
   classIdentity: ClassIdentity,
   credentials: ServiceAccountCredentials,
@@ -78,7 +58,7 @@ export async function checkValidateRequest(_request: Request): Promise<Response 
   const member = await authService.getMemberFromUser(session.user)
 
   if (!member) {
-    return new Response("Member doesn't have betterAuthUserId field", { status: 500 })
+    return new Response("Member doesn't have betterAuthUserId field", { status: 404 })
   }
 
   return member

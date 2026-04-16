@@ -1,21 +1,7 @@
-import type { GoogleAuth } from "google-auth-library"
-import type { ClassIdentity, WalletPassClassPayload } from "@/lib/wallet-basics"
 import { createPassClass } from "@/lib/wallet-basics"
-import { passClass } from "@/lib/wallet-designs"
+import { getPassClass } from "@/lib/wallet-designs"
 import { googleAuth, identity } from "@/lib/wallet-integration"
 
-export async function initialiseClass(
-  auth: GoogleAuth,
-  classIdentity: ClassIdentity,
-): Promise<Record<string, unknown>> {
-  const classData: WalletPassClassPayload = {
-    id: `${classIdentity.issuerId}.${classIdentity.classId}`,
-    ...passClass,
-  }
-  return createPassClass(auth, classData)
-}
-
-console.log("updating class ...")
-console.log(await initialiseClass(googleAuth, identity))
+console.log(await createPassClass(googleAuth, getPassClass(identity)))
 console.log("... class updated")
 process.exit(0)

@@ -19,6 +19,7 @@
     "update:google-wallet-class": "tsx --env-file=.env src/scripts/update-google-wallet-class.ts"
   },
   "dependencies": {
+    "@googleapis/walletobjects": "^11.2.0",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.2",
     "@payloadcms/db-mongodb": "3.80.0",

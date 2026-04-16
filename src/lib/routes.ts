@@ -21,7 +21,7 @@ export const ApiRoutes = {
   HEALTH: "/api/health",
   GOOGLE_WALLET: {
     LINK: "/api/google-wallet/link",
-    PASS: "/api/google-wallet/link",
+    PASS: "/api/google-wallet/pass",
   },
   OG: "/og",
 } as const
