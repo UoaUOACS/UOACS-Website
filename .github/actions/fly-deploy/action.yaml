@@ -47,6 +47,12 @@ inputs:
   RESEND_API_KEY:
     description: 'Resend API key'
     required: true
+  GOOGLE_WALLET_ISSUER_ID:
+    description: 'Google wallet Issuer ID on Google Pay and Wallet Console'
+    required: true
+  GOOGLE_WALLET_SERVICE_ACCOUNT_KEY:
+    description: "Stringified json private key for google wallet service account"
+    required: true
 
 runs:
   using: composite
@@ -68,6 +74,8 @@ runs:
           NODE_ENV="${{ inputs.NODE_ENV }}" \
           BETTER_AUTH_SECRET="${{ inputs.BETTER_AUTH_SECRET }}" \
           RESEND_API_KEY="${{ inputs.RESEND_API_KEY }}" \
+          GOOGLE_WALLET_ISSUER_ID="${{ inputs.GOOGLE_WALLET_ISSUER_ID }}" \
+          GOOGLE_WALLET_SERVICE_ACCOUNT_KEY="${{ inputs.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}" \
           -a ${{ inputs.APP_NAME }}
       shell: bash
       env:
@@ -86,6 +94,8 @@ runs:
           --build-secret NODE_ENV="${{ inputs.NODE_ENV }}" \
           --build-secret BETTER_AUTH_SECRET="${{ inputs.BETTER_AUTH_SECRET }}" \
           --build-secret RESEND_API_KEY="${{ inputs.RESEND_API_KEY }}" \
+          --build-secret GOOGLE_WALLET_ISSUER_ID="${{ inputs.GOOGLE_WALLET_ISSUER_ID }}" \
+          --build-secret GOOGLE_WALLET_SERVICE_ACCOUNT_KEY="${{ inputs.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}" \
           -a ${{ inputs.APP_NAME }}
       shell: bash
       env:

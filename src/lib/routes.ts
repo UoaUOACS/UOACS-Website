@@ -5,6 +5,7 @@ export const Routes = {
   PRIVACY: "/privacy",
   SIGN_UP: "/sign-up",
   LOGIN: "/login",
+  GOOGLE_WALLET: "/google-wallet",
 } as const
 
 export type Route = (typeof Routes)[keyof typeof Routes]
@@ -18,6 +19,10 @@ export const ApiRoutes = {
     VERIFICATION_CODE: "/api/sign-up/verification-code",
   } as const,
   HEALTH: "/api/health",
+  GOOGLE_WALLET: {
+    LINK: "/api/google-wallet/link",
+    PASS: "/api/google-wallet/pass",
+  },
   OG: "/og",
 } as const
 

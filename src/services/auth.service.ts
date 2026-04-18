@@ -131,6 +131,18 @@ export class AuthService {
     }
   }
 
+  public async getMemberFromUser(user: User): Promise<Member | null> {
+    const res = await payload.find({
+      collection: Slugs.Collections.MEMBER,
+      where: {
+        betterAuthUserId: { equals: user.id }, // "betterAuthUserId" is a field entry from @/payload/collections/Member.ts
+      },
+      limit: 1,
+    })
+
+    return res.docs[0] ?? null
+  }
+
   public async checkMemberExists(email: string): Promise<boolean> {
     const result = await payload.find({
       collection: Slugs.Collections.MEMBER,
