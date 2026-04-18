@@ -45,7 +45,7 @@ export const identity: ClassIdentity = {
   classId: "membership", // change this to create a different class
 }
 
-export async function checkValidateRequest(_request: Request): Promise<Response | Member> {
+export async function checkValidateRequest(): Promise<Response | Member> {
   const session = await auth.api.getSession({
     headers: await headers(),
   })

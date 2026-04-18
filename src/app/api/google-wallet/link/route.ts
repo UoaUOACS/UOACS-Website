@@ -8,7 +8,7 @@ import {
 
 export async function GET(request: Request) {
   // returns link that adds digital pass to wallet
-  const validateMember = await checkValidateRequest(request)
+  const validateMember = await checkValidateRequest()
   if (validateMember instanceof Response) {
     return validateMember
   }

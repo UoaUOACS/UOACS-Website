@@ -19,7 +19,6 @@
     "update:google-wallet-class": "tsx --env-file=.env src/scripts/update-google-wallet-class.ts"
   },
   "dependencies": {
-    "@googleapis/walletobjects": "^11.2.0",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.2",
     "@payloadcms/db-mongodb": "3.80.0",
@@ -54,6 +53,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.6",
     "@chromatic-com/storybook": "^5.0.0",
+    "@googleapis/walletobjects": "^11.2.0",
     "@storybook/addon-a11y": "^10.2.7",
     "@storybook/addon-docs": "^10.2.7",
     "@storybook/addon-onboarding": "^10.2.7",
@@ -67,6 +67,7 @@
     "@vitest/browser": "^4.0.18",
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
+    "lefthook": "^2.1.6",
     "playwright": "^1.58.1",
     "storybook": "^10.2.7",
     "tailwindcss": "^4.1.18",
