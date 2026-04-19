@@ -25,8 +25,9 @@ if (!process.env.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY) {
 if (!process.env.GOOGLE_WALLET_ISSUER_ID) {
   throw new Error("GOOGLE_WALLET_ISSUER_ID environment variable not set")
 }
-
-const data = JSON.parse(process.env.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY)
+const data = JSON.parse(
+  Buffer.from(process.env.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY, "base64").toString(),
+)
 
 export const credentials = {
   // service account credientails for Oauth and key signing
