@@ -60,12 +60,21 @@ The application will be available at:
 |---------|-------------|
 | `pnpm dev` | Start development server with Turbopack |
 | `pnpm build` | Build production application |
+| `pnpm start` | Start production server |
 | `pnpm lint:check` | Run Biome linter and formatter checks |
 | `pnpm lint:fix` | Fix Biome lint and format issues |
 | `pnpm lint:fix:unsafe` | Unsafely Fix Biome lint and format issues |
 | `pnpm types:check` | Run TypeScript type checking |
 | `pnpm types:generate` | Generate Payload CMS TypeScript types |
 | `pnpm storybook` | Start Storybook development server |
+| `pnpm storybook:build` | Build Storybook static site |
+
+### One-off / Maintenance Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm migrate:user-admin` | Rename the `users` table to `admins` |
+| `pnpm update:google-wallet-class` | Update Google Wallet class configuration |
 
 ## 🧹 Linting & Formatting
 
@@ -115,35 +124,53 @@ File structure overview:
 ```
 src/
 ├── app/
-│   ├── (frontend)/          # Public website pages
-│   │   ├── (route)/         # Example route group
+│   ├── (frontend)/          # Public website pages (homepage, team, sponsors, etc.)
+│   │   ├── sponsors/        # ...
+│   │   ├── team/
+│   │   ├── ...
+│   │   ├── _components/     # Frontend-only components
 │   │   ├── page.tsx         # Homepage
-│   │   └── layout.tsx       # Main layout
-│   ├── payload/             # Payload CMS admin
-│   │   ├── admin/           # Admin panel
-│   │   ├── api/             # API routes
-│   │   └── layout.tsx       # Admin layout
+│   │   └── layout.tsx       # Frontend layout
 │   ├── api/                 # Custom API routes
-│   │   ├── (route)/         # Example API route
-├── components/              # Reusable React components
-├── lib/                     # Utility functions and helpers
+│   ├── og/                  # Open Graph image generation
+│   ├── payload/             # Payload CMS admin panel
+│   ├── robots.ts            # robots.txt generation
+│   └── sitemap.ts           # Sitemap generation
+├── components/
+│   ├── Primitive/           # Low-level UI blocks (Button, Input, Select, etc.)
+│   ├── Composite/           # Page-level components (Navbar, Footer, sections, etc.)
+│   └── Generic/             # Reusable feature components
+├── lib/                     # Auth, wallet, payload, and utility helpers
 ├── payload/
-│   ├── collections/         # Payload collections (Users, Media)
-│   └── payload-types.ts     # Generated types
-├── payload.config.ts        # Payload CMS configuration
-└── ...
+│   ├── collections/         # CMS collections (Members, Executives, Sponsors, Media, etc.)
+│   ├── globals/             # Global settings (HomePage, SocialLinks, etc.)
+│   ├── components/          # Custom Payload UI components
+│   ├── hooks/               # Payload lifecycle hooks
+│   └── payload-types.ts     # Auto-generated types (do not edit)
+├── services/                # Business logic and external service integrations
+├── types/                   # Shared TypeScript types, enums, and Zod schemas
+├── mocks/                   # Mock data for development/testing
+├── scripts/                 # Standalone maintenance scripts
+└── payload.config.ts        # Payload CMS configuration
+
+.github/
+├── actions/                 # Reusable composite actions for use in workflows
+├── ISSUE_TEMPLATE/          # Issue templates (frontend, backend, devops, bug)
+├── workflows/               # CI/CD pipelines (lint, build, deploy, renovate)
+└── pull-request-template.md # PR template
 
 .storybook/                  # Storybook configuration
-public/                      # Static assets
+public/                      # Static assets (SVGs, fonts, images)
+Dockerfile                   # Docker container configuration
+fly.toml                     # Fly.io production deployment config
+fly.staging.toml             # Fly.io staging deployment config
 
 package.json                 # Project metadata and scripts
-next.config.js               # Next.js configuration
+next.config.ts               # Next.js configuration
 tsconfig.json                # TypeScript configuration
 biome.json                   # Biome linter configuration
 lefthook.yaml                # Git hooks configuration
 ```
-
-Feel free to expand this structure as needed for the project.
 
 ## 🧪 Testing
 
@@ -172,9 +199,23 @@ pnpm storybook
 - **[Payload CMS](https://payloadcms.com/)** - Headless CMS with admin panel
 - **[MongoDB](https://www.mongodb.com/)** - Document database via Mongoose adapter
 
+### Authentication
+
+- **[Better Auth](https://www.better-auth.com/)** - TypeScript-first auth
+- **[Payload CMS Built-in Auth](https://payloadcms.com/docs/authentication/overview)** - Auth management via Payload CMS for Admin users
+
 ### Styling & UI
 
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)** - Form state management and schema validation
+- **[Zustand](https://zustand-demo.pmnd.rs/)** - Lightweight client state management
+- **[Motion](https://motion.dev/)** - Animations
+
+### Integrations
+
+- **[AWS S3](https://aws.amazon.com/s3/)** - Media asset storage via `@payloadcms/storage-s3`
+- **[Resend](https://resend.com/)** - Transactional email via `@payloadcms/email-resend`
+- **[Google Wallet](https://developers.google.com/wallet)** - Membership pass generation and management
 
 ### Development & Testing
 
@@ -182,6 +223,11 @@ pnpm storybook
 - **[Vitest](https://vitest.dev/)** - Fast unit testing framework
 - **[Biome](https://biomejs.dev/)** - Fast formatter and linter
 - **[Lefthook](https://lefthook.dev/)** - Git hooks manager
+
+### Deployment
+
+- **[Fly.io](https://fly.io/)** - Production and staging environments
+- **[Docker](https://www.docker.com/)** - Containerised builds via standalone Next.js output
 
 ### Package Management
 
