@@ -73,7 +73,7 @@ The application will be available at:
 
 | Command | Description |
 |---------|-------------|
-| `pnpm migrate:user-admin` | Migrate a user to admin role |
+| `pnpm migrate:user-admin` | Rename the `users` table to `admins` |
 | `pnpm update:google-wallet-class` | Update Google Wallet class configuration |
 
 ## 🧹 Linting & Formatting
