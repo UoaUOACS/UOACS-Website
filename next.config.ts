@@ -4,6 +4,13 @@ import type { NextConfig } from "next"
 const nextConfig: NextConfig = {
   reactCompiler: true,
   output: "standalone",
+  images: {
+    localPatterns: [
+      {
+        pathname: "/payload/api/media/file/**",
+      },
+    ],
+  },
   turbopack: {
     resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
     rules: {
