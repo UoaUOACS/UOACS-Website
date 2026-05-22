@@ -1,0 +1,32 @@
+{
+  "languages": {
+    "TypeScript": {
+      "format_on_save": "on"
+    },
+    "Markdown": {
+      "format_on_save": "on"
+    }
+  },
+  "language_servers": [
+    "...",
+    "!typescript-language-server",
+    "!eslint",
+    "!tailwindcss-language-server"
+  ],
+  "formatter": {
+    "language_server": {
+      "name": "biome"
+    }
+  },
+  "lsp": {
+    "biome": {
+      "settings": {
+        "require_config_file": true
+      }
+    }
+  },
+  "code_actions_on_format": {
+    "source.fixAll.biome": true,
+    "source.organizeImports.biome": true
+  }
+}
