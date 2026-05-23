@@ -1,5 +1,6 @@
 "use client"
 
+import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "../Button/Button"
@@ -29,7 +30,7 @@ export const Input = ({
   return (
     <div
       className={cn(
-        "flex w-full flex-col justify-start gap-2 font-mono",
+        "group flex w-full flex-col justify-start gap-2 font-mono",
         !isEditable && "border-gray-300 border-b-2",
         containerClassName,
       )}
@@ -39,31 +40,50 @@ export const Input = ({
           {label}
           {required && <span className="ml-1 text-brand-pink">*</span>}
         </label>
-        {toggleable &&
-          (isEditable ? (
-            <div className="flex flex-row gap-2">
+        {toggleable && (
+          <div className="relative">
+            <div
+              className={cn(
+                "transition-opacity duration-150",
+                isEditable ? "invisible" : "opacity-0 group-hover:opacity-100",
+              )}
+            >
               <Button
-                className="h-auto px-2 py-0.5 text-xs leading-none md:h-auto"
-                onClick={() => setIsEditable(false)}
-                theme="ghost"
+                className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
+                onClick={() => setIsEditable(true)}
               >
-                Close
-              </Button>
-              <Button
-                className="h-auto px-2 py-0.5 text-xs leading-none md:h-auto"
-                onClick={onSave}
-              >
-                Save
+                Edit
               </Button>
             </div>
-          ) : (
-            <Button
-              className="h-auto px-2 py-0.5 text-xs leading-none md:h-auto"
-              onClick={() => setIsEditable(true)}
-            >
-              Edit
-            </Button>
-          ))}
+            <AnimatePresence>
+              {isEditable && (
+                <motion.div
+                  animate={{ opacity: 1 }}
+                  className="absolute top-0 right-0"
+                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <div className="flex flex-row gap-2">
+                    <Button
+                      className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
+                      onClick={() => setIsEditable(false)}
+                      theme="ghost"
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
+                      onClick={onSave}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
       {isEditable ? (
         <input
