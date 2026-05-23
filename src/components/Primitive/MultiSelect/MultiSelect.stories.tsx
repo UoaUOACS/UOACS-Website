@@ -68,3 +68,36 @@ export const WithCustomTextInput: Story = {
     return <MultiSelect {...args} customTextInput onChange={setValue} value={value} />
   },
 }
+
+export const Toggleable: Story = {
+  render: (args) => {
+    const [value, setValue] = useState(["Computer Science", "Mathematics"])
+    return (
+      <MultiSelect
+        {...args}
+        label="Majors"
+        onChange={setValue}
+        onSave={() => {}}
+        toggleable
+        value={value}
+      />
+    )
+  },
+}
+
+export const ToggleableEditing: Story = {
+  render: (args) => {
+    const [value, setValue] = useState(["Computer Science", "Mathematics"])
+    return (
+      <MultiSelect
+        {...args}
+        defaultToggleState
+        label="Majors"
+        onChange={setValue}
+        onSave={() => {}}
+        toggleable
+        value={value}
+      />
+    )
+  },
+}

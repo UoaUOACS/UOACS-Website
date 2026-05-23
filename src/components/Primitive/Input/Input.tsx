@@ -45,7 +45,9 @@ export const Input = ({
             <div
               className={cn(
                 "transition-opacity duration-150",
-                isEditable ? "invisible" : "opacity-0 group-hover:opacity-100",
+                isEditable
+                  ? "invisible"
+                  : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100",
               )}
             >
               <Button
@@ -74,7 +76,10 @@ export const Input = ({
                     </Button>
                     <Button
                       className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
-                      onClick={onSave}
+                      onClick={() => {
+                        onSave?.()
+                        setIsEditable(false)
+                      }}
                     >
                       Save
                     </Button>
