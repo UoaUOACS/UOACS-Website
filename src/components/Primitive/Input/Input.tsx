@@ -8,8 +8,8 @@ import { Button } from "../Button/Button"
 export interface InputProps extends React.ComponentPropsWithRef<"input"> {
   label: string
   error: string | undefined
-  toggleable: boolean
-  onSave: () => void
+  toggleable?: boolean
+  onSave?: () => void
   defaultToggleState?: boolean
   containerClassName?: string
 }
@@ -31,7 +31,7 @@ export const Input = ({
     <div
       className={cn(
         "group flex w-full flex-col justify-start gap-2 font-mono",
-        !isEditable && "border-gray-300 border-b-2",
+        toggleable && !isEditable && "border-gray-300 border-b-2",
         containerClassName,
       )}
     >
@@ -85,7 +85,7 @@ export const Input = ({
           </div>
         )}
       </div>
-      {isEditable ? (
+      {!toggleable || isEditable ? (
         <input
           className={cn("w-full rounded border border-gray-300 px-3 py-2", className)}
           id={label}
