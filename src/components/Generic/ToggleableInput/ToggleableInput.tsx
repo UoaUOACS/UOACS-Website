@@ -42,21 +42,17 @@ export const ToggleableInput = ({
           {required && <span className="ml-1 text-brand-pink">*</span>}
         </span>
         <div className="relative">
-          <div
-            className={cn(
-              "transition-opacity duration-150",
-              isEditable
-                ? "invisible"
-                : "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100",
-            )}
-          >
-            <Button
-              className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
-              onClick={() => setIsEditable(true)}
-            >
-              Edit
-            </Button>
-          </div>
+          {!isEditable && (
+            <div className="opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
+              <Button
+                aria-label={`Edit ${label}`}
+                className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
+                onClick={() => setIsEditable(true)}
+              >
+                Edit
+              </Button>
+            </div>
+          )}
           <AnimatePresence>
             {isEditable && (
               <motion.div
