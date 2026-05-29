@@ -1,6 +1,6 @@
 "use client"
 
-import type { Ref } from "react"
+import { type Ref, useId } from "react"
 import { cn } from "@/lib/utils"
 import { RadioOption } from "./RadioOption"
 
@@ -32,6 +32,8 @@ export const Radio = ({
     onChange?.(option)
   }
 
+  const generatedId = useId()
+
   const radioGroup = (
     <div
       aria-labelledby={label ? `${label}-label` : undefined}
@@ -43,7 +45,7 @@ export const Radio = ({
         <RadioOption
           checked={value === option}
           key={option}
-          name={label ?? "radio"}
+          name={label ?? generatedId}
           option={option}
           toggle={toggle}
         />
