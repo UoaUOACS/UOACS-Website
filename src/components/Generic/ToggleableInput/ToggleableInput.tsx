@@ -11,7 +11,7 @@ export interface ToggleableProps {
   error?: string
   containerClassName?: string
   displayNode: React.ReactNode
-  onSave?: () => void
+  onSave?: () => void | Promise<void>
   defaultToggleState?: boolean
   children: React.ReactNode
 }
@@ -27,6 +27,7 @@ export const ToggleableInput = ({
   children,
 }: ToggleableProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(defaultToggleState)
+  const [isSaving, setIsSaving] = useState(false)
 
   return (
     <div
@@ -72,9 +73,17 @@ export const ToggleableInput = ({
                   </Button>
                   <Button
                     className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
-                    onClick={() => {
-                      onSave?.()
-                      setIsEditable(false)
+                    disabled={isSaving}
+                    onClick={async () => {
+                      setIsSaving(true)
+                      try {
+                        await onSave?.()
+                        setIsEditable(false)
+                      } catch {
+                        // stay open — parent sets error prop on failure
+                      } finally {
+                        setIsSaving(false)
+                      }
                     }}
                   >
                     Save
