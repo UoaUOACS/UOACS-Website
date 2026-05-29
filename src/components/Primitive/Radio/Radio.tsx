@@ -42,12 +42,13 @@ export const Radio = ({
       ref={ref}
       role="radiogroup"
     >
-      {options.map((option) => (
+      {options.map((option, i) => (
         <RadioOption
           checked={value === option}
           key={option}
           name={label ?? generatedId}
           option={option}
+          required={i === 0 ? required : undefined}
           toggle={toggle}
         />
       ))}
