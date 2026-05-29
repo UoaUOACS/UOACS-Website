@@ -166,8 +166,15 @@ export const MultiSelect = ({
     </div>
   )
 
+  const errorMessage = error ? <p className="mt-1 text-red-600 text-sm">{error}</p> : null
+
   if (!label) {
-    return <div ref={containerRef}>{multiSelectControl}</div>
+    return (
+      <div ref={containerRef}>
+        {multiSelectControl}
+        {errorMessage}
+      </div>
+    )
   }
 
   return (
@@ -180,7 +187,7 @@ export const MultiSelect = ({
         {required && <span className="ml-1 text-brand-pink">*</span>}
       </label>
       {multiSelectControl}
-      {error && <p className="mt-1 text-red-600 text-sm">{error}</p>}
+      {errorMessage}
     </div>
   )
 }

@@ -17,14 +17,19 @@ export const Input = ({
   ref,
   ...props
 }: InputProps) => {
+  const errorMessage = error ? <p className="mt-1 text-red-600 text-sm">{error}</p> : null
+
   if (!label) {
     return (
-      <input
-        className={cn("w-full rounded border border-gray-300 px-3 py-2", className)}
-        ref={ref}
-        required={required}
-        {...props}
-      />
+      <>
+        <input
+          className={cn("w-full rounded border border-gray-300 px-3 py-2", className)}
+          ref={ref}
+          required={required}
+          {...props}
+        />
+        {errorMessage}
+      </>
     )
   }
 
@@ -40,7 +45,7 @@ export const Input = ({
         ref={ref}
         {...props}
       />
-      {error && <p className="mt-1 text-red-600 text-sm">{error}</p>}
+      {errorMessage}
     </div>
   )
 }

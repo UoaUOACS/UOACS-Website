@@ -101,8 +101,15 @@ export const Select = ({
     </div>
   )
 
+  const errorMessage = error ? <p className="mt-1 text-red-600 text-sm">{error}</p> : null
+
   if (!label) {
-    return <div ref={containerRef}>{selectControl}</div>
+    return (
+      <div ref={containerRef}>
+        {selectControl}
+        {errorMessage}
+      </div>
+    )
   }
 
   return (
@@ -115,7 +122,7 @@ export const Select = ({
         {required && <span className="ml-1 text-brand-pink">*</span>}
       </label>
       {selectControl}
-      {error && <p className="mt-1 text-red-600 text-sm">{error}</p>}
+      {errorMessage}
     </div>
   )
 }
