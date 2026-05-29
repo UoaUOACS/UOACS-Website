@@ -1,5 +1,3 @@
-"use client"
-
 import { cn } from "@/lib/utils"
 
 export interface InputProps extends React.ComponentPropsWithRef<"input"> {
