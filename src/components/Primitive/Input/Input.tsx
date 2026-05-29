@@ -22,6 +22,7 @@ export const Input = ({
       <input
         className={cn("w-full rounded border border-gray-300 px-3 py-2", className)}
         ref={ref}
+        required={required}
         {...props}
       />
     )
