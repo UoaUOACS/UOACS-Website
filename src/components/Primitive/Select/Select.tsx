@@ -57,7 +57,7 @@ export const Select = ({
     <div className="relative">
       <button
         className="flex min-h-11 w-full items-center rounded border border-gray-300 px-3 py-2 text-left text-sm"
-        id={label}
+        id={label || undefined}
         onClick={() => setIsOpen((prev) => !prev)}
         ref={ref}
         type="button"

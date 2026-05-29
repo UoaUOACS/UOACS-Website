@@ -57,7 +57,7 @@ export const MultiSelect = ({
     <div className="relative">
       <button
         className="flex min-h-11 w-full flex-wrap items-center gap-1.5 rounded border border-gray-300 px-3 py-2 text-left"
-        id={label}
+        id={label || undefined}
         onClick={() => setIsOpen((prev) => !prev)}
         ref={ref}
         type="button"
