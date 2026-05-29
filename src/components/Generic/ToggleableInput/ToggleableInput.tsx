@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { Button } from "../Button/Button"
+import { Button } from "../../Primitive/Button/Button"
 
 export interface ToggleableProps {
   label: string
