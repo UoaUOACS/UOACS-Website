@@ -52,36 +52,3 @@ export const Required: Story = {
     return <Select {...args} onChange={setValue} required value={value} />
   },
 }
-
-export const Toggleable: Story = {
-  render: (args) => {
-    const [value, setValue] = useState("Option 2")
-    return (
-      <Select
-        {...args}
-        label="Favourite"
-        onChange={setValue}
-        onSave={() => {}}
-        toggleable
-        value={value}
-      />
-    )
-  },
-}
-
-export const ToggleableEditing: Story = {
-  render: (args) => {
-    const [value, setValue] = useState("Option 2")
-    return (
-      <Select
-        {...args}
-        defaultToggleState
-        label="Favourite"
-        onChange={setValue}
-        onSave={() => {}}
-        toggleable
-        value={value}
-      />
-    )
-  },
-}

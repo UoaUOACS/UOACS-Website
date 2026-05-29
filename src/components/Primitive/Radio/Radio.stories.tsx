@@ -45,36 +45,3 @@ export const WithError: Story = {
     return <Radio {...args} error="Please select an option" onChange={setValue} value={value} />
   },
 }
-
-export const Toggleable: Story = {
-  render: (args) => {
-    const [value, setValue] = useState("Option 2")
-    return (
-      <Radio
-        {...args}
-        label="Preference"
-        onChange={setValue}
-        onSave={() => {}}
-        toggleable
-        value={value}
-      />
-    )
-  },
-}
-
-export const ToggleableEditing: Story = {
-  render: (args) => {
-    const [value, setValue] = useState("Option 2")
-    return (
-      <Radio
-        {...args}
-        defaultToggleState
-        label="Preference"
-        onChange={setValue}
-        onSave={() => {}}
-        toggleable
-        value={value}
-      />
-    )
-  },
-}
