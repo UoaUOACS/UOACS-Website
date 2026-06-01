@@ -1,5 +1,6 @@
 "use client"
 
+import { LockClosedIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -13,6 +14,8 @@ export interface ToggleableProps {
   displayNode: React.ReactNode
   onSave?: () => void | Promise<void>
   defaultToggleState?: boolean
+  locked?: boolean
+  lockedReason?: string
   children: React.ReactNode
 }
 
@@ -24,6 +27,8 @@ export const ToggleableInput = ({
   displayNode,
   onSave,
   defaultToggleState = false,
+  locked = false,
+  lockedReason,
   children,
 }: ToggleableProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(defaultToggleState)
@@ -38,68 +43,82 @@ export const ToggleableInput = ({
       )}
     >
       <div className="flex flex-row justify-between">
-        <span className="block font-medium text-gray-700 text-sm">
+        <span className="inline-flex items-center gap-1.5 font-medium text-gray-700 text-sm">
           {label}
-          {required && <span className="ml-1 text-brand-pink">*</span>}
+          {required && <span className="text-brand-pink">*</span>}
+          {locked && (
+            <span className="cursor-default" title={lockedReason}>
+              <LockClosedIcon
+                aria-label="This field cannot be edited"
+                className="h-3.5 w-3.5 text-gray-400"
+              />
+            </span>
+          )}
         </span>
         <div className="relative">
-          {!isEditable && (
-            <div className="opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
-              <Button
-                aria-label={`Edit ${label}`}
-                className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
-                onClick={() => setIsEditable(true)}
-              >
-                Edit
-              </Button>
-            </div>
-          )}
-          <AnimatePresence>
-            {isEditable && (
-              <motion.div
-                animate={{ opacity: 1 }}
-                className="absolute top-0 right-0"
-                exit={{ opacity: 0 }}
-                initial={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <div className="flex flex-row gap-2">
+          {locked ? null : (
+            <>
+              {!isEditable && (
+                <div className="opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
                   <Button
+                    aria-label={`Edit ${label}`}
                     className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
-                    onClick={() => setIsEditable(false)}
-                    theme="ghost"
+                    onClick={() => setIsEditable(true)}
                   >
-                    Close
-                  </Button>
-                  <Button
-                    className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
-                    disabled={isSaving}
-                    onClick={async () => {
-                      setIsSaving(true)
-                      try {
-                        await onSave?.()
-                        setIsEditable(false)
-                      } catch {
-                        // stay open — parent sets error prop on failure
-                      } finally {
-                        setIsSaving(false)
-                      }
-                    }}
-                  >
-                    Save
+                    Edit
                   </Button>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              )}
+              <AnimatePresence>
+                {isEditable && (
+                  <motion.div
+                    animate={{ opacity: 1 }}
+                    className="absolute top-0 right-0"
+                    exit={{ opacity: 0 }}
+                    initial={{ opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <div className="flex flex-row gap-2">
+                      <Button
+                        className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
+                        onClick={() => setIsEditable(false)}
+                        theme="ghost"
+                      >
+                        Close
+                      </Button>
+                      <Button
+                        className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
+                        disabled={isSaving}
+                        onClick={async () => {
+                          setIsSaving(true)
+                          try {
+                            await onSave?.()
+                            setIsEditable(false)
+                          } catch {
+                            // stay open — parent sets error prop on failure
+                          } finally {
+                            setIsSaving(false)
+                          }
+                        }}
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </>
+          )}
         </div>
       </div>
-      {isEditable ? (
-        children
-      ) : typeof displayNode === "string" ? (
-        <p className="py-2 text-left text-gray-600 text-paragraph">{displayNode}</p>
+      {locked || !isEditable ? (
+        typeof displayNode === "string" ? (
+          <p className="py-2 text-left text-gray-600 text-paragraph">{displayNode}</p>
+        ) : (
+          displayNode
+        )
       ) : (
-        displayNode
+        children
       )}
       {error && <p className="mt-1 text-red-600 text-sm">{error}</p>}
     </div>

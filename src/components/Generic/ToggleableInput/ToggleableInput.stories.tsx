@@ -80,3 +80,17 @@ export const WithMultiSelect: Story = {
     )
   },
 }
+
+export const Locked: Story = {
+  render: (args) => (
+    <ToggleableInput
+      {...args}
+      displayNode="john@university.ac.nz"
+      label="Email"
+      locked
+      lockedReason="Email is used for login and cannot be changed here"
+    >
+      <Input onChange={() => {}} type="email" value="john@university.ac.nz" />
+    </ToggleableInput>
+  ),
+}
