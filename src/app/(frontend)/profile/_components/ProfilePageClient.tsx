@@ -191,6 +191,7 @@ export const ProfilePageClient = ({ member }: ProfilePageClientProps) => {
             <span className="font-bold">{`${member.firstName} ${member.lastName}`}</span>
           </p>
           <Button
+            className="whitespace-nowrap"
             left={<ArrowLeftEndOnRectangleIcon className="h-4 w-4 md:h-6 md:w-6" />}
             onClick={() => {}}
             theme="dark"
