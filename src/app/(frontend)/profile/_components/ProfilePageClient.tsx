@@ -1,7 +1,6 @@
 "use client"
 
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/solid"
-import type { User } from "better-auth"
 import { useState } from "react"
 import { ToggleableInput } from "@/components/Generic"
 import { Button, Heading, Input, MultiSelect, Radio, Select } from "@/components/Primitive"
@@ -22,7 +21,11 @@ const OTHER_MAJORS_OPTIONS = [
   "Mathematics",
 ]
 
-export const ProfilePageClient = ({ member, user }: { member: Member; user: User }) => {
+export type ProfilePageClientProps = {
+  member: Member
+}
+
+export const ProfilePageClient = ({ member }: ProfilePageClientProps) => {
   const [firstName, setFirstName] = useState(member.firstName ?? "")
   const [lastName, setLastName] = useState(member.lastName ?? "")
   const [email, setEmail] = useState(member.email ?? "")
