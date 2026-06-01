@@ -113,9 +113,9 @@ export const ToggleableInput = ({
       </div>
       {locked || !isEditable ? (
         typeof displayNode === "string" ? (
-          <p className="py-2 text-left text-gray-600 text-paragraph">{displayNode}</p>
+          <p className="min-h-9 py-2 text-left text-gray-600 text-paragraph">{displayNode}</p>
         ) : (
-          displayNode
+          <div className="min-h-9">{displayNode}</div>
         )
       ) : (
         children
