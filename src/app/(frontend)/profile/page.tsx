@@ -20,5 +20,5 @@ export default async function ProfilePage() {
     redirect(Routes.LOGIN)
   }
 
-  return <ProfilePageClient member={member} user={session.user} />
+  return <ProfilePageClient member={member} />
 }
