@@ -94,7 +94,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     >
       <body className="relative flex min-h-screen flex-col overflow-x-hidden">
         <Toaster />
-        <div className="mx-auto flex w-full max-w-[1480px] grow flex-col gap-14 px-4 py-6 md:gap-9 md:px-12 lg:px-20">
+        <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:gap-9 md:px-12 lg:px-20">
           <Navbar initialSession={session} links={navbarLinks} socialLinks={socialLinks} />
           <main className="flex grow flex-col items-center gap-14 py-9 md:gap-30">{children}</main>
         </div>

@@ -8,7 +8,7 @@ export const HeroSection = ({ socialLinks }: { socialLinks: SocialLink[] }) => {
   const START_YEAR = 2024
 
   return (
-    <section className="flex w-full max-w-180 flex-col items-center justify-start gap-6 self-center md:items-start md:gap-18 md:self-start">
+    <section className="flex w-full max-w-180 flex-col items-center justify-start gap-6 self-center py-14 md:items-start md:gap-18 md:self-start md:py-0">
       <p className="hidden font-mono md:block">
         UNIVERSITY OF AUCKLAND
         <br />
