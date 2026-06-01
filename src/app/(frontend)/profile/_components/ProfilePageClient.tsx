@@ -1,9 +1,12 @@
 "use client"
 
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/solid"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { ToggleableInput } from "@/components/Generic"
 import { Button, Heading, Input, MultiSelect, Radio, Select } from "@/components/Primitive"
+import { authClient } from "@/lib/auth-client"
+import { Routes } from "@/lib/routes"
 import type { Member } from "@/payload/payload-types"
 
 const STUDY_YEAR_OPTIONS = [
@@ -40,6 +43,8 @@ export const ProfilePageClient = ({ member }: ProfilePageClientProps) => {
   const [otherMajors, setOtherMajors] = useState<string[]>(member.otherMajors ?? [])
   const [heardAboutUs, setHeardAboutUs] = useState(member.heardAboutUs ?? "")
   const [eventWishlist, setEventWishlist] = useState(member.eventWishList ?? "")
+
+  const router = useRouter()
 
   const handleSave = () => {
     // TODO: persist field update
@@ -193,7 +198,10 @@ export const ProfilePageClient = ({ member }: ProfilePageClientProps) => {
           <Button
             className="whitespace-nowrap"
             left={<ArrowLeftEndOnRectangleIcon className="h-4 w-4 md:h-6 md:w-6" />}
-            onClick={() => {}}
+            onClick={() => {
+              authClient.signOut()
+              router.push(Routes.LOGIN)
+            }}
             theme="dark"
           >
             Sign Out
