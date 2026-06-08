@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download renovate cache
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v3
         if: ${{ github.event.inputs.repoCache != 'disabled' && github.event.inputs.repoCache != 'reset' }}
         continue-on-error: true
         with:
@@ -64,7 +64,10 @@ jobs:
       - name: Compress renovate cache
         if: ${{ github.event.inputs.repoCache != 'disabled' }}
         run: |
-          ls $cache_dir
+          if [ ! -d "$cache_dir" ]; then
+            echo "Cache dir not found — Renovate likely aborted early. Skipping."
+            exit 0
+          fi
           tar -czvf $cache_archive -C $cache_dir .
 
       - name: Upload renovate cache
@@ -73,4 +76,4 @@ jobs:
         with:
           name: ${{ env.cache_key }}
           path: ${{ env.cache_archive }}
-          retention-days: 1
+          retention-days: 7
