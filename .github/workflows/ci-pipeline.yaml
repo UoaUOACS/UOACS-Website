@@ -67,7 +67,6 @@ jobs:
         if: steps.cache-check.outputs.cache-hit != 'true'
         uses: pnpm/action-setup@v4
         with:
-          version: latest
           run_install: false
 
       - name: Install dependencies
@@ -97,7 +96,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: latest
           run_install: false
 
       - name: Restore node_modules cache
@@ -132,7 +130,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: latest
           run_install: false
 
       - name: Restore node_modules cache
@@ -189,7 +186,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: latest
           run_install: false
 
       - name: Restore node_modules cache
