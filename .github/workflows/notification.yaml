@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Send notification for PR Ready for Review
         if: github.event_name == 'pull_request' && github.event.pull_request.draft == false && (github.event.action == 'ready_for_review' || github.event.action == 'opened' || github.event.action == 'reopened')

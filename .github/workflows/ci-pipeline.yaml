@@ -33,7 +33,7 @@ jobs:
     if: needs.pr-stack.outputs.skip_ci != 'true'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.pr-stack.outputs.skip_ci != 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Check if node_modules cache exists
         id: cache-check
@@ -65,7 +65,7 @@ jobs:
 
       - name: Setup pnpm
         if: steps.cache-check.outputs.cache-hit != 'true'
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
           version: latest
           run_install: false
@@ -87,7 +87,7 @@ jobs:
     needs: [lint, setup]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -95,7 +95,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
           version: latest
           run_install: false
@@ -122,7 +122,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -130,7 +130,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
           version: latest
           run_install: false
@@ -179,7 +179,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -187,7 +187,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
           version: latest
           run_install: false
