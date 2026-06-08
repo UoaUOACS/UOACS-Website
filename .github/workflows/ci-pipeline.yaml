@@ -33,7 +33,7 @@ jobs:
     if: needs.pr-stack.outputs.skip_ci != 'true'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
@@ -47,11 +47,11 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.pr-stack.outputs.skip_ci != 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Check if node_modules cache exists
         id: cache-check
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -59,15 +59,14 @@ jobs:
 
       - name: Setup Node.js
         if: steps.cache-check.outputs.cache-hit != 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
         if: steps.cache-check.outputs.cache-hit != 'true'
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
-          version: latest
           run_install: false
 
       - name: Install dependencies
@@ -76,7 +75,7 @@ jobs:
 
       - name: Save node_modules cache
         if: steps.cache-check.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -87,21 +86,20 @@ jobs:
     needs: [lint, setup]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
-          version: latest
           run_install: false
 
       - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: cache
         with:
           path: node_modules
@@ -122,21 +120,20 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
-          version: latest
           run_install: false
 
       - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: cache
         with:
           path: node_modules
@@ -149,7 +146,7 @@ jobs:
         shell: bash
 
       - name: Restore Next.js cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('apps/*') }}
@@ -179,21 +176,20 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
-          version: latest
           run_install: false
 
       - name: Restore node_modules cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: cache
         with:
           path: node_modules
