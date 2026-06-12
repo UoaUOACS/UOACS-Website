@@ -11,7 +11,17 @@ export async function GET() {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 })
   }
 
-  const member = await authService.getMemberFromUser(session.user)
+  let member: Awaited<ReturnType<typeof authService.getMemberFromUser>>
+  try {
+    member = await authService.getMemberFromUser(session.user)
+  } catch (err) {
+    console.error("[GET /api/member/me] Failed to fetch member from Payload", {
+      userId: session.user.id,
+      error: err,
+    })
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 })
+  }
+
   if (!member) {
     return new Response(JSON.stringify({ error: "Member not found" }), { status: 404 })
   }
