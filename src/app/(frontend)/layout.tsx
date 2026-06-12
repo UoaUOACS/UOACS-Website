@@ -1,10 +1,8 @@
 import localFont from "next/font/local"
-import { headers } from "next/headers"
 import type React from "react"
 import { Footer, Navbar } from "@/components/Composite"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
-import { auth } from "@/lib/auth"
 import { getSocialLinks } from "@/lib/helpers"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import { Providers } from "./providers"
@@ -79,13 +77,8 @@ const navbarLinks: { label: string; href: string }[] = [
   { label: "Our Sponsors", href: Routes.SPONSORS },
 ]
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
-
-  const [socialLinks, session] = await Promise.all([
-    getSocialLinks(),
-    auth.api.getSession({ headers: await headers() }),
-  ])
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const socialLinks = await getSocialLinks()
 
   return (
     <html
@@ -95,7 +88,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       <body className="relative flex min-h-screen flex-col overflow-x-hidden">
         <Providers>
           <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:gap-9 md:px-12 lg:px-20">
-            <Navbar initialSession={session} links={navbarLinks} socialLinks={socialLinks} />
+            <Navbar links={navbarLinks} socialLinks={socialLinks} />
             <main className="flex grow flex-col items-center gap-14 py-9 md:gap-30">
               {children}
             </main>

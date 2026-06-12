@@ -8,6 +8,7 @@ import Link, { type LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { BorderButton, Button, Heading, SocialIcon } from "@/components/Primitive"
+import { useAuth } from "@/context/AuthContext"
 import { authClient } from "@/lib/auth-client"
 import { Routes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
@@ -20,10 +21,9 @@ import { mobileNavbarVariants } from "./variants"
  * @param links Links to be displayed in the mobile navbar.
  * @param socialLinks Social links to be displayed in the mobile navbar.
  */
-export const MobileNavbar = ({ links, socialLinks, initialSession }: NavbarProps) => {
+export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
+  const { user, member: _, isLoading: isAuthLoading } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
-  const { data: hookSession, isPending } = authClient.useSession()
-  const session = isPending ? initialSession : hookSession
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -114,9 +114,13 @@ export const MobileNavbar = ({ links, socialLinks, initialSession }: NavbarProps
               ))}
             </div>
             <div className="flex flex-col items-center gap-4">
-              {session ? (
+              {isAuthLoading ? (
+                <Button disabled theme="dark">
+                  <span className="w-12 animate-pulse rounded bg-white/20">&nbsp;</span>
+                </Button>
+              ) : user ? (
                 <div className="flex flex-row items-center gap-2">
-                  <Button theme="dark">{session.user.name.split(" ")[0].toUpperCase()}</Button>
+                  <Button theme="dark">{user.name.split(" ")[0].toUpperCase()}</Button>
                   <Button onClick={handleLogout} theme="dark">
                     Logout
                   </Button>
