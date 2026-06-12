@@ -7,16 +7,18 @@ import { Routes } from "@/lib/routes"
 import { ProfilePageClient } from "./_components/ProfilePageClient"
 
 export default function ProfilePage() {
-  const { user, member, isLoading } = useAuth()
+  const { user, member, isLoading, memberError } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!isLoading && (!user || !member)) {
+    if (!isLoading && !memberError && (!user || !member)) {
       router.replace(Routes.LOGIN)
     }
-  }, [isLoading, user, member, router])
+  }, [isLoading, user, member, memberError, router])
 
   if (isLoading) return <p>Loading...</p>
+
+  if (memberError) return <p>Something went wrong loading your profile. Please try again.</p>
 
   if (!user || !member) return null
 
