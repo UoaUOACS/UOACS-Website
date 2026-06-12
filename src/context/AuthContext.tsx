@@ -2,6 +2,7 @@
 
 import { createContext, type ReactNode, useContext, useEffect, useState } from "react"
 import { authClient } from "@/lib/auth-client"
+import { ApiRoutes } from "@/lib/routes"
 import type { Member } from "@/payload/payload-types"
 import type { AuthState } from "@/types/auth"
 
@@ -22,7 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return
     }
     setMemberLoading(true)
-    fetch("/api/member/me")
+    fetch(ApiRoutes.MEMBER.ME)
       .then((r) => (r.ok ? r.json() : null))
       .then(setMember)
       .finally(() => setMemberLoading(false))
