@@ -198,8 +198,8 @@ export const ProfilePageClient = ({ member }: ProfilePageClientProps) => {
           <Button
             className="whitespace-nowrap"
             left={<ArrowLeftEndOnRectangleIcon className="h-4 w-4 md:h-6 md:w-6" />}
-            onClick={() => {
-              authClient.signOut()
+            onClick={async () => {
+              await authClient.signOut()
               router.push(Routes.LOGIN)
             }}
             theme="dark"
