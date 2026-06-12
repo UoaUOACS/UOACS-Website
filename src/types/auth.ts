@@ -5,4 +5,5 @@ export type AuthState = {
   user: User | null
   member: Member | null
   isLoading: boolean
+  memberError: Error | null
 }
