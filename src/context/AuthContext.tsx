@@ -9,13 +9,16 @@ const AuthContext = createContext<AuthState | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [member, setMember] = useState<Member | null>(null)
-  const [memberLoading, setMemberLoading] = useState(false)
+  const [memberLoading, setMemberLoading] = useState(true)
 
   const { data: session, isPending } = authClient.useSession()
+  const userId = session?.user?.id
 
   useEffect(() => {
-    if (!session?.user) {
+    if (isPending) return
+    if (!userId) {
       setMember(null)
+      setMemberLoading(false)
       return
     }
     setMemberLoading(true)
@@ -23,7 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then((r) => (r.ok ? r.json() : null))
       .then(setMember)
       .finally(() => setMemberLoading(false))
-  }, [session?.user])
+  }, [userId, isPending])
 
   return (
     <AuthContext.Provider
