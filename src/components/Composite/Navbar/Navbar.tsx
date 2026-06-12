@@ -36,7 +36,7 @@ export interface NavbarProps {
  * @returns A Navbar component with logo, navigation links, social dropdown, and join button.
  */
 export function Navbar({ links, socialLinks }: NavbarProps) {
-  const { user, member: _, isLoading: isAuthLoading } = useAuth()
+  const { user, isLoading: isAuthLoading } = useAuth()
 
   const router = useRouter()
 

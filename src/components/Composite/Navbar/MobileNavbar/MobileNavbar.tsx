@@ -22,7 +22,7 @@ import { mobileNavbarVariants } from "./variants"
  * @param socialLinks Social links to be displayed in the mobile navbar.
  */
 export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
-  const { user, member: _, isLoading: isAuthLoading } = useAuth()
+  const { user, isLoading: isAuthLoading } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
 
