@@ -1,22 +1,16 @@
-import { headers } from "next/headers"
+"use client"
+
 import { redirect } from "next/navigation"
-import { auth } from "@/lib/auth"
+import { useAuth } from "@/context/AuthContext"
 import { Routes } from "@/lib/routes"
-import { AuthService } from "@/services/auth.service"
 import { ProfilePageClient } from "./_components/ProfilePageClient"
 
-const authService = new AuthService()
+export default function ProfilePage() {
+  const { user, member, isLoading } = useAuth()
 
-export default async function ProfilePage() {
-  const session = await auth.api.getSession({ headers: await headers() })
+  if (isLoading) return <p>Loading...</p>
 
-  if (!session) {
-    redirect(Routes.LOGIN)
-  }
-
-  const member = await authService.getMemberFromUser(session.user)
-
-  if (!member) {
+  if (!user || !member) {
     redirect(Routes.LOGIN)
   }
 
