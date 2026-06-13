@@ -77,8 +77,12 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
           <Button
             className="whitespace-nowrap"
             left={<ArrowLeftEndOnRectangleIcon className="h-4 w-4 md:h-6 md:w-6" />}
-            onClick={() => {
-              authClient.signOut()
+            onClick={async () => {
+              try {
+                await authClient.signOut()
+              } catch (err) {
+                console.error("[ProfilePageClient] signOut failed", { error: err })
+              }
               router.push(Routes.LOGIN)
             }}
             theme="dark"

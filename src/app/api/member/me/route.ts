@@ -6,12 +6,12 @@ import { AuthService } from "@/services/auth.service"
 const authService = new AuthService()
 
 export async function GET() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 })
-  }
-
   try {
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 })
+    }
+
     const member = await authService.getMemberFromUser(session.user)
     if (!member) {
       return new Response(JSON.stringify({ error: "Member not found" }), { status: 404 })
@@ -19,7 +19,7 @@ export async function GET() {
 
     return NextResponse.json(member)
   } catch (err) {
-    console.error("[GET /api/member/me]", { userId: session.user.id, error: err })
+    console.error("[GET /api/member/me]", { error: err })
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 })
   }
 }
