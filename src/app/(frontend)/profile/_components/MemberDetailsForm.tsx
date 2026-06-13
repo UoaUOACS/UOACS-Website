@@ -9,6 +9,7 @@ const STUDY_YEAR_OPTIONS = [
   { label: "First Year", value: "first-year" },
   { label: "Second Year", value: "second-year" },
   { label: "Third Year", value: "third-year" },
+  { label: "Fourth Year", value: "fourth-year" },
   { label: "Fifth Year or Above", value: "fifth-year-or-above" },
 ]
 
