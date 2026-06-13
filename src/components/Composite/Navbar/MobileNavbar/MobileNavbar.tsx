@@ -8,6 +8,7 @@ import Link, { type LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { BorderButton, Button, Heading, SocialIcon } from "@/components/Primitive"
+import { useSession } from "@/context/SessionContext"
 import { authClient } from "@/lib/auth-client"
 import { Routes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
@@ -20,10 +21,9 @@ import { mobileNavbarVariants } from "./variants"
  * @param links Links to be displayed in the mobile navbar.
  * @param socialLinks Social links to be displayed in the mobile navbar.
  */
-export const MobileNavbar = ({ links, socialLinks, initialSession }: NavbarProps) => {
+export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const { data: hookSession, isPending } = authClient.useSession()
-  const session = isPending ? initialSession : hookSession
+  const session = useSession()
   const router = useRouter()
 
   const handleLogout = async () => {

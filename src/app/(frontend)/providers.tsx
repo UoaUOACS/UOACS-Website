@@ -1,12 +1,17 @@
 "use client"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import type { ReactNode } from "react"
-import { useState } from "react"
+import { type ReactNode, useState } from "react"
 import { Toaster } from "sonner"
+import { type Session, SessionProvider } from "@/context/SessionContext"
 
-export function Providers({ children }: { children: ReactNode }) {
-  // Factory initializer prevents a new QueryClient from being created on every render.
+export function Providers({
+  children,
+  initialSession,
+}: {
+  children: ReactNode
+  initialSession?: Session
+}) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -21,9 +26,11 @@ export function Providers({ children }: { children: ReactNode }) {
       }),
   )
   return (
-    <QueryClientProvider client={queryClient}>
-      <Toaster />
-      {children}
-    </QueryClientProvider>
+    <SessionProvider initialSession={initialSession}>
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        {children}
+      </QueryClientProvider>
+    </SessionProvider>
   )
 }
