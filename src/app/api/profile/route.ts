@@ -2,12 +2,13 @@ import { type NextRequest, NextResponse } from "next/server"
 import { ValidationError } from "payload"
 import { ZodError } from "zod"
 import { auth } from "@/lib/auth"
+import type { Member } from "@/payload/payload-types"
 import { AuthService, DuplicateFieldError } from "@/services/auth.service"
 import { updateMemberSchema } from "@/types/schemas/member"
 
 export async function PATCH(req: NextRequest) {
   let session: Awaited<ReturnType<typeof auth.api.getSession>> | undefined
-  let member: Awaited<ReturnType<InstanceType<typeof AuthService>["getMemberFromUser"]>> | undefined
+  let member: Member | null | undefined
 
   try {
     session = await auth.api.getSession({ headers: req.headers })
