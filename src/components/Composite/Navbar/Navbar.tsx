@@ -1,6 +1,11 @@
 "use client"
 
-import { ArrowUpRightIcon, Bars3Icon } from "@heroicons/react/24/solid"
+import {
+  ArrowLeftEndOnRectangleIcon,
+  ArrowUpRightIcon,
+  Bars3Icon,
+  UserIcon,
+} from "@heroicons/react/24/solid"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
@@ -78,16 +83,39 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               label="Socials"
               options={dropdownOptions}
               theme="primary"
-              triggerClassName="hidden lg:flex"
-              triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
+              trigger={{
+                triggerClassName: "hidden lg:flex",
+                triggerIcon: <Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />,
+              }}
             />
           </div>
           {session ? (
             <Dropdown
-              label={session.user.name.split(" ")[0].toUpperCase()}
-              options={[{ label: "Logout", onClick: handleLogout, theme: "dark" }]}
+              label={<UserIcon className="h-4 w-4" />}
+              options={[
+                {
+                  label: (
+                    <div className="flex flex-row items-center gap-2">
+                      <UserIcon className="h-4 w-4" />
+                      <p>Profile</p>
+                    </div>
+                  ),
+                  href: Routes.PROFILE,
+                  theme: "dark",
+                },
+                {
+                  label: (
+                    <div className="flex flex-row items-center gap-2">
+                      <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
+                      <p>Sign Out</p>
+                    </div>
+                  ),
+                  onClick: handleLogout,
+                  theme: "dark",
+                },
+              ]}
               theme="dark"
-              triggerIcon={<Bars3Icon className="h-4 w-4 md:h-6 md:w-6" />}
+              trigger={false}
             />
           ) : (
             <Link href={Routes.LOGIN}>
