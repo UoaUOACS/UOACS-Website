@@ -124,7 +124,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                     theme="dark"
                   >
                     <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
-                    <p>Sign Out</p>
+                    <p>Log Out</p>
                   </Button>
                 </div>
               ) : (

@@ -71,7 +71,7 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
 
       <section className="flex flex-col justify-start gap-2 md:flex-row md:justify-between">
         <p className="font-mono">
-          Signed in as <span className="font-bold">{user.name}</span>
+          Logged in as <span className="font-bold">{user.name}</span>
         </p>
         <Button
           className="whitespace-nowrap"
@@ -86,7 +86,7 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
           }}
           theme="dark"
         >
-          Sign Out
+          Log Out
         </Button>
       </section>
     </div>

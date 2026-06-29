@@ -107,7 +107,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
                   label: (
                     <div className="flex flex-row items-center gap-2">
                       <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
-                      <p>Sign Out</p>
+                      <p>Log Out</p>
                     </div>
                   ),
                   onClick: handleLogout,
