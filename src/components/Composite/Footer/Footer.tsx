@@ -1,12 +1,13 @@
 "use client"
 
-import { ArrowUpRightIcon } from "@heroicons/react/24/solid"
+import { ArrowUpRightIcon, UserIcon } from "@heroicons/react/24/solid"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { type SocialLink, SocialLinks } from "@/components/Generic"
 import { Button, SocialIcon } from "@/components/Primitive"
+import { useSession } from "@/context/SessionContext"
 import { Routes } from "@/lib/routes"
 import { cn, shuffle } from "@/lib/utils"
 import type { DiscordWidgetData } from "@/types/schemas/discord"
@@ -36,17 +37,25 @@ export interface FooterProps {
  *
  * @param className optional additional class names to apply to the button
  */
-const InterestedButton = ({ className }: { className?: string }) => (
-  <Link href={Routes.SIGN_UP}>
-    <Button
-      className={cn("whitespace-nowrap", className)}
-      right={<ArrowUpRightIcon className="h-4 w-4 text-white" />}
-      theme="primary"
-    >
-      Interested? Join UOACS
-    </Button>
-  </Link>
-)
+const InterestedButton = ({ className }: { className?: string }) => {
+  const session = useSession()
+  return (
+    <Link href={session ? Routes.PROFILE : Routes.SIGN_UP}>
+      <Button
+        className={cn("whitespace-nowrap", className)}
+        right={
+          !session && (
+            <ArrowUpRightIcon className={cn("h-4 w-4", session ? "text-black" : "text-white")} />
+          )
+        }
+        theme={session ? "light" : "primary"}
+      >
+        {session && <UserIcon className="h-4 w-4" />}
+        {session ? "Profile" : "Interested? Join UOACS"}
+      </Button>
+    </Link>
+  )
+}
 
 /**
  * A footer component for the website, containing links and social media icons.
