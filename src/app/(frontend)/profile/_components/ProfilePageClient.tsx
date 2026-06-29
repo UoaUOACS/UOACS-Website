@@ -76,7 +76,7 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
           </p>
           <Button
             className="whitespace-nowrap"
-            left={<ArrowLeftEndOnRectangleIcon className="h-4 w-4 md:h-6 md:w-6" />}
+            left={<ArrowLeftEndOnRectangleIcon className="h-4 w-4" />}
             onClick={async () => {
               try {
                 await authClient.signOut()
