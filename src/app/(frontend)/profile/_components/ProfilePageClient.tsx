@@ -69,27 +69,25 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
         ) : null}
       </section>
 
-      <section>
-        <div className="flex flex-row justify-between">
-          <p className="font-mono">
-            Signed in as <span className="font-bold">{user.name}</span>
-          </p>
-          <Button
-            className="whitespace-nowrap"
-            left={<ArrowLeftEndOnRectangleIcon className="h-4 w-4" />}
-            onClick={async () => {
-              try {
-                await authClient.signOut()
-              } catch (err) {
-                console.error("[ProfilePageClient] signOut failed", { error: err })
-              }
-              router.push(Routes.LOGIN)
-            }}
-            theme="dark"
-          >
-            Sign Out
-          </Button>
-        </div>
+      <section className="flex flex-col justify-start gap-2 md:flex-row md:justify-between">
+        <p className="font-mono">
+          Signed in as <span className="font-bold">{user.name}</span>
+        </p>
+        <Button
+          className="whitespace-nowrap"
+          left={<ArrowLeftEndOnRectangleIcon className="h-4 w-4" />}
+          onClick={async () => {
+            try {
+              await authClient.signOut()
+            } catch (err) {
+              console.error("[ProfilePageClient] signOut failed", { error: err })
+            }
+            router.push(Routes.LOGIN)
+          }}
+          theme="dark"
+        >
+          Sign Out
+        </Button>
       </section>
     </div>
   )
