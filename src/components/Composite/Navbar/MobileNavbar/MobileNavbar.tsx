@@ -118,12 +118,6 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
             <div className="flex flex-col items-center gap-4">
               {session ? (
                 <div className="flex flex-col items-center justify-center gap-2">
-                  {/*<Link href={Routes.PROFILE}>
-                    <Button className="flex flex-row items-center gap-2" theme="dark">
-                      <UserIcon className="h-4 w-4" />
-                      <p>Profile</p>
-                    </Button>
-                  </Link>*/}
                   <Button
                     className="flex flex-row items-center gap-2"
                     onClick={handleLogout}
