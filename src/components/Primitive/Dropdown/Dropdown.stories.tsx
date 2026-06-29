@@ -8,9 +8,8 @@ const meta: Meta<typeof Dropdown> = {
   argTypes: {
     label: { control: "text" },
     options: { control: "object" },
-    triggerClassName: { control: "text" },
     popoverClassName: { control: "text" },
-    triggerIcon: { control: false },
+    trigger: { control: false },
   },
   args: {
     label: "Socials",
@@ -34,10 +33,13 @@ export const Primary: Story = {}
 
 export const TriggerIcon: Story = {
   args: {
-    triggerIcon: <Bars3Icon className="h-6 w-6 text-white" />,
+    trigger: { triggerIcon: <Bars3Icon className="h-6 w-6 text-white" /> },
   },
-  argTypes: {
-    triggerIcon: { control: false },
+}
+
+export const NoTriggerIcon: Story = {
+  args: {
+    trigger: false,
   },
 }
 
