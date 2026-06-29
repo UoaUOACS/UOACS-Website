@@ -1,7 +1,7 @@
 "use client"
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
-import { ArrowRightIcon } from "@heroicons/react/24/solid"
+import { ArrowLeftEndOnRectangleIcon, ArrowRightIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
@@ -25,6 +25,8 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const session = useSession()
   const router = useRouter()
+
+  const extendedLinks = [...links, { label: "Profile", href: Routes.PROFILE }]
 
   const handleLogout = async () => {
     setIsOpen(false)
@@ -102,7 +104,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
               </motion.div>
             </div>
             <div className="w-full">
-              {links.map((link) => (
+              {extendedLinks.map((link) => (
                 <MobileNavbarButton key={link.href} {...link} onClick={() => setIsOpen(false)} />
               ))}
             </div>
@@ -115,31 +117,36 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
             </div>
             <div className="flex flex-col items-center gap-4">
               {session ? (
-                <div className="flex flex-row items-center gap-2">
-                  <Button theme="dark">{session.user.name.split(" ")[0].toUpperCase()}</Button>
-                  <Button onClick={handleLogout} theme="dark">
-                    Logout
+                <div className="flex flex-col items-center justify-center gap-2">
+                  {/*<Link href={Routes.PROFILE}>
+                    <Button className="flex flex-row items-center gap-2" theme="dark">
+                      <UserIcon className="h-4 w-4" />
+                      <p>Profile</p>
+                    </Button>
+                  </Link>*/}
+                  <Button
+                    className="flex flex-row items-center gap-2"
+                    onClick={handleLogout}
+                    theme="dark"
+                  >
+                    <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
+                    <p>Sign Out</p>
                   </Button>
                 </div>
               ) : (
-                <>
-                  <Link
-                    className="grid grid-cols-4"
-                    href={Routes.SIGN_UP}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Button className="col-span-4 rounded-b-none" theme="dark">
-                      Interested? Join UOACS <ArrowRightIcon className="h-3 w-3" />
-                    </Button>
-                    <div className="h-0.5 w-full rounded-bl-[2px] bg-orange-400" />
-                    <div className="h-0.5 w-full bg-blue-400" />
-                    <div className="h-0.5 w-full bg-purple-400" />
-                    <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
-                  </Link>
-                  <Link href={Routes.LOGIN} onClick={() => setIsOpen(false)}>
-                    <Button theme="primary">Log In</Button>
-                  </Link>
-                </>
+                <Link
+                  className="grid grid-cols-4"
+                  href={Routes.LOGIN}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Button className="col-span-4 rounded-b-none" theme="dark">
+                    Log In <ArrowRightIcon className="h-3 w-3" />
+                  </Button>
+                  <div className="h-0.5 w-full rounded-bl-[2px] bg-orange-400" />
+                  <div className="h-0.5 w-full bg-blue-400" />
+                  <div className="h-0.5 w-full bg-purple-400" />
+                  <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
+                </Link>
               )}
             </div>
           </motion.div>
