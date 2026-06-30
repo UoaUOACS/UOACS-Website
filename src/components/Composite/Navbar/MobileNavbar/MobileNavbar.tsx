@@ -31,7 +31,6 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
   const handleLogout = async () => {
     setIsOpen(false)
     await authClient.signOut()
-    router.push(Routes.HOME)
     router.refresh()
   }
 
