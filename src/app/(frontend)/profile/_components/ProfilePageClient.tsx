@@ -2,10 +2,8 @@
 
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/solid"
 import type { User } from "better-auth"
-import { useRouter } from "next/navigation"
 import { Button, Heading } from "@/components/Primitive"
 import { authClient } from "@/lib/auth-client"
-import { Routes } from "@/lib/routes"
 import { useMember } from "@/queries/useMember"
 import { MemberDetailsForm } from "./MemberDetailsForm"
 
@@ -15,7 +13,6 @@ export type ProfilePageClientProps = {
 
 export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
   const { data: member, isLoading, isError } = useMember(user.id)
-  const router = useRouter()
 
   return (
     <div className="flex w-full flex-col gap-12">
@@ -82,7 +79,6 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
             } catch (err) {
               console.error("[ProfilePageClient] signOut failed", { error: err })
             }
-            router.push(Routes.LOGIN)
           }}
           theme="dark"
         >
