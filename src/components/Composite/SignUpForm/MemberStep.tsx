@@ -213,8 +213,8 @@ export const MemberStep = () => {
       />
 
       <Input
-        {...register("eventWishlist")}
-        error={errors.eventWishlist?.message}
+        {...register("eventWishList")}
+        error={errors.eventWishList?.message}
         label="What kinds of events would you like to see us host?"
         type="text"
       />
