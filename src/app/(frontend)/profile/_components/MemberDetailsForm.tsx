@@ -3,7 +3,10 @@
 import { useState } from "react"
 import { ToggleableInput } from "@/components/Generic"
 import { Input, MultiSelect, Radio, Select } from "@/components/Primitive"
+import { toast } from "@/lib/toast"
 import type { Member } from "@/payload/payload-types"
+import { ProfileUpdateError, useUpdateMember } from "@/queries/useUpdateMember"
+import type { UpdateMemberInput } from "@/types/schemas/member"
 
 const STUDY_YEAR_OPTIONS = [
   { label: "First Year", value: "first-year" },
@@ -36,17 +39,48 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
   const [heardAboutUs, setHeardAboutUs] = useState(member.heardAboutUs ?? "")
   const [eventWishlist, setEventWishlist] = useState(member.eventWishList ?? "")
 
-  const handleSave = () => {
-    // TODO: persist field update
+  const [errors, setErrors] = useState<Partial<Record<keyof UpdateMemberInput, string>>>({})
+  const { mutateAsync } = useUpdateMember()
+
+  const saveField = async <K extends keyof UpdateMemberInput>(
+    field: K,
+    value: UpdateMemberInput[K],
+  ) => {
+    setErrors((prev) => ({ ...prev, [field]: undefined }))
+    try {
+      await mutateAsync({ [field]: value } as Partial<UpdateMemberInput>)
+      toast.success({ description: "Profile updated" })
+    } catch (err) {
+      const fieldError =
+        err instanceof ProfileUpdateError
+          ? err.fieldErrors.find((e) => e.field === field)
+          : undefined
+      if (fieldError) {
+        setErrors((prev) => ({ ...prev, [field]: fieldError.message }))
+      } else {
+        toast.error({ description: "An error occurred while updating your profile" })
+      }
+      throw err
+    }
   }
 
   return (
     <div className="flex w-full flex-col items-start gap-4">
-      <ToggleableInput displayNode={firstName} label="First Name" onSave={handleSave}>
+      <ToggleableInput
+        displayNode={firstName}
+        error={errors.firstName}
+        label="First Name"
+        onSave={() => saveField("firstName", firstName)}
+      >
         <Input onChange={(e) => setFirstName(e.target.value)} type="text" value={firstName} />
       </ToggleableInput>
 
-      <ToggleableInput displayNode={lastName} label="Last Name" onSave={handleSave}>
+      <ToggleableInput
+        displayNode={lastName}
+        error={errors.lastName}
+        label="Last Name"
+        onSave={() => saveField("lastName", lastName)}
+      >
         <Input onChange={(e) => setLastName(e.target.value)} type="text" value={lastName} />
       </ToggleableInput>
 
@@ -77,7 +111,12 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         <Input onChange={(e) => setUoaID(e.target.value)} type="text" value={uoaID} />
       </ToggleableInput>
 
-      <ToggleableInput displayNode={gender} label="Gender" onSave={handleSave}>
+      <ToggleableInput
+        displayNode={gender}
+        error={errors.gender}
+        label="Gender"
+        onSave={() => saveField("gender", gender as UpdateMemberInput["gender"])}
+      >
         <Select
           onChange={setGender}
           options={["Male", "Female", "Other", "Prefer not to say"]}
@@ -85,14 +124,20 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         />
       </ToggleableInput>
 
-      <ToggleableInput displayNode={phoneNumber} label="Phone Number" onSave={handleSave}>
+      <ToggleableInput
+        displayNode={phoneNumber}
+        error={errors.phoneNumber}
+        label="Phone Number"
+        onSave={() => saveField("phoneNumber", phoneNumber)}
+      >
         <Input onChange={(e) => setPhoneNumber(e.target.value)} type="text" value={phoneNumber} />
       </ToggleableInput>
 
       <ToggleableInput
         displayNode={compsciStudent ?? ""}
+        error={errors.compsciStudent}
         label="Are you a computer science student?"
-        onSave={handleSave}
+        onSave={() => saveField("compsciStudent", compsciStudent === "Yes")}
       >
         <Radio
           onChange={setCompsciStudent}
@@ -104,16 +149,18 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
 
       <ToggleableInput
         displayNode={STUDY_YEAR_OPTIONS.find((o) => o.value === studyYear)?.label ?? studyYear}
+        error={errors.studyYear}
         label="Year of Study"
-        onSave={handleSave}
+        onSave={() => saveField("studyYear", studyYear as UpdateMemberInput["studyYear"])}
       >
         <Select onChange={setStudyYear} options={STUDY_YEAR_OPTIONS} value={studyYear} />
       </ToggleableInput>
 
       <ToggleableInput
         displayNode={otherMajors.join(", ")}
+        error={errors.otherMajors}
         label={compsciStudent === "Yes" ? "Other Majors (if any)" : "Other Majors"}
-        onSave={handleSave}
+        onSave={() => saveField("otherMajors", otherMajors)}
       >
         <MultiSelect
           customTextInput
@@ -125,16 +172,18 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
 
       <ToggleableInput
         displayNode={heardAboutUs}
+        error={errors.heardAboutUs}
         label="How did you hear about us?"
-        onSave={handleSave}
+        onSave={() => saveField("heardAboutUs", heardAboutUs)}
       >
         <Input onChange={(e) => setHeardAboutUs(e.target.value)} type="text" value={heardAboutUs} />
       </ToggleableInput>
 
       <ToggleableInput
         displayNode={eventWishlist}
+        error={errors.eventWishList}
         label="What kinds of events would you like to see us host?"
-        onSave={handleSave}
+        onSave={() => saveField("eventWishList", eventWishlist)}
       >
         <Input
           onChange={(e) => setEventWishlist(e.target.value)}
