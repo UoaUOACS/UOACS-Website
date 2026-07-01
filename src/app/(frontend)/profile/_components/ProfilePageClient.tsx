@@ -13,6 +13,7 @@ export type ProfilePageClientProps = {
 
 export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
   const { data: member, isLoading, isError } = useMember(user.id)
+  const displayName = `${member?.firstName ?? ""} ${member?.lastName ?? ""}`.trim() || user.name
 
   return (
     <div className="flex w-full flex-col gap-12">
@@ -22,7 +23,7 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
           <span className="text-primary">// </span>YOUR ACCOUNT
         </p>
         <Heading h={2} period>
-          {user.name}
+          {displayName}
         </Heading>
         <p className="flex flex-row justify-start gap-2 font-mono text-paragraph-sm">
           <span>
@@ -68,7 +69,7 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
 
       <section className="flex flex-col justify-start gap-2 md:flex-row md:justify-between">
         <p className="font-mono">
-          Logged in as <span className="font-bold">{user.name}</span>
+          Logged in as <span className="font-bold">{displayName}</span>
         </p>
         <Button
           className="whitespace-nowrap"
