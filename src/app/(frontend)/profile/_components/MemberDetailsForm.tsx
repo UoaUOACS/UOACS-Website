@@ -51,17 +51,33 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
       await mutateAsync({ [field]: value } as Partial<UpdateMemberInput>)
       toast.success({ description: "Profile updated" })
     } catch (err) {
-      const fieldError =
-        err instanceof ProfileUpdateError
-          ? err.fieldErrors.find((e) => e.field === field)
-          : undefined
-      if (fieldError) {
-        setErrors((prev) => ({ ...prev, [field]: fieldError.message }))
+      if (err instanceof ProfileUpdateError && err.fieldErrors.length > 0) {
+        setErrors((prev) => {
+          const next = { ...prev }
+          for (const fieldError of err.fieldErrors) {
+            next[fieldError.field] = fieldError.message
+          }
+          return next
+        })
+        if (!err.fieldErrors.some((fieldError) => fieldError.field === field)) {
+          toast.error({ description: err.message })
+        }
       } else {
-        toast.error({ description: "An error occurred while updating your profile" })
+        console.error("[MemberDetailsForm] saveField failed", { field, error: err })
+        toast.error({
+          description:
+            err instanceof ProfileUpdateError
+              ? err.message
+              : "An error occurred while updating your profile",
+        })
       }
       throw err
     }
+  }
+
+  const cancelField = <K extends keyof UpdateMemberInput>(field: K, reset: () => void) => {
+    reset()
+    setErrors((prev) => ({ ...prev, [field]: undefined }))
   }
 
   return (
@@ -70,6 +86,7 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         displayNode={firstName}
         error={errors.firstName}
         label="First Name"
+        onCancel={() => cancelField("firstName", () => setFirstName(member.firstName ?? ""))}
         onSave={() => saveField("firstName", firstName)}
       >
         <Input onChange={(e) => setFirstName(e.target.value)} type="text" value={firstName} />
@@ -79,6 +96,7 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         displayNode={lastName}
         error={errors.lastName}
         label="Last Name"
+        onCancel={() => cancelField("lastName", () => setLastName(member.lastName ?? ""))}
         onSave={() => saveField("lastName", lastName)}
       >
         <Input onChange={(e) => setLastName(e.target.value)} type="text" value={lastName} />
@@ -115,6 +133,7 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         displayNode={gender}
         error={errors.gender}
         label="Gender"
+        onCancel={() => cancelField("gender", () => setGender(member.gender ?? ""))}
         onSave={() => saveField("gender", gender as UpdateMemberInput["gender"])}
       >
         <Select
@@ -128,6 +147,7 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         displayNode={phoneNumber}
         error={errors.phoneNumber}
         label="Phone Number"
+        onCancel={() => cancelField("phoneNumber", () => setPhoneNumber(member.phoneNumber ?? ""))}
         onSave={() => saveField("phoneNumber", phoneNumber)}
       >
         <Input onChange={(e) => setPhoneNumber(e.target.value)} type="text" value={phoneNumber} />
@@ -137,6 +157,17 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         displayNode={compsciStudent ?? ""}
         error={errors.compsciStudent}
         label="Are you a computer science student?"
+        onCancel={() =>
+          cancelField("compsciStudent", () =>
+            setCompsciStudent(
+              member.compsciStudent === true
+                ? "Yes"
+                : member.compsciStudent === false
+                  ? "No"
+                  : undefined,
+            ),
+          )
+        }
         onSave={() => saveField("compsciStudent", compsciStudent === "Yes")}
       >
         <Radio
@@ -151,6 +182,7 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         displayNode={STUDY_YEAR_OPTIONS.find((o) => o.value === studyYear)?.label ?? studyYear}
         error={errors.studyYear}
         label="Year of Study"
+        onCancel={() => cancelField("studyYear", () => setStudyYear(member.studyYear ?? ""))}
         onSave={() => saveField("studyYear", studyYear as UpdateMemberInput["studyYear"])}
       >
         <Select onChange={setStudyYear} options={STUDY_YEAR_OPTIONS} value={studyYear} />
@@ -160,6 +192,7 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         displayNode={otherMajors.join(", ")}
         error={errors.otherMajors}
         label={compsciStudent === "Yes" ? "Other Majors (if any)" : "Other Majors"}
+        onCancel={() => cancelField("otherMajors", () => setOtherMajors(member.otherMajors ?? []))}
         onSave={() => saveField("otherMajors", otherMajors)}
       >
         <MultiSelect
@@ -174,6 +207,9 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         displayNode={heardAboutUs}
         error={errors.heardAboutUs}
         label="How did you hear about us?"
+        onCancel={() =>
+          cancelField("heardAboutUs", () => setHeardAboutUs(member.heardAboutUs ?? ""))
+        }
         onSave={() => saveField("heardAboutUs", heardAboutUs)}
       >
         <Input onChange={(e) => setHeardAboutUs(e.target.value)} type="text" value={heardAboutUs} />
@@ -183,6 +219,9 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         displayNode={eventWishlist}
         error={errors.eventWishList}
         label="What kinds of events would you like to see us host?"
+        onCancel={() =>
+          cancelField("eventWishList", () => setEventWishlist(member.eventWishList ?? ""))
+        }
         onSave={() => saveField("eventWishList", eventWishlist)}
       >
         <Input

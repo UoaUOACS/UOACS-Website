@@ -4,11 +4,14 @@ import type { Member } from "@/payload/payload-types"
 import type { UpdateMemberInput } from "@/types/schemas/member"
 import { QueryKeys } from "./QueryKeys"
 
-export type ProfileFieldError = { field: string; message: string }
+export type ProfileFieldError = { field: keyof UpdateMemberInput; message: string }
 
 export class ProfileUpdateError extends Error {
-  constructor(public readonly fieldErrors: ProfileFieldError[]) {
-    super("Failed to update profile")
+  constructor(
+    public readonly fieldErrors: ProfileFieldError[],
+    message = "Failed to update profile",
+  ) {
+    super(message)
     this.name = "ProfileUpdateError"
   }
 }
@@ -25,10 +28,15 @@ export function useUpdateMember() {
       })
       if (!response.ok) {
         const body = await response.json().catch(() => null)
-        const fieldErrors: ProfileFieldError[] = Array.isArray(body?.error) ? body.error : []
-        throw new ProfileUpdateError(fieldErrors)
+        if (Array.isArray(body?.error)) {
+          throw new ProfileUpdateError(body.error)
+        }
+        const message = typeof body?.error === "string" ? body.error : undefined
+        throw new ProfileUpdateError([], message)
       }
-      return response.json()
+      return response.json().catch(() => {
+        throw new ProfileUpdateError([], "Received an invalid response from the server")
+      })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.MEMBER] })
