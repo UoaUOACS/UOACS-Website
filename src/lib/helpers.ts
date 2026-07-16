@@ -7,9 +7,9 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
     slug: Slugs.Globals.SOCIAL_LINKS,
   })
   return [
-    { icon: "discord", label: "Discord", href: discordHref ?? "" },
     { icon: "instagram", label: "Instagram", href: instagramHref ?? "" },
     { icon: "tiktok", label: "TikTok", href: tiktokHref ?? "" },
     { icon: "linkedin", label: "LinkedIn", href: linkedinHref ?? "" },
+    { icon: "discord", label: "Discord", href: discordHref ?? "" },
   ]
 }
