@@ -53,6 +53,10 @@ inputs:
   GOOGLE_WALLET_SERVICE_ACCOUNT_KEY:
     description: "Stringified json private key for google wallet service account"
     required: true
+  DISCORD_SERVER_ID:
+    description: 'Discord server (guild) ID used to fetch the Discord widget'
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -76,6 +80,7 @@ runs:
           RESEND_API_KEY="${{ inputs.RESEND_API_KEY }}" \
           GOOGLE_WALLET_ISSUER_ID="${{ inputs.GOOGLE_WALLET_ISSUER_ID }}" \
           GOOGLE_WALLET_SERVICE_ACCOUNT_KEY="${{ inputs.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}" \
+          DISCORD_SERVER_ID="${{ inputs.DISCORD_SERVER_ID }}" \
           -a ${{ inputs.APP_NAME }}
       shell: bash
       env:
@@ -96,6 +101,7 @@ runs:
           --build-secret RESEND_API_KEY="${{ inputs.RESEND_API_KEY }}" \
           --build-secret GOOGLE_WALLET_ISSUER_ID="${{ inputs.GOOGLE_WALLET_ISSUER_ID }}" \
           --build-secret GOOGLE_WALLET_SERVICE_ACCOUNT_KEY="${{ inputs.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}" \
+          --build-secret DISCORD_SERVER_ID="${{ inputs.DISCORD_SERVER_ID }}" \
           -a ${{ inputs.APP_NAME }}
       shell: bash
       env:
