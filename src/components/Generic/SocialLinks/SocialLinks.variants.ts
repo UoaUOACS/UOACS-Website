@@ -8,7 +8,8 @@ export const socialLinksVariants = tv({
   variants: {
     variant: {
       hero: {
-        container: "gap-2 self-center md:gap-4 md:self-start",
+        container:
+          "flex-wrap gap-2 self-center justify-center md:flex-nowrap md:gap-4 md:self-start",
         icon: "h-6 w-6 md:h-7 md:w-7",
       },
       footer: {
