@@ -13,6 +13,18 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  images: {
+    localPatterns: [
+      {
+        pathname: "/payload/api/media/file/**",
+      },
+    ],
+    remotePatterns: [
+      {
+        hostname: "cdn.discordapp.com",
+      },
+    ],
+  },
 }
 
 export default withPayload(nextConfig)
