@@ -9,7 +9,7 @@ import { type SocialLink, SocialLinks } from "@/components/Generic"
 import { Button, SocialIcon } from "@/components/Primitive"
 import { Routes } from "@/lib/routes"
 import { cn, shuffle } from "@/lib/utils"
-import type { DiscordWidgetData } from "@/types/discord"
+import type { DiscordWidgetData } from "@/types/schemas/discord"
 import { NavbarGradient } from "../Navbar/NavbarGradient"
 
 /**
