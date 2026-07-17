@@ -62,6 +62,7 @@ const AVATAR_MIN_VISIBLE_COUNT = 4
 
 export const Footer = ({ links, socialLinks, discordWidgetData }: FooterProps) => {
   const discordHref = socialLinks.find((link) => link.icon === "discord")?.href
+  const joinDiscordHref = discordWidgetData?.instant_invite ?? discordHref
   const [avatarMembers, setAvatarMembers] = useState(
     () => discordWidgetData?.members.slice(0, 8) ?? [],
   )
@@ -139,15 +140,17 @@ export const Footer = ({ links, socialLinks, discordWidgetData }: FooterProps) =
             ))}
           </div>
         )}
-        <a className="shrink-0" href={discordWidgetData?.instant_invite ?? discordHref ?? ""}>
-          <Button
-            className="paragraph-sm"
-            right={<ArrowUpRightIcon className="h-3 w-3" />}
-            theme="primary"
-          >
-            Join Discord
-          </Button>
-        </a>
+        {joinDiscordHref && (
+          <a className="shrink-0" href={joinDiscordHref} rel="noopener noreferrer" target="_blank">
+            <Button
+              className="paragraph-sm"
+              right={<ArrowUpRightIcon className="h-3 w-3" />}
+              theme="primary"
+            >
+              Join Discord
+            </Button>
+          </a>
+        )}
       </div>
 
       <nav aria-label="Footer navigation" className="hidden flex-col items-start gap-4 md:flex">
