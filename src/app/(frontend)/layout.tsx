@@ -6,7 +6,7 @@ import { Footer, Navbar } from "@/components/Composite"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
 import { auth } from "@/lib/auth"
-import { getSocialLinks } from "@/lib/helpers"
+import { getDiscordWidgetData, getSocialLinks } from "@/lib/helpers"
 import { ApiRoutes, Routes } from "@/lib/routes"
 
 const inter = localFont({
@@ -82,9 +82,10 @@ const navbarLinks: { label: string; href: string }[] = [
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
-  const [socialLinks, session] = await Promise.all([
+  const [socialLinks, session, discordWidgetData] = await Promise.all([
     getSocialLinks(),
     auth.api.getSession({ headers: await headers() }),
+    getDiscordWidgetData(),
   ])
 
   return (
@@ -98,7 +99,11 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           <Navbar initialSession={session} links={navbarLinks} socialLinks={socialLinks} />
           <main className="flex grow flex-col items-center gap-14 py-9 md:gap-30">{children}</main>
         </div>
-        <Footer links={navbarLinks} socialLinks={socialLinks} />
+        <Footer
+          discordWidgetData={discordWidgetData}
+          links={navbarLinks}
+          socialLinks={socialLinks}
+        />
       </body>
     </html>
   )

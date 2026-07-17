@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { AboutUsSection, HeroSection, ValuesSection, WhoWeAreSection } from "@/components/Composite"
-import { getSocialLinks } from "@/lib/helpers"
+import { getDiscordWidgetData, getSocialLinks } from "@/lib/helpers"
 import { payload, Slugs } from "@/lib/payload"
 import type { Reel } from "@/payload/payload-types"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"
@@ -11,9 +11,10 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [homePage, socialLinks] = await Promise.all([
+  const [homePage, socialLinks, discordWidgetData] = await Promise.all([
     payload.findGlobal({ slug: Slugs.Globals.HOME_PAGE }),
     getSocialLinks(),
+    getDiscordWidgetData(),
   ])
 
   const rawReels = (homePage?.reels ?? []) as (string | Reel | null | undefined)[]
@@ -29,7 +30,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection socialLinks={socialLinks} />
+      <HeroSection
+        discordPresenceCount={discordWidgetData?.presence_count ?? null}
+        socialLinks={socialLinks}
+      />
       <AboutUsSection instagramHref={instagramHref} reels={resolvedReels} />
       <WhoWeAreSection polaroids={resolvedPolaroids} />
       <ValuesSection />

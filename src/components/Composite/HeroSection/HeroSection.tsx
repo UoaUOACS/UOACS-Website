@@ -4,7 +4,13 @@ import { Heading } from "@/components/Primitive"
 /**
  * HeroSection component for the homepage.
  */
-export const HeroSection = ({ socialLinks }: { socialLinks: SocialLink[] }) => {
+export const HeroSection = ({
+  discordPresenceCount,
+  socialLinks,
+}: {
+  discordPresenceCount: number | null
+  socialLinks: SocialLink[]
+}) => {
   const START_YEAR = 2024
 
   return (
@@ -31,7 +37,11 @@ export const HeroSection = ({ socialLinks }: { socialLinks: SocialLink[] }) => {
           </p>
         </div>
         <div className="mask-[linear-gradient(to_right,white,transparent)] hidden h-1.5 w-full bg-linear-to-r from-[#FF307C] to-[#2134FF] md:block" />
-        <SocialLinks links={socialLinks} />
+        <SocialLinks
+          activeDiscord
+          discordPresenceCount={discordPresenceCount}
+          links={socialLinks}
+        />
       </div>
     </section>
   )
