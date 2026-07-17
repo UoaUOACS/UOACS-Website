@@ -24,10 +24,8 @@ export const SocialLinks = ({
     <nav aria-label="Social media links" className={container()}>
       {links.map(({ icon: iconName, label, href }) => {
         const badge =
-          activeDiscord && iconName === "discord" ? (
-            <span key={label}>
-              {discordPresenceCount !== null ? discordPresenceCount : "00"} ONLINE
-            </span>
+          activeDiscord && iconName === "discord" && discordPresenceCount !== null ? (
+            <span key={label}>{discordPresenceCount} ONLINE</span>
           ) : null
         return variant === "footer" ? (
           <a

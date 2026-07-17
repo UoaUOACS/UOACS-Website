@@ -31,7 +31,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection
-        discordPresenceCount={discordWidgetData?.presence_count || null}
+        discordPresenceCount={discordWidgetData?.presence_count ?? null}
         socialLinks={socialLinks}
       />
       <AboutUsSection instagramHref={instagramHref} reels={resolvedReels} />
