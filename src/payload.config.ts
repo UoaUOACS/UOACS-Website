@@ -10,6 +10,7 @@ import sharp from "sharp"
 import { Slugs } from "./lib/slugs"
 import { Admin } from "./payload/collections/Admin"
 import { EmailVerificationCode } from "./payload/collections/EmailVerificationCode"
+import { Event } from "./payload/collections/Event"
 import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
@@ -31,7 +32,17 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Admin, Media, Member, Executive, Sponsor, Reel, Polaroid, EmailVerificationCode],
+  collections: [
+    Admin,
+    Media,
+    Member,
+    Executive,
+    Sponsor,
+    Reel,
+    Polaroid,
+    EmailVerificationCode,
+    Event,
+  ],
   globals: [HomePage, PrivacyPolicy, SocialLinks],
   editor: lexicalEditor(),
   graphQL: {

@@ -75,6 +75,7 @@ export interface Config {
     reel: Reel;
     polaroid: Polaroid;
     'email-verification-code': EmailVerificationCode;
+    event: Event;
     exports: Export;
     imports: Import;
     'payload-kv': PayloadKv;
@@ -93,6 +94,7 @@ export interface Config {
     reel: ReelSelect<false> | ReelSelect<true>;
     polaroid: PolaroidSelect<false> | PolaroidSelect<true>;
     'email-verification-code': EmailVerificationCodeSelect<false> | EmailVerificationCodeSelect<true>;
+    event: EventSelect<false> | EventSelect<true>;
     exports: ExportsSelect<false> | ExportsSelect<true>;
     imports: ImportsSelect<false> | ImportsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -368,6 +370,40 @@ export interface EmailVerificationCode {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event".
+ */
+export interface Event {
+  id: string;
+  /**
+   * Name of the event
+   */
+  name: string;
+  /**
+   * Short description of the event
+   */
+  description?: string | null;
+  /**
+   * Date that the event is being run
+   */
+  date: string;
+  /**
+   * Time that the event is being run
+   */
+  time: string;
+  /**
+   * The image posted to socials for this event and to be shown on the site
+   */
+  design: string | Media;
+  /**
+   * Link to the google form for this event. Do not include when retroactively adding events.
+   */
+  'sign-up-form'?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "exports".
  */
 export interface Export {
@@ -587,6 +623,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'email-verification-code';
         value: string | EmailVerificationCode;
+      } | null)
+    | ({
+        relationTo: 'event';
+        value: string | Event;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -753,6 +793,21 @@ export interface EmailVerificationCodeSelect<T extends boolean = true> {
   expiresAt?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event_select".
+ */
+export interface EventSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  date?: T;
+  time?: T;
+  design?: T;
+  'sign-up-form'?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -991,6 +1046,7 @@ export interface TaskCreateCollectionExport {
       | 'reel'
       | 'polaroid'
       | 'email-verification-code'
+      | 'event'
       | 'exports'
       | 'imports';
     drafts?: ('yes' | 'no') | null;
