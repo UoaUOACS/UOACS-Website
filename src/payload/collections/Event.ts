@@ -36,16 +36,10 @@ export const Event: CollectionConfig = {
       required: true,
       index: true,
       admin: {
-        description: "Date that the event is being run",
-      },
-    },
-    {
-      name: "time",
-      type: "text",
-      required: true,
-      index: true,
-      admin: {
-        description: "Time that the event is being run",
+        description: "Date and time that the event is being run",
+        date: {
+          pickerAppearance: "dayAndTime",
+        },
       },
     },
     {

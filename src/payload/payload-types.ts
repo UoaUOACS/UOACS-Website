@@ -383,13 +383,9 @@ export interface Event {
    */
   description?: string | null;
   /**
-   * Date that the event is being run
+   * Date and time that the event is being run
    */
   date: string;
-  /**
-   * Time that the event is being run
-   */
-  time: string;
   /**
    * The image posted to socials for this event and to be shown on the site
    */
@@ -802,7 +798,6 @@ export interface EventSelect<T extends boolean = true> {
   name?: T;
   description?: T;
   date?: T;
-  time?: T;
   design?: T;
   signUpForm?: T;
   updatedAt?: T;
