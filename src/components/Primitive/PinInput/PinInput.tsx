@@ -92,7 +92,7 @@ export const PinInput = ({
           <input
             aria-invalid={!!error}
             aria-label={`Digit ${i + 1} of ${length}`}
-            autoComplete={i === 0 ? "one-time-code" : "off"}
+            autoComplete="one-time-code"
             className={cn(
               "h-12 w-12 rounded border text-center font-mono text-lg caret-transparent transition-colors focus:outline-none focus:ring-1",
               error
