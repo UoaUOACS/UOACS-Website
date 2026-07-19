@@ -397,7 +397,7 @@ export interface Event {
   /**
    * Link to the google form for this event. Do not include when retroactively adding events.
    */
-  'sign-up-form'?: string | null;
+  signUpForm?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -804,7 +804,7 @@ export interface EventSelect<T extends boolean = true> {
   date?: T;
   time?: T;
   design?: T;
-  'sign-up-form'?: T;
+  signUpForm?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

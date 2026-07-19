@@ -58,7 +58,7 @@ export const Event: CollectionConfig = {
       },
     },
     {
-      name: "sign-up-form",
+      name: "signUpForm",
       type: "text",
       required: false, // once sign up is integrated to the website, new events can leave this field blank and be routed to internal sign up
       admin: {
