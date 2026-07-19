@@ -118,10 +118,18 @@ export const MemberStep = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="item-center flex w-full flex-col justify-start gap-2 md:flex-row md:gap-4">
-        <Input {...register("upi")} error={errors.upi?.message} label="UPI" required type="text" />
+        <Input
+          {...register("upi")}
+          error={errors.upi?.message}
+          hint="Not a UOA student? Enter N/A"
+          label="UPI"
+          required
+          type="text"
+        />
         <Input
           {...register("uoaID")}
           error={errors.uoaID?.message}
+          hint="Not a UOA student? Enter N/A"
           label="UOA ID Number"
           required
           type="text"

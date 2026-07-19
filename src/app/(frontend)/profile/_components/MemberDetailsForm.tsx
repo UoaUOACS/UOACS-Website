@@ -116,7 +116,12 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         onCancel={() => cancelField("upi", () => setUpi(member.upi ?? ""))}
         onSave={() => saveField("upi", upi)}
       >
-        <Input onChange={(e) => setUpi(e.target.value)} type="text" value={upi} />
+        <Input
+          hint="Not a UOA student? Enter N/A"
+          onChange={(e) => setUpi(e.target.value)}
+          type="text"
+          value={upi}
+        />
       </ToggleableInput>
 
       <ToggleableInput
@@ -126,7 +131,12 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
         onCancel={() => cancelField("uoaID", () => setUoaID(member.uoaID ?? ""))}
         onSave={() => saveField("uoaID", uoaID)}
       >
-        <Input onChange={(e) => setUoaID(e.target.value)} type="text" value={uoaID} />
+        <Input
+          hint="Not a UOA student? Enter N/A"
+          onChange={(e) => setUoaID(e.target.value)}
+          type="text"
+          value={uoaID}
+        />
       </ToggleableInput>
 
       <ToggleableInput
