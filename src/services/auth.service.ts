@@ -6,7 +6,11 @@ import { auth } from "@/lib/auth"
 import { payload } from "@/lib/payload"
 import { Slugs } from "@/lib/slugs"
 import type { Member } from "@/payload/payload-types"
-import { type CreateMemberInput, createMemberSchema } from "@/types/schemas/member"
+import {
+  type CreateMemberInput,
+  createMemberSchema,
+  type UpdateMemberInput,
+} from "@/types/schemas/member"
 import type { CreateUserInput } from "@/types/schemas/user"
 
 export class DuplicateFieldError extends Error {
@@ -128,6 +132,42 @@ export class AuthService {
         await this.rollbackBetterAuthSignUp(betterAuthUserId)
       }
       throw err
+    }
+  }
+
+  public async updateMember(memberId: string, data: UpdateMemberInput): Promise<Member> {
+    try {
+      return await payload.update({
+        collection: Slugs.Collections.MEMBER,
+        id: memberId,
+        data,
+      })
+    } catch (err) {
+      if (
+        err instanceof ValidationError &&
+        err.data?.errors?.some((e) => e.message === "Value must be unique")
+      ) {
+        const field = err.data.errors.find((e) => e.message === "Value must be unique")?.path ?? ""
+        throw new DuplicateFieldError(field)
+      }
+      console.error("[AuthService] updateMember failed", { memberId, error: err })
+      throw err
+    }
+  }
+
+  public async updateAuthUser(
+    data: UpdateMemberInput,
+    currentMember: Member,
+    headers: Headers,
+  ): Promise<void> {
+    const { firstName, lastName } = data
+    if (firstName !== undefined || lastName !== undefined) {
+      await auth.api.updateUser({
+        headers,
+        body: {
+          name: `${firstName ?? currentMember.firstName} ${lastName ?? currentMember.lastName}`,
+        },
+      })
     }
   }
 

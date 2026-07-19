@@ -41,3 +41,16 @@ export const createMemberSchema = memberSchema
   })
 
 export type CreateMemberInput = z.infer<typeof createMemberSchema>
+
+export const updateMemberSchema = memberSchema
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+    email: true,
+    upi: true,
+    uoaID: true,
+  })
+  .partial()
+
+export type UpdateMemberInput = z.infer<typeof updateMemberSchema>

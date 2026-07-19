@@ -28,6 +28,7 @@ export const ApiRoutes = {
     PASS: "/api/google-wallet/pass",
   },
   OG: "/og",
+  PROFILE: "/api/profile",
 } as const
 
 export type ApiRoute = (typeof ApiRoutes)[keyof typeof ApiRoutes]
