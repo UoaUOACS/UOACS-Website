@@ -57,16 +57,17 @@ export class AuthService {
     }
   }
 
-  public async signUpBetterAuth(data: CreateUserInput): Promise<User> {
+  public async signUpBetterAuth(data: CreateUserInput): Promise<{ user: User; headers: Headers }> {
     try {
-      const result = await auth.api.signUpEmail({
+      const { response, headers } = await auth.api.signUpEmail({
         body: {
           name: `${data.firstName} ${data.lastName}`,
           email: data.email,
           password: data.password,
         },
+        returnHeaders: true,
       })
-      return result.user
+      return { user: response.user, headers }
     } catch (err) {
       if (isAPIError(err) && err.body?.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
         throw new DuplicateFieldError("email")

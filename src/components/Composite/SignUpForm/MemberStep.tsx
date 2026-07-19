@@ -11,6 +11,7 @@ import { Button, Radio } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
 import { MultiSelect } from "@/components/Primitive/MultiSelect/MultiSelect"
 import { Select } from "@/components/Primitive/Select/Select"
+import { authClient } from "@/lib/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
 import { memberSchema } from "@/types/schemas/member"
@@ -42,6 +43,7 @@ export const MemberStep = () => {
   const { step1, step2, setStep2, prevStep, reset } = useSignUpFormStore()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { refetch: refetchSession } = authClient.useSession()
 
   const {
     control,
@@ -68,7 +70,6 @@ export const MemberStep = () => {
       return
     }
     setStep2(step2Data)
-    router.prefetch(Routes.HOME)
     setLoading(true)
     try {
       const response = await fetch(ApiRoutes.SIGN_UP.ROOT, {
@@ -88,7 +89,18 @@ export const MemberStep = () => {
         return
       }
       reset()
-      router.push(Routes.LOGIN)
+      const { data: session, error } = await authClient.getSession()
+      if (!session || error) {
+        console.error("Session confirmation failed after sign-up", error)
+        toast.error({
+          description: "Signed up, but we couldn't confirm your session. Please log in.",
+        })
+        router.push(Routes.LOGIN)
+        return
+      }
+
+      await refetchSession()
+      router.push(Routes.PROFILE)
       toast.success({
         description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
       })

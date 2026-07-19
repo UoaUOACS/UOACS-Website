@@ -22,9 +22,9 @@ export const LoginForm = () => {
   })
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { refetch: refetchSession } = authClient.useSession()
 
   const onSubmit = async (data: LoginOutput) => {
-    router.prefetch(Routes.HOME)
     setLoading(true)
     try {
       const { error } = await authClient.signIn.email({
@@ -45,7 +45,17 @@ export const LoginForm = () => {
         return
       }
 
-      router.push(Routes.HOME)
+      const { data: session, error: sessionError } = await authClient.getSession()
+      if (!session || sessionError) {
+        console.error("Session confirmation failed after log in", sessionError)
+        toast.error({
+          description: "Logged in, but we couldn't confirm your session. Please try again.",
+        })
+        return
+      }
+
+      await refetchSession()
+      router.push(Routes.PROFILE)
       toast.success({
         description: "Successfully logged in!",
       })
