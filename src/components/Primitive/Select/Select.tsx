@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils"
 export type SelectOption = string | { label: string; value: string }
 
 export interface SelectProps {
-  label: string
-  error: string | undefined
+  label?: string
+  error?: string
   options: SelectOption[]
   value: string
   onChange: (value: string) => void
@@ -53,6 +53,65 @@ export const Select = ({
     setIsOpen(false)
   }
 
+  const selectControl = (
+    <div className="relative">
+      <button
+        className="flex min-h-11 w-full items-center rounded border border-gray-300 px-3 py-2 text-left text-sm"
+        id={label || undefined}
+        onClick={() => setIsOpen((prev) => !prev)}
+        ref={ref}
+        type="button"
+      >
+        <span className={cn("flex-1", !value && "text-gray-400")}>
+          {selectedLabel ?? placeholder}
+        </span>
+        <ChevronDownIcon
+          className={cn(
+            "ml-auto h-4 w-4 shrink-0 text-gray-700 transition-transform",
+            isOpen && "rotate-180",
+          )}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.ul
+            animate={{ opacity: 1, y: 0 }}
+            className="absolute top-full z-10 mt-1 w-full rounded border border-gray-200 bg-white py-2 shadow-md"
+            exit={{ opacity: 0, y: -4 }}
+            initial={{ opacity: 0, y: -4 }}
+            transition={{ damping: 25, stiffness: 400, type: "spring" }}
+          >
+            {options.map(normalize).map(({ label: optLabel, value: optValue }) => (
+              <li key={optValue}>
+                <button
+                  className={cn(
+                    "flex w-full items-center px-3 py-2 text-left text-sm transition-colors duration-300 hover:bg-gray-400-opaque",
+                    optValue === value && "pointer-events-none bg-primary font-medium text-white",
+                  )}
+                  onClick={() => select(optValue)}
+                  type="button"
+                >
+                  {optLabel}
+                </button>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+
+  const errorMessage = error ? <p className="mt-1 text-red-600 text-sm">{error}</p> : null
+
+  if (!label) {
+    return (
+      <div ref={containerRef}>
+        {selectControl}
+        {errorMessage}
+      </div>
+    )
+  }
+
   return (
     <div
       className={cn("flex w-full flex-col justify-start gap-1 font-mono", containerClassName)}
@@ -62,52 +121,8 @@ export const Select = ({
         {label}
         {required && <span className="ml-1 text-brand-pink">*</span>}
       </label>
-      <div className="relative">
-        <button
-          className="flex min-h-11 w-full items-center rounded border border-gray-300 px-3 py-2 text-left text-sm"
-          id={label}
-          onClick={() => setIsOpen((prev) => !prev)}
-          ref={ref}
-          type="button"
-        >
-          <span className={cn("flex-1", !value && "text-gray-400")}>
-            {selectedLabel ?? placeholder}
-          </span>
-          <ChevronDownIcon
-            className={cn(
-              "ml-auto h-4 w-4 shrink-0 text-gray-700 transition-transform",
-              isOpen && "rotate-180",
-            )}
-          />
-        </button>
-        <AnimatePresence>
-          {isOpen && (
-            <motion.ul
-              animate={{ opacity: 1, y: 0 }}
-              className="absolute top-full z-10 mt-1 w-full rounded border border-gray-200 bg-white py-2 shadow-md"
-              exit={{ opacity: 0, y: -4 }}
-              initial={{ opacity: 0, y: -4 }}
-              transition={{ damping: 25, stiffness: 400, type: "spring" }}
-            >
-              {options.map(normalize).map(({ label: optLabel, value: optValue }) => (
-                <li key={optValue}>
-                  <button
-                    className={cn(
-                      "flex w-full items-center px-3 py-2 text-left text-sm transition-colors duration-300 hover:bg-gray-400-opaque",
-                      optValue === value && "pointer-events-none bg-primary font-medium text-white",
-                    )}
-                    onClick={() => select(optValue)}
-                    type="button"
-                  >
-                    {optLabel}
-                  </button>
-                </li>
-              ))}
-            </motion.ul>
-          )}
-        </AnimatePresence>
-      </div>
-      {error && <p className="mt-1 text-red-600 text-sm">{error}</p>}
+      {selectControl}
+      {errorMessage}
     </div>
   )
 }

@@ -7,9 +7,10 @@ export interface RadioOptionProps {
   checked: boolean
   toggle: (option: string) => void
   name: string
+  required?: boolean
 }
 
-export const RadioOption = ({ option, checked, toggle, name }: RadioOptionProps) => {
+export const RadioOption = ({ option, checked, toggle, name, required }: RadioOptionProps) => {
   return (
     <label className="group flex w-fit cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm">
       <input
@@ -17,6 +18,7 @@ export const RadioOption = ({ option, checked, toggle, name }: RadioOptionProps)
         className="sr-only"
         name={name}
         onChange={() => toggle(option)}
+        required={required}
         type="radio"
         value={option}
       />
