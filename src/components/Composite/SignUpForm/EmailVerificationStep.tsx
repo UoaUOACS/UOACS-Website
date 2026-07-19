@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Button } from "@/components/Primitive"
 import { PinInput } from "@/components/Primitive/PinInput/PinInput"
+import { authClient } from "@/lib/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
 import {
@@ -22,6 +23,7 @@ export const EmailVerificationStep = () => {
   const [resendCooldown, setResendCooldown] = useState(RESEND_COOLDOWN_S)
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const router = useRouter()
+  const { refetch: refetchSession } = authClient.useSession()
 
   const {
     control,
@@ -112,7 +114,6 @@ export const EmailVerificationStep = () => {
       const { memberExists } = await verifyResponse.json()
 
       if (memberExists) {
-        router.prefetch(Routes.LOGIN)
         const signUpResponse = await fetch(ApiRoutes.SIGN_UP.ROOT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -131,8 +132,9 @@ export const EmailVerificationStep = () => {
           return
         }
 
+        await refetchSession() // bypasses authClient's signUp methods (raw fetch to our route), so manually refresh the session store before navigating
         reset()
-        router.push(Routes.LOGIN)
+        router.push(Routes.PROFILE)
         toast.success({
           description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
         })

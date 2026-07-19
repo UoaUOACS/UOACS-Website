@@ -13,9 +13,9 @@ export async function POST(request: Request) {
 
     if (body?.existingMember === true) {
       const user = createUserServerSchema.parse(body)
-      const baUser = await authService.signUpBetterAuth(user)
+      const { user: baUser, headers } = await authService.signUpBetterAuth(user)
       const member = await authService.linkExistingMember(user.email, baUser.id)
-      return new Response(JSON.stringify(member), { status: 201 })
+      return new Response(JSON.stringify(member), { status: 201, headers })
     }
 
     const { password, ...memberData } = signUpSchema.parse(body)
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       limit: 1,
     })
 
-    const baUser = await authService.signUpBetterAuth({
+    const { user: baUser, headers } = await authService.signUpBetterAuth({
       firstName: memberData.firstName,
       lastName: memberData.lastName,
       email: memberData.email,
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         ? await authService.linkExistingMember(memberData.email, baUser.id)
         : await authService.signUpPayloadMember(memberData, baUser.id)
 
-    return new Response(JSON.stringify(member), { status: 201 })
+    return new Response(JSON.stringify(member), { status: 201, headers })
   } catch (err) {
     if (err instanceof SyntaxError) {
       return new Response(JSON.stringify({ error: "Invalid JSON body" }), { status: 400 })
