@@ -59,7 +59,7 @@ export const ToggleableInput = ({
           {locked ? null : (
             <>
               {!isEditable && (
-                <div className="opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
+                <div className="opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
                   <Button
                     aria-label={`Edit ${label}`}
                     className="h-auto px-2 py-1 text-xs leading-none md:h-auto"

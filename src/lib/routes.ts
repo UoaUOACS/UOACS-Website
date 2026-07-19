@@ -3,6 +3,7 @@ export const Routes = {
   TEAM: "/team",
   SPONSORS: "/sponsors",
   PRIVACY: "/privacy",
+  PROFILE: "/profile",
   SIGN_UP: "/sign-up",
   LOGIN: "/login",
   GOOGLE_WALLET: "/google-wallet",
