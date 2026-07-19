@@ -48,8 +48,6 @@ export const updateMemberSchema = memberSchema
     createdAt: true,
     updatedAt: true,
     email: true,
-    upi: true,
-    uoaID: true,
   })
   .partial()
 

@@ -36,8 +36,6 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
     member.compsciStudent === true ? "Yes" : member.compsciStudent === false ? "No" : undefined,
   )
   const [otherMajors, setOtherMajors] = useState<string[]>(member.otherMajors ?? [])
-  const [heardAboutUs, setHeardAboutUs] = useState(member.heardAboutUs ?? "")
-  const [eventWishlist, setEventWishlist] = useState(member.eventWishList ?? "")
 
   const [errors, setErrors] = useState<Partial<Record<keyof UpdateMemberInput, string>>>({})
   const { mutateAsync } = useUpdateMember()
@@ -113,18 +111,20 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
 
       <ToggleableInput
         displayNode={upi}
+        error={errors.upi}
         label="UPI"
-        locked
-        lockedReason="UPI is your university identifier and cannot be changed here"
+        onCancel={() => cancelField("upi", () => setUpi(member.upi ?? ""))}
+        onSave={() => saveField("upi", upi)}
       >
         <Input onChange={(e) => setUpi(e.target.value)} type="text" value={upi} />
       </ToggleableInput>
 
       <ToggleableInput
         displayNode={uoaID}
+        error={errors.uoaID}
         label="UOA ID Number"
-        locked
-        lockedReason="Your student ID cannot be changed here"
+        onCancel={() => cancelField("uoaID", () => setUoaID(member.uoaID ?? ""))}
+        onSave={() => saveField("uoaID", uoaID)}
       >
         <Input onChange={(e) => setUoaID(e.target.value)} type="text" value={uoaID} />
       </ToggleableInput>
@@ -200,34 +200,6 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
           onChange={setOtherMajors}
           options={OTHER_MAJORS_OPTIONS}
           value={otherMajors}
-        />
-      </ToggleableInput>
-
-      <ToggleableInput
-        displayNode={heardAboutUs}
-        error={errors.heardAboutUs}
-        label="How did you hear about us?"
-        onCancel={() =>
-          cancelField("heardAboutUs", () => setHeardAboutUs(member.heardAboutUs ?? ""))
-        }
-        onSave={() => saveField("heardAboutUs", heardAboutUs)}
-      >
-        <Input onChange={(e) => setHeardAboutUs(e.target.value)} type="text" value={heardAboutUs} />
-      </ToggleableInput>
-
-      <ToggleableInput
-        displayNode={eventWishlist}
-        error={errors.eventWishList}
-        label="What kinds of events would you like to see us host?"
-        onCancel={() =>
-          cancelField("eventWishList", () => setEventWishlist(member.eventWishList ?? ""))
-        }
-        onSave={() => saveField("eventWishList", eventWishlist)}
-      >
-        <Input
-          onChange={(e) => setEventWishlist(e.target.value)}
-          type="text"
-          value={eventWishlist}
         />
       </ToggleableInput>
     </div>
