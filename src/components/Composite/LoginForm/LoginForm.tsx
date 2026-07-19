@@ -54,7 +54,7 @@ export const LoginForm = () => {
         return
       }
 
-      void refetchSession()
+      await refetchSession()
       router.push(Routes.PROFILE)
       toast.success({
         description: "Successfully logged in!",

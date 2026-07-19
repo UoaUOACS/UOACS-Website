@@ -99,7 +99,7 @@ export const MemberStep = () => {
         return
       }
 
-      void refetchSession()
+      await refetchSession()
       router.push(Routes.PROFILE)
       toast.success({
         description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
