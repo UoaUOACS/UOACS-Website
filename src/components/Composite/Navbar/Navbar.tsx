@@ -46,7 +46,6 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
 
   const handleLogout = async () => {
     await authClient.signOut()
-    router.push(Routes.HOME)
     router.refresh()
   }
 
