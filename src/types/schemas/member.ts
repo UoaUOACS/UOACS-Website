@@ -23,7 +23,7 @@ export const memberSchema = z.object({
     },
   ),
   heardAboutUs: z.string().min(1, "This field is required"),
-  eventWishlist: z.string().nullable().optional(),
+  eventWishList: z.string().nullable().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 }) satisfies z.ZodType<Member>

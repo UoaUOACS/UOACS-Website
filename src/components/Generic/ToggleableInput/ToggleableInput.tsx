@@ -13,6 +13,7 @@ export interface ToggleableProps {
   containerClassName?: string
   displayNode: React.ReactNode
   onSave?: () => void | Promise<void>
+  onCancel?: () => void
   defaultToggleState?: boolean
   locked?: boolean
   lockedReason?: string
@@ -26,6 +27,7 @@ export const ToggleableInput = ({
   containerClassName,
   displayNode,
   onSave,
+  onCancel,
   defaultToggleState = false,
   locked = false,
   lockedReason,
@@ -81,7 +83,10 @@ export const ToggleableInput = ({
                     <div className="flex flex-row gap-2">
                       <Button
                         className="h-auto px-2 py-1 text-xs leading-none md:h-auto"
-                        onClick={() => setIsEditable(false)}
+                        onClick={() => {
+                          onCancel?.()
+                          setIsEditable(false)
+                        }}
                         theme="ghost"
                       >
                         Close
@@ -94,8 +99,8 @@ export const ToggleableInput = ({
                           try {
                             await onSave?.()
                             setIsEditable(false)
-                          } catch {
-                            // stay open — parent sets error prop on failure
+                          } catch (err) {
+                            console.error("[ToggleableInput] onSave failed", { label, error: err })
                           } finally {
                             setIsSaving(false)
                           }
