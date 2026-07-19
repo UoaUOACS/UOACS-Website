@@ -15,6 +15,9 @@ export const ApiRoutes = {
   ADMIN: {
     MEMBERS: (id: string | number | undefined) => `/api/admin/members/${id ?? ""}`,
   } as const,
+  MEMBER: {
+    ME: "/api/member/me",
+  } as const,
   SIGN_UP: {
     ROOT: "/api/sign-up",
     VERIFICATION_CODE: "/api/sign-up/verification-code",

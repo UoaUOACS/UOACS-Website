@@ -8,12 +8,11 @@ import { useRouter } from "next/navigation"
 import type { SocialLink } from "@/components/Generic"
 import { Button, Dropdown } from "@/components/Primitive"
 import { SocialIcon } from "@/components/Primitive/Icons"
+import { useSession } from "@/context/SessionContext"
 import { authClient } from "@/lib/auth-client"
 import { Routes } from "@/lib/routes"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"
-
-type Session = typeof authClient.$Infer.Session
 
 /**
  * Props for the {@link Navbar} component.
@@ -27,11 +26,6 @@ export interface NavbarProps {
    * Social links to be displayed in the dropdown on the right of the navbar's middle.
    */
   socialLinks: SocialLink[]
-  /**
-   * Session fetched on the server, used as the initial value before the
-   * client session hook resolves. Prevents a flash/skeleton on first paint.
-   */
-  initialSession?: Session | null
 }
 
 /**
@@ -41,9 +35,8 @@ export interface NavbarProps {
  * @param socialLinks Social links to be displayed in the dropdown on the right of the navbar's middle.
  * @returns A Navbar component with logo, navigation links, social dropdown, and join button.
  */
-export function Navbar({ links, socialLinks, initialSession }: NavbarProps) {
-  const { data: hookSession, isPending } = authClient.useSession()
-  const session = isPending ? initialSession : hookSession
+export function Navbar({ links, socialLinks }: NavbarProps) {
+  const session = useSession()
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -71,7 +64,7 @@ export function Navbar({ links, socialLinks, initialSession }: NavbarProps) {
             <Image alt="UOACS Logo" height={40} src="/uoacs-logo-bw.svg" width={167} />
           </Link>
         </motion.div>
-        <MobileNavbar initialSession={initialSession} links={links} socialLinks={socialLinks} />
+        <MobileNavbar links={links} socialLinks={socialLinks} />
         <div className="nowrap hidden flex-row md:flex lg:gap-5">
           <div className="flex flex-row items-center gap-5">
             {links
