@@ -88,8 +88,18 @@ export const MemberStep = () => {
         }
         return
       }
-      await refetchSession() // bypassed authClient's signUp methods (raw fetch to our route), so manually refresh the session store before navigating
       reset()
+      const { data: session, error } = await authClient.getSession()
+      if (!session || error) {
+        console.error("Session confirmation failed after sign-up", error)
+        toast.error({
+          description: "Signed up, but we couldn't confirm your session. Please log in.",
+        })
+        router.push(Routes.LOGIN)
+        return
+      }
+
+      void refetchSession()
       router.push(Routes.PROFILE)
       toast.success({
         description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
