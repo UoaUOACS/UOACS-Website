@@ -67,7 +67,7 @@ export const PinInput = ({
     } else if (e.key === "ArrowRight") {
       e.preventDefault()
       if (i < length - 1) inputRefs.current[i + 1]?.focus()
-    } else if (e.key !== "Tab") {
+    } else if (e.key !== "Tab" && !e.ctrlKey && !e.metaKey) {
       e.preventDefault()
     }
   }
