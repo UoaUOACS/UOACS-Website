@@ -1,5 +1,6 @@
 "use client"
 
+import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion, stagger } from "motion/react"
 import { type ReactNode, useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
@@ -14,7 +15,7 @@ export interface DropdownProps extends ButtonVariantProps {
   /**
    * A label for the dropdown button.
    */
-  label: string
+  label: string | ReactNode
   /**
    * Options for the dropdown menu.
    */
@@ -24,14 +25,10 @@ export interface DropdownProps extends ButtonVariantProps {
    */
   popoverClassName?: string
   /**
-   * Additional class names for the trigger button.
+   * Trigger button configuration, or `false` to hide the trigger icon entirely.
+   * Omit for default triangle icon.
    */
-  triggerClassName?: string
-  /**
-   * Optional icon for the trigger button.
-   * If not supplied, falls back to default icon.
-   */
-  triggerIcon?: ReactNode
+  trigger?: false | { triggerClassName?: string; triggerIcon?: ReactNode }
 }
 
 /**
@@ -44,8 +41,7 @@ export const Dropdown = ({
   label,
   options,
   popoverClassName,
-  triggerClassName,
-  triggerIcon,
+  trigger,
   ...buttonVariantProps
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -66,30 +62,21 @@ export const Dropdown = ({
     }
   }, [])
 
+  const triggerClassName = trigger !== false ? trigger?.triggerClassName : undefined
+  const triggerRight =
+    trigger === false
+      ? undefined
+      : (trigger?.triggerIcon ?? (
+          <ChevronDownIcon className={cn("h-4 w-4", isOpen && "rotate-180")} />
+        ))
+
   return (
     <div className="relative inline-flex" ref={ref}>
       <Button
         aria-expanded={isOpen}
         className={cn("z-20", triggerClassName)}
         onClick={() => setIsOpen(!isOpen)}
-        right={
-          triggerIcon || (
-            <svg
-              className={cn("transition-transform duration-200", isOpen && "rotate-180")}
-              fill="none"
-              height="9"
-              viewBox="0 0 11 9"
-              width="11"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Toggle dropdown</title>
-              <path
-                d="M5.91805 8.775C5.73225 9.075 5.26775 9.075 5.08195 8.775L0.0653922 0.675C-0.120406 0.375 0.111842 -3.02841e-08 0.483439 0L10.5166 8.17672e-07C10.8882 8.47956e-07 11.1204 0.375001 10.9346 0.675001L5.91805 8.775Z"
-                fill="currentColor"
-              />
-            </svg>
-          )
-        }
+        right={triggerRight}
         {...buttonVariantProps}
       >
         {label}

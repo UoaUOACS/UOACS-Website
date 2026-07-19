@@ -1,6 +1,9 @@
+"use client"
+
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { Button } from "@/components/Primitive"
+import { useSession } from "@/context/SessionContext"
 import { Routes } from "@/lib/routes"
 import type { Reel as ReelDocument } from "@/payload/payload-types"
 import { Reel } from "../Reel/Reel"
@@ -25,6 +28,7 @@ export interface AboutUsSectionProps {
  * @param reels An array of reels to display in the About Us section.
  */
 export const AboutUsSection = ({ reels, instagramHref }: AboutUsSectionProps) => {
+  const session = useSession()
   return (
     <div className="flex w-full flex-row justify-between gap-18 overflow-x-visible">
       <div className="flex w-full flex-none flex-col items-center gap-8 md:w-auto md:max-w-lg md:items-start md:gap-12">
@@ -44,11 +48,13 @@ export const AboutUsSection = ({ reels, instagramHref }: AboutUsSectionProps) =>
           competitive events.
         </p>
         <div className="flex flex-col items-center gap-6 md:items-start">
-          <Link className="w-fit" href={Routes.SIGN_UP}>
-            <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
-              Interested? Join UOACS
-            </Button>
-          </Link>
+          {!session && (
+            <Link className="w-fit" href={Routes.SIGN_UP}>
+              <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
+                Interested? Join UOACS
+              </Button>
+            </Link>
+          )}
           <p className="paragraph-sm font-medium">Membership is 100% free so come join us!</p>
         </div>
       </div>

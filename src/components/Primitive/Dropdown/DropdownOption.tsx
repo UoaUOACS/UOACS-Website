@@ -30,8 +30,14 @@ export interface DropdownOptionProps extends ButtonVariantProps {
 export const DropdownOption = ({ label, href, onClick, ...variant }: DropdownOptionProps) => {
   if (href) {
     const variantClasses = buttonVariants(variant)
+    const isExternal = href.startsWith("http")
     return (
-      <Link href={href} rel="noopener noreferrer" role="menuitem" target="_blank">
+      <Link
+        href={href}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        role="menuitem"
+        target={isExternal ? "_blank" : "_self"}
+      >
         <div className={cn(variantClasses, "whitespace-nowrap")}>{label || "Option"}</div>
       </Link>
     )
