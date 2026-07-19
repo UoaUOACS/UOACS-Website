@@ -2,12 +2,14 @@ import { cn } from "@/lib/utils"
 
 export interface InputProps extends React.ComponentPropsWithRef<"input"> {
   label?: string
+  hint?: string
   error?: string
   containerClassName?: string
 }
 
 export const Input = ({
   label,
+  hint,
   error,
   containerClassName,
   className,
@@ -20,6 +22,7 @@ export const Input = ({
   if (!label) {
     return (
       <>
+        {hint && <p className="paragraph-xs -mt-1 text-gray-400">{hint}</p>}
         <input
           className={cn("w-full rounded border border-gray-300 px-3 py-2", className)}
           ref={ref}
@@ -37,6 +40,7 @@ export const Input = ({
         {label}
         {required && <span className="ml-1 text-brand-pink">*</span>}
       </label>
+      {hint && <p className="paragraph-xs -mt-1 text-gray-400">{hint}</p>}
       <input
         className={cn("w-full rounded border border-gray-300 px-3 py-2", className)}
         id={label}
