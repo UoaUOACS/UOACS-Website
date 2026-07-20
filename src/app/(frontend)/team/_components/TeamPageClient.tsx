@@ -126,7 +126,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
         </div>
       </Section>
       <Section subtitle="UOACS Alumni" title="Past Executives" titleProps={{ h: 1, period: true }}>
-        <div className="grid w-full grid-cols-1 justify-center gap-12 md:grid-cols-[repeat(auto-fill,22.5rem)] md:gap-x-16 md:gap-y-[4.5rem]">
+        <div className="grid w-full grid-cols-1 justify-center gap-12 md:grid-cols-[repeat(auto-fill,22.5rem)] md:gap-x-16 md:gap-y-18">
           {pastTeams.map((team: string) => {
             const execsInTeam = pastExecs.filter((exec: Executive) =>
               (exec.role?.teams ?? []).includes(toTeam(team)),
