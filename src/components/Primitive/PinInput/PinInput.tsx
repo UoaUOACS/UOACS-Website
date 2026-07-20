@@ -67,7 +67,9 @@ export const PinInput = ({
     } else if (e.key === "ArrowRight") {
       e.preventDefault()
       if (i < length - 1) inputRefs.current[i + 1]?.focus()
-    } else if (e.key !== "Tab") {
+    } else if (e.key === "Enter" || e.key === "Tab" || e.ctrlKey || e.metaKey) {
+      // let native form submit / focus behavior through
+    } else {
       e.preventDefault()
     }
   }
@@ -92,7 +94,7 @@ export const PinInput = ({
           <input
             aria-invalid={!!error}
             aria-label={`Digit ${i + 1} of ${length}`}
-            autoComplete={i === 0 ? "one-time-code" : "off"}
+            autoComplete="one-time-code"
             className={cn(
               "h-12 w-12 rounded border text-center font-mono text-lg caret-transparent transition-colors focus:outline-none focus:ring-1",
               error
