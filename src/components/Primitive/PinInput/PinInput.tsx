@@ -48,7 +48,13 @@ export const PinInput = ({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, i: number) => {
-    if (e.key === "Backspace") {
+    if (e.key >= "0" && e.key <= "9") {
+      e.preventDefault()
+      const next = [...slots]
+      next[i] = e.key
+      commit(next)
+      if (i < length - 1) inputRefs.current[i + 1]?.focus()
+    } else if (e.key === "Backspace") {
       e.preventDefault()
       const next = [...slots]
       if (next[i]) {
@@ -65,6 +71,11 @@ export const PinInput = ({
     } else if (e.key === "ArrowRight") {
       e.preventDefault()
       if (i < length - 1) inputRefs.current[i + 1]?.focus()
+    } else if (e.key.length === 1 && !(e.key >= "0" && e.key <= "9")) {
+      // Only block real single-char non-digit keys (letters/symbols). Multi-char
+      // key reports (Enter, Tab, and IME-composed "Unidentified"/"Process" from
+      // some Android keyboards) fall through to native input / handleChange.
+      e.preventDefault()
     }
   }
 
