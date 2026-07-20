@@ -32,6 +32,21 @@ const TEAM_ORDER = [
 ]
 
 /**
+ * Ranks an exec by their primary (first-listed) team, for grouping purposes
+ */
+const primaryTeamRank = (exec: Executive): number => {
+  const primaryTeam = exec.role?.teams?.[0]
+  if (!primaryTeam) return TEAM_ORDER.length
+  return TEAM_ORDER.indexOf(primaryTeam as ExecutiveTeam)
+}
+
+/**
+ * Ranks an exec by their level (e.g. director vs executive), for grouping purposes
+ */
+const levelRank = (exec: Executive): number =>
+  EXECUTIVE_LEVEL_ORDER.indexOf((exec.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel)
+
+/**
  * A client component that displays the team page with current and past executives
  *
  * @param execs a payload response containing exec documents
@@ -40,15 +55,11 @@ const TEAM_ORDER = [
 export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
   const currentExecs = execs?.docs
     .filter((exec: Executive) => exec.isCurrent)
-    .sort(
-      (a, b) =>
-        EXECUTIVE_LEVEL_ORDER.indexOf(
-          (a.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
-        ) -
-        EXECUTIVE_LEVEL_ORDER.indexOf(
-          (b.role?.level ?? ExecutiveLevel.EXECUTIVE) as ExecutiveLevel,
-        ),
-    )
+    .sort((a, b) => {
+      const levelDiff = levelRank(a) - levelRank(b)
+      if (levelDiff !== 0) return levelDiff
+      return primaryTeamRank(a) - primaryTeamRank(b)
+    })
   const pastExecs = execs?.docs
     .filter((exec: Executive) => !exec.isCurrent)
     .sort(
@@ -126,7 +137,7 @@ export const TeamPageClient = ({ execs }: { execs: { docs: Executive[] } }) => {
         </div>
       </Section>
       <Section subtitle="UOACS Alumni" title="Past Executives" titleProps={{ h: 1, period: true }}>
-        <div className="grid w-full grid-cols-1 justify-center gap-12 md:grid-cols-[repeat(auto-fill,22.5rem)] md:gap-x-16 md:gap-y-[4.5rem]">
+        <div className="grid w-full grid-cols-1 justify-center gap-12 md:grid-cols-[repeat(auto-fill,22.5rem)] md:gap-x-16 md:gap-y-18">
           {pastTeams.map((team: string) => {
             const execsInTeam = pastExecs.filter((exec: Executive) =>
               (exec.role?.teams ?? []).includes(toTeam(team)),
