@@ -31,26 +31,24 @@ export const PinInput = ({
   const [slots, setSlots] = useState<string[]>(() =>
     value.split("").concat(Array(length).fill("")).slice(0, length),
   )
+  const slotsRef = useRef(slots)
 
   useEffect(() => {
     if (value === "") {
-      setSlots(Array(length).fill(""))
+      const cleared = Array(length).fill("")
+      slotsRef.current = cleared
+      setSlots(cleared)
     }
   }, [value, length])
 
   const commit = (next: string[]) => {
+    slotsRef.current = next
     setSlots(next)
     onChange(next.join(""))
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, i: number) => {
-    if (e.key >= "0" && e.key <= "9") {
-      e.preventDefault()
-      const next = [...slots]
-      next[i] = e.key
-      commit(next)
-      if (i < length - 1) inputRefs.current[i + 1]?.focus()
-    } else if (e.key === "Backspace") {
+    if (e.key === "Backspace") {
       e.preventDefault()
       const next = [...slots]
       if (next[i]) {
@@ -67,11 +65,41 @@ export const PinInput = ({
     } else if (e.key === "ArrowRight") {
       e.preventDefault()
       if (i < length - 1) inputRefs.current[i + 1]?.focus()
-    } else if (e.key === "Enter" || e.key === "Tab" || e.ctrlKey || e.metaKey) {
-      // let native form submit / focus behavior through
-    } else {
-      e.preventDefault()
     }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, i: number) => {
+    const raw = e.target.value
+
+    if (raw === "") {
+      if (slotsRef.current[i]) {
+        const next = [...slotsRef.current]
+        next[i] = ""
+        commit(next)
+      }
+      return
+    }
+
+    const digits = raw.replace(/\D/g, "")
+
+    if (digits.length === 0) {
+      commit([...slotsRef.current])
+      return
+    }
+
+    if (digits.length > 1) {
+      // Multi-char value in a single slot (autofill/dictation) - replace the whole code from slot 0, same as handlePaste
+      const clipped = digits.slice(0, length)
+      const next = clipped.split("").concat(Array(length).fill("")).slice(0, length)
+      commit(next)
+      inputRefs.current[Math.min(clipped.length, length - 1)]?.focus()
+      return
+    }
+
+    const next = [...slotsRef.current]
+    next[i] = digits
+    commit(next)
+    if (i < length - 1) inputRefs.current[i + 1]?.focus()
   }
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -108,7 +136,7 @@ export const PinInput = ({
             inputMode="numeric"
             key={SLOT_KEYS[i]}
             maxLength={1}
-            onChange={() => {}}
+            onChange={(e) => handleChange(e, i)}
             onFocus={(e) => e.target.select()}
             onKeyDown={(e) => handleKeyDown(e, i)}
             onPaste={handlePaste}
