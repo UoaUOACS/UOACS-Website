@@ -8,6 +8,7 @@ export const Slugs = {
     SPONSOR: "sponsor",
     ADMIN: "admin",
     EMAIL_VERIFICATION_CODE: "email-verification-code",
+    EVENT: "event",
   },
   Globals: {
     HOME_PAGE: "home-page",

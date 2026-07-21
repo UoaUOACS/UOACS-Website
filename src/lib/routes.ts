@@ -7,6 +7,7 @@ export const Routes = {
   SIGN_UP: "/sign-up",
   LOGIN: "/login",
   GOOGLE_WALLET: "/google-wallet",
+  EVENTS: "/events",
 } as const
 
 export type Route = (typeof Routes)[keyof typeof Routes]
