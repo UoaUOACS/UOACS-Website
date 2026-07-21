@@ -13,7 +13,7 @@ importers:
         version: 2.2.0(react@19.2.4)
       '@hookform/resolvers':
         specifier: ^5.2.2
-        version: 5.2.2(react-hook-form@7.73.1(react@19.2.4))
+        version: 5.2.2(react-hook-form@7.82.0(react@19.2.4))
       '@payloadcms/db-mongodb':
         specifier: 3.83.0
         version: 3.83.0(@aws-sdk/credential-providers@3.1032.0)(payload@3.83.0(graphql@16.13.2)(typescript@5.9.3))
@@ -79,7 +79,7 @@ importers:
         version: 19.2.4(react@19.2.4)
       react-hook-form:
         specifier: ^7.71.2
-        version: 7.73.1(react@19.2.4)
+        version: 7.82.0(react@19.2.4)
       react-smart-ticker:
         specifier: ^1.6.7
         version: 1.6.8(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -3769,8 +3769,8 @@ packages:
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
 
-  react-hook-form@7.73.1:
-    resolution: {integrity: sha512-VAfVYOPcx3piiEVQy95vyFmBwbVUsP/AUIN+mpFG8h11yshDd444nn0VyfaGWSRnhOLVgiDu7HIuBtAIzxn9dA==}
+  react-hook-form@7.82.0:
+    resolution: {integrity: sha512-Zw/uFZ2dO+02GHlBn7JFGn8kZJ7LdM33B/0BXOovzFay+CMhf94JMw5BVu+F1tVkUKjNvBuaE3fz5BJhga10Tg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -5491,10 +5491,10 @@ snapshots:
     dependencies:
       react: 19.2.4
 
-  '@hookform/resolvers@5.2.2(react-hook-form@7.73.1(react@19.2.4))':
+  '@hookform/resolvers@5.2.2(react-hook-form@7.82.0(react@19.2.4))':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.73.1(react@19.2.4)
+      react-hook-form: 7.82.0(react@19.2.4)
 
   '@img/colour@1.1.0': {}
 
@@ -8614,7 +8614,7 @@ snapshots:
     dependencies:
       react: 19.2.4
 
-  react-hook-form@7.73.1(react@19.2.4):
+  react-hook-form@7.82.0(react@19.2.4):
     dependencies:
       react: 19.2.4
 
