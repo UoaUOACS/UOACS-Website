@@ -16,7 +16,8 @@
       "!**/.vercel",
       "!**/node_modules"
     ],
-    "ignoreUnknown": true
+    "ignoreUnknown": true,
+    "maxSize": 2097152
   },
   "formatter": {
     "attributePosition": "auto",
@@ -59,7 +60,8 @@
         "noUnusedImports": "error"
       },
       "suspicious": {
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noLeakedRender": "off"
       },
       "a11y": {},
       "nursery": {
@@ -83,7 +85,8 @@
         "useComponentExportOnlyModules": "off"
       },
       "performance": {
-        "noImgElement": "info"
+        "noImgElement": "info",
+        "noJsxPropsBind": "off"
       }
     }
   },
@@ -96,6 +99,16 @@
             "useComponentExportOnlyModules": {
               "level": "off"
             }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["public/**/*.svg"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noSvgWithoutTitle": "off"
           }
         }
       }
