@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import type { z } from "zod"
 import { Button } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
+import { ApiError, api } from "@/lib/api-client"
 import { ApiRoutes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
 import { createUserSchema } from "@/types/schemas/user"
@@ -36,22 +37,18 @@ export const UserStep = () => {
     setSubmitting(true)
     try {
       setStep1(userData)
-      const response = await fetch(ApiRoutes.SIGN_UP.VERIFICATION_CODE, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: userData.email }),
-      })
-      if (!response.ok) {
-        if (response.status === 429) {
-          toast.warning({ description: "Please wait before requesting another code." })
-        } else {
-          toast.error({ description: "Failed to send verification email. Please try again." })
-        }
-        return
-      }
+      await api.post(
+        ApiRoutes.SIGN_UP.VERIFICATION_CODE,
+        { email: userData.email },
+        { toastOnError: false },
+      )
       nextStep()
-    } catch {
-      toast.error({ description: "An error occurred while submitting the form" })
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 429) {
+        toast.warning({ description: "Please wait before requesting another code." })
+      } else {
+        toast.error({ description: "Failed to send verification email. Please try again." })
+      }
     } finally {
       setSubmitting(false)
     }
