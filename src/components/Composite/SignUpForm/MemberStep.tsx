@@ -11,6 +11,7 @@ import { Button, Radio } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
 import { MultiSelect } from "@/components/Primitive/MultiSelect/MultiSelect"
 import { Select } from "@/components/Primitive/Select/Select"
+import { ApiError, api } from "@/lib/api-client"
 import { authClient } from "@/lib/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
@@ -72,22 +73,7 @@ export const MemberStep = () => {
     setStep2(step2Data)
     setLoading(true)
     try {
-      const response = await fetch(ApiRoutes.SIGN_UP.ROOT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...step1, ...step2Data }),
-      })
-      if (!response.ok) {
-        if (response.status === 409) {
-          toast.warning({
-            description:
-              "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
-          })
-        } else {
-          toast.error({ description: "An error occurred while submitting the form" })
-        }
-        return
-      }
+      await api.post(ApiRoutes.SIGN_UP.ROOT, { ...step1, ...step2Data }, { toastOnError: false })
       reset()
       const { data: session, error } = await authClient.getSession()
       if (!session || error) {
@@ -104,8 +90,15 @@ export const MemberStep = () => {
       toast.success({
         description: "Successfully signed up!\nWe look forward to seeing you at our events!!",
       })
-    } catch {
-      toast.error({ description: "An error occurred while submitting the form" })
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 409) {
+        toast.warning({
+          description:
+            "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
+        })
+      } else {
+        toast.error({ description: "An error occurred while submitting the form" })
+      }
     } finally {
       setLoading(false)
     }
