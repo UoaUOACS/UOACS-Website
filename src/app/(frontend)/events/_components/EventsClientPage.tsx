@@ -19,9 +19,13 @@ export const EventsClientPage = () => {
         titleProps={{ h: 1, period: true }}
       >
         <div className="flex w-full flex-row flex-wrap items-start justify-center gap-8">
-          {upcoming.isLoading || (upcoming.isError && upcomingEvents.length === 0)
-            ? null
-            : upcomingEvents.map((event) => <EventCard event={event} key={event.id} />)}
+          {upcoming.isLoading ? null : upcomingEvents.length === 0 ? (
+            <p className="paragraph text-gray-700">
+              No upcoming events right now, check back soon.
+            </p>
+          ) : (
+            upcomingEvents.map((event) => <EventCard event={event} key={event.id} />)
+          )}
         </div>
         {upcomingEvents.length > 0 && upcoming.hasNextPage && (
           <Button disabled={upcoming.isFetchingNextPage} onClick={() => upcoming.fetchNextPage()}>
@@ -36,9 +40,11 @@ export const EventsClientPage = () => {
         titleProps={{ h: 1, period: true }}
       >
         <div className="flex w-full flex-row flex-wrap items-start justify-center gap-8">
-          {past.isLoading || (past.isError && pastEvents.length === 0)
-            ? null
-            : pastEvents.map((event) => <EventCard event={event} key={event.id} />)}
+          {past.isLoading ? null : pastEvents.length === 0 ? (
+            <p className="paragraph text-gray-700">No past events to show yet.</p>
+          ) : (
+            pastEvents.map((event) => <EventCard event={event} key={event.id} />)
+          )}
         </div>
         {pastEvents.length > 0 && past.hasNextPage && (
           <Button disabled={past.isFetchingNextPage} onClick={() => past.fetchNextPage()}>
