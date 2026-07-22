@@ -1,3 +1,4 @@
+export * from "./EncryptedBanner/EncryptedBanner"
 export * from "./EventCard/EventCard"
 export * from "./ExecCard/ExecCard"
 export * from "./Polaroid/Polaroid"
