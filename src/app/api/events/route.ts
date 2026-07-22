@@ -13,19 +13,24 @@ export const GET = async (req: NextRequest) => {
     )
   }
 
-  const data = await payload.find({
-    collection: Slugs.Collections.EVENT,
-    pagination: true,
-    page,
-    limit: 8,
-    sort: upcoming ? "date" : "-date",
-    where: {
-      _status: { equals: "published" },
-      date: upcoming
-        ? { greater_than_equal: new Date().toISOString() }
-        : { less_than: new Date().toISOString() },
-    },
-  })
+  try {
+    const data = await payload.find({
+      collection: Slugs.Collections.EVENT,
+      pagination: true,
+      page,
+      limit: 8,
+      sort: upcoming ? "date" : "-date",
+      where: {
+        _status: { equals: "published" },
+        date: upcoming
+          ? { greater_than_equal: new Date().toISOString() }
+          : { less_than: new Date().toISOString() },
+      },
+    })
 
-  return NextResponse.json(data)
+    return NextResponse.json(data)
+  } catch (err) {
+    console.error("[GET /api/events]", { error: err })
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 })
+  }
 }
