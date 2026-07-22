@@ -12,6 +12,7 @@
     "lint:fix:unsafe": "biome check . --write --unsafe",
     "types:check": "tsc --noEmit",
     "types:generate": "payload generate:types && next typegen",
+    "code:generate": "plop",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
     "postinstall": "lefthook install",

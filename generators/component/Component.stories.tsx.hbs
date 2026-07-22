@@ -1,0 +1,12 @@
+import type { Meta, StoryObj } from "@storybook/nextjs-vite"
+import { {{pascalCase name}} } from "./{{pascalCase name}}"
+
+const meta: Meta<typeof {{pascalCase name}}> = {
+  title: "{{tier}} Components/{{pascalCase name}}",
+  component: {{pascalCase name}},
+}
+
+export default meta
+type Story = StoryObj<typeof {{pascalCase name}}>
+
+export const Default: Story = {}
