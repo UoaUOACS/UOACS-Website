@@ -20,6 +20,7 @@ type RequestOptions = {
   params?: Record<string, string | number | boolean | undefined | null>
   cache?: RequestCache
   next?: NextFetchRequestConfig
+  toastOnError?: boolean
 }
 
 function buildUrlWithParams(url: string, params?: RequestOptions["params"]): string {
@@ -33,7 +34,15 @@ function buildUrlWithParams(url: string, params?: RequestOptions["params"]): str
 }
 
 async function fetchApi<T>(url: string, options: RequestOptions = {}): Promise<T> {
-  const { method = "GET", headers = {}, body, params, cache = "no-store", next } = options
+  const {
+    method = "GET",
+    headers = {},
+    body,
+    params,
+    cache = "no-store",
+    next,
+    toastOnError = true,
+  } = options
 
   const fullUrl = buildUrlWithParams(url, params)
 
@@ -59,7 +68,7 @@ async function fetchApi<T>(url: string, options: RequestOptions = {}): Promise<T
         ? responseBody.error
         : response.statusText
 
-    if (typeof window !== "undefined") {
+    if (toastOnError && typeof window !== "undefined") {
       toast.error({ description: message })
     }
 
@@ -68,7 +77,9 @@ async function fetchApi<T>(url: string, options: RequestOptions = {}): Promise<T
 
   if (response.status === 204) return undefined as T
 
-  return response.json()
+  return response.json().catch(() => {
+    throw new ApiError("Received an invalid response from the server", response.status)
+  })
 }
 
 export const api = {
