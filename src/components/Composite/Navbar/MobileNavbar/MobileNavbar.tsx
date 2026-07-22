@@ -48,14 +48,14 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
   }, [])
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
+    if (!isOpen) return
+
+    document.documentElement.classList.add("overflow-hidden", "touch-none")
+    document.body.classList.add("overflow-hidden", "touch-none")
 
     return () => {
-      document.body.style.overflow = ""
+      document.documentElement.classList.remove("overflow-hidden", "touch-none")
+      document.body.classList.remove("overflow-hidden", "touch-none")
     }
   }, [isOpen])
 
