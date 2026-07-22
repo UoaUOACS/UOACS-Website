@@ -3,9 +3,10 @@
 import { useState } from "react"
 import { ToggleableInput } from "@/components/Generic"
 import { Input, MultiSelect, Radio, Select } from "@/components/Primitive"
+import { ApiError } from "@/lib/api-client"
 import { toast } from "@/lib/toast"
 import type { Member } from "@/payload/payload-types"
-import { ProfileUpdateError, useUpdateMember } from "@/queries/useUpdateMember"
+import { useUpdateMember } from "@/queries/useUpdateMember"
 import type { UpdateMemberInput } from "@/types/schemas/member"
 
 const STUDY_YEAR_OPTIONS = [
@@ -49,24 +50,19 @@ export const MemberDetailsForm = ({ member }: { member: Member }) => {
       await mutateAsync({ [field]: value } as Partial<UpdateMemberInput>)
       toast.success({ description: "Profile updated" })
     } catch (err) {
-      if (err instanceof ProfileUpdateError && err.fieldErrors.length > 0) {
+      if (err instanceof ApiError && err.fieldErrors && err.fieldErrors.length > 0) {
         setErrors((prev) => {
           const next = { ...prev }
-          for (const fieldError of err.fieldErrors) {
-            next[fieldError.field] = fieldError.message
+          for (const fieldError of err.fieldErrors ?? []) {
+            next[fieldError.field as keyof UpdateMemberInput] = fieldError.message
           }
           return next
         })
-        if (!err.fieldErrors.some((fieldError) => fieldError.field === field)) {
-          toast.error({ description: err.message })
-        }
       } else {
         console.error("[MemberDetailsForm] saveField failed", { field, error: err })
         toast.error({
           description:
-            err instanceof ProfileUpdateError
-              ? err.message
-              : "An error occurred while updating your profile",
+            err instanceof ApiError ? err.message : "An error occurred while updating your profile",
         })
       }
       throw err
