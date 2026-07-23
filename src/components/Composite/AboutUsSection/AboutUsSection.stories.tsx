@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/nextjs-vite"
 import { mockReel } from "@/mocks/Reel.mock"
+import { mockSession } from "@/mocks/Session.mock"
 import { AboutUsSection } from "./AboutUsSection"
 
 const meta: Meta<typeof AboutUsSection> = {
@@ -21,3 +22,12 @@ export const Default: Story = (args) => {
     </div>
   )
 }
+
+export const LoggedIn: Story = (args) => {
+  return (
+    <div className="mt-55">
+      <AboutUsSection {...args} />
+    </div>
+  )
+}
+LoggedIn.parameters = { session: mockSession }
