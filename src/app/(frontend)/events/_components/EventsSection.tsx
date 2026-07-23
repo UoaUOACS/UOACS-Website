@@ -1,7 +1,8 @@
 "use client"
 
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
 import { EventCard, Section } from "@/components/Generic"
-import { Button } from "@/components/Primitive"
+import { Button, EmptyState, type EmptyStateProps } from "@/components/Primitive"
 import { useEvents } from "@/queries/useEvents"
 
 export const EventsSection = ({
@@ -13,7 +14,7 @@ export const EventsSection = ({
   upcoming: boolean
   title: string
   subtitle: string
-  emptyMessage: string
+  emptyMessage: EmptyStateProps
 }) => {
   const query = useEvents(upcoming)
   const events = query.data?.pages.flatMap((page) => page.docs) ?? []
@@ -25,11 +26,15 @@ export const EventsSection = ({
       title={title}
       titleProps={{ h: 1, period: true }}
     >
-      <div className="flex w-full flex-row flex-wrap items-start justify-center gap-8">
+      <div className="flex w-full flex-row flex-wrap items-start justify-center gap-8 pt-6">
         {query.isError ? (
-          <p className="paragraph text-gray-700">Failed to load events. Please try again.</p>
+          <EmptyState
+            description="Please try again."
+            icon={<ExclamationTriangleIcon className="size-full text-red-500" />}
+            title="Failed to load events"
+          />
         ) : events.length === 0 ? (
-          <p className="paragraph text-gray-700">{emptyMessage}</p>
+          <EmptyState {...emptyMessage} />
         ) : (
           events.map((event) => <EventCard event={event} key={event.id} />)
         )}
