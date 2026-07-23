@@ -51,11 +51,11 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
     if (!isOpen) return
 
     document.documentElement.classList.add("overflow-hidden", "touch-none")
-    document.body.classList.add("overflow-hidden", "touch-none")
+    document.body.classList.add("touch-none")
 
     return () => {
       document.documentElement.classList.remove("overflow-hidden", "touch-none")
-      document.body.classList.remove("overflow-hidden", "touch-none")
+      document.body.classList.remove("touch-none")
     }
   }, [isOpen])
 

@@ -76,6 +76,7 @@ const navbarLinks: { label: string; href: string }[] = [
   { label: "Home", href: Routes.HOME },
   { label: "Meet The Team", href: Routes.TEAM },
   { label: "Our Sponsors", href: Routes.SPONSORS },
+  { label: "Events", href: Routes.EVENTS },
 ]
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
@@ -92,7 +93,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       className={`${inter.variable} ${switzer.variable} ${mono.variable} overflow-x-hidden`}
       lang="en"
     >
-      <body className="relative flex min-h-screen flex-col overflow-x-hidden">
+      <body className="relative flex min-h-screen flex-col overflow-hidden">
         <Providers initialSession={session}>
           <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:gap-9 md:px-12 lg:px-20">
             <Navbar links={navbarLinks} socialLinks={socialLinks} />
