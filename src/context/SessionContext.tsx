@@ -3,7 +3,7 @@ import { authClient } from "@/lib/auth-client"
 
 export type Session = typeof authClient.$Infer.Session | null
 
-const SessionContext = createContext<Session | undefined>(undefined)
+export const SessionContext = createContext<Session | undefined>(undefined)
 
 export function useSession(): Session {
   const context = useContext(SessionContext)
