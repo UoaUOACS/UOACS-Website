@@ -1,5 +1,6 @@
 import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query"
 import type { PaginatedDocs } from "payload"
+import { api } from "@/lib/api-client"
 import { ApiRoutes } from "@/lib/routes"
 import type { Event } from "@/payload/payload-types"
 import { QueryKeys } from "./QueryKeys"
@@ -7,11 +8,10 @@ import { QueryKeys } from "./QueryKeys"
 export const getEventsQueryOptions = (upcoming: boolean) =>
   infiniteQueryOptions({
     queryKey: [QueryKeys.EVENTS, upcoming],
-    queryFn: async ({ pageParam }) => {
-      const result = await fetch(ApiRoutes.EVENTS(upcoming, pageParam))
-      if (!result.ok) throw new Error(`Failed to fetch events: ${result.status}`)
-      return result.json() as Promise<PaginatedDocs<Event>>
-    },
+    queryFn: ({ pageParam }) =>
+      api.get<PaginatedDocs<Event>>(ApiRoutes.EVENTS(upcoming, pageParam), {
+        toastOnError: false,
+      }),
     initialPageParam: 1,
     getNextPageParam: (lastPage: PaginatedDocs<Event>) =>
       lastPage.hasNextPage ? lastPage.nextPage : undefined,
