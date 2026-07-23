@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Button } from "@/components/Primitive"
 import { PinInput } from "@/components/Primitive/PinInput/PinInput"
+import { ApiError, api } from "@/lib/api-client"
 import { authClient } from "@/lib/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
@@ -50,25 +51,20 @@ export const EmailVerificationStep = () => {
     if (!step1) return
     setResendCooldown(RESEND_COOLDOWN_S)
     try {
-      const response = await fetch(ApiRoutes.SIGN_UP.VERIFICATION_CODE, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: step1.email }),
-      })
-      if (!response.ok) {
-        setResendCooldown(0)
-        if (response.status === 429) {
-          toast.warning({ description: "Please wait before requesting another code." })
-        } else {
-          toast.error({ description: "Failed to send verification email. Please try again." })
-        }
-        return
-      }
+      await api.post(
+        ApiRoutes.SIGN_UP.VERIFICATION_CODE,
+        { email: step1.email },
+        { toastOnError: false },
+      )
       startCooldown()
       toast.success({ description: "Verification email sent! Please check your inbox." })
-    } catch {
+    } catch (err) {
       setResendCooldown(0)
-      toast.error({ description: "Failed to send verification email. Please try again." })
+      if (err instanceof ApiError && err.status === 429) {
+        toast.warning({ description: "Please wait before requesting another code." })
+      } else {
+        toast.error({ description: "Failed to send verification email. Please try again." })
+      }
     }
   }
 
@@ -95,15 +91,15 @@ export const EmailVerificationStep = () => {
 
     setSubmitting(true)
     try {
-      const verifyResponse = await fetch(ApiRoutes.SIGN_UP.VERIFICATION_CODE, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: step1.email, code }),
-      })
-
-      if (!verifyResponse.ok) {
-        const body = await verifyResponse.json()
-        if (body?.error === "expired") {
+      let verifyResult: { memberExists: boolean }
+      try {
+        verifyResult = await api.put<{ memberExists: boolean }>(
+          ApiRoutes.SIGN_UP.VERIFICATION_CODE,
+          { email: step1.email, code },
+          { toastOnError: false },
+        )
+      } catch (err) {
+        if (err instanceof ApiError && err.message === "expired") {
           toast.warning({ description: "Your code has expired. Please request a new one." })
         } else {
           toast.warning({ description: "Incorrect code. Please check your email and try again." })
@@ -111,17 +107,17 @@ export const EmailVerificationStep = () => {
         return
       }
 
-      const { memberExists } = await verifyResponse.json()
+      const { memberExists } = verifyResult
 
       if (memberExists) {
-        const signUpResponse = await fetch(ApiRoutes.SIGN_UP.ROOT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...step1, existingMember: true }),
-        })
-
-        if (!signUpResponse.ok) {
-          if (signUpResponse.status === 409) {
+        try {
+          await api.post(
+            ApiRoutes.SIGN_UP.ROOT,
+            { ...step1, existingMember: true },
+            { toastOnError: false },
+          )
+        } catch (err) {
+          if (err instanceof ApiError && err.status === 409) {
             toast.warning({
               description:
                 "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",

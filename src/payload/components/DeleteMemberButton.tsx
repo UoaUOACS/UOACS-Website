@@ -3,6 +3,7 @@
 import { Button, useDocumentInfo } from "@payloadcms/ui"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { ApiError, api } from "@/lib/api-client"
 import { ApiRoutes } from "@/lib/routes"
 
 export function DeleteMemberButton() {
@@ -18,16 +19,10 @@ export function DeleteMemberButton() {
     setError(null)
 
     try {
-      const res = await fetch(ApiRoutes.ADMIN.MEMBERS(id), { method: "DELETE" })
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}))
-        setError(body.error ?? `Delete failed (${res.status})`)
-        setConfirming(false)
-        return
-      }
+      await api.delete(ApiRoutes.ADMIN.MEMBERS(id), { toastOnError: false })
       router.push("/payload/admin/collections/member")
-    } catch {
-      setError("Unexpected error — please try again")
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Unexpected error — please try again")
       setConfirming(false)
     } finally {
       setLoading(false)
