@@ -3,6 +3,7 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion, stagger } from "motion/react"
 import { type ReactNode, useEffect, useRef, useState } from "react"
+import { usePopoverKeyboardNav } from "@/hooks/usePopoverKeyboardNav"
 import { cn } from "@/lib/utils"
 import { Button } from "../Button/Button"
 import type { ButtonVariantProps } from "../Button/variants"
@@ -46,6 +47,8 @@ export const Dropdown = ({
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const optionRefs = useRef<(HTMLElement | null)[]>([])
 
   useEffect(() => {
     const listener = (event: MouseEvent | TouchEvent) => {
@@ -62,6 +65,13 @@ export const Dropdown = ({
     }
   }, [])
 
+  const onKeyDown = usePopoverKeyboardNav({
+    isOpen,
+    onClose: () => setIsOpen(false),
+    triggerRef,
+    itemRefs: optionRefs,
+  })
+
   const triggerClassName = trigger !== false ? trigger?.triggerClassName : undefined
   const triggerRight =
     trigger === false
@@ -71,11 +81,13 @@ export const Dropdown = ({
         ))
 
   return (
-    <div className="relative inline-flex" ref={ref}>
+    // biome-ignore lint/a11y/noStaticElementInteractions: delegates keydown from the trigger/menu items below to the shared popover nav handler
+    <div className="relative inline-flex" onKeyDown={onKeyDown} ref={ref}>
       <Button
         aria-expanded={isOpen}
         className={cn("z-20", triggerClassName)}
         onClick={() => setIsOpen(!isOpen)}
+        ref={triggerRef}
         right={triggerRight}
         {...buttonVariantProps}
       >
@@ -104,7 +116,7 @@ export const Dropdown = ({
               closed: { opacity: 0, y: -5 },
             }}
           >
-            {options.map((option) => (
+            {options.map((option, i) => (
               <motion.div
                 key={option.href ?? option.label?.toString()}
                 variants={{
@@ -112,7 +124,12 @@ export const Dropdown = ({
                   closed: { opacity: 0, y: -5 },
                 }}
               >
-                <DropdownOption {...option} />
+                <DropdownOption
+                  {...option}
+                  ref={(el) => {
+                    optionRefs.current[i] = el
+                  }}
+                />
               </motion.div>
             ))}
           </motion.div>
