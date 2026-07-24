@@ -74,6 +74,7 @@ export const MultiSelect = ({
       <div
         aria-expanded={isOpen}
         aria-haspopup="listbox"
+        aria-label={label}
         className="flex min-h-11 w-full flex-wrap items-center gap-1.5 rounded border border-gray-300 px-3 py-2 text-left"
         id={label || undefined}
         onClick={() => setIsOpen((prev) => !prev)}
