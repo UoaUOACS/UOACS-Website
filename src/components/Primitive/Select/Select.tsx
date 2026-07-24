@@ -65,6 +65,7 @@ export const Select = ({
   const select = (val: string) => {
     onChange(val)
     setIsOpen(false)
+    triggerRef.current?.focus()
   }
 
   const selectControl = (
