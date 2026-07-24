@@ -53,6 +53,10 @@ export const Select = ({
     itemRefs: optionRefs,
   })
 
+  useEffect(() => {
+    if (isOpen) triggerRef.current?.focus()
+  }, [isOpen])
+
   const normalize = (option: SelectOption) =>
     typeof option === "string" ? { label: option, value: option } : option
 

@@ -55,6 +55,10 @@ export const MultiSelect = ({
     itemRefs: optionRefs,
   })
 
+  useEffect(() => {
+    if (isOpen) triggerRef.current?.focus()
+  }, [isOpen])
+
   const toggle = (option: string) => {
     if (value.includes(option)) {
       onChange(value.filter((v) => v !== option))

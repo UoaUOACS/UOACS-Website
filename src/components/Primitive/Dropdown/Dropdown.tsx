@@ -72,6 +72,10 @@ export const Dropdown = ({
     itemRefs: optionRefs,
   })
 
+  useEffect(() => {
+    if (isOpen) triggerRef.current?.focus()
+  }, [isOpen])
+
   const triggerClassName = trigger !== false ? trigger?.triggerClassName : undefined
   const triggerRight =
     trigger === false
