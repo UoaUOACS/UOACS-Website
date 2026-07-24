@@ -15,7 +15,7 @@ export const RadioOption = ({ option, checked, toggle, name, required }: RadioOp
     <label className="group flex w-fit cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm">
       <input
         checked={checked}
-        className="sr-only"
+        className="peer sr-only"
         name={name}
         onChange={() => toggle(option)}
         required={required}
@@ -24,7 +24,7 @@ export const RadioOption = ({ option, checked, toggle, name, required }: RadioOp
       />
       <span
         className={cn(
-          "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 group-hover:bg-gray-200",
+          "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 group-hover:bg-gray-200 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-pink peer-focus-visible:ring-offset-2",
           checked
             ? "border-brand-pink bg-brand-pink group-hover:border-pink-300 group-hover:bg-pink-300"
             : "border-gray-300",
