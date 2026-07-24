@@ -48,6 +48,8 @@ export const PinInput = ({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, i: number) => {
+    if (e.ctrlKey || e.metaKey) return
+
     if (e.key >= "0" && e.key <= "9") {
       e.preventDefault()
       const next = [...slots]
