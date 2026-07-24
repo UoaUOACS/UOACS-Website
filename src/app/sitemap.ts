@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next"
+import { isProductionUrl } from "@/lib/helpers"
 import { Routes } from "@/lib/routes"
 
 export const dynamic = "force-static"
@@ -6,7 +7,7 @@ export const dynamic = "force-static"
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_URL
 
-  if (!baseUrl) {
+  if (!isProductionUrl(baseUrl)) {
     return []
   }
 
