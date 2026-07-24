@@ -22,13 +22,23 @@ export default async function EventsPage() {
   return (
     <HydrationBoundary state={dehydratedState}>
       <EventsSection
-        emptyMessage="No upcoming events right now, check back soon."
+        emptyMessage={{
+          title: "Nothing on the calendar just yet.",
+          description: (
+            <>
+              Tabby's busy cooking up the next event. <br /> Check back soon!
+            </>
+          ),
+        }}
         subtitle="Where members register to learn, connect, or simply enjoy the good vibes"
         title="Upcoming Events"
         upcoming
       />
       <EventsSection
-        emptyMessage="No past events to show yet."
+        emptyMessage={{
+          title: "No past events to show yet.",
+          description: "Our first one's still to come, but it'll be here before you know it.",
+        }}
         subtitle="Take a trip down memory lane with us"
         title="Past Events"
         upcoming={false}

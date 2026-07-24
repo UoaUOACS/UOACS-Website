@@ -8,6 +8,7 @@ export const emptyStateVariants = tv({
   slots: {
     root: "flex flex-col items-center justify-center text-center",
     icon: "text-gray-400",
+    image: "h-auto w-full",
     title: "heading-4",
     description: "paragraph text-gray-700",
     titleDescriptionGroup: "flex flex-col items-center justify-center gap-1",
@@ -16,12 +17,12 @@ export const emptyStateVariants = tv({
   variants: {
     size: {
       sm: {
-        root: "gap-2",
+        root: "gap-1",
         titleDescriptionGroup: "gap-1",
         icon: "size-8",
         description: "paragraph-sm",
       },
-      default: { root: "gap-4", titleDescriptionGroup: "gap-2", icon: "size-12" },
+      default: { root: "gap-2", titleDescriptionGroup: "gap-1", icon: "size-12" },
     },
   },
   defaultVariants: { size: "default" },
