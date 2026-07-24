@@ -3,6 +3,7 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
 import { type Ref, useEffect, useRef, useState } from "react"
+import { usePopoverKeyboardNav } from "@/hooks/usePopoverKeyboardNav"
 import { cn } from "@/lib/utils"
 
 export type SelectOption = string | { label: string; value: string }
@@ -32,6 +33,8 @@ export const Select = ({
 }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const optionRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
@@ -43,6 +46,17 @@ export const Select = ({
     return () => document.removeEventListener("mousedown", handleMouseDown)
   }, [])
 
+  const onKeyDown = usePopoverKeyboardNav({
+    isOpen,
+    onClose: () => setIsOpen(false),
+    triggerRef,
+    itemRefs: optionRefs,
+  })
+
+  useEffect(() => {
+    if (isOpen) triggerRef.current?.focus()
+  }, [isOpen])
+
   const normalize = (option: SelectOption) =>
     typeof option === "string" ? { label: option, value: option } : option
 
@@ -51,15 +65,23 @@ export const Select = ({
   const select = (val: string) => {
     onChange(val)
     setIsOpen(false)
+    triggerRef.current?.focus()
   }
 
   const selectControl = (
-    <div className="relative">
+    // biome-ignore lint/a11y/noStaticElementInteractions: delegates keydown from the trigger/options below to the shared popover nav handler
+    <div className="relative" onKeyDown={onKeyDown}>
       <button
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
         className="flex min-h-11 w-full items-center rounded border border-gray-300 px-3 py-2 text-left text-sm"
         id={label || undefined}
         onClick={() => setIsOpen((prev) => !prev)}
-        ref={ref}
+        ref={(el) => {
+          triggerRef.current = el
+          if (typeof ref === "function") ref(el)
+          else if (ref) ref.current = el
+        }}
         type="button"
       >
         <span className={cn("flex-1", !value && "text-gray-400")}>
@@ -79,16 +101,22 @@ export const Select = ({
             className="absolute top-full z-10 mt-1 w-full rounded border border-gray-200 bg-white py-2 shadow-md"
             exit={{ opacity: 0, y: -4 }}
             initial={{ opacity: 0, y: -4 }}
+            role="listbox"
             transition={{ damping: 25, stiffness: 400, type: "spring" }}
           >
-            {options.map(normalize).map(({ label: optLabel, value: optValue }) => (
+            {options.map(normalize).map(({ label: optLabel, value: optValue }, i) => (
               <li key={optValue}>
                 <button
+                  aria-selected={optValue === value}
                   className={cn(
                     "flex w-full items-center px-3 py-2 text-left text-sm transition-colors duration-300 hover:bg-gray-400-opaque",
                     optValue === value && "pointer-events-none bg-primary font-medium text-white",
                   )}
                   onClick={() => select(optValue)}
+                  ref={(el) => {
+                    optionRefs.current[i] = el
+                  }}
+                  role="option"
                   type="button"
                 >
                   {optLabel}

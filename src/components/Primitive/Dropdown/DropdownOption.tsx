@@ -1,4 +1,5 @@
 import Link from "next/link"
+import type { Ref } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "../Button/Button"
 import { type ButtonVariantProps, buttonVariants } from "../Button/variants"
@@ -19,6 +20,10 @@ export interface DropdownOptionProps extends ButtonVariantProps {
    * An optional click handler for the dropdown option.
    */
   onClick?: () => void
+  /**
+   * A ref to the underlying link/button element, used for keyboard roving focus.
+   */
+  ref?: Ref<HTMLElement>
 }
 
 /**
@@ -27,13 +32,19 @@ export interface DropdownOptionProps extends ButtonVariantProps {
  * @param props {@link DropdownOptionProps} for the DropdownOption component.
  * @returns A styled dropdown option element.
  */
-export const DropdownOption = ({ label, href, onClick, ...variant }: DropdownOptionProps) => {
+export const DropdownOption = ({ label, href, onClick, ref, ...variant }: DropdownOptionProps) => {
+  const setRef = (el: HTMLElement | null) => {
+    if (typeof ref === "function") ref(el)
+    else if (ref) ref.current = el
+  }
+
   if (href) {
     const variantClasses = buttonVariants(variant)
     const isExternal = href.startsWith("http")
     return (
       <Link
         href={href}
+        ref={setRef}
         rel={isExternal ? "noopener noreferrer" : undefined}
         role="menuitem"
         target={isExternal ? "_blank" : "_self"}
@@ -44,7 +55,13 @@ export const DropdownOption = ({ label, href, onClick, ...variant }: DropdownOpt
   }
 
   return (
-    <Button className="z-5 whitespace-nowrap" onClick={onClick} role="menuitem" {...variant}>
+    <Button
+      className="z-5 whitespace-nowrap"
+      onClick={onClick}
+      ref={setRef}
+      role="menuitem"
+      {...variant}
+    >
       {label || "Option"}
     </Button>
   )

@@ -48,6 +48,8 @@ export const PinInput = ({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, i: number) => {
+    if (e.ctrlKey || e.metaKey) return
+
     if (e.key >= "0" && e.key <= "9") {
       e.preventDefault()
       const next = [...slots]
@@ -116,6 +118,12 @@ export const PinInput = ({
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault()
     const raw = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, length)
+
+    if (raw.length === 0) {
+      commit([...slotsRef.current])
+      return
+    }
+
     const next = raw.split("").concat(Array(length).fill("")).slice(0, length)
     commit(next)
     inputRefs.current[Math.min(raw.length, length - 1)]?.focus()
