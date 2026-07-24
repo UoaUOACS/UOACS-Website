@@ -1,8 +1,10 @@
 import type { Preview } from "@storybook/nextjs-vite"
+import { withProviders } from "./decorators"
 import "../src/app/globals.css"
 import "./fonts.css"
 
 const preview: Preview = {
+  decorators: [withProviders],
   parameters: {
     controls: {
       matchers: {

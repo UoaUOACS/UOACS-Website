@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { SOCIAL_ICONS } from "@/components/Primitive"
 import { Routes } from "@/lib/routes"
+import { mockSession } from "@/mocks/Session.mock"
 import { Footer } from "./Footer"
 
 const meta: Meta<typeof Footer> = {
@@ -42,4 +43,9 @@ type Story = StoryObj<typeof Footer>
 
 export const Default: Story = {
   args: {},
+}
+
+export const LoggedIn: Story = {
+  args: {},
+  parameters: { session: mockSession },
 }

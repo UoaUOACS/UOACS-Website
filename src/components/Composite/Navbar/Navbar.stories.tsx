@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { SOCIAL_ICONS } from "@/components/Primitive"
 import { Routes } from "@/lib/routes"
+import { mockSession } from "@/mocks/Session.mock"
 import { Navbar } from "./Navbar"
 
 const meta: Meta<typeof Navbar> = {
@@ -45,3 +46,7 @@ export default meta
 type Story = StoryObj<typeof Navbar>
 
 export const Primary: Story = {}
+
+export const LoggedIn: Story = {
+  parameters: { session: mockSession },
+}
