@@ -19,18 +19,24 @@ export function usePopoverKeyboardNav({
     (e: KeyboardEvent) => {
       if (!isOpen) return
 
+      if (e.key === "Escape") {
+        e.preventDefault()
+        onClose()
+        triggerRef.current?.focus()
+        return
+      }
+
       const items = itemRefs.current.filter((el): el is HTMLElement => el !== null)
       if (items.length === 0) return
 
       const currentIndex = items.indexOf(document.activeElement as HTMLElement)
+      const isOnTrackedElement =
+        currentIndex !== -1 || document.activeElement === triggerRef.current
+      if (!isOnTrackedElement) return
+
       const focus = (index: number) => items[index]?.focus()
 
       switch (e.key) {
-        case "Escape":
-          e.preventDefault()
-          onClose()
-          triggerRef.current?.focus()
-          return
         case "ArrowDown":
           e.preventDefault()
           focus(currentIndex === -1 ? 0 : (currentIndex + 1) % items.length)

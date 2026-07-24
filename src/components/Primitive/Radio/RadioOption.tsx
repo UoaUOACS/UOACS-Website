@@ -18,6 +18,12 @@ export const RadioOption = ({ option, checked, toggle, name, required }: RadioOp
         className="peer sr-only"
         name={name}
         onChange={() => toggle(option)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault()
+            toggle(option)
+          }
+        }}
         required={required}
         type="radio"
         value={option}
