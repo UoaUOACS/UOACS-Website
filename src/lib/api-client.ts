@@ -23,6 +23,11 @@ type RequestOptions = {
   toastOnError?: boolean
 }
 
+function resolveUrl(url: string): string {
+  if (typeof window !== "undefined") return url
+  return `${process.env.NEXT_PUBLIC_URL}${url}`
+}
+
 function buildUrlWithParams(url: string, params?: RequestOptions["params"]): string {
   if (!params) return url
   const filteredParams = Object.fromEntries(
@@ -44,7 +49,7 @@ async function fetchApi<T>(url: string, options: RequestOptions = {}): Promise<T
     toastOnError = true,
   } = options
 
-  const fullUrl = buildUrlWithParams(url, params)
+  const fullUrl = buildUrlWithParams(resolveUrl(url), params)
 
   const response = await fetch(fullUrl, {
     method,
