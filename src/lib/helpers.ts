@@ -1,7 +1,17 @@
 import type { SocialLink } from "@/components/Generic"
 import { type DiscordWidgetData, discordWidgetDataSchema } from "@/types/schemas/discord"
+import { PRODUCTION_HOSTNAME } from "./constants"
 import { payload } from "./payload"
 import { Slugs } from "./slugs"
+
+export function isProductionUrl(baseUrl: string | undefined): baseUrl is string {
+  if (!baseUrl) return false
+  try {
+    return new URL(baseUrl).hostname === PRODUCTION_HOSTNAME
+  } catch {
+    return false
+  }
+}
 
 export async function getSocialLinks(): Promise<SocialLink[]> {
   const { discordHref, instagramHref, tiktokHref, linkedinHref } = await payload.findGlobal({
