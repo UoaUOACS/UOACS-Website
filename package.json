@@ -15,7 +15,7 @@
     "code:generate": "plop",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "postinstall": "lefthook install",
+    "postinstall": "sh -c 'command -v git >/dev/null 2>&1 || exit 0; lefthook install'",
     "migrate:user-admin": "tsx --env-file=.env src/scripts/user-admin-migration.ts",
     "update:google-wallet-class": "tsx --env-file=.env src/scripts/update-google-wallet-class.ts"
   },
