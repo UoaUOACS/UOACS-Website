@@ -43,7 +43,7 @@ export const EventCard = ({ event }: EventCardProps) => {
   )
 
   return (
-    <div className="relative flex w-full max-w-2xs flex-col justify-center overflow-hidden rounded-xs shadow-md">
+    <div className="relative flex w-full max-w-56 flex-col justify-center overflow-hidden rounded-xs shadow-md md:max-w-2xs">
       <div className="group relative">
         {canRegister ? (
           <a
