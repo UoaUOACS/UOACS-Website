@@ -20,6 +20,13 @@ export const EventCard = ({ event }: EventCardProps) => {
   const isUpcoming = dayjs(event.date).isAfter(dayjs())
   const canRegister = isUpcoming && Boolean(event.signUpForm)
 
+  const eventDate = dayjs(event.date).tz(NZ_TIMEZONE)
+  const dateFormat = [
+    "MMMM D",
+    ...(isUpcoming ? [] : ["YYYY"]),
+    eventDate.minute() === 0 ? "- hA" : "- h:mmA",
+  ].join(" ")
+
   const media = (
     <>
       <LazyImage
@@ -63,12 +70,7 @@ export const EventCard = ({ event }: EventCardProps) => {
         <p className="heading-4 font-mono">{event.name.toUpperCase()}</p>
         <p className="paragraph-xs text-gray-700">{event.description}</p>
         <p className="paragraph-xs font-mono tracking-tight">
-          {dayjs(event.date)
-            .tz(NZ_TIMEZONE)
-            .format(
-              dayjs(event.date).tz(NZ_TIMEZONE).minute() === 0 ? "MMMM D - hA" : "MMMM D - h:mmA",
-            )
-            .toUpperCase()}
+          {eventDate.format(dateFormat).toUpperCase()}
         </p>
       </div>
     </div>
