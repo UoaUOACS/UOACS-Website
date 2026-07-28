@@ -2,7 +2,7 @@ import type { SocialLink } from "@/components/Generic"
 import { type DiscordWidgetData, discordWidgetDataSchema } from "@/types/schemas/discord"
 import { PRODUCTION_HOSTNAME } from "./constants"
 import { payload } from "./payload"
-import { Slugs } from "./slugs"
+import { Slugs } from "./payload/slugs"
 
 export function isProductionUrl(baseUrl: string | undefined): baseUrl is string {
   if (!baseUrl) return false

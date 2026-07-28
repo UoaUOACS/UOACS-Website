@@ -1,5 +1,5 @@
 import { createContext, type ReactNode, useContext, useRef } from "react"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 
 export type Session = typeof authClient.$Infer.Session | null
 

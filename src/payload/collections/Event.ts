@@ -1,6 +1,6 @@
 import type { CollectionConfig } from "payload"
+import { Slugs } from "@/lib/payload/slugs"
 import { Routes } from "@/lib/routes"
-import { Slugs } from "@/lib/slugs"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 
 const { afterChange, afterDelete } = makeRevalidateHooks([Routes.EVENTS])

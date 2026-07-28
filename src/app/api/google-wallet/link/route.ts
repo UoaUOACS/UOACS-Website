@@ -4,7 +4,7 @@ import {
   credentials,
   getLinkFromMember,
   identity,
-} from "@/lib/wallet-integration"
+} from "@/lib/wallet/wallet-integration"
 
 export async function GET(request: Request) {
   // returns link that adds digital pass to wallet

@@ -1,7 +1,7 @@
 import { headers } from "next/headers"
 import { unstable_rethrow } from "next/navigation"
 import { cache } from "react"
-import { auth } from "@/lib/auth"
+import { auth } from "./auth"
 
 export const getSession = cache(async () => {
   try {

@@ -1,6 +1,6 @@
 import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query"
 import type { PaginatedDocs } from "payload"
-import { api } from "@/lib/api-client"
+import { api } from "@/lib/api/api-client"
 import { ApiRoutes } from "@/lib/routes"
 import type { Event } from "@/payload/payload-types"
 import { QueryKeys } from "./QueryKeys"

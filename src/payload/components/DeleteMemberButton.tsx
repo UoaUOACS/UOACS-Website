@@ -3,7 +3,7 @@
 import { Button, useDocumentInfo } from "@payloadcms/ui"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { ApiError, api } from "@/lib/api-client"
+import { ApiError, api } from "@/lib/api/api-client"
 import { ApiRoutes } from "@/lib/routes"
 
 export function DeleteMemberButton() {

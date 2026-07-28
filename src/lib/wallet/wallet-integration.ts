@@ -1,8 +1,8 @@
 import { GoogleAuth } from "google-auth-library"
 import { headers } from "next/headers"
-import { auth } from "@/lib/auth"
-import type { ClassIdentity, ServiceAccountCredentials } from "@/lib/wallet-basics"
-import { generateWalletLink } from "@/lib/wallet-basics"
+import { auth } from "@/lib/auth/auth"
+import type { ClassIdentity, ServiceAccountCredentials } from "@/lib/wallet/wallet-basics"
+import { generateWalletLink } from "@/lib/wallet/wallet-basics"
 import type { Member } from "@/payload/payload-types"
 import { AuthService } from "@/services/auth.service"
 
