@@ -1,6 +1,6 @@
 import type { GlobalConfig } from "payload"
+import { Slugs } from "@/lib/payload/slugs"
 import { Routes } from "@/lib/routes"
-import { Slugs } from "@/lib/slugs"
 import { makeRevalidateHooks } from "@/payload/hooks/revalidate"
 
 const { globalAfterChange } = makeRevalidateHooks([Routes.PRIVACY])

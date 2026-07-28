@@ -1,5 +1,5 @@
 import type { CollectionConfig } from "payload"
-import { Slugs } from "@/lib/slugs"
+import { Slugs } from "@/lib/payload/slugs"
 
 export const EmailVerificationCode: CollectionConfig = {
   slug: Slugs.Collections.EMAIL_VERIFICATION_CODE,

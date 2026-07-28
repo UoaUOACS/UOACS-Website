@@ -1,6 +1,6 @@
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/auth/auth"
 import { payload } from "@/lib/payload"
-import { Slugs } from "@/lib/slugs"
+import { Slugs } from "@/lib/payload/slugs"
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { user } = await payload.auth({ headers: request.headers })

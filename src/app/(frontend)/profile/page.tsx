@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import { getSession } from "@/lib/auth-session"
+import { getSession } from "@/lib/auth/auth-session"
 import { Routes } from "@/lib/routes"
 import { UserOnly } from "../_components/UserOnly"
 import { ProfilePageClient } from "./_components/ProfilePageClient"

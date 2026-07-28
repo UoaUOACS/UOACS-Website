@@ -1,6 +1,6 @@
 import { ZodError } from "zod"
 import { payload } from "@/lib/payload"
-import { Slugs } from "@/lib/slugs"
+import { Slugs } from "@/lib/payload/slugs"
 import { AuthService, DuplicateFieldError } from "@/services/auth.service"
 import { signUpSchema } from "@/types/schemas/sign-up"
 import { createUserServerSchema } from "@/types/schemas/user"
