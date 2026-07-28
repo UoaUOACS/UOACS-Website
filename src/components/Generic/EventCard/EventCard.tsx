@@ -59,17 +59,16 @@ export const EventCard = ({ event }: EventCardProps) => {
           media
         )}
       </div>
-      <div className="flex flex-col p-2 text-center">
+      <div className="flex flex-col gap-1 p-2 text-center">
         <p className="heading-4 font-mono">{event.name.toUpperCase()}</p>
-        <p className="paragraph-xs">{event.description}</p>
-        <p className="paragraph-xs">
+        <p className="paragraph-xs text-gray-700">{event.description}</p>
+        <p className="paragraph-xs font-mono tracking-tight">
           {dayjs(event.date)
             .tz(NZ_TIMEZONE)
             .format(
-              dayjs(event.date).tz(NZ_TIMEZONE).minute() === 0
-                ? "MMMM D, YYYY h A"
-                : "MMMM D, YYYY h:mm A",
-            )}
+              dayjs(event.date).tz(NZ_TIMEZONE).minute() === 0 ? "MMMM D - hA" : "MMMM D - h:mmA",
+            )
+            .toUpperCase()}
         </p>
       </div>
     </div>
