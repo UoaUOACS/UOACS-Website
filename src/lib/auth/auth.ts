@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
-import { mongoClient } from "./mongo"
+import { mongoClient } from "@/lib/mongo"
 
 if (!process.env.BETTER_AUTH_SECRET || !process.env.NEXT_PUBLIC_URL) {
   const missingEnvVars = []
