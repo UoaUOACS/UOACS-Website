@@ -20,6 +20,13 @@ export const EventCard = ({ event }: EventCardProps) => {
   const isUpcoming = dayjs(event.date).isAfter(dayjs())
   const canRegister = isUpcoming && Boolean(event.signUpForm)
 
+  const eventDate = dayjs(event.date).tz(NZ_TIMEZONE)
+  const dateFormat = [
+    "MMMM D",
+    ...(isUpcoming ? [] : ["YYYY"]),
+    eventDate.minute() === 0 ? "- hA" : "- h:mmA",
+  ].join(" ")
+
   const media = (
     <>
       <LazyImage
@@ -43,7 +50,7 @@ export const EventCard = ({ event }: EventCardProps) => {
   )
 
   return (
-    <div className="relative flex w-full max-w-2xs flex-col justify-center overflow-hidden rounded-xs shadow-md">
+    <div className="relative flex w-full max-w-56 flex-col justify-center overflow-hidden rounded-xs shadow-md md:max-w-2xs">
       <div className="group relative">
         {canRegister ? (
           <a
@@ -59,17 +66,11 @@ export const EventCard = ({ event }: EventCardProps) => {
           media
         )}
       </div>
-      <div className="flex flex-col p-2 text-center">
+      <div className="flex flex-col gap-1 p-2 text-center">
         <p className="heading-4 font-mono">{event.name.toUpperCase()}</p>
-        <p className="paragraph-xs">{event.description}</p>
-        <p className="paragraph-xs">
-          {dayjs(event.date)
-            .tz(NZ_TIMEZONE)
-            .format(
-              dayjs(event.date).tz(NZ_TIMEZONE).minute() === 0
-                ? "MMMM D, YYYY h A"
-                : "MMMM D, YYYY h:mm A",
-            )}
+        <p className="paragraph-xs text-gray-700">{event.description}</p>
+        <p className="paragraph-xs font-mono tracking-tight">
+          {eventDate.format(dateFormat).toUpperCase()}
         </p>
       </div>
     </div>
