@@ -7,30 +7,34 @@ on:
   workflow_dispatch:
 
 jobs:
-  pr-stack:
-    name: PR Stack Check
-    runs-on: ubuntu-latest
-    outputs:
-      skip_ci: ${{ steps.check.outputs.skip_ci }}
-    steps:
-      - name: Check if CI should run
-        id: check
-        continue-on-error: true
-        env:
-          EVENT_JSON: ${{ toJson(github.event) }}
-        run: |
-          RESPONSE=$(curl -s -X POST https://pr-stack.fly.dev/ci-check \
-            -H "Content-Type: application/json" \
-            -d "$EVENT_JSON")
-          echo "Response: $RESPONSE"
-          SKIP_CI=$(echo "$RESPONSE" | jq -r '.skipCI' 2>/dev/null) || SKIP_CI="false"
-          echo "skip_ci=${SKIP_CI:-false}" >> $GITHUB_OUTPUT
+  # DEPRECATED: PR Stack Check is currently deprecated. Disabled by commenting
+  # out the job below and its downstream `needs`/`if` references in the
+  # `lint` and `setup` jobs.
+  # pr-stack:
+  #   name: PR Stack Check
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     skip_ci: ${{ steps.check.outputs.skip_ci }}
+  #   steps:
+  #     - name: Check if CI should run
+  #       id: check
+  #       continue-on-error: true
+  #       env:
+  #         EVENT_JSON: ${{ toJson(github.event) }}
+  #       run: |
+  #         RESPONSE=$(curl -s -X POST https://pr-stack.fly.dev/ci-check \
+  #           -H "Content-Type: application/json" \
+  #           -d "$EVENT_JSON")
+  #         echo "Response: $RESPONSE"
+  #         SKIP_CI=$(echo "$RESPONSE" | jq -r '.skipCI' 2>/dev/null) || SKIP_CI="false"
+  #         echo "skip_ci=${SKIP_CI:-false}" >> $GITHUB_OUTPUT
 
   lint:
     name: Linting
     runs-on: ubuntu-latest
-    needs: [pr-stack]
-    if: needs.pr-stack.outputs.skip_ci != 'true'
+    # DEPRECATED: PR Stack Check disabled, see pr-stack job above.
+    # needs: [pr-stack]
+    # if: needs.pr-stack.outputs.skip_ci != 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -43,9 +47,10 @@ jobs:
 
   setup:
     name: Setup
-    needs: [lint, pr-stack]
+    # DEPRECATED: PR Stack Check disabled, see pr-stack job above.
+    needs: [lint]
+    # if: needs.pr-stack.outputs.skip_ci != 'true'
     runs-on: ubuntu-latest
-    if: needs.pr-stack.outputs.skip_ci != 'true'
     steps:
       - uses: actions/checkout@v5
 
