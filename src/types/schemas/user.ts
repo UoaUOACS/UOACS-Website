@@ -1,5 +1,6 @@
 import type { User } from "better-auth"
 import { z } from "zod"
+import { passwordMismatchIssue, passwordsMatch } from "@/types/schemas/shared"
 
 export const createUserServerSchema = z.object({
   firstName: z.string().min(1, "First Name is required"),
@@ -10,10 +11,7 @@ export const createUserServerSchema = z.object({
 
 export const createUserSchema = createUserServerSchema
   .extend({ confirmPassword: z.string().min(1, "Please confirm your password") })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  })
+  .refine(passwordsMatch, passwordMismatchIssue)
 
 export type CreateUserInput = z.infer<typeof createUserServerSchema>
 
