@@ -8,6 +8,8 @@ export const Routes = {
   LOGIN: "/login",
   GOOGLE_WALLET: "/google-wallet",
   EVENTS: "/events",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
 } as const
 
 export type Route = (typeof Routes)[keyof typeof Routes]
