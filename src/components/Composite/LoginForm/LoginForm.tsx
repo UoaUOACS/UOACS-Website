@@ -7,7 +7,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 import { Routes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
 import { type LoginInput, type LoginOutput, loginSchema } from "@/types/schemas/login"
@@ -94,12 +94,20 @@ export const LoginForm = () => {
         {loading ? "Logging in..." : "Log In"}
       </Button>
 
-      <p className="paragraph-xs text-gray-500">
-        Don&apos;t have an account?{" "}
-        <Link className="underline transition-colors hover:text-gray-700" href={Routes.SIGN_UP}>
-          Sign Up
+      <div className="paragraph-xs flex w-full flex-col gap-4 text-gray-500 md:flex-row md:justify-between">
+        <p>
+          Don&apos;t have an account?{" "}
+          <Link className="underline transition-colors hover:text-gray-700" href={Routes.SIGN_UP}>
+            Sign Up
+          </Link>
+        </p>
+        <Link
+          className="text-left underline transition-colors hover:text-gray-700 md:text-right"
+          href={Routes.FORGOT_PASSWORD}
+        >
+          Forgot Password?
         </Link>
-      </p>
+      </div>
     </form>
   )
 }

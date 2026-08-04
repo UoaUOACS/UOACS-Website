@@ -1,5 +1,5 @@
 import type { CollectionConfig } from "payload"
-import { Slugs } from "@/lib/slugs"
+import { Slugs } from "@/lib/payload/slugs"
 
 export const Media: CollectionConfig = {
   slug: Slugs.Collections.MEDIA,

@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
-import { mongoClient } from "./mongo"
+import { mongoClient } from "@/lib/mongo"
+import { PayloadEmailService } from "@/services/email/payload-email.service"
 
 if (!process.env.BETTER_AUTH_SECRET || !process.env.NEXT_PUBLIC_URL) {
   const missingEnvVars = []
@@ -15,5 +16,11 @@ export const auth = betterAuth({
   database: mongodbAdapter(mongoClient.db()),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url }, _request) => {
+      void PayloadEmailService.sendResetPassword(user.email, url).catch((error) => {
+        console.error("[Auth/sendResetPassword] Failed to send reset email", { error })
+      })
+    },
+    revokeSessionsOnPasswordReset: true,
   },
 })

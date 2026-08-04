@@ -2,9 +2,9 @@ import crypto from "node:crypto"
 import type { User } from "better-auth"
 import { isAPIError } from "better-auth/api"
 import { ValidationError } from "payload"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/auth/auth"
 import { payload } from "@/lib/payload"
-import { Slugs } from "@/lib/slugs"
+import { Slugs } from "@/lib/payload/slugs"
 import type { Member } from "@/payload/payload-types"
 import {
   type CreateMemberInput,

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { type ApiError, api } from "@/lib/api-client"
+import { type ApiError, api } from "@/lib/api/api-client"
 import { ApiRoutes } from "@/lib/routes"
 import type { Member } from "@/payload/payload-types"
 import type { UpdateMemberInput } from "@/types/schemas/member"

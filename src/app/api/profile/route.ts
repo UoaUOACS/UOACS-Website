@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { ValidationError } from "payload"
 import { ZodError } from "zod"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/auth/auth"
 import type { Member } from "@/payload/payload-types"
 import { AuthService, DuplicateFieldError } from "@/services/auth.service"
 import { updateMemberSchema } from "@/types/schemas/member"

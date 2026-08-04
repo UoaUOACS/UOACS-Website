@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
-import { createPassObject } from "@/lib/wallet-basics"
-import { getPassObject } from "@/lib/wallet-designs"
-import { checkValidateRequest, googleAuth, identity } from "@/lib/wallet-integration"
+import { createPassObject } from "@/lib/wallet/wallet-basics"
+import { getPassObject } from "@/lib/wallet/wallet-designs"
+import { checkValidateRequest, googleAuth, identity } from "@/lib/wallet/wallet-integration"
 
 export async function POST(_request: Request) {
   // creates a digital pass object for the specific member
