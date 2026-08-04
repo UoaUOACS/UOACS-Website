@@ -1,4 +1,5 @@
 import dayjs from "dayjs"
+import advancedFormat from "dayjs/plugin/advancedFormat"
 import timezone from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
 import { LazyImage } from "@/components/Primitive"
@@ -7,6 +8,7 @@ import type { Event, Media } from "@/payload/payload-types"
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
+dayjs.extend(advancedFormat)
 
 const NZ_TIMEZONE = "Pacific/Auckland"
 
@@ -22,7 +24,7 @@ export const EventCard = ({ event }: EventCardProps) => {
 
   const eventDate = dayjs(event.date).tz(NZ_TIMEZONE)
   const dateFormat = [
-    "MMMM D",
+    "MMMM Do",
     ...(isUpcoming ? [] : ["YYYY"]),
     eventDate.minute() === 0 ? "- hA" : "- h:mmA",
   ].join(" ")
