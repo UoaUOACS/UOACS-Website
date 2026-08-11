@@ -5,8 +5,8 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/Primitive"
 import { Input } from "@/components/Primitive/Input/Input"
-import { authClient } from "@/lib/auth/auth-client"
-import { Routes } from "@/lib/routes"
+import { api } from "@/lib/api/api-client"
+import { ApiRoutes } from "@/lib/routes"
 import { toast } from "@/lib/toast"
 import {
   type ForgotPasswordInput,
@@ -28,18 +28,7 @@ export const ForgotPasswordForm = () => {
   const onSubmit = async (data: ForgotPasswordOutput) => {
     setLoading(true)
     try {
-      const { error: resetRequestError } = await authClient.requestPasswordReset({
-        email: data.email,
-        redirectTo: Routes.RESET_PASSWORD,
-      })
-
-      if (resetRequestError) {
-        toast.error({
-          description: "An error occurred while requesting a password reset",
-        })
-        return
-      }
-
+      await api.post(ApiRoutes.FORGOT_PASSWORD, { email: data.email }, { toastOnError: false })
       setSubmitted(true)
     } catch (error) {
       console.error("[ForgotPasswordForm] Failed to request password reset", { error })

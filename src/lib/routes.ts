@@ -25,6 +25,7 @@ export const ApiRoutes = {
     ROOT: "/api/sign-up",
     VERIFICATION_CODE: "/api/sign-up/verification-code",
   } as const,
+  FORGOT_PASSWORD: "/api/forgot-password",
   HEALTH: "/api/health",
   EVENTS: (upcoming: boolean, page: number) => `/api/events?upcoming=${upcoming}&page=${page}`,
   GOOGLE_WALLET: {
