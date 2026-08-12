@@ -23,6 +23,31 @@ export class PayloadEmailService {
     })
   }
 
+  public static async sendCompleteSignUp(email: string, url: string): Promise<unknown> {
+    return payload.sendEmail({
+      to: email,
+      subject: "UOACS - Finish setting up your account",
+      text: `We found a UOACS membership for this email, but it doesn't have a password set up yet. Open this link to finish creating your account: ${url}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 480px; padding: 24px; color: #1a1a1a;">
+          <h2 style="margin-bottom: 16px;">Finish setting up your account</h2>
+          <p style="margin-bottom: 24px; line-height: 1.5;">
+            We found a UOACS membership for this email, but it doesn't have a password set up yet. Click the button below to finish creating your account.
+          </p>
+          <a
+            href="${url}"
+            style="display: inline-block; padding: 12px 24px; background-color: #1a1a1a; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold;"
+          >
+            Finish Sign Up
+          </a>
+          <p style="margin-top: 24px; font-size: 13px; color: #666666; line-height: 1.5;">
+            If you didn't request this, you can safely ignore this email.
+          </p>
+        </div>
+      `,
+    })
+  }
+
   public static async sendResetPassword(email: string, url: string): Promise<unknown> {
     return payload.sendEmail({
       to: email,
