@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1.23
+# Build context is the monorepo root, not this directory.
 FROM node:24.18.0-alpine AS base
 
 ENV PNPM_HOME="/pnpm"
@@ -12,7 +13,10 @@ RUN corepack enable pnpm
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
+# Copy only the workspace manifests first so this layer caches on dependency
+# changes rather than on every application source change.
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY apps/website/package.json ./apps/website/
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile --ignore-scripts
 
@@ -21,6 +25,7 @@ FROM base AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/apps/website/node_modules ./apps/website/node_modules
 COPY . .
 
 RUN --mount=type=secret,id=DATABASE_URI \
@@ -47,7 +52,7 @@ RUN --mount=type=secret,id=DATABASE_URI \
            export SMTP_PASS=$(cat /run/secrets/SMTP_PASS) && \
            export GOOGLE_WALLET_ISSUER_ID=$(cat /run/secrets/GOOGLE_WALLET_ISSUER_ID) && \
            export GOOGLE_WALLET_SERVICE_ACCOUNT_KEY=$(cat /run/secrets/GOOGLE_WALLET_SERVICE_ACCOUNT_KEY) && \
-           pnpm run build'
+           pnpm --filter @uoacs/website build'
 
 # Stage 3: Production runner (minimal image)
 FROM base AS runner
@@ -56,14 +61,15 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Copy standalone server output
-COPY --from=builder /app/.next/standalone ./
+# Standalone output mirrors the workspace layout beneath outputFileTracingRoot,
+# so it unpacks to /app/apps/website/server.js with /app/node_modules alongside.
+COPY --from=builder /app/apps/website/.next/standalone ./
 # Copy static assets
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/apps/website/.next/static ./apps/website/.next/static
 # Copy public assets
-COPY --from=builder /app/public ./public
+COPY --from=builder /app/apps/website/public ./apps/website/public
 
 EXPOSE 3000
 
 # Standalone output provides server.js entrypoint
-CMD ["node", "server.js"]
+CMD ["node", "apps/website/server.js"]

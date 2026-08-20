@@ -3,6 +3,8 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
+# Deploy from the monorepo root so the pnpm workspace is in the build context:
+#   flyctl deploy --config apps/website/fly.staging.toml --dockerfile apps/website/Dockerfile
 app = 'uoacs-website-staging'
 primary_region = 'syd'
 swap_size_mb = 256
