@@ -30,7 +30,6 @@
     "@uoacs/ui": "workspace:*",
     "babel-plugin-react-compiler": "^1.0.0",
     "better-auth": "^1.6.1",
-    "clsx": "^2.1.1",
     "dayjs": "^1.11.21",
     "google-auth-library": "^10.6.2",
     "graphql": "^16.11.0",
@@ -45,7 +44,6 @@
     "react-smart-ticker": "^1.6.7",
     "sharp": "^0.34.4",
     "sonner": "^2.0.7",
-    "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^3.1.1",
     "zod": "^4.3.6",
     "zustand": "^5.0.12"
