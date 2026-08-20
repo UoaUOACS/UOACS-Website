@@ -1,0 +1,42 @@
+"use client"
+
+import { cn } from "../../utils/cn"
+
+export interface RadioOptionProps {
+  option: string
+  checked: boolean
+  toggle: (option: string) => void
+  name: string
+  required?: boolean
+}
+
+export const RadioOption = ({ option, checked, toggle, name, required }: RadioOptionProps) => {
+  return (
+    <label className="group flex w-fit cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm">
+      <input
+        checked={checked}
+        className="peer sr-only"
+        name={name}
+        onChange={() => toggle(option)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault()
+            toggle(option)
+          }
+        }}
+        required={required}
+        type="radio"
+        value={option}
+      />
+      <span
+        className={cn(
+          "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 group-hover:bg-gray-200 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-pink peer-focus-visible:ring-offset-2",
+          checked
+            ? "border-brand-pink bg-brand-pink group-hover:border-pink-300 group-hover:bg-pink-300"
+            : "border-gray-300",
+        )}
+      />
+      {option}
+    </label>
+  )
+}

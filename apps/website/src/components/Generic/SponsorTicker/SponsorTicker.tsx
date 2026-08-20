@@ -1,10 +1,11 @@
 "use client"
 
+import { cn, LazyImage } from "@uoacs/ui"
 import Link from "next/link"
 import { SmartTicker } from "react-smart-ticker"
-import { LazyImage } from "@/components/Primitive"
+
 import { TIER_SIZES } from "@/lib/constants"
-import { cn } from "@/lib/utils"
+
 import type { Sponsor } from "@/payload/payload-types"
 import type { SponsorTier } from "@/types/enums"
 

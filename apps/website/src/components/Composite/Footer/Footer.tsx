@@ -1,15 +1,17 @@
 "use client"
 
 import { ArrowUpRightIcon, UserIcon } from "@heroicons/react/24/solid"
+import { Button, cn, SocialIcon } from "@uoacs/ui"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { type SocialLink, SocialLinks } from "@/components/Generic"
-import { Button, SocialIcon } from "@/components/Primitive"
+
 import { useSession } from "@/context/SessionContext"
 import { Routes } from "@/lib/routes"
-import { cn, shuffle } from "@/lib/utils"
+
+import { shuffle } from "@/lib/utils"
 import type { DiscordWidgetData } from "@/types/schemas/discord"
 import { NavbarGradient } from "../Navbar/NavbarGradient"
 

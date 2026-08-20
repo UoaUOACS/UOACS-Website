@@ -1,8 +1,8 @@
 "use client"
 
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
+import { Button } from "@uoacs/ui"
 import Link from "next/link"
-import { Button } from "@/components/Primitive"
 import { useSession } from "@/context/SessionContext"
 import { Routes } from "@/lib/routes"
 import type { Reel as ReelDocument } from "@/payload/payload-types"

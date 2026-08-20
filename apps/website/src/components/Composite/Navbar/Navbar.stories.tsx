@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { SOCIAL_ICONS } from "@/components/Primitive"
+import { SOCIAL_ICONS } from "@uoacs/ui"
 import { Routes } from "@/lib/routes"
 import { mockSession } from "@/mocks/Session.mock"
 import { Navbar } from "./Navbar"

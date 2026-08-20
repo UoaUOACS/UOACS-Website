@@ -1,11 +1,11 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Button, PinInput } from "@uoacs/ui"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { Button } from "@/components/Primitive"
-import { PinInput } from "@/components/Primitive/PinInput/PinInput"
+
 import { ApiError, api } from "@/lib/api/api-client"
 import { authClient } from "@/lib/auth/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"

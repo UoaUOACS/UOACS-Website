@@ -1,5 +1,5 @@
+import { Heading } from "@uoacs/ui"
 import type { Metadata } from "next"
-import { Heading } from "@/components/Primitive"
 import { payload, Slugs } from "@/lib/payload"
 
 export const metadata: Metadata = {

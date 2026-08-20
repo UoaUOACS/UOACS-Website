@@ -2,18 +2,36 @@ import { execSync } from "node:child_process"
 import fs from "node:fs"
 import path from "node:path"
 
-const TIERS = ["Primitive", "Generic", "Composite"]
+/**
+ * Primitives are shared across UOACS apps and live in @uoacs/ui; the Generic and
+ * Composite tiers stay app-local. Paths are relative to this plopfile.
+ */
+const TIERS = {
+  Primitive: {
+    root: "../../packages/ui/src/Primitive",
+    cnImport: "../../utils/cn",
+  },
+  Generic: {
+    root: "src/components/Generic",
+    cnImport: "@uoacs/ui",
+  },
+  Composite: {
+    root: "src/components/Composite",
+    cnImport: "@uoacs/ui",
+  },
+}
 
 /** @param {import("plop").NodePlopAPI} plop */
 export default function (plop) {
   plop.setGenerator("component", {
-    description: "Scaffold a new component under src/components/{Primitive,Generic,Composite}",
+    description:
+      "Scaffold a new component in @uoacs/ui (Primitive) or this app (Generic/Composite)",
     prompts: [
       {
         type: "list",
         name: "tier",
         message: "Which tier does this component belong to?",
-        choices: TIERS,
+        choices: Object.keys(TIERS),
       },
       {
         type: "input",
@@ -23,9 +41,9 @@ export default function (plop) {
           if (!/^[A-Z][A-Za-z0-9]*$/.test(input)) {
             return "Name must be PascalCase (e.g. Badge, EventCard) with letters/numbers only"
           }
-          const dir = path.join(process.cwd(), "src/components", answers.tier, input)
-          if (fs.existsSync(dir)) {
-            return `src/components/${answers.tier}/${input} already exists`
+          const { root } = TIERS[answers.tier]
+          if (fs.existsSync(path.join(process.cwd(), root, input))) {
+            return `${root}/${input} already exists`
           }
           return true
         },
@@ -33,13 +51,14 @@ export default function (plop) {
     ],
     actions: (answers) => {
       const isPrimitive = answers?.tier === "Primitive"
-      const base = "src/components/{{tier}}/{{pascalCase name}}"
+      const { root, cnImport } = TIERS[answers.tier]
+      const base = `${root}/{{pascalCase name}}`
       const actions = [
         {
           type: "add",
           path: `${base}/{{pascalCase name}}.tsx`,
           templateFile: "generators/component/Component.tsx.hbs",
-          data: { isPrimitive },
+          data: { isPrimitive, cnImport },
         },
       ]
 
@@ -67,7 +86,8 @@ export default function (plop) {
 
   plop.setActionType("addBarrelExport", (answers) => {
     const pascalName = plop.getHelper("pascalCase")(answers.name)
-    const barrelPath = path.join(process.cwd(), "src/components", answers.tier, "index.ts")
+    const { root } = TIERS[answers.tier]
+    const barrelPath = path.join(process.cwd(), root, "index.ts")
     const exportLine = `export * from "./${pascalName}/${pascalName}"`
 
     const existing = fs.readFileSync(barrelPath, "utf-8")
@@ -81,8 +101,9 @@ export default function (plop) {
 
   plop.setActionType("format", (answers) => {
     const pascalName = plop.getHelper("pascalCase")(answers.name)
-    const componentDir = path.join("src/components", answers.tier, pascalName)
-    const barrelPath = path.join("src/components", answers.tier, "index.ts")
+    const { root } = TIERS[answers.tier]
+    const componentDir = path.join(root, pascalName)
+    const barrelPath = path.join(root, "index.ts")
 
     execSync(`pnpm exec biome check --write "${componentDir}" "${barrelPath}"`, {
       stdio: "inherit",

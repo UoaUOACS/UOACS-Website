@@ -1,8 +1,8 @@
+import { LazyImage } from "@uoacs/ui"
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import timezone from "dayjs/plugin/timezone"
 import utc from "dayjs/plugin/utc"
-import { LazyImage } from "@/components/Primitive"
 import { assertPopulated } from "@/lib/utils"
 import type { Event, Media } from "@/payload/payload-types"
 

@@ -1,9 +1,9 @@
 "use client"
 
+import { BorderButton, Container, SocialIcon } from "@uoacs/ui"
 import Link from "next/link"
 import { useState } from "react"
 import { ExecCard, Section } from "@/components/Generic"
-import { BorderButton, Container, SocialIcon } from "@/components/Primitive"
 import type { Executive } from "@/payload/payload-types"
 import { EXECUTIVE_LEVEL_ORDER, ExecutiveLevel, ExecutiveTeam } from "@/types/enums"
 

@@ -1,6 +1,6 @@
+import { Heading } from "@uoacs/ui"
 import Link from "next/link"
 import { SignUpForm } from "@/components/Composite"
-import { Heading } from "@/components/Primitive"
 import { Routes } from "@/lib/routes"
 import { GuestOnly } from "../_components/GuestOnly"
 

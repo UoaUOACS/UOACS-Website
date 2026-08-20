@@ -1,6 +1,6 @@
+import { Heading } from "@uoacs/ui"
 import { Suspense } from "react"
 import { ResetPasswordForm } from "@/components/Composite"
-import { Heading } from "@/components/Primitive"
 import { GuestOnly } from "../_components/GuestOnly"
 
 export default function ResetPasswordPage() {

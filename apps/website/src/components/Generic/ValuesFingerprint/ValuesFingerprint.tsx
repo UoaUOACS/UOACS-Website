@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@uoacs/ui"
 import { type ValuesFingerprintVariants, valuesFingerprintVariants } from "./variants"
 
 /**

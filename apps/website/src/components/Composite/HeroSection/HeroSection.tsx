@@ -1,5 +1,5 @@
+import { Heading } from "@uoacs/ui"
 import { type SocialLink, SocialLinks } from "@/components/Generic"
-import { Heading } from "@/components/Primitive"
 
 /**
  * HeroSection component for the homepage.

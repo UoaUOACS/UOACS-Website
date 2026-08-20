@@ -1,5 +1,5 @@
+import { Heading } from "@uoacs/ui"
 import { LoginForm } from "@/components/Composite"
-import { Heading } from "@/components/Primitive"
 import { GuestOnly } from "../_components/GuestOnly"
 
 export default function LoginPage() {

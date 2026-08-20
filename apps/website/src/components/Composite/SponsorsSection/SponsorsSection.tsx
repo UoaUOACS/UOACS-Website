@@ -1,10 +1,11 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
+import { Button, cn, LazyImage } from "@uoacs/ui"
 import Link from "next/link"
 import { Section, SponsorTicker } from "@/components/Generic"
-import { Button, LazyImage } from "@/components/Primitive"
+
 import { TIER_SIZES } from "@/lib/constants"
 import { Routes } from "@/lib/routes"
-import { cn } from "@/lib/utils"
+
 import type { Sponsor } from "@/payload/payload-types"
 
 /**

@@ -1,8 +1,8 @@
 "use client"
 
+import { Input, MultiSelect, Radio, Select } from "@uoacs/ui"
 import { useState } from "react"
 import { ToggleableInput } from "@/components/Generic"
-import { Input, MultiSelect, Radio, Select } from "@/components/Primitive"
 import { ApiError } from "@/lib/api/api-client"
 import { toast } from "@/lib/toast"
 import type { Member } from "@/payload/payload-types"

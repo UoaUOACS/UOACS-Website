@@ -1,4 +1,4 @@
-import { Heading } from "@/components/Primitive"
+import { Heading } from "@uoacs/ui"
 
 /**
  * Props for the ValueCard component.

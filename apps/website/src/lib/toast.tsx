@@ -1,7 +1,7 @@
 "use client"
 
+import { Toast, type ToastProps } from "@uoacs/ui"
 import { toast as sonnerToast } from "sonner"
-import { Toast, type ToastProps } from "@/components/Primitive"
 
 export const toast = {
   success: (toast: Omit<ToastProps, "type">) => {

@@ -1,10 +1,10 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Button, Input } from "@uoacs/ui"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Button } from "@/components/Primitive"
-import { Input } from "@/components/Primitive/Input/Input"
+
 import { api } from "@/lib/api/api-client"
 import { ApiRoutes } from "@/lib/routes"
 import { toast } from "@/lib/toast"

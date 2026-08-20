@@ -1,9 +1,9 @@
 "use client"
 
+import { cn } from "@uoacs/ui"
 import { useRef } from "react"
 import { useContainerWidth } from "@/hooks/useContainerWidth"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
-import { cn } from "@/lib/utils"
 import { EncryptedBannerLayer } from "./EncryptedBannerLayer"
 import type { EncryptedBannerLayerVariants } from "./variants"
 

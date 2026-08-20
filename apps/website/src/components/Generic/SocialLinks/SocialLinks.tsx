@@ -1,4 +1,4 @@
-import { BorderButton, SocialIcon, type SocialIconName } from "@/components/Primitive"
+import { BorderButton, SocialIcon, type SocialIconName } from "@uoacs/ui"
 import { type SocialLinksVariantProps, socialLinksVariants } from "./SocialLinks.variants"
 
 export interface SocialLink {

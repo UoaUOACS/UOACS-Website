@@ -2,16 +2,17 @@
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ArrowLeftEndOnRectangleIcon, ArrowRightIcon } from "@heroicons/react/24/solid"
+import { BorderButton, Button, cn, Heading, SocialIcon } from "@uoacs/ui"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { BorderButton, Button, Heading, SocialIcon } from "@/components/Primitive"
+
 import { useSession } from "@/context/SessionContext"
 import { authClient } from "@/lib/auth/auth-client"
 import { Routes } from "@/lib/routes"
-import { cn } from "@/lib/utils"
+
 import type { NavbarProps } from "../Navbar"
 import { mobileNavbarVariants } from "./variants"
 

@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
+import { Button, Heading } from "@uoacs/ui"
 import Link from "next/link"
 import { SocialLinks } from "@/components/Generic"
-import { Button, Heading } from "@/components/Primitive"
 import { getSocialLinks } from "@/lib/helpers"
 import { Routes } from "@/lib/routes"
 

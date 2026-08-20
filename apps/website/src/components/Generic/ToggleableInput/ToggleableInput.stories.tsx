@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
+import { Input, MultiSelect, Radio, Select } from "@uoacs/ui"
 import { useState } from "react"
-import { Input, MultiSelect, Radio, Select } from "../../Primitive"
 import { ToggleableInput } from "./ToggleableInput"
 
 const meta: Meta<typeof ToggleableInput> = {

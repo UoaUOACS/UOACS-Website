@@ -1,8 +1,8 @@
 "use client"
 
+import { cn } from "@uoacs/ui"
 import Image from "next/image"
 import { useState } from "react"
-import { cn } from "@/lib/utils"
 import type { Reel as ReelType } from "@/payload/payload-types"
 
 /**

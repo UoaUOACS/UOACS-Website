@@ -1,16 +1,14 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Button, Input, MultiSelect, Radio, Select } from "@uoacs/ui"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import type { z as zType } from "zod"
 import { z } from "zod"
-import { Button, Radio } from "@/components/Primitive"
-import { Input } from "@/components/Primitive/Input/Input"
-import { MultiSelect } from "@/components/Primitive/MultiSelect/MultiSelect"
-import { Select } from "@/components/Primitive/Select/Select"
+
 import { ApiError, api } from "@/lib/api/api-client"
 import { authClient } from "@/lib/auth/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"
