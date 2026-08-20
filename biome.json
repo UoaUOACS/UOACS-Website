@@ -104,7 +104,7 @@
       }
     },
     {
-      "includes": ["public/**/*.svg"],
+      "includes": ["**/public/**/*.svg"],
       "linter": {
         "rules": {
           "a11y": {

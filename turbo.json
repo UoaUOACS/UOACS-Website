@@ -26,9 +26,6 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "lint:check": {
-      "outputs": []
-    },
     "storybook:build": {
       "dependsOn": ["^build"],
       "outputs": ["storybook-static/**"]
