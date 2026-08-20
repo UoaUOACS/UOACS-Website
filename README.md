@@ -37,10 +37,10 @@ pnpm install
 
 ### 2. Environment Setup
 
-Copy the example environment file at `.env.example` to `.env` and update the variables as needed:
+Environment variables are per-app. Copy the example file into the app you're running and update the variables as needed:
 
 ```bash
-cp .env.example .env
+cp apps/website/.env.example apps/website/.env
 ```
 
 ### 3. Start Development Server
@@ -56,23 +56,30 @@ The application will be available at:
 
 ## 🔧 Important Scripts
 
+Run from the repository root. Turborepo fans these out to every workspace package that defines the script.
+
 | Command | Description |
 |---------|-------------|
 | `pnpm dev` | Start development server with Turbopack |
 | `pnpm build` | Build production application |
-| `pnpm start` | Start production server |
+| `pnpm types:check` | Run TypeScript type checking |
 | `pnpm lint:check` | Run Biome linter and formatter checks |
 | `pnpm lint:fix` | Fix Biome lint and format issues |
 | `pnpm lint:fix:unsafe` | Unsafely Fix Biome lint and format issues |
-| `pnpm types:check` | Run TypeScript type checking |
-| `pnpm types:generate` | Generate Payload CMS TypeScript types |
 | `pnpm storybook` | Start Storybook development server |
 | `pnpm storybook:build` | Build Storybook static site |
 
-### One-off / Maintenance Scripts
+Use `--filter` to target a single package, e.g. `pnpm turbo run build --filter @uoacs/website`.
+
+### App-scoped Scripts
+
+These live on `@uoacs/website` and can be run with `pnpm --filter @uoacs/website <script>`, or from inside `apps/website`.
 
 | Command | Description |
 |---------|-------------|
+| `pnpm start` | Start production server |
+| `pnpm types:generate` | Generate Payload CMS TypeScript types |
+| `pnpm code:generate` | Scaffold a new component with Plop |
 | `pnpm migrate:user-admin` | Rename the `users` table to `admins` |
 | `pnpm update:google-wallet-class` | Update Google Wallet class configuration |
 
@@ -109,68 +116,86 @@ Otherwise, you are responsible for figuring out how to configure those plugins f
 This project uses Payload CMS's automatic type generation for type-safe database operations.
 
 ```bash
-pnpm types:generate
+pnpm --filter @uoacs/website types:generate
 ```
 
 This will create/update:
 
-- `src/payload/payload-types.ts` - Auto-generated TypeScript interfaces
+- `apps/website/src/payload/payload-types.ts` - Auto-generated TypeScript interfaces
 - Never edit this file manually - it's regenerated automatically
 
 ## 🏗️ Project Structure
 
-File structure overview:
+This is a pnpm workspace orchestrated by [Turborepo](https://turborepo.com/), so UOACS apps can share
+branding and UI without duplicating them.
 
 ```
-src/
-├── app/
-│   ├── (frontend)/          # Public website pages (homepage, team, sponsors, etc.)
-│   │   ├── sponsors/        # ...
-│   │   ├── team/
-│   │   ├── ...
-│   │   ├── _components/     # Frontend-only components
-│   │   ├── page.tsx         # Homepage
-│   │   └── layout.tsx       # Frontend layout
-│   ├── api/                 # Custom API routes
-│   ├── og/                  # Open Graph image generation
-│   ├── payload/             # Payload CMS admin panel
-│   ├── robots.ts            # robots.txt generation
-│   └── sitemap.ts           # Sitemap generation
-├── components/
-│   ├── Primitive/           # Low-level UI blocks (Button, Input, Select, etc.)
-│   ├── Composite/           # Page-level components (Navbar, Footer, sections, etc.)
-│   └── Generic/             # Reusable feature components
-├── lib/                     # Auth, wallet, payload, and utility helpers
-├── payload/
-│   ├── collections/         # CMS collections (Members, Executives, Sponsors, Media, etc.)
-│   ├── globals/             # Global settings (HomePage, SocialLinks, etc.)
-│   ├── components/          # Custom Payload UI components
-│   ├── hooks/               # Payload lifecycle hooks
-│   └── payload-types.ts     # Auto-generated types (do not edit)
-├── services/                # Business logic and external service integrations
-├── types/                   # Shared TypeScript types, enums, and Zod schemas
-├── mocks/                   # Mock data for development/testing
-├── scripts/                 # Standalone maintenance scripts
-└── payload.config.ts        # Payload CMS configuration
+apps/
+└── website/                     # The main UOACS website (@uoacs/website)
+    ├── src/
+    │   ├── app/
+    │   │   ├── (frontend)/      # Public website pages (homepage, team, sponsors, etc.)
+    │   │   │   ├── _components/ # Frontend-only components
+    │   │   │   ├── page.tsx     # Homepage
+    │   │   │   └── layout.tsx   # Frontend layout
+    │   │   ├── api/             # Custom API routes
+    │   │   ├── og/              # Open Graph image generation
+    │   │   ├── payload/         # Payload CMS admin panel
+    │   │   ├── robots.ts        # robots.txt generation
+    │   │   └── sitemap.ts       # Sitemap generation
+    │   ├── components/
+    │   │   ├── Composite/       # Page-level components (Navbar, Footer, sections, etc.)
+    │   │   └── Generic/         # Reusable feature components
+    │   ├── lib/                 # Auth, wallet, payload, and utility helpers
+    │   ├── payload/
+    │   │   ├── collections/     # CMS collections (Members, Executives, Sponsors, Media, etc.)
+    │   │   ├── globals/         # Global settings (HomePage, SocialLinks, etc.)
+    │   │   ├── components/      # Custom Payload UI components
+    │   │   ├── hooks/           # Payload lifecycle hooks
+    │   │   └── payload-types.ts # Auto-generated types (do not edit)
+    │   ├── queries/             # React Query hooks
+    │   ├── services/            # Business logic and external service integrations
+    │   ├── types/               # Shared TypeScript types, enums, and Zod schemas
+    │   ├── mocks/               # Mock data for development/testing
+    │   ├── scripts/             # Standalone maintenance scripts
+    │   └── payload.config.ts    # Payload CMS configuration
+    ├── .storybook/              # Storybook configuration
+    ├── generators/              # Plop templates for scaffolding components
+    ├── public/                  # Static assets (SVGs, fonts, images)
+    ├── Dockerfile               # Built from the repo root, not this directory
+    ├── fly.toml                 # Fly.io production deployment config
+    └── fly.staging.toml         # Fly.io staging deployment config
+
+packages/
+├── ui/                          # Shared design system (@uoacs/ui)
+│   └── src/
+│       ├── Primitive/           # Low-level UI blocks (Button, Input, Select, etc.)
+│       ├── hooks/               # Hooks backing the primitives
+│       ├── utils/               # cn() class-merging helper
+│       └── styles/theme.css     # Brand tokens and typography
+└── config/                      # Shared tsconfig bases (@uoacs/config)
 
 .github/
-├── actions/                 # Reusable composite actions for use in workflows
-├── ISSUE_TEMPLATE/          # Issue templates (frontend, backend, devops, bug)
-├── workflows/               # CI/CD pipelines (lint, build, deploy, renovate)
-└── pull-request-template.md # PR template
+├── actions/                     # Reusable composite actions for use in workflows
+├── ISSUE_TEMPLATE/              # Issue templates (frontend, backend, devops, bug)
+├── workflows/                   # CI/CD pipelines (lint, build, deploy, renovate)
+└── pull-request-template.md     # PR template
 
-.storybook/                  # Storybook configuration
-public/                      # Static assets (SVGs, fonts, images)
-Dockerfile                   # Docker container configuration
-fly.toml                     # Fly.io production deployment config
-fly.staging.toml             # Fly.io staging deployment config
-
-package.json                 # Project metadata and scripts
-next.config.ts               # Next.js configuration
-tsconfig.json                # TypeScript configuration
-biome.json                   # Biome linter configuration
-lefthook.yaml                # Git hooks configuration
+package.json                     # Root tooling and Turborepo entrypoints
+pnpm-workspace.yaml              # Workspace package globs
+turbo.json                       # Task graph and caching
+biome.json                       # Biome linter configuration
+lefthook.yaml                    # Git hooks configuration
 ```
+
+### Where should a component go?
+
+- **`packages/ui` (Primitive)** — generic, brand-level building blocks with no app-specific
+  dependencies. Anything here is available to every UOACS app.
+- **`apps/*/src/components` (Generic / Composite)** — anything that depends on that app's Payload
+  types, routes, or auth session.
+
+`pnpm --filter @uoacs/website code:generate` scaffolds into the right place based on the tier you pick.
 
 ## 🧪 Testing
 
