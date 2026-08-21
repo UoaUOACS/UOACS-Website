@@ -168,8 +168,9 @@ jobs:
           path: |
             .turbo
             apps/*/.next/cache
-          key: ${{ runner.os }}-build-${{ github.sha }}
+          key: ${{ runner.os }}-build-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
           restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('pnpm-lock.yaml') }}-
             ${{ runner.os }}-build-
 
       - name: Build Application

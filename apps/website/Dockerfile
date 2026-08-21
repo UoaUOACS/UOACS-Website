@@ -14,9 +14,14 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 # Copy only the workspace manifests first so this layer caches on dependency
-# changes rather than on every application source change.
+# changes rather than on every application source change. Every workspace
+# package needs its manifest here: pnpm resolves the apps/* and packages/*
+# globs against what is present, and a package whose manifest is missing gets
+# a dangling symlink and no node_modules of its own.
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY apps/website/package.json ./apps/website/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/config/package.json ./packages/config/
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile --ignore-scripts
 
@@ -24,8 +29,12 @@ RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
+# Carry over the whole installed tree rather than naming each package's
+# node_modules, so adding a workspace package doesn't silently break the build.
+# .dockerignore excludes node_modules, so the COPY . . below cannot backfill it.
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/website/node_modules ./apps/website/node_modules
+COPY --from=deps /app/apps ./apps
+COPY --from=deps /app/packages ./packages
 COPY . .
 
 RUN --mount=type=secret,id=DATABASE_URI \
