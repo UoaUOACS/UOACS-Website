@@ -1,7 +1,7 @@
 post-merge:
   commands:
     pnpm:
-      glob: "{package.json,pnpm-lock.yaml}"
+      glob: "{package.json,**/package.json,pnpm-lock.yaml}"
       run: pnpm install
 
 pre-commit:
@@ -29,5 +29,5 @@ pre-commit:
 post-checkout:
   commands:
     pnpm:
-      glob: "{package.json,pnpm-lock.yaml}"
+      glob: "{package.json,**/package.json,pnpm-lock.yaml}"
       run: pnpm install

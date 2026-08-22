@@ -24,6 +24,10 @@ COPY packages/ui/package.json ./packages/ui/
 COPY packages/config/package.json ./packages/config/
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile --ignore-scripts
+# A missing manifest above is silent: pnpm still exits 0, it just leaves the
+# package linked to nothing. Fail here instead of deep inside next build.
+RUN node -e "require.resolve('clsx',{paths:['/app/packages/ui']})" \
+    || (echo "workspace install incomplete: is every packages/*/package.json copied above?" && exit 1)
 
 # Stage 2: Build the application
 FROM base AS builder
@@ -31,7 +35,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 # Carry over the whole installed tree rather than naming each package's
 # node_modules, so adding a workspace package doesn't silently break the build.
-# .dockerignore excludes node_modules, so the COPY . . below cannot backfill it.
+# .dockerignore keeps node_modules out of the context, so COPY . . must not be
+# relied on to backfill it.
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps ./apps
 COPY --from=deps /app/packages ./packages

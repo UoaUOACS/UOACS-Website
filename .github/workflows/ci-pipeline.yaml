@@ -163,7 +163,7 @@ jobs:
         shell: bash
 
       - name: Restore build caches
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
           path: |
             .turbo
@@ -189,6 +189,18 @@ jobs:
           GOOGLE_WALLET_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}
           DISCORD_SERVER_ID: ${{ secrets.DISCORD_SERVER_ID }}
         run: pnpm build
+
+      # Only main writes an entry. PR runs still read the cache, but don't each
+      # add a copy that pushes the shared node_modules cache out under the 10GB
+      # LRU limit.
+      - name: Save build caches
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            .turbo
+            apps/*/.next/cache
+          key: ${{ runner.os }}-build-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
 
   build-storybook:
     name: Build Storybook

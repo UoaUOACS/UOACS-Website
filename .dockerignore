@@ -1,40 +1,45 @@
+# Unlike .gitignore, Docker matches these against the whole path relative to the
+# build context root, so recursive entries need an explicit **/ prefix. Without
+# it a bare `node_modules` only excludes the root one and every workspace
+# package's copy still gets uploaded.
+
 # dependencies
-node_modules
-.pnp
-.pnp.js
+**/node_modules
+**/.pnp
+**/.pnp.js
 
 # testing
-coverage
+**/coverage
 
 # next.js
-.next/
-out/
+**/.next
+**/out
 
 # production
-build
+**/build
 
 # turborepo
-.turbo
+**/.turbo
 
 # misc
-.DS_Store
-*.pem
+**/.DS_Store
+**/*.pem
 
 # local env files
-.env
-.env*.local
+**/.env
+**/.env*.local
 
 # typescript
-*.tsbuildinfo
-next-env.d.ts
+**/*.tsbuildinfo
+**/next-env.d.ts
 
 # ide
-.vscode
-.zed
+**/.vscode
+**/.zed
 
 # storybook
-storybook-static
-*storybook.log
+**/storybook-static
+**/*storybook.log
 
 # vcs / ci
 .git
