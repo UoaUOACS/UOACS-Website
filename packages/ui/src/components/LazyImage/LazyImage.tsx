@@ -2,7 +2,7 @@
 
 import Image, { type ImageProps } from "next/image"
 import { useState } from "react"
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils"
 
 /**
  * A component that displays an image with a loading placeholder.

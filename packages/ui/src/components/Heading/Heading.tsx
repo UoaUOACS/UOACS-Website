@@ -1,5 +1,5 @@
 import type { JSX } from "react"
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils"
 import { type HeadingVariants, headingVariants } from "./variants"
 
 /**

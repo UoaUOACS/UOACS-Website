@@ -1,5 +1,5 @@
 import { CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon } from "@heroicons/react/24/solid"
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils"
 
 export interface ToastProps {
   type: "success" | "warning" | "error"

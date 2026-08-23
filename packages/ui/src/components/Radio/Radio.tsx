@@ -1,7 +1,7 @@
 "use client"
 
 import { type Ref, useId } from "react"
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils"
 import { RadioOption } from "./RadioOption"
 
 export interface RadioProps {

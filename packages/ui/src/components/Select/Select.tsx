@@ -4,7 +4,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid"
 import { AnimatePresence, motion } from "motion/react"
 import { type Ref, useEffect, useRef, useState } from "react"
 import { usePopoverKeyboardNav } from "../../hooks/usePopoverKeyboardNav"
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils"
 
 export type SelectOption = string | { label: string; value: string }
 

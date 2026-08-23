@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils"
 
 export interface PinInputProps {
   value: string

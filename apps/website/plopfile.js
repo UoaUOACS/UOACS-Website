@@ -9,7 +9,7 @@ import path from "node:path"
 const TIERS = {
   Primitive: {
     root: "../../packages/ui/src/components",
-    cnImport: "../../utils/cn",
+    cnImport: "../../utils",
   },
   Generic: {
     root: "src/components/Generic",

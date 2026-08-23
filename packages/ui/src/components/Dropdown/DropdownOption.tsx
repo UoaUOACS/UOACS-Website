@@ -1,6 +1,6 @@
 import Link from "next/link"
 import type { Ref } from "react"
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils"
 import { Button } from "../Button/Button"
 import { type ButtonVariantProps, buttonVariants } from "../Button/variants"
 
