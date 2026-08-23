@@ -1,7 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
-  "globalDependencies": [".nvmrc", "biome.json"],
+  "globalDependencies": [".nvmrc", "biome.json", ".env*", "apps/*/.env*"],
   "globalEnv": ["NODE_ENV"],
   "tasks": {
     "build": {
