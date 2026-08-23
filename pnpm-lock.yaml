@@ -17,6 +17,9 @@ importers:
       turbo:
         specifier: ^2.10.11
         version: 2.10.11
+      typescript:
+        specifier: ^5
+        version: 5.9.3
 
   apps/website:
     dependencies:

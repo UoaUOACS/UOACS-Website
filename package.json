@@ -16,7 +16,8 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.5",
     "lefthook": "^2.1.6",
-    "turbo": "^2.10.11"
+    "turbo": "^2.10.11",
+    "typescript": "^5"
   },
   "packageManager": "pnpm@11.17.0"
 }
