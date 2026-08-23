@@ -8,7 +8,7 @@ import path from "node:path"
  */
 const TIERS = {
   Primitive: {
-    root: "../../packages/ui/src/Primitive",
+    root: "../../packages/ui/src/components",
     cnImport: "../../utils/cn",
   },
   Generic: {

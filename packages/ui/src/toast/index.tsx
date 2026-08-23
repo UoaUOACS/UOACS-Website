@@ -1,7 +1,7 @@
 "use client"
 
 import { toast as sonnerToast } from "sonner"
-import { Toast, type ToastProps } from "../Primitive/Toast/Toast"
+import { Toast, type ToastProps } from "../components/Toast/Toast"
 
 // Re-exported so consumers get the renderer and the API from one place: calling
 // toast() does nothing unless <Toaster /> is mounted, and sonner stays an
