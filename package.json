@@ -6,6 +6,7 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "types:check": "turbo run types:check",
+    "types:generate": "turbo run types:generate",
     "storybook": "turbo run storybook",
     "storybook:build": "turbo run storybook:build",
     "lint:check": "turbo run lint:check //#lint:check:root",
