@@ -1,7 +1,8 @@
 "use client"
 
 import { ArrowUpRightIcon, UserIcon } from "@heroicons/react/24/solid"
-import { Button, cn, SocialIcon } from "@uoacs/ui"
+import { Button, SocialIcon } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"

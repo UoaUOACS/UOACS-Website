@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import { type EncryptedTextSweepOptions, useEncryptedText } from "./useEncryptedText"
 import { type EncryptedBannerLayerVariants, encryptedBannerLayerVariants } from "./variants"
 

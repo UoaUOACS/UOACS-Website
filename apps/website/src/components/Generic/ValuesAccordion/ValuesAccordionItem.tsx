@@ -1,5 +1,5 @@
 import { PlusIcon } from "@heroicons/react/24/solid"
-import { cn } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import { AnimatePresence, motion } from "motion/react"
 import type { Value } from "@/types/common"
 

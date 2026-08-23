@@ -1,5 +1,6 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
-import { Button, cn, LazyImage } from "@uoacs/ui"
+import { Button, LazyImage } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import Link from "next/link"
 import { Section, SponsorTicker } from "@/components/Generic"
 

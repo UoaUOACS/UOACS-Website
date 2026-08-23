@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import { useRef } from "react"
 import { useContainerWidth } from "@/hooks/useContainerWidth"
 import { useMediaQuery } from "@/hooks/useMediaQuery"

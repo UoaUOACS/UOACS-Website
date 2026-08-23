@@ -2,7 +2,8 @@
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ArrowLeftEndOnRectangleIcon, ArrowRightIcon } from "@heroicons/react/24/solid"
-import { BorderButton, Button, cn, Heading, SocialIcon } from "@uoacs/ui"
+import { BorderButton, Button, Heading, SocialIcon } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"

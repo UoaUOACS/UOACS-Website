@@ -1,7 +1,8 @@
 "use client"
 
 import { LockClosedIcon } from "@heroicons/react/24/solid"
-import { Button, cn } from "@uoacs/ui"
+import { Button } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 

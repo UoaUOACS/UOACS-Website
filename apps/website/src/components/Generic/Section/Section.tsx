@@ -1,4 +1,5 @@
-import { cn, Heading, type HeadingProps } from "@uoacs/ui"
+import { Heading, type HeadingProps } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 
 export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   title: string

@@ -1,6 +1,7 @@
 "use client"
 
-import { cn, LazyImage } from "@uoacs/ui"
+import { LazyImage } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import Link from "next/link"
 import { SmartTicker } from "react-smart-ticker"
 

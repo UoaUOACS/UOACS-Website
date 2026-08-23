@@ -1,4 +1,5 @@
-import { Container, cn, LazyImage } from "@uoacs/ui"
+import { Container, LazyImage } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import type { Metadata } from "next"
 import { Section } from "@/components/Generic"
 
