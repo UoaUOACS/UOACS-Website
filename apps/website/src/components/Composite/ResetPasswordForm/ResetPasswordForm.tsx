@@ -2,14 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Input } from "@uoacs/ui"
+import { toast } from "@uoacs/ui/toast"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-
 import { authClient } from "@/lib/auth/auth-client"
 import { Routes } from "@/lib/routes"
-import { toast } from "@/lib/toast"
 import {
   type ResetPasswordInput,
   type ResetPasswordOutput,

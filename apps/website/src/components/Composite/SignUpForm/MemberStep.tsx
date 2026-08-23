@@ -2,17 +2,16 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Input, MultiSelect, Radio, Select } from "@uoacs/ui"
+import { toast } from "@uoacs/ui/toast"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import type { z as zType } from "zod"
 import { z } from "zod"
-
 import { ApiError, api } from "@/lib/api/api-client"
 import { authClient } from "@/lib/auth/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"
-import { toast } from "@/lib/toast"
 import { memberSchema } from "@/types/schemas/member"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
 

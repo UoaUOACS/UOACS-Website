@@ -104,9 +104,6 @@ importers:
       sharp:
         specifier: ^0.34.4
         version: 0.34.5
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       tailwind-variants:
         specifier: ^3.1.1
         version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.3.3)
@@ -200,6 +197,9 @@ importers:
       motion:
         specifier: ^12.23.24
         version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.5.0

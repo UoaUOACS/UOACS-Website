@@ -1,4 +1,4 @@
-import { toast } from "@/lib/toast"
+import { toast } from "@uoacs/ui/toast"
 
 export type ApiFieldError = { field: string; message: string }
 

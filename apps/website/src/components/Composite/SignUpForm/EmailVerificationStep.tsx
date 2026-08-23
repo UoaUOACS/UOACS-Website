@@ -2,14 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, PinInput } from "@uoacs/ui"
+import { toast } from "@uoacs/ui/toast"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-
 import { ApiError, api } from "@/lib/api/api-client"
 import { authClient } from "@/lib/auth/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"
-import { toast } from "@/lib/toast"
 import {
   type EmailVerificationCodeForm,
   emailVerificationCodeFormSchema,

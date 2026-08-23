@@ -2,12 +2,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Input } from "@uoacs/ui"
+import { toast } from "@uoacs/ui/toast"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-
 import { api } from "@/lib/api/api-client"
 import { ApiRoutes } from "@/lib/routes"
-import { toast } from "@/lib/toast"
 import {
   type ForgotPasswordInput,
   type ForgotPasswordOutput,
