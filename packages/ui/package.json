@@ -10,7 +10,10 @@
     "./styles/theme.css": "./src/styles/theme.css"
   },
   "scripts": {
-    "types:check": "tsc --noEmit"
+    "types:check": "tsc --noEmit",
+    "lint:check": "biome check .",
+    "lint:fix": "biome check . --write",
+    "lint:fix:unsafe": "biome check . --write --unsafe"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
