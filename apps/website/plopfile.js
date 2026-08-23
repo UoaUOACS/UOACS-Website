@@ -13,11 +13,11 @@ const TIERS = {
   },
   Generic: {
     root: "src/components/Generic",
-    cnImport: "@uoacs/ui",
+    cnImport: "@uoacs/ui/utils",
   },
   Composite: {
     root: "src/components/Composite",
-    cnImport: "@uoacs/ui",
+    cnImport: "@uoacs/ui/utils",
   },
 }
 
