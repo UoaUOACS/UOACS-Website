@@ -9,38 +9,44 @@ LABEL fly_launch_runtime="Next.js"
 
 RUN corepack enable pnpm
 
-# Stage 1: Install dependencies
+# Stage 1: Prune the workspace down to @uoacs/website and its dependencies
+FROM base AS pruner
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+# Root manifests only. This install exists to get turbo at the version the
+# lockfile pins, so it should cache on dependency changes, not source changes.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile --ignore-scripts --filter uoacs-monorepo
+COPY . .
+# --docker splits the output in two: out/json holds every workspace manifest in
+# its original directory layout beside a pruned lockfile, out/full holds their
+# sources. Turbo discovers the packages, so adding one needs no change here.
+RUN pnpm turbo prune @uoacs/website --docker
+
+# Stage 2: Install dependencies
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-# Copy only the workspace manifests first so this layer caches on dependency
-# changes rather than on every application source change. Every workspace
-# package needs its manifest here: pnpm resolves the apps/* and packages/*
-# globs against what is present, and a package whose manifest is missing gets
-# a dangling symlink and no node_modules of its own.
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-COPY apps/website/package.json ./apps/website/
-COPY packages/ui/package.json ./packages/ui/
-COPY packages/config/package.json ./packages/config/
+# Manifests only, so this layer caches on dependency changes rather than on
+# every application source change.
+COPY --from=pruner /app/out/json/ ./
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile --ignore-scripts
-# A missing manifest above is silent: pnpm still exits 0, it just leaves the
-# package linked to nothing. Fail here instead of deep inside next build.
-RUN node -e "require.resolve('clsx',{paths:['/app/packages/ui']})" \
-    || (echo "workspace install incomplete: is every packages/*/package.json copied above?" && exit 1)
 
-# Stage 2: Build the application
+# Stage 3: Build the application
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 # Carry over the whole installed tree rather than naming each package's
 # node_modules, so adding a workspace package doesn't silently break the build.
-# .dockerignore keeps node_modules out of the context, so COPY . . must not be
-# relied on to backfill it.
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps ./apps
 COPY --from=deps /app/packages ./packages
-COPY . .
+# Sources merge in on top of the installed node_modules. out/full carries the
+# workspace root files the build needs (package.json, turbo.json,
+# pnpm-workspace.yaml) alongside each in-scope package.
+COPY --from=pruner /app/out/full/ ./
 
 RUN --mount=type=secret,id=DATABASE_URI \
     --mount=type=secret,id=PAYLOAD_SECRET \
@@ -68,7 +74,7 @@ RUN --mount=type=secret,id=DATABASE_URI \
            export GOOGLE_WALLET_SERVICE_ACCOUNT_KEY=$(cat /run/secrets/GOOGLE_WALLET_SERVICE_ACCOUNT_KEY) && \
            pnpm --filter @uoacs/website build'
 
-# Stage 3: Production runner (minimal image)
+# Stage 4: Production runner (minimal image)
 FROM base AS runner
 WORKDIR /app
 
