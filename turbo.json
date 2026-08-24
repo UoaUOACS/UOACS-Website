@@ -54,24 +54,6 @@
     "storybook": {
       "cache": false,
       "persistent": true
-    },
-    "lint:check": {
-      "outputs": []
-    },
-    "//#lint:check:root": {
-      "outputs": []
-    },
-    "lint:fix": {
-      "cache": false
-    },
-    "//#lint:fix:root": {
-      "cache": false
-    },
-    "lint:fix:unsafe": {
-      "cache": false
-    },
-    "//#lint:fix:unsafe:root": {
-      "cache": false
     }
   }
 }

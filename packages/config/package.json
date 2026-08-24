@@ -9,10 +9,5 @@
     "./tsconfig/base.json": "./tsconfig/base.json",
     "./tsconfig/next.json": "./tsconfig/next.json",
     "./tsconfig/react-library.json": "./tsconfig/react-library.json"
-  },
-  "scripts": {
-    "lint:check": "biome check .",
-    "lint:fix": "biome check . --write",
-    "lint:fix:unsafe": "biome check . --write --unsafe"
   }
 }

@@ -9,13 +9,10 @@
     "types:generate": "turbo run types:generate",
     "storybook": "turbo run storybook",
     "storybook:build": "turbo run storybook:build",
-    "lint:check": "turbo run lint:check //#lint:check:root",
-    "lint:fix": "turbo run lint:fix //#lint:fix:root",
-    "lint:fix:unsafe": "turbo run lint:fix:unsafe //#lint:fix:unsafe:root",
-    "postinstall": "sh -c 'command -v git >/dev/null 2>&1 || exit 0; lefthook install'",
-    "lint:check:root": "biome check ./*.json",
-    "lint:fix:root": "biome check ./*.json --write",
-    "lint:fix:unsafe:root": "biome check ./*.json --write --unsafe"
+    "lint:check": "biome check .",
+    "lint:fix": "biome check . --write",
+    "lint:fix:unsafe": "biome check . --write --unsafe",
+    "postinstall": "sh -c 'command -v git >/dev/null 2>&1 || exit 0; lefthook install'"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.5",
