@@ -13,12 +13,12 @@
     "types:check": "tsc --noEmit"
   },
   "dependencies": {
-    "@heroicons/react": "^2.2.0",
+    "@heroicons/react": "catalog:",
     "clsx": "^2.1.1",
-    "motion": "^12.23.24",
+    "motion": "catalog:",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
-    "tailwind-variants": "^3.1.1"
+    "tailwind-variants": "catalog:"
   },
   "peerDependencies": {
     "next": ">=16",
@@ -27,13 +27,13 @@
     "tailwindcss": ">=4"
   },
   "devDependencies": {
-    "@storybook/nextjs-vite": "^10.5.3",
-    "@types/react": "^19.2.13",
-    "@types/react-dom": "^19.2.3",
+    "@storybook/nextjs-vite": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "@uoacs/config": "workspace:*",
-    "next": "16.3.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "typescript": "^5"
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "typescript": "catalog:"
   }
 }

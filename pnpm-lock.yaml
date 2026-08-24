@@ -4,6 +4,39 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@heroicons/react':
+      specifier: ^2.2.0
+      version: 2.2.0
+    '@storybook/nextjs-vite':
+      specifier: ^10.5.3
+      version: 10.5.3
+    '@types/react':
+      specifier: ^19.2.13
+      version: 19.2.14
+    '@types/react-dom':
+      specifier: ^19.2.3
+      version: 19.2.3
+    motion:
+      specifier: ^12.23.24
+      version: 12.38.0
+    next:
+      specifier: 16.3.0
+      version: 16.3.0
+    react:
+      specifier: 19.2.4
+      version: 19.2.4
+    react-dom:
+      specifier: 19.2.4
+      version: 19.2.4
+    tailwind-variants:
+      specifier: ^3.1.1
+      version: 3.2.2
+    typescript:
+      specifier: ^5
+      version: 5.9.3
+
 importers:
 
   .:
@@ -18,13 +51,13 @@ importers:
         specifier: ^2.10.11
         version: 2.10.11
       typescript:
-        specifier: ^5
+        specifier: 'catalog:'
         version: 5.9.3
 
   apps/website:
     dependencies:
       '@heroicons/react':
-        specifier: ^2.2.0
+        specifier: 'catalog:'
         version: 2.2.0(react@19.2.4)
       '@hookform/resolvers':
         specifier: ^5.2.2
@@ -81,19 +114,19 @@ importers:
         specifier: ^7.1.1
         version: 7.2.0(@aws-sdk/credential-providers@3.1032.0)
       motion:
-        specifier: ^12.23.24
+        specifier: 'catalog:'
         version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       next:
-        specifier: 16.3.0
+        specifier: 'catalog:'
         version: 16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4)
       payload:
         specifier: 3.86.0
         version: 3.86.0(graphql@16.13.2)(supports-color@7.2.0)(typescript@5.9.3)
       react:
-        specifier: 19.2.4
+        specifier: 'catalog:'
         version: 19.2.4
       react-dom:
-        specifier: 19.2.4
+        specifier: 'catalog:'
         version: 19.2.4(react@19.2.4)
       react-hook-form:
         specifier: ^7.71.2
@@ -105,7 +138,7 @@ importers:
         specifier: ^0.34.4
         version: 0.34.5
       tailwind-variants:
-        specifier: ^3.1.1
+        specifier: 'catalog:'
         version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.3.3)
       zod:
         specifier: ^4.3.6
@@ -133,7 +166,7 @@ importers:
         specifier: ^10.5.3
         version: 10.5.3(@vitest/browser-playwright@4.1.4)(@vitest/browser@4.1.4)(@vitest/runner@4.1.4)(react@19.2.4)(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))(vitest@4.1.4)
       '@storybook/nextjs-vite':
-        specifier: ^10.5.3
+        specifier: 'catalog:'
         version: 10.5.3(@babel/core@7.29.0(supports-color@7.2.0))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(babel-plugin-macros@3.1.0)(esbuild@0.28.1)(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))(supports-color@7.2.0)(typescript@5.9.3)(vite@8.0.8(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4))
       '@tailwindcss/postcss':
         specifier: ^4
@@ -145,10 +178,10 @@ importers:
         specifier: ^24
         version: 24.13.3
       '@types/react':
-        specifier: ^19.2.13
+        specifier: 'catalog:'
         version: 19.2.14
       '@types/react-dom':
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.14)
       '@uoacs/config':
         specifier: workspace:*
@@ -178,7 +211,7 @@ importers:
         specifier: ^4.21.0
         version: 4.22.4
       typescript:
-        specifier: ^5
+        specifier: 'catalog:'
         version: 5.9.3
       vitest:
         specifier: ^4.0.18
@@ -189,13 +222,13 @@ importers:
   packages/ui:
     dependencies:
       '@heroicons/react':
-        specifier: ^2.2.0
+        specifier: 'catalog:'
         version: 2.2.0(react@19.2.4)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
       motion:
-        specifier: ^12.23.24
+        specifier: 'catalog:'
         version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       sonner:
         specifier: ^2.0.7
@@ -204,35 +237,35 @@ importers:
         specifier: ^3.3.1
         version: 3.5.0
       tailwind-variants:
-        specifier: ^3.1.1
+        specifier: 'catalog:'
         version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.3.3)
       tailwindcss:
         specifier: '>=4'
         version: 4.3.3
     devDependencies:
       '@storybook/nextjs-vite':
-        specifier: ^10.5.3
+        specifier: 'catalog:'
         version: 10.5.3(@babel/core@7.29.0(supports-color@7.2.0))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(babel-plugin-macros@3.1.0)(esbuild@0.28.1)(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))(supports-color@7.2.0)(typescript@5.9.3)(vite@8.0.8(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4))
       '@types/react':
-        specifier: ^19.2.13
+        specifier: 'catalog:'
         version: 19.2.14
       '@types/react-dom':
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.14)
       '@uoacs/config':
         specifier: workspace:*
         version: link:../config
       next:
-        specifier: 16.3.0
+        specifier: 'catalog:'
         version: 16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4)
       react:
-        specifier: 19.2.4
+        specifier: 'catalog:'
         version: 19.2.4
       react-dom:
-        specifier: 19.2.4
+        specifier: 'catalog:'
         version: 19.2.4(react@19.2.4)
       typescript:
-        specifier: ^5
+        specifier: 'catalog:'
         version: 5.9.3
 
 packages:
