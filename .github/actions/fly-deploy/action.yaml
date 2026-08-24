@@ -4,9 +4,15 @@ description: Deploys application to Fly.io based on the provided configuration.
 inputs:
   # Deployment Config
   CONFIG_FILE:
-    description: 'Path to the Fly.io configuration file (e.g., fly.toml)'
+    description: 'Path to the Fly.io configuration file (e.g., apps/website/fly.toml)'
     required: true
-    default: 'fly.toml'
+    default: 'apps/website/fly.toml'
+  DOCKERFILE:
+    description: >
+      Path to the Dockerfile, relative to the repository root. The build context
+      is always the repository root so the pnpm workspace is available.
+    required: false
+    default: 'apps/website/Dockerfile'
   FLY_API_TOKEN:
     description: 'Fly.io API token for authentication'
     required: true
@@ -88,7 +94,9 @@ runs:
 
     - name: Deploy to Fly.io
       run: |
-        flyctl deploy --remote-only --config ${{ inputs.CONFIG_FILE }} \
+        flyctl deploy --remote-only \
+          --config ${{ inputs.CONFIG_FILE }} \
+          --dockerfile ${{ inputs.DOCKERFILE }} \
           --build-secret DATABASE_URI="${{ inputs.DATABASE_URI }}" \
           --build-secret PAYLOAD_SECRET="${{ inputs.PAYLOAD_SECRET }}" \
           --build-secret NEXT_PUBLIC_URL="${{ inputs.NEXT_PUBLIC_URL }}" \

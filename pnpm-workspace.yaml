@@ -1,3 +1,22 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# Versions shared by more than one workspace package. Manifests reference these
+# as "catalog:" so the apps and @uoacs/ui cannot drift onto different React,
+# TypeScript or Storybook versions. Peer ranges stay wide and are not listed.
+catalog:
+  "@heroicons/react": ^2.2.0
+  "@storybook/nextjs-vite": ^10.5.3
+  "@types/react": ^19.2.13
+  "@types/react-dom": ^19.2.3
+  motion: ^12.23.24
+  next: 16.3.0
+  react: 19.2.4
+  react-dom: 19.2.4
+  tailwind-variants: ^3.1.1
+  typescript: ^5
+
 allowBuilds:
   "@tailwindcss/oxide": true
   core-js-pure: true

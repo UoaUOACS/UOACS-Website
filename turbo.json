@@ -1,0 +1,59 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "tui",
+  "globalDependencies": [".nvmrc", "biome.json", ".env*", "apps/*/.env*"],
+  "globalEnv": ["NODE_ENV"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": [
+        "BETTER_AUTH_SECRET",
+        "DATABASE_URI",
+        "DISCORD_SERVER_ID",
+        "GOOGLE_WALLET_ISSUER_ID",
+        "GOOGLE_WALLET_SERVICE_ACCOUNT_KEY",
+        "NEXT_PUBLIC_URL",
+        "PAYLOAD_SECRET",
+        "RESEND_API_KEY",
+        "S3_ACCESS_KEY_ID",
+        "S3_BUCKET",
+        "S3_REGION",
+        "S3_SECRET_ACCESS_KEY"
+      ]
+    },
+    "types:check": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "types:generate": {
+      "cache": false,
+      "env": [
+        "BETTER_AUTH_SECRET",
+        "DATABASE_URI",
+        "DISCORD_SERVER_ID",
+        "GOOGLE_WALLET_ISSUER_ID",
+        "GOOGLE_WALLET_SERVICE_ACCOUNT_KEY",
+        "NEXT_PUBLIC_URL",
+        "PAYLOAD_SECRET",
+        "RESEND_API_KEY",
+        "S3_ACCESS_KEY_ID",
+        "S3_BUCKET",
+        "S3_REGION",
+        "S3_SECRET_ACCESS_KEY"
+      ]
+    },
+    "storybook:build": {
+      "dependsOn": ["^build"],
+      "outputs": ["storybook-static/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "storybook": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

@@ -1,0 +1,30 @@
+import { cn } from "{{cnImport}}"
+{{#if isPrimitive}}
+import { type {{pascalCase name}}VariantProps, {{camelCase name}}Variants } from "./{{pascalCase name}}.variants"
+{{/if}}
+
+export interface {{pascalCase name}}Props
+{{#if isPrimitive}}
+  extends {{pascalCase name}}VariantProps,
+    React.HTMLAttributes<HTMLDivElement> {}
+{{else}}
+  extends React.HTMLAttributes<HTMLDivElement> {}
+{{/if}}
+
+export const {{pascalCase name}} = ({ children, className, ...props }: {{pascalCase name}}Props) => {
+{{#if isPrimitive}}
+  const variantClasses = {{camelCase name}}Variants()
+
+  return (
+    <div className={cn(variantClasses, className)} {...props}>
+      {children}
+    </div>
+  )
+{{else}}
+  return (
+    <div className={cn(className)} {...props}>
+      {children}
+    </div>
+  )
+{{/if}}
+}
