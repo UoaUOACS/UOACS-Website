@@ -28,7 +28,16 @@ export class BetterAuthSignUpError extends Error {
   }
 }
 
+export class VerificationCodeCooldownError extends Error {
+  constructor(public readonly retryAfterSeconds: number) {
+    super("Verification code requested too recently")
+    this.name = "VerificationCodeCooldownError"
+  }
+}
+
 export class AuthService {
+  private static readonly VERIFICATION_CODE_COOLDOWN_MS = 60 * 1000
+
   public async signUpPayloadMember(
     data: CreateMemberInput,
     betterAuthUserId: string,
@@ -198,6 +207,24 @@ export class AuthService {
   }
 
   public async createVerificationCode(email: string, code: string): Promise<string> {
+    const mostRecent = await payload.find({
+      collection: Slugs.Collections.EMAIL_VERIFICATION_CODE,
+      where: { email: { equals: email } },
+      sort: "-createdAt",
+      limit: 1,
+    })
+
+    const lastSentAt = mostRecent.docs[0]?.createdAt
+    if (lastSentAt) {
+      const elapsedMs = Date.now() - new Date(lastSentAt).getTime()
+      if (elapsedMs < AuthService.VERIFICATION_CODE_COOLDOWN_MS) {
+        const retryAfterSeconds = Math.ceil(
+          (AuthService.VERIFICATION_CODE_COOLDOWN_MS - elapsedMs) / 1000,
+        )
+        throw new VerificationCodeCooldownError(retryAfterSeconds)
+      }
+    }
+
     await payload.delete({
       collection: Slugs.Collections.EMAIL_VERIFICATION_CODE,
       where: { email: { equals: email } },
