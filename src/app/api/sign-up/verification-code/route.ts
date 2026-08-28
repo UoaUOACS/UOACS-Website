@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { ZodError } from "zod"
-import { AuthService } from "@/services/auth.service"
+import { AuthService, VerificationCodeCooldownError } from "@/services/auth.service"
 import { PayloadEmailService } from "@/services/email/payload-email.service"
 import { sendCodeSchema, verifyCodeSchema } from "@/types/schemas/verification-code"
 
@@ -32,6 +32,12 @@ export async function POST(request: NextRequest) {
   try {
     await authService.createVerificationCode(email, code)
   } catch (error) {
+    if (error instanceof VerificationCodeCooldownError) {
+      return NextResponse.json(
+        { error: "Please wait before requesting another code" },
+        { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } },
+      )
+    }
     console.error("[SignUp/verification-code] Failed to store verification code", { error })
     return NextResponse.json({ error: "Failed to send verification code" }, { status: 500 })
   }
