@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     // so Better Auth's own reset flow silently no-ops for them.
     if (hasUnlinkedMember) {
       step = "sendCompleteSignUp"
-      const url = `${process.env.NEXT_PUBLIC_URL}${Routes.SIGN_UP}`
+      const url = `${process.env.NEXT_PUBLIC_WEBSITE_URL}${Routes.SIGN_UP}`
       await PayloadEmailService.sendCompleteSignUp(email, url)
     } else {
       step = "requestPasswordReset"

@@ -50,7 +50,7 @@ COPY --from=pruner /app/out/full/ ./
 
 RUN --mount=type=secret,id=DATABASE_URI \
     --mount=type=secret,id=PAYLOAD_SECRET \
-    --mount=type=secret,id=NEXT_PUBLIC_URL \
+    --mount=type=secret,id=NEXT_PUBLIC_WEBSITE_URL \
     --mount=type=secret,id=S3_ACCESS_KEY_ID \
     --mount=type=secret,id=S3_SECRET_ACCESS_KEY \
     --mount=type=secret,id=S3_REGION \
@@ -62,7 +62,7 @@ RUN --mount=type=secret,id=DATABASE_URI \
     --mount=type=secret,id=GOOGLE_WALLET_SERVICE_ACCOUNT_KEY \
     sh -c 'export DATABASE_URI=$(cat /run/secrets/DATABASE_URI) && \
            export PAYLOAD_SECRET=$(cat /run/secrets/PAYLOAD_SECRET) && \
-           export NEXT_PUBLIC_URL=$(cat /run/secrets/NEXT_PUBLIC_URL) && \
+           export NEXT_PUBLIC_WEBSITE_URL=$(cat /run/secrets/NEXT_PUBLIC_WEBSITE_URL) && \
            export S3_ACCESS_KEY_ID=$(cat /run/secrets/S3_ACCESS_KEY_ID) && \
            export S3_SECRET_ACCESS_KEY=$(cat /run/secrets/S3_SECRET_ACCESS_KEY) && \
            export S3_REGION=$(cat /run/secrets/S3_REGION) && \

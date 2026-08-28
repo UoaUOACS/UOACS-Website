@@ -4,7 +4,7 @@ import { isProductionUrl } from "@/lib/helpers"
 export const dynamic = "force-static"
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_URL
+  const baseUrl = process.env.NEXT_PUBLIC_WEBSITE_URL
 
   if (!isProductionUrl(baseUrl)) {
     return {
