@@ -36,9 +36,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to send verification code" }, { status: 500 })
   }
 
-  try {
-    await PayloadEmailService.sendVerificationCode(email, code)
-  } catch (error) {
+  void PayloadEmailService.sendVerificationCode(email, code).catch(async (error) => {
     console.error("[SignUp/verification-code] Email delivery failed — cleaning up stored code", {
       error,
     })
@@ -47,8 +45,7 @@ export async function POST(request: NextRequest) {
         e,
       }),
     )
-    return NextResponse.json({ error: "Failed to send verification code" }, { status: 500 })
-  }
+  })
 
   return NextResponse.json({ message: "Verification code sent" })
 }
