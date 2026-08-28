@@ -142,6 +142,72 @@ jobs:
           DISCORD_SERVER_ID: ${{ secrets.DISCORD_SERVER_ID }}
         run: pnpm types:check
 
+  codegen:
+    name: Codegen
+    runs-on: ubuntu-latest
+    needs: [lint, setup]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v5
+        id: cache
+        with:
+          path: |
+            node_modules
+            apps/*/node_modules
+            packages/*/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-node_modules
+
+      - name: Install dependencies if cache misses
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Generate typing
+        env:
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          NEXT_PUBLIC_WEBSITE_URL: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+          NEXT_PUBLIC_PROJECTS_URL: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GOOGLE_WALLET_ISSUER_ID: ${{ secrets.GOOGLE_WALLET_ISSUER_ID }}
+          GOOGLE_WALLET_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}
+          DISCORD_SERVER_ID: ${{ secrets.DISCORD_SERVER_ID }}
+        run: pnpm types:generate
+
+      - name: Write git diff
+        run: |
+          if git diff --quiet; then
+            echo "TYPE_GEN_DIFF=0" >> $GITHUB_ENV
+          else
+            echo "TYPE_GEN_DIFF=1" >> $GITHUB_ENV
+          fi
+
+      - name: Check for differences in typing
+        if: ${{ env.TYPE_GEN_DIFF != '0'}}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('Your code generation for typings are not up to date. Run pnpm types:generate')
+
   build-app:
     name: Build Applications
     runs-on: ubuntu-latest
