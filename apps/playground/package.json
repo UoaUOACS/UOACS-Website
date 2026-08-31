@@ -17,7 +17,7 @@
     "@uoacs/ui": "workspace:*"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
     "@uoacs/config": "workspace:*",
     "@types/react": "catalog:",
