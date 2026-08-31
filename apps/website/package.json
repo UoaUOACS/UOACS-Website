@@ -57,7 +57,7 @@
     "@storybook/nextjs-vite": "catalog:",
     "@tailwindcss/postcss": "^4",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@uoacs/config": "workspace:*",
