@@ -125,12 +125,100 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
       
       - name: Run Type Check
+        env:
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          NEXT_PUBLIC_WEBSITE_URL: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+          NEXT_PUBLIC_PROJECTS_URL: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GOOGLE_WALLET_ISSUER_ID: ${{ secrets.GOOGLE_WALLET_ISSUER_ID }}
+          GOOGLE_WALLET_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}
+          DISCORD_SERVER_ID: ${{ secrets.DISCORD_SERVER_ID }}
         run: pnpm types:check
 
+  codegen:
+    name: Codegen
+    runs-on: ubuntu-latest
+    needs: [lint, setup]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v5
+        id: cache
+        with:
+          path: |
+            node_modules
+            apps/*/node_modules
+            packages/*/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-node_modules
+
+      - name: Install dependencies if cache misses
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Generate typing
+        env:
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          NEXT_PUBLIC_WEBSITE_URL: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+          NEXT_PUBLIC_PROJECTS_URL: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GOOGLE_WALLET_ISSUER_ID: ${{ secrets.GOOGLE_WALLET_ISSUER_ID }}
+          GOOGLE_WALLET_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}
+          DISCORD_SERVER_ID: ${{ secrets.DISCORD_SERVER_ID }}
+        run: pnpm types:generate
+
+      - name: Write git diff
+        run: |
+          if git diff --quiet; then
+            echo "TYPE_GEN_DIFF=0" >> $GITHUB_ENV
+          else
+            echo "TYPE_GEN_DIFF=1" >> $GITHUB_ENV
+          fi
+
+      - name: Check for differences in typing
+        if: ${{ env.TYPE_GEN_DIFF != '0'}}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('Your code generation for typings are not up to date. Run pnpm types:generate')
+
   build-app:
-    name: Build Application
+    name: Build Applications
     runs-on: ubuntu-latest
     needs: [lint, setup, type-check]
+    strategy:
+      matrix:
+        include:
+          - app: website
+            package: "@uoacs/website"
+          - app: playground
+            package: "@uoacs/playground"
 
     steps:
       - name: Checkout
@@ -162,22 +250,25 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
         shell: bash
 
-      - name: Restore build caches
+      # Keyed per app so parallel matrix legs don't stomp each other's
+      # cache entry under one shared key.
+      - name: Restore build cache
         uses: actions/cache/restore@v5
         with:
           path: |
             .turbo
-            apps/*/.next/cache
-          key: ${{ runner.os }}-build-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+            apps/${{ matrix.app }}/.next/cache
+          key: ${{ runner.os }}-build-${{ matrix.app }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ hashFiles('pnpm-lock.yaml') }}-
-            ${{ runner.os }}-build-
+            ${{ runner.os }}-build-${{ matrix.app }}-${{ hashFiles('pnpm-lock.yaml') }}-
+            ${{ runner.os }}-build-${{ matrix.app }}-
 
-      - name: Build Application
+      - name: Build
         env:
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
-          NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_WEBSITE_URL: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+          NEXT_PUBLIC_PROJECTS_URL: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
           S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
           S3_REGION: ${{ secrets.S3_REGION }}
@@ -188,19 +279,19 @@ jobs:
           GOOGLE_WALLET_ISSUER_ID: ${{ secrets.GOOGLE_WALLET_ISSUER_ID }}
           GOOGLE_WALLET_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}
           DISCORD_SERVER_ID: ${{ secrets.DISCORD_SERVER_ID }}
-        run: pnpm build
+        run: pnpm build --filter=${{ matrix.package }}
 
       # Only main writes an entry. PR runs still read the cache, but don't each
       # add a copy that pushes the shared node_modules cache out under the 10GB
       # LRU limit.
-      - name: Save build caches
+      - name: Save build cache
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/cache/save@v5
         with:
           path: |
             .turbo
-            apps/*/.next/cache
-          key: ${{ runner.os }}-build-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+            apps/${{ matrix.app }}/.next/cache
+          key: ${{ runner.os }}-build-${{ matrix.app }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
 
   build-storybook:
     name: Build Storybook

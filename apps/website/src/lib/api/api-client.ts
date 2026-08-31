@@ -25,7 +25,7 @@ type RequestOptions = {
 
 function resolveUrl(url: string): string {
   if (typeof window !== "undefined") return url
-  return `${process.env.NEXT_PUBLIC_URL}${url}`
+  return `${process.env.NEXT_PUBLIC_WEBSITE_URL}${url}`
 }
 
 function buildUrlWithParams(url: string, params?: RequestOptions["params"]): string {

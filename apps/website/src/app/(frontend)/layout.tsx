@@ -40,7 +40,7 @@ const mono = localFont({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_WEBSITE_URL ?? "http://localhost:3000"),
   description: "University of Auckland Computer Society - Join our community of CS students!",
   title: {
     default: "UOACS",

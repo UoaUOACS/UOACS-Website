@@ -13,7 +13,8 @@
         "DISCORD_SERVER_ID",
         "GOOGLE_WALLET_ISSUER_ID",
         "GOOGLE_WALLET_SERVICE_ACCOUNT_KEY",
-        "NEXT_PUBLIC_URL",
+        "NEXT_PUBLIC_WEBSITE_URL",
+        "NEXT_PUBLIC_PROJECTS_URL",
         "PAYLOAD_SECRET",
         "RESEND_API_KEY",
         "S3_ACCESS_KEY_ID",
@@ -23,7 +24,7 @@
       ]
     },
     "types:check": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "types:generate"],
       "outputs": []
     },
     "types:generate": {
@@ -34,7 +35,8 @@
         "DISCORD_SERVER_ID",
         "GOOGLE_WALLET_ISSUER_ID",
         "GOOGLE_WALLET_SERVICE_ACCOUNT_KEY",
-        "NEXT_PUBLIC_URL",
+        "NEXT_PUBLIC_WEBSITE_URL",
+        "NEXT_PUBLIC_PROJECTS_URL",
         "PAYLOAD_SECRET",
         "RESEND_API_KEY",
         "S3_ACCESS_KEY_ID",
