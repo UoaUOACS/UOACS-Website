@@ -219,6 +219,8 @@ jobs:
             package: "@uoacs/website"
           - app: playground
             package: "@uoacs/playground"
+          - app: auth
+            package: "@uoacs/auth"
 
     steps:
       - name: Checkout
