@@ -11,12 +11,12 @@
     "types:generate": "payload generate:types && next typegen"
   },
   "dependencies": {
-    "@payloadcms/db-mongodb": "3.86.0",
-    "@payloadcms/next": "3.86.0",
-    "@payloadcms/richtext-lexical": "3.86.0",
-    "@payloadcms/ui": "3.86.0",
+    "@payloadcms/db-mongodb": "catalog:payload",
+    "@payloadcms/next": "catalog:payload",
+    "@payloadcms/richtext-lexical": "catalog:payload",
+    "@payloadcms/ui": "catalog:payload",
     "next": "catalog:",
-    "payload": "3.86.0",
+    "payload": "catalog:payload",
     "react": "catalog:",
     "react-dom": "catalog:",
     "sharp": "^0.34.4"
