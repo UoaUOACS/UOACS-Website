@@ -1,0 +1,31 @@
+{
+  "name": "@uoacs/auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port=3002",
+    "build": "next build",
+    "start": "next start",
+    "types:check": "tsc --noEmit",
+    "types:generate": "payload generate:types && next typegen"
+  },
+  "dependencies": {
+    "@payloadcms/db-mongodb": "catalog:payload",
+    "@payloadcms/next": "catalog:payload",
+    "@payloadcms/richtext-lexical": "catalog:payload",
+    "@payloadcms/ui": "catalog:payload",
+    "next": "catalog:",
+    "payload": "catalog:payload",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "sharp": "^0.34.4"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@uoacs/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
