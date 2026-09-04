@@ -10,8 +10,8 @@ catalog:
   "@types/node": ^24
   motion: ^12.23.24
   next: 16.3.0
-  react: 19.2.4
-  react-dom: 19.2.4
+  react: 19.2.8
+  react-dom: 19.2.8
   tailwindcss: ^4.1.18
   "@tailwindcss/postcss": ^4
   tailwind-variants: ^3.1.1
