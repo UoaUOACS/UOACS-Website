@@ -8,20 +8,27 @@
     "build": "next build",
     "start": "next start",
     "types:check": "tsc --noEmit",
-    "types:generate": "next typegen"
+    "types:generate": "next typegen",
+    "storybook": "storybook dev -p 6007",
+    "storybook:build": "storybook build"
   },
   "dependencies": {
+    "@heroicons/react": "catalog:",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "@uoacs/ui": "workspace:*"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^10.5.3",
+    "@storybook/addon-docs": "^10.5.3",
+    "@storybook/nextjs-vite": "catalog:",
     "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
     "@uoacs/config": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "storybook": "^10.5.3",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }
