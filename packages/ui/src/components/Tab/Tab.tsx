@@ -17,8 +17,8 @@ export interface TabProps extends TabVariantProps, React.ButtonHTMLAttributes<HT
  * the button's own border-box: the focus ring (on the button itself) stays a full,
  * uncut rectangle, and the label text is never subject to the clip-path either.
  */
-export const Tab = ({ children, className, active, ref, ...props }: TabProps) => {
-  const { root, fill, label } = tabVariants({ active })
+export const Tab = ({ active, children, className, first, ref, ...props }: TabProps) => {
+  const { root, fill, label } = tabVariants({ active, first })
 
   return (
     <button className={cn(root(), className)} ref={ref} type="button" {...props}>

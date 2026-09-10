@@ -17,6 +17,7 @@ export const Active: Story = {
   args: {
     active: true,
     children: "Featured",
+    first: true,
   },
 }
 
@@ -24,16 +25,17 @@ export const Inactive: Story = {
   args: {
     active: false,
     children: "Awards",
+    first: false,
   },
 }
 
 export const Overlapping: Story = {
   render: (args) => (
-    <div className="flex bg-primary p-8">
-      <Tab {...args} active className="-mr-4">
+    <div className="flex bg-gray-100 p-8">
+      <Tab {...args} active className="-mr-5" first>
         Featured
       </Tab>
-      <Tab {...args} active={false}>
+      <Tab {...args} active={false} first={false}>
         Awards
       </Tab>
     </div>
