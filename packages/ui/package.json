@@ -34,6 +34,7 @@
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "storybook": "^10.5.3",
     "typescript": "catalog:"
   }
 }
