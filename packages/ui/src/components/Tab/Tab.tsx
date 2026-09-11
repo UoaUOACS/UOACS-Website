@@ -1,11 +1,11 @@
 "use client"
 
-import { useLayoutEffect, useRef, useState } from "react"
+import { useCallback, useLayoutEffect, useRef, useState } from "react"
 import { cn } from "../../utils"
 import { type TabVariantProps, tabVariants } from "./Tab.variants"
 
-/** Horizontal run of the diagonal edge, in px. */
-const SLANT = 35
+/** Horizontal run of the diagonal edge, in px. Exported so a tablist can work out how much to overlap adjacent tabs. */
+export const SLANT = 35
 /** Radius of the corner where the flat top meets the diagonal, in px. */
 const ROUND = 10
 
@@ -45,11 +45,16 @@ export interface TabProps extends TabVariantProps, React.ButtonHTMLAttributes<HT
  * Presentational only: selection state, keyboard navigation and ARIA wiring
  * belong to the parent tablist, which passes them through as props.
  *
- * The fill is a layer of its own rather than a background on the button, so the
- * clip-path can't cut into the focus ring or the label.
+ * The clip-path sits on the button itself, not just its fill, so a row of
+ * overlapping tabs hit-tests the same way it looks: a click lands on whichever
+ * tab is visibly on top at that point, and falls through to the tab behind
+ * wherever the top tab's shape doesn't cover it. The focus ring lives on its own
+ * layer, above the fill and inset rather than offset outward, because clip-path
+ * cuts off anything painted outside the border box, and the fill is opaque
+ * enough to paint over a ring drawn directly on the button underneath it.
  */
 export const Tab = ({ active, children, className, first, ref, ...props }: TabProps) => {
-  const { root, fill, label } = tabVariants({ active, first })
+  const { root, fill, label, ring } = tabVariants({ active, first })
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [size, setSize] = useState({ width: 0, height: 0 })
 
@@ -57,28 +62,48 @@ export const Tab = ({ active, children, className, first, ref, ...props }: TabPr
     const node = buttonRef.current
     if (!node) return
 
-    const observer = new ResizeObserver(() => {
-      // Border-box, not the observer's contentBoxSize: the fill spans the padded
-      // box, so a content-box path would be too small and clip the label.
-      const rect = node.getBoundingClientRect()
-      setSize({ height: rect.height, width: rect.width })
+    // offsetWidth/offsetHeight (and borderBoxSize below) are the untransformed
+    // border box clip-path resolves against — getBoundingClientRect includes
+    // any ancestor scaling or page zoom, which would size the path wrong.
+    // Measuring here, synchronously, means the first paint is already clipped
+    // correctly instead of showing an unclipped rectangle for a frame.
+    setSize({ height: node.offsetHeight, width: node.offsetWidth })
+
+    const observer = new ResizeObserver(([entry]) => {
+      const borderBox = entry?.borderBoxSize?.[0]
+      setSize(
+        borderBox
+          ? { height: borderBox.blockSize, width: borderBox.inlineSize }
+          : { height: node.offsetHeight, width: node.offsetWidth },
+      )
     })
     observer.observe(node)
     return () => observer.disconnect()
   }, [])
 
-  const setRefs = (node: HTMLButtonElement | null) => {
-    buttonRef.current = node
-    if (typeof ref === "function") ref(node)
-    else if (ref) ref.current = node
-  }
+  const setRefs = useCallback(
+    (node: HTMLButtonElement | null) => {
+      buttonRef.current = node
+      if (typeof ref === "function") ref(node)
+      else if (ref) ref.current = node
+    },
+    [ref],
+  )
 
   const clipPath = buildClipPath(size.width, size.height, Boolean(first))
 
   return (
-    <button className={cn(root(), className)} ref={setRefs} type="button" {...props}>
-      <span aria-hidden="true" className={fill()} style={clipPath ? { clipPath } : undefined} />
+    <button
+      className={cn(root(), className)}
+      ref={setRefs}
+      style={clipPath ? { clipPath } : undefined}
+      type="button"
+      {...props}
+    >
+      {/* Hidden until first measured, so the gap before that never shows as an unclipped rectangle. */}
+      <span aria-hidden="true" className={fill()} style={clipPath ? undefined : { opacity: 0 }} />
       <span className={label()}>{children}</span>
+      <span aria-hidden="true" className={ring()} />
     </button>
   )
 }
