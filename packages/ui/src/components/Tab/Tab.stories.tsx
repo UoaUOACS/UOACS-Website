@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { expect, fn, userEvent, within } from "storybook/test"
 import { cn } from "../../utils"
 import { Tab } from "./Tab"
@@ -34,6 +34,8 @@ export const Inactive: Story = {
 export const Overlapping: Story = {
   render: (args) => (
     <div className="flex bg-gray-100 p-8">
+      {/* This margin is a value tuned by eye, not derived from Tab's exported
+          SLANT (35px) — two slants meeting exactly would need double that. */}
       <Tab {...args} active className="z-20 -mr-12" first>
         Featured
       </Tab>
@@ -45,11 +47,24 @@ export const Overlapping: Story = {
 }
 
 /**
- * A minimal tablist, showing what a consumer of `Tab` is responsible for: holding
- * the active index, and raising the active tab above the ones tucked under it.
+ * A minimal tablist, showing what a consumer of `Tab` is responsible for:
+ * holding the active index, raising the active tab above the ones tucked under
+ * it, and moving both focus and selection together on ArrowLeft/ArrowRight.
  */
 const TabRow = ({ labels }: { labels: string[] }) => {
   const [activeIndex, setActiveIndex] = useState(0)
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
+
+  const selectTab = (index: number) => {
+    const nextIndex = (index + labels.length) % labels.length
+    setActiveIndex(nextIndex)
+    tabRefs.current[nextIndex]?.focus()
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent, index: number) => {
+    if (event.key === "ArrowRight") selectTab(index + 1)
+    if (event.key === "ArrowLeft") selectTab(index - 1)
+  }
 
   return (
     <div className="flex bg-gray-100 p-8" role="tablist">
@@ -64,7 +79,11 @@ const TabRow = ({ labels }: { labels: string[] }) => {
             className={cn(index > 0 && "-ml-12", isActive ? "z-20" : "z-0")}
             first={index === 0}
             key={label}
-            onClick={() => setActiveIndex(index)}
+            onClick={() => selectTab(index)}
+            onKeyDown={(event) => handleKeyDown(event, index)}
+            ref={(node) => {
+              tabRefs.current[index] = node
+            }}
             role="tab"
             tabIndex={isActive ? 0 : -1}
           >
@@ -93,6 +112,12 @@ export const Switching: StoryObj<{ labels: string[] }> = {
     for (const [index, tab] of tabs.entries()) {
       await expect(tab).toHaveAttribute("aria-selected", String(index === 2))
     }
+
+    await userEvent.keyboard("{ArrowRight}")
+
+    await expect(tabs[3]).toHaveFocus()
+    await expect(tabs[3]).toHaveAttribute("aria-selected", "true")
+    await expect(tabs[2]).toHaveAttribute("aria-selected", "false")
   },
 }
 
@@ -103,18 +128,19 @@ export const Interaction: Story = {
     "aria-selected": false,
     children: "Featured",
     id: "tab-featured",
+    role: "tab",
     tabIndex: 0,
   },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement)
-    const button = canvas.getByRole("button", { name: "Featured" })
+    const tab = canvas.getByRole("tab", { name: "Featured" })
 
-    await expect(button).toHaveAttribute("id", "tab-featured")
-    await expect(button).toHaveAttribute("aria-controls", "panel-featured")
-    await expect(button).toHaveAttribute("aria-selected", "false")
-    await expect(button).toHaveAttribute("tabindex", "0")
+    await expect(tab).toHaveAttribute("id", "tab-featured")
+    await expect(tab).toHaveAttribute("aria-controls", "panel-featured")
+    await expect(tab).toHaveAttribute("aria-selected", "false")
+    await expect(tab).toHaveAttribute("tabindex", "0")
 
-    await userEvent.click(button)
+    await userEvent.click(tab)
     await expect(args.onClick).toHaveBeenCalledOnce()
   },
 }
