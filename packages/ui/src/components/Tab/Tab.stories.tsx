@@ -34,8 +34,6 @@ export const Inactive: Story = {
 export const Overlapping: Story = {
   render: (args) => (
     <div className="flex bg-gray-100 p-8">
-      {/* This margin is a value tuned by eye, not derived from Tab's exported
-          SLANT (35px) — two slants meeting exactly would need double that. */}
       <Tab {...args} active className="z-20 -mr-12" first>
         Featured
       </Tab>
@@ -46,11 +44,7 @@ export const Overlapping: Story = {
   ),
 }
 
-/**
- * A minimal tablist, showing what a consumer of `Tab` is responsible for:
- * holding the active index, raising the active tab above the ones tucked under
- * it, and moving both focus and selection together on ArrowLeft/ArrowRight.
- */
+/** A minimal tablist: owns the active index, and moves focus + selection together on arrow keys. */
 const TabRow = ({ labels }: { labels: string[] }) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
