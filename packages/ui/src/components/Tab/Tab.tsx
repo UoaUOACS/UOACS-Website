@@ -81,6 +81,8 @@ export const Tab = ({ active, children, className, first, ref, ...props }: TabPr
     return () => observer.disconnect()
   }, [])
 
+  // Memoized so it only changes identity when the consumer's own ref does,
+  // instead of detaching and reattaching both refs on every resize.
   const setRefs = useCallback(
     (node: HTMLButtonElement | null) => {
       buttonRef.current = node
