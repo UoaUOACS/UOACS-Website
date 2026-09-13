@@ -33,6 +33,7 @@ catalogs:
     "@storybook/addon-docs": "^10.5.3"
     "@storybook/addon-onboarding": "^10.5.3"
     "@storybook/addon-vitest": "^10.5.3"
+    "@chromatic-com/storybook": "^5.0.0"
 
 allowBuilds:
   "@tailwindcss/oxide": true
