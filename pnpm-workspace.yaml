@@ -28,12 +28,13 @@ catalogs:
     "@payloadcms/storage-s3": 3.86.0
     "@payloadcms/ui": 3.86.0
   storybook:
+    storybook: ^10.5.3
     "@storybook/nextjs-vite": ^10.5.3
-    "@storybook/addon-a11y": "^10.5.3"
-    "@storybook/addon-docs": "^10.5.3"
-    "@storybook/addon-onboarding": "^10.5.3"
-    "@storybook/addon-vitest": "^10.5.3"
-    "@chromatic-com/storybook": "^5.0.0"
+    "@storybook/addon-a11y": ^10.5.3
+    "@storybook/addon-docs": ^10.5.3
+    "@storybook/addon-onboarding": ^10.5.3
+    "@storybook/addon-vitest": ^10.5.3
+    "@chromatic-com/storybook": ^5.0.0
 
 allowBuilds:
   "@tailwindcss/oxide": true
