@@ -9,14 +9,14 @@ import { ApiRoutes, Routes } from "@/lib/routes"
 import { Providers } from "./providers"
 
 const inter = localFont({
-  src: "../../../public/fonts/InterTight-Variable.woff2",
+  src: "../../../../../packages/ui/src/styles/fonts/InterTight-Variable.woff2",
   weight: "100 900",
   variable: "--font-inter",
   display: "optional",
 })
 
 const switzer = localFont({
-  src: "../../../public/fonts/Switzer-Variable.woff2",
+  src: "../../../../../packages/ui/src/styles/fonts/Switzer-Variable.woff2",
   weight: "100 900",
   variable: "--font-switzer",
   display: "optional",
@@ -25,12 +25,12 @@ const switzer = localFont({
 const mono = localFont({
   src: [
     {
-      path: "../../../public/fonts/IBMPlexMono-Regular.woff2",
+      path: "../../../../../packages/ui/src/styles/fonts/IBMPlexMono-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../../public/fonts/IBMPlexMono-Medium.woff2",
+      path: "../../../../../packages/ui/src/styles/fonts/IBMPlexMono-Medium.woff2",
       weight: "500",
       style: "normal",
     },

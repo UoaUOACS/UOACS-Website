@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/nextjs-vite"
+import "@uoacs/ui/styles/fonts.css"
 import "../src/app/globals.css"
 import "./preview.css"
 
