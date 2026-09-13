@@ -71,6 +71,9 @@ catalogs:
       specifier: 3.86.0
       version: 3.86.0
   storybook:
+    '@chromatic-com/storybook':
+      specifier: ^5.0.0
+      version: 5.1.2
     '@storybook/addon-a11y':
       specifier: ^10.5.3
       version: 10.5.3
@@ -290,7 +293,7 @@ importers:
         version: 5.0.12(@types/react@19.2.14)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
     devDependencies:
       '@chromatic-com/storybook':
-        specifier: ^5.0.0
+        specifier: catalog:storybook
         version: 5.1.2(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))
       '@googleapis/walletobjects':
         specifier: ^11.2.0
