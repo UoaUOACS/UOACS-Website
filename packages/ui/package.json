@@ -27,7 +27,7 @@
     "tailwindcss": ">=4"
   },
   "devDependencies": {
-    "@storybook/nextjs-vite": "catalog:",
+    "@storybook/nextjs-vite": "catalog:storybook",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@uoacs/config": "workspace:*",

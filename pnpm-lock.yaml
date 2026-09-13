@@ -9,9 +9,6 @@ catalogs:
     '@heroicons/react':
       specifier: ^2.2.0
       version: 2.2.0
-    '@storybook/nextjs-vite':
-      specifier: ^10.5.3
-      version: 10.5.3
     '@tailwindcss/postcss':
       specifier: ^4
       version: 4.3.3
@@ -73,6 +70,22 @@ catalogs:
     payload:
       specifier: 3.86.0
       version: 3.86.0
+  storybook:
+    '@storybook/addon-a11y':
+      specifier: ^10.5.3
+      version: 10.5.3
+    '@storybook/addon-docs':
+      specifier: ^10.5.3
+      version: 10.5.3
+    '@storybook/addon-onboarding':
+      specifier: ^10.5.3
+      version: 10.5.3
+    '@storybook/addon-vitest':
+      specifier: ^10.5.3
+      version: 10.5.3
+    '@storybook/nextjs-vite':
+      specifier: ^10.5.3
+      version: 10.5.3
 
 importers:
 
@@ -274,19 +287,19 @@ importers:
         specifier: ^11.2.0
         version: 11.2.0(supports-color@7.2.0)
       '@storybook/addon-a11y':
-        specifier: ^10.5.3
+        specifier: catalog:storybook
         version: 10.5.3(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))
       '@storybook/addon-docs':
-        specifier: ^10.5.3
+        specifier: catalog:storybook
         version: 10.5.3(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(esbuild@0.28.1)(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))(vite@8.0.8(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4))
       '@storybook/addon-onboarding':
-        specifier: ^10.5.3
+        specifier: catalog:storybook
         version: 10.5.3(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))
       '@storybook/addon-vitest':
-        specifier: ^10.5.3
+        specifier: catalog:storybook
         version: 10.5.3(@vitest/browser-playwright@4.1.4)(@vitest/browser@4.1.4)(@vitest/runner@4.1.4)(react@19.2.4)(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))(vitest@4.1.4)
       '@storybook/nextjs-vite':
-        specifier: 'catalog:'
+        specifier: catalog:storybook
         version: 10.5.3(@babel/core@7.29.0(supports-color@7.2.0))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(babel-plugin-macros@3.1.0)(esbuild@0.28.1)(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))(supports-color@7.2.0)(typescript@5.9.3)(vite@8.0.8(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4))
       '@tailwindcss/postcss':
         specifier: 'catalog:'
@@ -364,7 +377,7 @@ importers:
         version: 4.3.3
     devDependencies:
       '@storybook/nextjs-vite':
-        specifier: 'catalog:'
+        specifier: catalog:storybook
         version: 10.5.3(@babel/core@7.29.0(supports-color@7.2.0))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(babel-plugin-macros@3.1.0)(esbuild@0.28.1)(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.5.3(@types/react@19.2.14)(prettier@3.8.3)(react@19.2.4))(supports-color@7.2.0)(typescript@5.9.3)(vite@8.0.8(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4))
       '@types/react':
         specifier: 'catalog:'
