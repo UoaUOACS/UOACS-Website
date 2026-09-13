@@ -10,9 +10,7 @@
     "./styles/theme.css": "./src/styles/theme.css"
   },
   "scripts": {
-    "types:check": "tsc --noEmit",
-    "storybook": "storybook dev",
-    "storybook:build": "storybook build"
+    "types:check": "tsc --noEmit"
   },
   "dependencies": {
     "@heroicons/react": "catalog:",

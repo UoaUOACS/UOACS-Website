@@ -9,7 +9,7 @@
     "start": "next start",
     "types:check": "tsc --noEmit",
     "types:generate": "next typegen",
-    "storybook": "storybook dev",
+    "storybook": "storybook dev -p 6008",
     "storybook:build": "storybook build"
   },
   "dependencies": {
