@@ -1,3 +1,5 @@
+/* Must precede the Tailwind import: it carries a remote @import. */
+@import "@uoacs/ui/styles/cartograph.css";
 @import "tailwindcss";
 @import "@uoacs/ui/styles/theme.css";
 

@@ -8,7 +8,8 @@
     "./utils": "./src/utils/index.ts",
     "./toast": "./src/toast/index.tsx",
     "./styles/theme.css": "./src/styles/theme.css",
-    "./styles/fonts.css": "./src/styles/fonts.css"
+    "./styles/fonts.css": "./src/styles/fonts.css",
+    "./styles/cartograph.css": "./src/styles/cartograph.css"
   },
   "scripts": {
     "types:check": "tsc --noEmit"
