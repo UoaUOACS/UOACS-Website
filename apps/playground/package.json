@@ -16,7 +16,8 @@
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "@uoacs/ui": "workspace:*"
+    "@uoacs/ui": "workspace:*",
+    "@uoacs/shared": "workspace:*"
   },
   "devDependencies": {
     "@storybook/addon-docs": "catalog:storybook",

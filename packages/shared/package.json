@@ -1,0 +1,16 @@
+{
+  "name": "@uoacs/shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "types:check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@uoacs/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

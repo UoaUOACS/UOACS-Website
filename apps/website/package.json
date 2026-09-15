@@ -27,6 +27,7 @@
     "@payloadcms/storage-s3": "catalog:payload",
     "@payloadcms/ui": "catalog:payload",
     "@tanstack/react-query": "^5.101.0",
+    "@uoacs/shared": "workspace:*",
     "@uoacs/ui": "workspace:*",
     "babel-plugin-react-compiler": "^1.0.0",
     "better-auth": "^1.6.1",

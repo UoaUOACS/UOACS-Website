@@ -1,13 +1,14 @@
+import { AuthCollectionSlugs } from "@uoacs/shared"
+
 export const Slugs = {
   Collections: {
+    ...AuthCollectionSlugs,
     EXECUTIVE: "executive",
     MEDIA: "media",
-    MEMBER: "member",
     POLAROID: "polaroid",
     REEL: "reel",
     SPONSOR: "sponsor",
     ADMIN: "admin",
-    EMAIL_VERIFICATION_CODE: "email-verification-code",
     EVENT: "event",
   },
   Globals: {

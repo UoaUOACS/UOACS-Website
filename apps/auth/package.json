@@ -15,6 +15,7 @@
     "@payloadcms/next": "catalog:payload",
     "@payloadcms/richtext-lexical": "catalog:payload",
     "@payloadcms/ui": "catalog:payload",
+    "@uoacs/shared": "workspace:*",
     "next": "catalog:",
     "payload": "catalog:payload",
     "react": "catalog:",
