@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { fn } from "storybook/test"
+import { expect, fn } from "storybook/test"
 import type { Project } from "../ProjectCard/ProjectCard"
 import { ProjectGrid } from "./ProjectGrid"
 
@@ -42,5 +42,8 @@ export const Empty: Story = {
   name: "Empty tab (no projects)",
   args: {
     projects: [],
+  },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText(/no projects yet/i)).toBeInTheDocument()
   },
 }

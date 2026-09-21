@@ -8,7 +8,12 @@ interface ProjectGridProps {
 
 export const ProjectGrid = ({ projects, onSelectProject }: ProjectGridProps) => {
   if (projects.length === 0) {
-    return <EmptyState />
+    return (
+      <EmptyState
+        description="Projects will show up here once they've been added to this tab."
+        title="No projects yet"
+      />
+    )
   }
 
   return (

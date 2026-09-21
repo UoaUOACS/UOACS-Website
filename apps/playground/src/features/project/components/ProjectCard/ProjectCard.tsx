@@ -1,7 +1,7 @@
 "use client"
 
 import { LazyImage } from "@uoacs/ui"
-import { type CardVariants, card } from "./ProjectCard.variants"
+import { type ProjectCardVariants, projectCardVariants } from "./ProjectCard.variants"
 
 export interface Project {
   id: string
@@ -9,7 +9,7 @@ export interface Project {
   imageURL?: string
 }
 
-interface ProjectCardProps extends CardVariants {
+interface ProjectCardProps extends ProjectCardVariants {
   project: Project
   className?: string
   onSelect?: (project: Project) => void
@@ -17,7 +17,7 @@ interface ProjectCardProps extends CardVariants {
 
 export const ProjectCard = ({ project, className, onSelect, variant }: ProjectCardProps) => {
   const { title, imageURL } = project
-  const { base, imageWrapper, title: titleStyles } = card({ variant })
+  const { base, imageWrapper, title: titleStyles } = projectCardVariants({ variant })
 
   return (
     <button className={base({ className })} onClick={() => onSelect?.(project)} type="button">

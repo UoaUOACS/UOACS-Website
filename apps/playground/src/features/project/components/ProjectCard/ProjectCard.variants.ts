@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from "tailwind-variants"
 
-export const card = tv({
+export const projectCardVariants = tv({
   slots: {
     base: "group flex w-full flex-col gap-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70",
     imageWrapper:
@@ -21,4 +21,4 @@ export const card = tv({
   },
 })
 
-export type CardVariants = VariantProps<typeof card>
+export type ProjectCardVariants = VariantProps<typeof projectCardVariants>
