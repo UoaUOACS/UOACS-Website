@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { expect, fn } from "storybook/test"
+import { expect } from "storybook/test"
 import type { Project } from "../ProjectCard/ProjectCard"
 import { ProjectGrid } from "./ProjectGrid"
 
@@ -17,9 +17,6 @@ const meta = {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "pink-shell" },
-  },
-  args: {
-    onSelectProject: fn(),
   },
 } satisfies Meta<typeof ProjectGrid>
 

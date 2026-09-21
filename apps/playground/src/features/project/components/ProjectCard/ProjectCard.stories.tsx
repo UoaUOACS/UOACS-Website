@@ -1,12 +1,11 @@
-// ProjectCard.stories.tsx
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { fn } from "storybook/test"
+import { expect, within } from "storybook/test"
 import { type Project, ProjectCard } from "./ProjectCard"
 
 const mockProjectWithImage: Project = {
   id: "1",
   title: "Project Playground",
-  imageURL: "next.svg",
+  imageURL: "https://placehold.co/400x300",
 }
 
 const mockProjectNoImage: Project = {
@@ -20,9 +19,6 @@ const meta = {
   parameters: {
     layout: "centered",
     backgrounds: { default: "pink-shell" },
-  },
-  args: {
-    onSelect: fn(),
   },
   argTypes: {
     variant: {
@@ -38,6 +34,11 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     project: mockProjectWithImage,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const link = canvas.getByRole("link")
+    await expect(link).toHaveAttribute("href", "/projects/1")
   },
 }
 

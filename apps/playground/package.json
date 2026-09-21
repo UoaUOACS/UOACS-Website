@@ -17,8 +17,7 @@
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "tailwind-variants": "catalog:"
-    "@uoacs/ui": "workspace:*",
+    "tailwind-variants": "catalog:",
     "@uoacs/shared": "workspace:*"
   },
   "devDependencies": {
