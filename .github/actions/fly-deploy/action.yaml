@@ -1,69 +1,28 @@
 name: Fly Deploy
-description: Deploys application to Fly.io based on the provided configuration.
+description: Deploys an application to Fly.io based on the provided configuration.
 
 inputs:
-  # Deployment Config
   CONFIG_FILE:
     description: 'Path to the Fly.io configuration file (e.g., apps/website/fly.toml)'
     required: true
-    default: 'apps/website/fly.toml'
   DOCKERFILE:
     description: >
       Path to the Dockerfile, relative to the repository root. The build context
       is always the repository root so the pnpm workspace is available.
-    required: false
-    default: 'apps/website/Dockerfile'
+    required: true
   FLY_API_TOKEN:
     description: 'Fly.io API token for authentication'
     required: true
-  # Deployment Settings
   APP_NAME:
     description: 'Name of the Fly.io application'
-    required: false
-    default: ''
-  # Build Secrets
-  DATABASE_URI:
-    description: 'Database connection URI'
     required: true
-  PAYLOAD_SECRET:
-    description: 'Payload secret for the application'
-    required: true
-  NEXT_PUBLIC_WEBSITE_URL:
-    description: 'Public URL for the website'
-    required: true
-  NEXT_PUBLIC_PROJECTS_URL:
-    description: 'Public URL for the projects playground'
-    required: true
-  S3_ACCESS_KEY_ID:
-    description: 'S3 Access Key ID'
-    required: true
-  S3_SECRET_ACCESS_KEY:
-    description: 'S3 Secret Access Key'
-    required: true
-  S3_REGION:
-    description: 'S3 Region'
-    required: true
-  S3_BUCKET:
-    description: 'S3 Bucket Name'
-    required: true
-  NODE_ENV:
-    description: 'Node environment (e.g., development, production)'
-    required: false
-    default: 'production'
-  BETTER_AUTH_SECRET:
-    description: 'Secret key for Better Auth'
-    required: true
-  RESEND_API_KEY:
-    description: 'Resend API key'
-    required: true
-  GOOGLE_WALLET_ISSUER_ID:
-    description: 'Google wallet Issuer ID on Google Pay and Wallet Console'
-    required: true
-  GOOGLE_WALLET_SERVICE_ACCOUNT_KEY:
-    description: "Stringified json private key for google wallet service account"
-    required: true
-  DISCORD_SERVER_ID:
-    description: 'Discord server (guild) ID used to fetch the Discord widget'
+  SECRETS:
+    description: >
+      Space-separated names of environment variables to pass to Fly.io as both
+      runtime secrets and build secrets. Set their values in the calling step's
+      `env` block, so values reach the script through the environment and not
+      through `${{ }}` expansion in the script. The deploy fails if a listed
+      name has no value.
     required: false
     default: ''
 
@@ -72,50 +31,43 @@ runs:
   steps:
     - name: Setup Flyctl
       uses: superfly/flyctl-actions/setup-flyctl@master
-      env:
-        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
-    - name: Set Fly.io secrets
-      run: |
-        flyctl secrets set \
-          DATABASE_URI="${{ inputs.DATABASE_URI }}" \
-          PAYLOAD_SECRET="${{ inputs.PAYLOAD_SECRET }}" \
-          NEXT_PUBLIC_WEBSITE_URL="${{ inputs.NEXT_PUBLIC_WEBSITE_URL }}" \
-          NEXT_PUBLIC_PROJECTS_URL="${{ inputs.NEXT_PUBLIC_PROJECTS_URL }}" \
-          S3_ACCESS_KEY_ID="${{ inputs.S3_ACCESS_KEY_ID }}" \
-          S3_SECRET_ACCESS_KEY="${{ inputs.S3_SECRET_ACCESS_KEY }}" \
-          S3_REGION="${{ inputs.S3_REGION }}" \
-          S3_BUCKET="${{ inputs.S3_BUCKET }}" \
-          NODE_ENV="${{ inputs.NODE_ENV }}" \
-          BETTER_AUTH_SECRET="${{ inputs.BETTER_AUTH_SECRET }}" \
-          RESEND_API_KEY="${{ inputs.RESEND_API_KEY }}" \
-          GOOGLE_WALLET_ISSUER_ID="${{ inputs.GOOGLE_WALLET_ISSUER_ID }}" \
-          GOOGLE_WALLET_SERVICE_ACCOUNT_KEY="${{ inputs.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}" \
-          DISCORD_SERVER_ID="${{ inputs.DISCORD_SERVER_ID }}" \
-          -a ${{ inputs.APP_NAME }}
-      shell: bash
-      env:
-        FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
 
     - name: Deploy to Fly.io
-      run: |
-        flyctl deploy --remote-only \
-          --config ${{ inputs.CONFIG_FILE }} \
-          --dockerfile ${{ inputs.DOCKERFILE }} \
-          --build-secret DATABASE_URI="${{ inputs.DATABASE_URI }}" \
-          --build-secret PAYLOAD_SECRET="${{ inputs.PAYLOAD_SECRET }}" \
-          --build-secret NEXT_PUBLIC_WEBSITE_URL="${{ inputs.NEXT_PUBLIC_WEBSITE_URL }}" \
-          --build-secret NEXT_PUBLIC_PROJECTS_URL="${{ inputs.NEXT_PUBLIC_PROJECTS_URL }}" \
-          --build-secret S3_ACCESS_KEY_ID="${{ inputs.S3_ACCESS_KEY_ID }}" \
-          --build-secret S3_SECRET_ACCESS_KEY="${{ inputs.S3_SECRET_ACCESS_KEY }}" \
-          --build-secret S3_REGION="${{ inputs.S3_REGION }}" \
-          --build-secret S3_BUCKET="${{ inputs.S3_BUCKET }}" \
-          --build-secret NODE_ENV="${{ inputs.NODE_ENV }}" \
-          --build-secret BETTER_AUTH_SECRET="${{ inputs.BETTER_AUTH_SECRET }}" \
-          --build-secret RESEND_API_KEY="${{ inputs.RESEND_API_KEY }}" \
-          --build-secret GOOGLE_WALLET_ISSUER_ID="${{ inputs.GOOGLE_WALLET_ISSUER_ID }}" \
-          --build-secret GOOGLE_WALLET_SERVICE_ACCOUNT_KEY="${{ inputs.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}" \
-          --build-secret DISCORD_SERVER_ID="${{ inputs.DISCORD_SERVER_ID }}" \
-          -a ${{ inputs.APP_NAME }}
       shell: bash
       env:
         FLY_API_TOKEN: ${{ inputs.FLY_API_TOKEN }}
+        APP_NAME: ${{ inputs.APP_NAME }}
+        CONFIG_FILE: ${{ inputs.CONFIG_FILE }}
+        DOCKERFILE: ${{ inputs.DOCKERFILE }}
+        SECRETS: ${{ inputs.SECRETS }}
+      run: |
+        set -euo pipefail
+
+        missing=()
+        stage_args=()
+        build_args=()
+        for name in $SECRETS; do
+          if [ -z "${!name-}" ]; then
+            missing+=("$name")
+            continue
+          fi
+          stage_args+=("$name=${!name}")
+          build_args+=(--build-secret "$name=${!name}")
+        done
+
+        # An empty value would replace the app's current secret, so stop first.
+        if [ ${#missing[@]} -gt 0 ]; then
+          echo "::error::Missing deploy secrets for $APP_NAME: ${missing[*]}"
+          exit 1
+        fi
+
+        # Staged secrets are applied by the deploy, so there is one release.
+        if [ ${#stage_args[@]} -gt 0 ]; then
+          flyctl secrets set --stage -a "$APP_NAME" "${stage_args[@]}"
+        fi
+
+        flyctl deploy --remote-only \
+          -a "$APP_NAME" \
+          --config "$CONFIG_FILE" \
+          --dockerfile "$DOCKERFILE" \
+          "${build_args[@]}"
