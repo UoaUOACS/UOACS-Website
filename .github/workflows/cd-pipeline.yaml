@@ -20,7 +20,6 @@ jobs:
     environment:
       name: website-staging
       url: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
-    needs: ci-gate
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-deploy-website-staging
@@ -59,7 +58,6 @@ jobs:
     environment:
       name: auth-staging
       url: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
-    needs: ci-gate
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-deploy-auth-staging
@@ -88,7 +86,6 @@ jobs:
     environment:
       name: playground-staging
       url: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
-    needs: ci-gate
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-deploy-playground-staging
@@ -115,7 +112,6 @@ jobs:
     environment:
       name: website-prod
       url: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
-    needs: ci-gate
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-deploy-website-prod
@@ -154,7 +150,6 @@ jobs:
     environment:
       name: auth-prod
       url: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
-    needs: ci-gate
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-deploy-auth-prod
@@ -183,7 +178,6 @@ jobs:
     environment:
       name: playground-prod
       url: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
-    needs: ci-gate
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-deploy-playground-prod
