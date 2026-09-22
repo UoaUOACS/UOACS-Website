@@ -48,31 +48,29 @@ COPY --from=deps /app/packages ./packages
 # pnpm-workspace.yaml) alongside each in-scope package.
 COPY --from=pruner /app/out/full/ ./
 
-RUN --mount=type=secret,id=DATABASE_URI \
-    --mount=type=secret,id=PAYLOAD_SECRET \
-    --mount=type=secret,id=NEXT_PUBLIC_WEBSITE_URL \
-    --mount=type=secret,id=S3_ACCESS_KEY_ID \
-    --mount=type=secret,id=S3_SECRET_ACCESS_KEY \
-    --mount=type=secret,id=S3_REGION \
-    --mount=type=secret,id=S3_BUCKET \
-    --mount=type=secret,id=NODE_ENV \
-    --mount=type=secret,id=BETTER_AUTH_SECRET \
-    --mount=type=secret,id=SMTP_PASS \
-    --mount=type=secret,id=GOOGLE_WALLET_ISSUER_ID \
-    --mount=type=secret,id=GOOGLE_WALLET_SERVICE_ACCOUNT_KEY \
-    sh -c 'export DATABASE_URI=$(cat /run/secrets/DATABASE_URI) && \
-           export PAYLOAD_SECRET=$(cat /run/secrets/PAYLOAD_SECRET) && \
-           export NEXT_PUBLIC_WEBSITE_URL=$(cat /run/secrets/NEXT_PUBLIC_WEBSITE_URL) && \
-           export S3_ACCESS_KEY_ID=$(cat /run/secrets/S3_ACCESS_KEY_ID) && \
-           export S3_SECRET_ACCESS_KEY=$(cat /run/secrets/S3_SECRET_ACCESS_KEY) && \
-           export S3_REGION=$(cat /run/secrets/S3_REGION) && \
-           export S3_BUCKET=$(cat /run/secrets/S3_BUCKET) && \
-           export NODE_ENV=$(cat /run/secrets/NODE_ENV) && \
-           export BETTER_AUTH_SECRET=$(cat /run/secrets/BETTER_AUTH_SECRET) && \
-           export SMTP_PASS=$(cat /run/secrets/SMTP_PASS) && \
-           export GOOGLE_WALLET_ISSUER_ID=$(cat /run/secrets/GOOGLE_WALLET_ISSUER_ID) && \
-           export GOOGLE_WALLET_SERVICE_ACCOUNT_KEY=$(cat /run/secrets/GOOGLE_WALLET_SERVICE_ACCOUNT_KEY) && \
-           pnpm --filter @uoacs/website build'
+ENV NODE_ENV=production
+
+# Each secret must be present and non-empty, so a missing value fails the
+# build instead of being compiled in as an empty string.
+RUN --mount=type=secret,id=DATABASE_URI,required=true \
+    --mount=type=secret,id=PAYLOAD_SECRET,required=true \
+    --mount=type=secret,id=NEXT_PUBLIC_WEBSITE_URL,required=true \
+    --mount=type=secret,id=NEXT_PUBLIC_PROJECTS_URL,required=true \
+    --mount=type=secret,id=S3_ACCESS_KEY_ID,required=true \
+    --mount=type=secret,id=S3_SECRET_ACCESS_KEY,required=true \
+    --mount=type=secret,id=S3_REGION,required=true \
+    --mount=type=secret,id=S3_BUCKET,required=true \
+    --mount=type=secret,id=BETTER_AUTH_SECRET,required=true \
+    --mount=type=secret,id=RESEND_API_KEY,required=true \
+    --mount=type=secret,id=GOOGLE_WALLET_ISSUER_ID,required=true \
+    --mount=type=secret,id=GOOGLE_WALLET_SERVICE_ACCOUNT_KEY,required=true \
+    --mount=type=secret,id=DISCORD_SERVER_ID,required=true \
+    sh -euc 'for name in DATABASE_URI PAYLOAD_SECRET NEXT_PUBLIC_WEBSITE_URL NEXT_PUBLIC_PROJECTS_URL S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_REGION S3_BUCKET BETTER_AUTH_SECRET RESEND_API_KEY GOOGLE_WALLET_ISSUER_ID GOOGLE_WALLET_SERVICE_ACCOUNT_KEY DISCORD_SERVER_ID; do \
+               value=$(cat "/run/secrets/$name"); \
+               [ -n "$value" ] || { echo "Build secret $name is empty" >&2; exit 1; }; \
+               export "$name=$value"; \
+             done; \
+             pnpm --filter @uoacs/website build'
 
 # Stage 4: Production runner (minimal image)
 FROM base AS runner
