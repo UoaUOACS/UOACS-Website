@@ -3,6 +3,7 @@ import type { NextConfig } from "next"
 const nextConfig: NextConfig = {
   reactCompiler: true,
   cacheComponents: true,
+  partialPrefetching: true,
   transpilePackages: ["@uoacs/ui", "@uoacs/shared"],
   turbopack: {
     resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
