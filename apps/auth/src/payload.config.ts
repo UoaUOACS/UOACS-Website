@@ -1,7 +1,9 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
+import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import { AuthCollectionSlugs, EmailVerificationCode, Member } from "@uoacs/shared/payload"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Media } from "./payload/collections/Media"
@@ -18,7 +20,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Member, EmailVerificationCode],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,
@@ -35,5 +37,20 @@ export default buildConfig({
     url: process.env.DATABASE_URI || "",
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    importExportPlugin({
+      collections: [
+        {
+          slug: AuthCollectionSlugs.MEMBER,
+          export: {
+            disableSave: true,
+            disableJobsQueue: true,
+          },
+          import: {
+            disableJobsQueue: true,
+          },
+        },
+      ],
+    }),
+  ],
 })

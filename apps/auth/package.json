@@ -13,6 +13,7 @@
   "dependencies": {
     "@payloadcms/db-mongodb": "catalog:payload",
     "@payloadcms/next": "catalog:payload",
+    "@payloadcms/plugin-import-export": "catalog:payload",
     "@payloadcms/richtext-lexical": "catalog:payload",
     "@payloadcms/ui": "catalog:payload",
     "@uoacs/shared": "workspace:*",
