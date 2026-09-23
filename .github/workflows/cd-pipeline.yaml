@@ -1,0 +1,199 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Manual deployment environment'
+        type: environment
+        required: true
+
+jobs:
+  deploy-website-staging:
+    name: Deploy Website Staging
+    if: (github.event_name == 'push' && github.ref_type == 'branch') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'website-staging')
+    environment:
+      name: website-staging
+      url: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-website-staging
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Deploy to Fly.io
+        uses: ./.github/actions/fly-deploy
+        with:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          APP_NAME: uoacs-website-staging
+          CONFIG_FILE: apps/website/fly.staging.toml
+          DOCKERFILE: apps/website/Dockerfile
+          SECRETS: >-
+            BETTER_AUTH_SECRET DATABASE_URI DISCORD_SERVER_ID GOOGLE_WALLET_ISSUER_ID GOOGLE_WALLET_SERVICE_ACCOUNT_KEY NEXT_PUBLIC_PROJECTS_URL NEXT_PUBLIC_WEBSITE_URL PAYLOAD_SECRET RESEND_API_KEY S3_ACCESS_KEY_ID S3_BUCKET S3_REGION S3_SECRET_ACCESS_KEY
+        env:
+          NEXT_PUBLIC_WEBSITE_URL: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+          NEXT_PUBLIC_PROJECTS_URL: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GOOGLE_WALLET_ISSUER_ID: ${{ secrets.GOOGLE_WALLET_ISSUER_ID }}
+          GOOGLE_WALLET_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}
+          DISCORD_SERVER_ID: ${{ secrets.DISCORD_SERVER_ID }}
+
+  deploy-auth-staging:
+    name: Deploy Auth Staging
+    if: (github.event_name == 'push' && github.ref_type == 'branch') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'auth-staging')
+    environment:
+      name: auth-staging
+      url: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-auth-staging
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Deploy to Fly.io
+        uses: ./.github/actions/fly-deploy
+        with:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          APP_NAME: uoacs-auth-staging
+          CONFIG_FILE: apps/auth/fly.staging.toml
+          DOCKERFILE: apps/auth/Dockerfile
+          SECRETS: >-
+            DATABASE_URI NEXT_PUBLIC_AUTH_URL PAYLOAD_SECRET
+        env:
+          NEXT_PUBLIC_AUTH_URL: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+
+  deploy-playground-staging:
+    name: Deploy Playground Staging
+    if: (github.event_name == 'push' && github.ref_type == 'branch') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'playground-staging')
+    environment:
+      name: playground-staging
+      url: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-playground-staging
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Deploy to Fly.io
+        uses: ./.github/actions/fly-deploy
+        with:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          APP_NAME: uoacs-playground-staging
+          CONFIG_FILE: apps/playground/fly.staging.toml
+          DOCKERFILE: apps/playground/Dockerfile
+          SECRETS: >-
+            NEXT_PUBLIC_AUTH_URL
+        env:
+          NEXT_PUBLIC_AUTH_URL: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
+
+  deploy-website-prod:
+    name: Deploy Website Production
+    if: (github.event_name == 'push' && github.ref_type == 'tag') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'website-prod')
+    environment:
+      name: website-prod
+      url: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-website-prod
+      cancel-in-progress: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Deploy to Fly.io
+        uses: ./.github/actions/fly-deploy
+        with:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          APP_NAME: uoacs-website
+          CONFIG_FILE: apps/website/fly.toml
+          DOCKERFILE: apps/website/Dockerfile
+          SECRETS: >-
+            BETTER_AUTH_SECRET DATABASE_URI DISCORD_SERVER_ID GOOGLE_WALLET_ISSUER_ID GOOGLE_WALLET_SERVICE_ACCOUNT_KEY NEXT_PUBLIC_PROJECTS_URL NEXT_PUBLIC_WEBSITE_URL PAYLOAD_SECRET RESEND_API_KEY S3_ACCESS_KEY_ID S3_BUCKET S3_REGION S3_SECRET_ACCESS_KEY
+        env:
+          NEXT_PUBLIC_WEBSITE_URL: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+          NEXT_PUBLIC_PROJECTS_URL: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GOOGLE_WALLET_ISSUER_ID: ${{ secrets.GOOGLE_WALLET_ISSUER_ID }}
+          GOOGLE_WALLET_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY }}
+          DISCORD_SERVER_ID: ${{ secrets.DISCORD_SERVER_ID }}
+
+  deploy-auth-prod:
+    name: Deploy Auth Production
+    if: (github.event_name == 'push' && github.ref_type == 'tag') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'auth-prod')
+    environment:
+      name: auth-prod
+      url: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-auth-prod
+      cancel-in-progress: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Deploy to Fly.io
+        uses: ./.github/actions/fly-deploy
+        with:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          APP_NAME: uoacs-auth
+          CONFIG_FILE: apps/auth/fly.toml
+          DOCKERFILE: apps/auth/Dockerfile
+          SECRETS: >-
+            DATABASE_URI NEXT_PUBLIC_AUTH_URL PAYLOAD_SECRET
+        env:
+          NEXT_PUBLIC_AUTH_URL: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+
+  deploy-playground-prod:
+    name: Deploy Playground Production 
+    if: (github.event_name == 'push' && github.ref_type == 'tag') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'playground-prod')
+    environment:
+      name: playground-prod
+      url: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy-playground-prod
+      cancel-in-progress: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Deploy to Fly.io
+        uses: ./.github/actions/fly-deploy
+        with:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          APP_NAME: uoacs-playground
+          CONFIG_FILE: apps/playground/fly.toml
+          DOCKERFILE: apps/playground/Dockerfile
+          SECRETS: >-
+            NEXT_PUBLIC_AUTH_URL
+        env:
+          NEXT_PUBLIC_AUTH_URL: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
