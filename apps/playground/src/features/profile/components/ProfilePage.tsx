@@ -8,6 +8,8 @@ import type { ProfileTab } from "./ProfileTabs"
 import { ProfileTabs } from "./ProfileTabs"
 import { ProfileToolbar } from "./ProfileToolbar"
 
+// Fixed rather than generated with useId: one profile renders per page, and a
+// stable id keeps `aria-controls` readable in the DOM and in tests.
 const PANEL_ID = "profile-tab-panel"
 
 /**
@@ -92,8 +94,11 @@ export const ProfilePage = ({
   children,
   className,
 }: ProfilePageProps) => {
+  // Same controlled/uncontrolled shape as ProfileTabs: `activeTab` from the
+  // parent wins, otherwise this component owns the selection.
   const [uncontrolledTab, setUncontrolledTab] = useState(tabs[0]?.id)
   const selectedId = activeTab ?? uncontrolledTab
+  // Names the panel after whichever collection it is showing.
   const selectedTab = tabs.find((tab) => tab.id === selectedId)
 
   const handleTabChange = (id: string) => {

@@ -11,6 +11,8 @@ import { mockProfile, mockProfileTabs } from "@/mocks/Profile.mock"
  */
 export default function Profile() {
   return (
+    // `relative` positions the backdrop; the bar and main sit above it at z-10,
+    // since the backdrop itself has to paint over this element's background.
     <div className="relative flex flex-1 flex-col bg-white text-black">
       <ProfileBackdrop />
 
@@ -24,6 +26,10 @@ export default function Profile() {
         }}
       />
 
+      {/*
+       * max-w + the 40px gutter reproduce the mock's 140px content inset at its
+       * 1406px width ((1406 - 1206) / 2 + 40), and hold that gutter below it.
+       */}
       <main className="relative z-10 mx-auto w-full max-w-[1206px] px-4 pt-2 pb-16 md:px-10 md:pt-4">
         <ProfilePage
           onEditProfile={() => {

@@ -88,14 +88,25 @@ export const ProfileTabs = ({
   className,
 }: ProfileTabsProps) => {
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue ?? tabs[0]?.id)
+  // A `value` from the parent wins, which is what makes this work either
+  // controlled or uncontrolled; the internal state is then simply ignored.
   const selectedId = value ?? uncontrolledValue
+  // Keyed by tab id rather than index so the map survives a reordered `tabs`.
   const tabRefs = useRef(new Map<string, HTMLButtonElement | null>())
 
+  // Always updates the internal state, even when controlled: the parent's
+  // `value` shadows it above, so the write is harmless and keeps the component
+  // usable without a parent.
   const select = (id: string) => {
     setUncontrolledValue(id)
     onValueChange?.(id)
   }
 
+  /**
+   * Arrow keys, Home, and End move the selection, wrapping at both ends, per
+   * the ARIA tabs pattern. Selection follows focus, so the panel changes as
+   * the user arrows across.
+   */
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     const current = tabs.findIndex((tab) => tab.id === selectedId)
     if (current === -1) {
@@ -108,6 +119,7 @@ export const ProfileTabs = ({
         nextIndex = (current + 1) % tabs.length
         break
       case "ArrowLeft":
+        // + tabs.length keeps the modulo positive when wrapping off the start.
         nextIndex = (current - 1 + tabs.length) % tabs.length
         break
       case "Home":
@@ -125,12 +137,18 @@ export const ProfileTabs = ({
       return
     }
 
+    // Only past the early returns, so keys we do not handle (Tab especially)
+    // keep their default behaviour.
     event.preventDefault()
     select(nextTab.id)
+    // Focus has to move by hand: the roving tabIndex below takes the old tab
+    // out of the tab order, which does not carry focus to the new one.
     tabRefs.current.get(nextTab.id)?.focus()
   }
 
   return (
+    // No padding on the track: it is meant to be exactly as wide as the tabs it
+    // holds, with the selected tab's own background reading as the pill inside.
     <div
       aria-label={label}
       className={cn("inline-flex items-center rounded-full bg-pink-300", className)}
@@ -156,6 +174,8 @@ export const ProfileTabs = ({
               tabRefs.current.set(tab.id, node)
             }}
             role="tab"
+            // Roving tabIndex: the tab list is one stop in the page's tab
+            // order, and arrow keys move within it.
             tabIndex={isSelected ? 0 : -1}
             type="button"
           >

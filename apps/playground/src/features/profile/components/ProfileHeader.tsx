@@ -54,6 +54,11 @@ export const ProfileHeader = ({ profile, avatar, className }: ProfileHeaderProps
         className,
       )}
     >
+      {/*
+       * The md sizes here and in the rest of the profile are measured off the
+       * hi-fi mock at a 1406px viewport: a 229px avatar, a 44px name, and meta
+       * lines at 18px on a 29px pitch.
+       */}
       <div className="flex size-32 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200 md:size-[229px]">
         {avatar ?? (
           <span aria-hidden className="font-cartograph text-4xl text-gray-400 md:text-6xl">
