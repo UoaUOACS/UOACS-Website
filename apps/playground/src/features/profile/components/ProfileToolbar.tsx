@@ -68,7 +68,7 @@ export const ProfileToolbar = ({
     >
       <div className="flex justify-center sm:justify-start">
         <Button
-          className="justify-center rounded-full px-5 font-cartograph md:h-[47px] md:min-w-[192px] md:text-base"
+          className="justify-center rounded-md px-5 font-cartograph md:h-[47px] md:min-w-[192px] md:text-base"
           onClick={onEditProfile}
         >
           Edit Profile
