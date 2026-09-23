@@ -21,7 +21,7 @@ inputs:
       Space-separated names of environment variables to pass to Fly.io as both
       runtime secrets and build secrets. Set their values in the calling step's
       `env` block, so values reach the script through the environment and not
-      through `${{ }}` expansion in the script. The deploy fails if a listed
+      through expression expansion in the script. The deploy fails if a listed
       name has no value.
     required: false
     default: ''
