@@ -32,7 +32,7 @@ export interface ProfileToolbarProps {
 }
 
 const ICON_BUTTON_CLASSES =
-  "flex cursor-pointer items-center justify-center rounded-full p-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+  "flex cursor-pointer items-center justify-center rounded-full p-2 transition-colors md:p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
 
 /**
  * The action row under the profile header: edit on the left, the tab switcher
@@ -67,7 +67,10 @@ export const ProfileToolbar = ({
       )}
     >
       <div className="flex justify-center sm:justify-start">
-        <Button className="rounded-full px-5 font-cartograph" onClick={onEditProfile}>
+        <Button
+          className="rounded-full px-5 font-cartograph md:h-11 md:px-8 md:text-base"
+          onClick={onEditProfile}
+        >
           Edit Profile
         </Button>
       </div>
@@ -81,7 +84,7 @@ export const ProfileToolbar = ({
           onClick={onFilter}
           type="button"
         >
-          <AdjustmentsHorizontalIcon aria-hidden className="size-6" />
+          <AdjustmentsHorizontalIcon aria-hidden className="size-6 md:size-7" />
         </button>
         <button
           aria-label="Share profile"

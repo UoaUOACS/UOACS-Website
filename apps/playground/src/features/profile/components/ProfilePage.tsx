@@ -102,7 +102,7 @@ export const ProfilePage = ({
   }
 
   return (
-    <div className={cn("flex w-full flex-col gap-8 md:gap-10", className)}>
+    <div className={cn("flex w-full flex-col gap-8 md:gap-14", className)}>
       <ProfileHeader avatar={avatar} profile={profile} />
       <ProfileToolbar onEditProfile={onEditProfile} onFilter={onFilter} onShare={onShare}>
         <ProfileTabs

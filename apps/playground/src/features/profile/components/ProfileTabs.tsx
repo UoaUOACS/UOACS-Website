@@ -133,7 +133,10 @@ export const ProfileTabs = ({
   return (
     <div
       aria-label={label}
-      className={cn("inline-flex items-center gap-1 rounded-full bg-pink-300 p-1", className)}
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full bg-pink-300 p-1 md:p-1.5",
+        className,
+      )}
       onKeyDown={handleKeyDown}
       role="tablist"
     >
@@ -145,7 +148,7 @@ export const ProfileTabs = ({
             aria-controls={panelId}
             aria-selected={isSelected}
             className={cn(
-              "flex cursor-pointer items-center gap-2 rounded-full px-4 py-1.5 font-cartograph text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+              "flex cursor-pointer items-center gap-2 rounded-full px-4 py-1.5 font-cartograph text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:px-5 md:py-2 md:text-base",
               isSelected ? "bg-primary text-white" : "text-pink-800 hover:bg-pink-200",
             )}
             key={tab.id}
@@ -162,7 +165,7 @@ export const ProfileTabs = ({
             {tab.label}
             <span
               className={cn(
-                "min-w-6 rounded-full px-2 py-0.5 text-xs",
+                "min-w-6 rounded-full px-2 py-0.5 text-xs md:min-w-7 md:text-sm",
                 isSelected ? "bg-pink-700 text-white" : "bg-white text-pink-800",
               )}
             >
