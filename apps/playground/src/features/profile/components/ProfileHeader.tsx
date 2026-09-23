@@ -54,7 +54,7 @@ export const ProfileHeader = ({ profile, avatar, className }: ProfileHeaderProps
         className,
       )}
     >
-      <div className="flex size-32 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200 md:size-[14.25rem]">
+      <div className="flex size-32 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200 md:size-[229px]">
         {avatar ?? (
           <span aria-hidden className="font-cartograph text-4xl text-gray-400 md:text-6xl">
             {getInitials(name)}
@@ -62,14 +62,11 @@ export const ProfileHeader = ({ profile, avatar, className }: ProfileHeaderProps
         )}
       </div>
 
-      <div className="flex flex-col gap-2 sm:pt-4 md:gap-3 md:pt-10">
-        <Heading
-          className="justify-center text-center sm:justify-start sm:text-left md:text-[3rem]"
-          h={3}
-        >
+      <div className="flex flex-col gap-2 sm:pt-4 md:gap-4 md:pt-12">
+        <Heading className="justify-center text-center sm:justify-start sm:text-left" h={3}>
           {name}
         </Heading>
-        <div className="flex flex-col gap-0.5 font-cartograph text-black text-sm md:gap-1.5 md:text-base">
+        <div className="flex flex-col gap-0.5 font-cartograph text-black text-sm md:text-lg md:leading-[1.6]">
           <p>@{username}</p>
           {bio && <p className="max-w-prose text-gray-700">{bio}</p>}
           {link && (

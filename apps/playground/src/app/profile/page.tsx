@@ -24,7 +24,7 @@ export default function Profile() {
         }}
       />
 
-      <main className="relative z-10 mx-auto w-full max-w-[1206px] px-4 pt-2 pb-16 md:px-10 md:pt-5">
+      <main className="relative z-10 mx-auto w-full max-w-[1206px] px-4 pt-2 pb-16 md:px-10 md:pt-4">
         <ProfilePage
           onEditProfile={() => {
             console.info("[profile] edit profile clicked")
