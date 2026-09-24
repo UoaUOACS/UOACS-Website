@@ -21,18 +21,18 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
 
   return (
     <Link className={base({ className })} href={`/projects/${id}`}>
-      <div className={imageWrapper()}>
-        {imageURL ? (
-          <LazyImage
-            alt={title}
-            className="object-cover!"
-            containerClassName="h-full w-full"
-            fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            src={imageURL}
-          />
-        ) : null}
-      </div>
+      {imageURL ? (
+        <LazyImage
+          alt={title}
+          className="object-cover!"
+          containerClassName={imageWrapper()}
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          src={imageURL}
+        />
+      ) : (
+        <div className={imageWrapper()} />
+      )}
 
       <span className={titleStyles()}>{title}</span>
     </Link>
