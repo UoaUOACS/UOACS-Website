@@ -9,25 +9,29 @@ const mockProjects: Project[] = [
     title: "Project Playground",
     imageURL: "https://placehold.co/400x300",
     authorName: "Name Of Author",
+    likes: 1000,
   },
   {
     id: "2",
     title: "Committee Portal",
     imageURL: "https://placehold.co/400x300",
     authorName: "Name Of Author",
+    likes: 23,
   },
-  { id: "3", title: "Events Hub", authorName: "Name Of Author" },
+  { id: "3", title: "Events Hub", authorName: "Name Of Author", likes: 31415 },
   {
     id: "4",
     title: "Sponsorship Tracker",
     imageURL: "https://placehold.co/400x300",
     authorName: "Name Of Author",
+    likes: 10000,
   },
   {
     id: "5",
     title: "Alumni Directory",
     imageURL: "https://placehold.co/400x300",
     authorName: "Name Of Author",
+    likes: 0,
   },
 ]
 

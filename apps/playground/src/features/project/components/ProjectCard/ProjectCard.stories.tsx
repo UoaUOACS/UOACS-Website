@@ -7,12 +7,14 @@ const mockProjectWithImage: Project = {
   title: "Project Playground",
   imageURL: "https://placehold.co/400x300",
   authorName: "Name Of Author",
+  likes: 1000,
 }
 
 const mockProjectNoImage: Project = {
   id: "2",
   title: "Events Hub",
   authorName: "Jane Smith",
+  likes: 1000,
 }
 
 const meta = {
@@ -59,6 +61,7 @@ export const LongAuthorName: Story = {
       title: "Design Systems Workshop",
       imageURL: "https://placehold.co/400x300",
       authorName: "A Very Long Author Name That Should Truncate Nicely",
+      likes: 1000,
     },
   },
 }
