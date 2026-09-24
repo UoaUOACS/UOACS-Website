@@ -26,6 +26,13 @@ const meta = {
       options: ["default", "rounded"],
     },
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof ProjectCard>
 
 export default meta
@@ -50,18 +57,21 @@ export const Rounded: Story = {
 }
 
 export const NoImage: Story = {
-  name: "No image (fallback white surface)",
+  name: "No image (fallback gray surface)",
   args: {
     project: mockProjectNoImage,
+    variant: "rounded",
   },
 }
 
 export const LongTitle: Story = {
+  name: "Long title (check tab notch doesn't clip text)",
   args: {
     project: {
       id: "3",
       title: "A Very Long Project Title That Might Wrap Onto Two Lines Beneath The Card",
       imageURL: "https://placehold.co/400x300",
     },
+    variant: "rounded",
   },
 }

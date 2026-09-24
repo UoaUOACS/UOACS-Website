@@ -16,9 +16,9 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 justify-items-center gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
-        <ProjectCard key={project.id} project={project} />
+        <ProjectCard key={project.id} project={project} variant="rounded" />
       ))}
     </div>
   )
