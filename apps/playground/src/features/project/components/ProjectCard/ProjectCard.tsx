@@ -2,13 +2,13 @@
 
 import { LazyImage } from "@uoacs/ui"
 import Link from "next/link"
-import { useId } from "react"
 import { type ProjectCardVariants, projectCardVariants } from "./ProjectCard.variants"
 
 export interface Project {
   id: string
   title: string
   imageURL?: string
+  authorName: string
 }
 
 interface ProjectCardProps extends ProjectCardVariants {
@@ -16,10 +16,63 @@ interface ProjectCardProps extends ProjectCardVariants {
   className?: string
 }
 
+interface IconProps {
+  className?: string
+  size?: number
+}
+
+const UserIcon = ({ className, size = 16 }: IconProps) => (
+  <svg
+    aria-hidden="true"
+    className={className}
+    fill="none"
+    focusable="false"
+    height={size}
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth={2}
+    viewBox="0 0 24 24"
+    width={size}
+  >
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+)
+
+const TrophyIcon = ({ className, size = 18 }: IconProps) => (
+  <svg
+    aria-hidden="true"
+    className={className}
+    fill="none"
+    focusable="false"
+    height={size}
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth={2}
+    viewBox="0 0 24 24"
+    width={size}
+  >
+    <path d="M8 21h8" />
+    <path d="M12 17v4" />
+    <path d="M7 4h10v6a5 5 0 0 1-10 0V4Z" />
+    <path d="M17 5h3a2 2 0 0 1 2 2v1a4 4 0 0 1-4 4" />
+    <path d="M7 5H4a2 2 0 0 0-2 2v1a4 4 0 0 0 4 4" />
+  </svg>
+)
+
 export const ProjectCard = ({ project, className, variant }: ProjectCardProps) => {
-  const clipId = useId()
-  const { id, title, imageURL } = project
-  const { base, imageWrapper, titleTab, title: titleStyles } = projectCardVariants({ variant })
+  const { id, title, imageURL, authorName } = project
+  const {
+    base,
+    imageWrapper,
+    footer,
+    authorGroup,
+    avatarIcon,
+    authorName: authorNameStyles,
+    trophyIcon,
+  } = projectCardVariants({ variant })
 
   return (
     <Link className={base({ className })} href={`/projects/${id}`}>
@@ -36,42 +89,13 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
         ) : null}
       </div>
 
-      <div
-        className="pointer-events-none absolute right-[12%] bottom-0 h-[18%] w-6 bg-black/25 blur-lg"
-        style={{ zIndex: 0 }}
-      />
-
-      <div
-        className={titleTab()}
-        style={{ clipPath: `url(#${clipId})`, ["--tab-cut" as keyof React.CSSProperties]: "0.12" }}
-      >
-        <div
-          className="flex justify-center px-6 pt-[8%]"
-          style={{ width: "calc((1 - var(--tab-cut)) * 100%)" }}
-        >
-          <span className={titleStyles()}>{title}</span>
+      <div className={footer()}>
+        <div className={authorGroup()}>
+          <UserIcon className={avatarIcon()} size={16} />
+          <span className={authorNameStyles()}>{authorName}</span>
         </div>
+        <TrophyIcon className={trophyIcon()} size={18} />
       </div>
-
-      <svg aria-hidden="true" className="absolute" focusable="false" height="0" width="0">
-        <defs>
-          <clipPath clipPathUnits="objectBoundingBox" id={clipId}>
-            <path
-              d="
-          M 0,0
-          L 0.29,0
-          Q 0.32,0 0.331,0.028
-          L 0.40,0.20
-          L 0.80,0.20
-          A 0.08,0.26 0 0 1 0.88,0.46
-          L 0.88,1
-          L 0,1
-          Z
-        "
-            />
-          </clipPath>
-        </defs>
-      </svg>
     </Link>
   )
 }

@@ -6,11 +6,13 @@ const mockProjectWithImage: Project = {
   id: "1",
   title: "Project Playground",
   imageURL: "https://placehold.co/400x300",
+  authorName: "Name Of Author",
 }
 
 const mockProjectNoImage: Project = {
   id: "2",
   title: "Events Hub",
+  authorName: "Jane Smith",
 }
 
 const meta = {
@@ -18,13 +20,6 @@ const meta = {
   component: ProjectCard,
   parameters: {
     layout: "centered",
-    backgrounds: { default: "pink-shell" },
-  },
-  argTypes: {
-    variant: {
-      control: "select",
-      options: ["default", "rounded"],
-    },
   },
   decorators: [
     (Story) => (
@@ -49,29 +44,21 @@ export const Default: Story = {
   },
 }
 
-export const Rounded: Story = {
-  args: {
-    project: mockProjectWithImage,
-    variant: "rounded",
-  },
-}
-
 export const NoImage: Story = {
   name: "No image (fallback gray surface)",
   args: {
     project: mockProjectNoImage,
-    variant: "rounded",
   },
 }
 
-export const LongTitle: Story = {
-  name: "Long title (check tab notch doesn't clip text)",
+export const LongAuthorName: Story = {
+  name: "Long author name (check truncation in footer)",
   args: {
     project: {
       id: "3",
-      title: "A Very Long Project Title That Might Wrap Onto Two Lines Beneath The Card",
+      title: "Design Systems Workshop",
       imageURL: "https://placehold.co/400x300",
+      authorName: "A Very Long Author Name That Should Truncate Nicely",
     },
-    variant: "rounded",
   },
 }

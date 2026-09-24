@@ -2,18 +2,17 @@ import { tv, type VariantProps } from "tailwind-variants"
 
 export const projectCardVariants = tv({
   slots: {
-    base: "group relative flex w-full max-w-sm flex-col overflow-hidden bg-white p-1 transition-shadow duration-200 hover:shadow-lg",
-    imageWrapper: "relative aspect-4/3 w-full overflow-hidden bg-gray-200",
-    titleTab: "absolute inset-x-0 bottom-0 flex h-[38%] items-center bg-white",
-    title: "font-mono text-lg font-medium tracking-wider text-[#FF307C] truncate",
+    base: "group relative flex w-full max-w-sm flex-col overflow-hidden bg-white",
+    imageWrapper: "relative aspect-4/3 w-full overflow-hidden bg-gray-100",
+    footer: "flex items-center justify-between border-t border-gray-100 py-3",
+    authorGroup: "flex items-center gap-2 min-w-0",
+    avatarIcon: "flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
+    authorName: "truncate font-serif text-sm font-semibold text-gray-900",
+    trophyIcon: "h-7 w-7 shrink-0",
   },
   variants: {
     variant: {
       default: {},
-      rounded: {
-        base: "rounded-3xl",
-        imageWrapper: "rounded-[20px]",
-      },
     },
   },
   defaultVariants: {

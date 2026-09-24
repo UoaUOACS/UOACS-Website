@@ -4,11 +4,31 @@ import type { Project } from "../ProjectCard/ProjectCard"
 import { ProjectGrid } from "./ProjectGrid"
 
 const mockProjects: Project[] = [
-  { id: "1", title: "Project Playground", imageURL: "https://placehold.co/400x300" },
-  { id: "2", title: "Committee Portal", imageURL: "https://placehold.co/400x300" },
-  { id: "3", title: "Events Hub" },
-  { id: "4", title: "Sponsorship Tracker", imageURL: "https://placehold.co/400x300" },
-  { id: "5", title: "Alumni Directory", imageURL: "https://placehold.co/400x300" },
+  {
+    id: "1",
+    title: "Project Playground",
+    imageURL: "https://placehold.co/400x300",
+    authorName: "Name Of Author",
+  },
+  {
+    id: "2",
+    title: "Committee Portal",
+    imageURL: "https://placehold.co/400x300",
+    authorName: "Name Of Author",
+  },
+  { id: "3", title: "Events Hub", authorName: "Name Of Author" },
+  {
+    id: "4",
+    title: "Sponsorship Tracker",
+    imageURL: "https://placehold.co/400x300",
+    authorName: "Name Of Author",
+  },
+  {
+    id: "5",
+    title: "Alumni Directory",
+    imageURL: "https://placehold.co/400x300",
+    authorName: "Name Of Author",
+  },
 ]
 
 const meta = {
