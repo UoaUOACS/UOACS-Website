@@ -91,7 +91,7 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
 
       <div className={footer()}>
         <div className={authorGroup()}>
-          <UserIcon className={avatarIcon()} size={16} />
+          <UserIcon className={avatarIcon()} size={18} />
           <span className={authorNameStyles()}>{authorName}</span>
         </div>
         <TrophyIcon className={trophyIcon()} size={18} />
