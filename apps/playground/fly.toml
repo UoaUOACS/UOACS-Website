@@ -1,11 +1,9 @@
-# fly.toml app configuration file generated for uoacs-website on 2026-01-13T21:00:50+13:00
-#
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
 
 # Deploy from the monorepo root so the pnpm workspace is in the build context:
-#   flyctl deploy --config apps/website/fly.staging.toml --dockerfile apps/website/Dockerfile
-app = 'uoacs-website-staging'
+#   flyctl deploy --config apps/playground/fly.toml --dockerfile apps/playground/Dockerfile
+
+app = 'uoacs-playground'
 primary_region = 'syd'
 swap_size_mb = 256
 
@@ -16,7 +14,7 @@ swap_size_mb = 256
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
   processes = ['app']
 
   [[http_service.checks]]
