@@ -52,8 +52,10 @@ ENV NODE_ENV=production
 
 # Each secret must be present and non-empty, so a missing value fails the
 # build instead of being compiled in as an empty string.
-RUN --mount=type=secret,id=NEXT_PUBLIC_AUTH_URL,required=true \
-    sh -euc 'for name in NEXT_PUBLIC_AUTH_URL; do \
+RUN --mount=type=secret,id=DATABASE_URI,required=true \
+    --mount=type=secret,id=PAYLOAD_SECRET,required=true \
+    --mount=type=secret,id=NEXT_PUBLIC_AUTH_URL,required=true \
+    sh -euc 'for name in DATABASE_URI PAYLOAD_SECRET NEXT_PUBLIC_AUTH_URL; do \
                value=$(cat "/run/secrets/$name"); \
                [ -n "$value" ] || { echo "Build secret $name is empty" >&2; exit 1; }; \
                export "$name=$value"; \
