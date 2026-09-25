@@ -1,14 +1,6 @@
+import { AuthCollectionSlugs } from "@uoacs/shared"
 import type { CollectionConfig } from "payload"
-import { AuthCollectionSlugs } from "../slugs"
 
-/**
- * Registered by both apps/auth and apps/website against the same database while
- * the website still queries members directly. #396 drops the website's
- * registration once those reads go through the auth service instead.
- *
- * Admin UI components stay out of here — they reach into an app's own routes,
- * so each app layers its own on top.
- */
 export const Member: CollectionConfig = {
   slug: AuthCollectionSlugs.MEMBER,
   admin: {

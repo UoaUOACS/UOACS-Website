@@ -3,10 +3,12 @@ import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
-import { AuthCollectionSlugs, EmailVerificationCode, Member } from "@uoacs/shared/payload"
+import { AuthCollectionSlugs } from "@uoacs/shared"
 import { buildConfig } from "payload"
 import sharp from "sharp"
+import { EmailVerificationCode } from "./payload/collections/EmailVerificationCode"
 import { Media } from "./payload/collections/Media"
+import { Member } from "./payload/collections/Member"
 import { Users } from "./payload/collections/Users"
 
 const filename = fileURLToPath(import.meta.url)
