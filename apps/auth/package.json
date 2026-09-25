@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "types:check": "tsc --noEmit",
-    "types:generate": "payload generate:types && next typegen"
+    "types:generate": "payload generate:types && node scripts/strip-payload-augmentation.mjs && next typegen"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "catalog:payload",

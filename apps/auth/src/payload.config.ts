@@ -33,7 +33,9 @@ export default buildConfig({
   },
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
-    outputFile: path.resolve(dirname, "payload/payload-types.ts"),
+    // Auth owns the member/verification data model, so its generated types are
+    // the contract the website and playground consume over the auth API.
+    outputFile: path.resolve(dirname, "../../../packages/shared/src/payload/payload-types.ts"),
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
