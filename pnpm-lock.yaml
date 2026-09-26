@@ -118,6 +118,9 @@ importers:
       '@payloadcms/next':
         specifier: catalog:payload
         version: 3.86.0(@types/react@19.2.14)(graphql@16.13.2)(monaco-editor@0.55.1)(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(payload@3.86.0(graphql@16.13.2)(supports-color@7.2.0)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(supports-color@7.2.0)(typescript@5.9.3)
+      '@payloadcms/plugin-import-export':
+        specifier: catalog:payload
+        version: 3.86.0(@payloadcms/ui@3.86.0(@types/react@19.2.14)(monaco-editor@0.55.1)(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(payload@3.86.0(graphql@16.13.2)(supports-color@7.2.0)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(supports-color@7.2.0)(typescript@5.9.3))(payload@3.86.0(graphql@16.13.2)(supports-color@7.2.0)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@payloadcms/richtext-lexical':
         specifier: catalog:payload
         version: 3.86.0(ae61f7947b4473725482dcb623c994f1)
@@ -387,6 +390,9 @@ importers:
       '@uoacs/config':
         specifier: workspace:*
         version: link:../config
+      payload:
+        specifier: catalog:payload
+        version: 3.86.0(graphql@16.13.2)(supports-color@7.2.0)(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
