@@ -22,7 +22,7 @@
    * "thin" will get mapped to font weight of 150, and since Tailwind doesn't have a class name for 150,
    * we define our own custom variable. 
    */
-  --font-weight-thin-150: 150; 
+  --font-weight-thin-150: 150;
 }
 
 @media (prefers-color-scheme: dark) {
