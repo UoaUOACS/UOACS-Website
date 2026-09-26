@@ -1,8 +1,8 @@
+import { AuthCollectionSlugs } from "@uoacs/shared"
 import type { CollectionConfig } from "payload"
-import { Slugs } from "@/lib/payload/slugs"
 
 export const EmailVerificationCode: CollectionConfig = {
-  slug: Slugs.Collections.EMAIL_VERIFICATION_CODE,
+  slug: AuthCollectionSlugs.EMAIL_VERIFICATION_CODE,
   admin: {
     useAsTitle: "email",
   },

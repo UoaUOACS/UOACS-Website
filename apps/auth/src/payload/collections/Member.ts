@@ -1,15 +1,10 @@
+import { AuthCollectionSlugs } from "@uoacs/shared"
 import type { CollectionConfig } from "payload"
-import { Slugs } from "@/lib/payload/slugs"
 
 export const Member: CollectionConfig = {
-  slug: Slugs.Collections.MEMBER,
+  slug: AuthCollectionSlugs.MEMBER,
   admin: {
     useAsTitle: "email",
-    components: {
-      edit: {
-        beforeDocumentControls: ["@/payload/components/DeleteMemberButton#DeleteMemberButton"],
-      },
-    },
   },
   fields: [
     {

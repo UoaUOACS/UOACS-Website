@@ -1,10 +1,14 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
+import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import { AuthCollectionSlugs } from "@uoacs/shared"
 import { buildConfig } from "payload"
 import sharp from "sharp"
+import { EmailVerificationCode } from "./payload/collections/EmailVerificationCode"
 import { Media } from "./payload/collections/Media"
+import { Member } from "./payload/collections/Member"
 import { Users } from "./payload/collections/Users"
 
 const filename = fileURLToPath(import.meta.url)
@@ -18,7 +22,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Member, EmailVerificationCode],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,
@@ -29,11 +33,28 @@ export default buildConfig({
   },
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
-    outputFile: path.resolve(dirname, "payload/payload-types.ts"),
+    // Auth owns the member/verification data model, so its generated types are
+    // the contract the website and playground consume over the auth API.
+    outputFile: path.resolve(dirname, "../../../packages/shared/src/payload/payload-types.ts"),
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    importExportPlugin({
+      collections: [
+        {
+          slug: AuthCollectionSlugs.MEMBER,
+          export: {
+            disableSave: true,
+            disableJobsQueue: true,
+          },
+          import: {
+            disableJobsQueue: true,
+          },
+        },
+      ],
+    }),
+  ],
 })
