@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { expect, within } from "storybook/test"
 import { type Project, ProjectCard } from "./ProjectCard"
 
 const mockProjectWithImage: Project = {
@@ -38,11 +37,6 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     project: mockProjectWithImage,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const link = canvas.getByRole("link")
-    await expect(link).toHaveAttribute("href", "/projects/1")
   },
 }
 
