@@ -13,20 +13,22 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
+    "@heroicons/react": "catalog:",
+    "@uoacs/shared": "workspace:*",
+    "@uoacs/ui": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "@uoacs/ui": "workspace:*",
-    "@uoacs/shared": "workspace:*"
+    "tailwind-variants": "catalog:"
   },
   "devDependencies": {
     "@storybook/addon-docs": "catalog:storybook",
     "@storybook/nextjs-vite": "catalog:storybook",
     "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
-    "@uoacs/config": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@uoacs/config": "workspace:*",
     "storybook": "catalog:storybook",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
