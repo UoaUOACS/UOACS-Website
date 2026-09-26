@@ -13,12 +13,13 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
+    "@heroicons/react": "catalog:",
+    "@uoacs/shared": "workspace:*",
     "@uoacs/ui": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "tailwind-variants": "catalog:",
-    "@uoacs/shared": "workspace:*"
+    "tailwind-variants": "catalog:"
   },
   "devDependencies": {
     "@storybook/addon-docs": "catalog:storybook",
