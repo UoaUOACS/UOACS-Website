@@ -1,5 +1,6 @@
 import { LazyImage } from "@uoacs/ui"
 import Link from "next/link"
+import { formatLikes } from "../../helpers/format"
 import { type ProjectCardVariants, projectCardVariants } from "./ProjectCard.variants"
 
 export interface Project {
@@ -78,12 +79,6 @@ const HeartIcon = ({ className, size = 18 }: IconProps) => (
     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
   </svg>
 )
-
-const formatLikes = (likes: number): string => {
-  if (likes < 1000) return `${likes}`
-  if (likes < 10000) return `${(likes / 1000).toFixed(1).replace(/\.0$/, "")}k`
-  return `${Math.round(likes / 1000)}k`
-}
 
 export const ProjectCard = ({ project, className, variant }: ProjectCardProps) => {
   const { id, title, imageURL, authorName, likes } = project
