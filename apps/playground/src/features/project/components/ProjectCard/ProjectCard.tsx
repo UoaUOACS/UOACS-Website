@@ -1,5 +1,3 @@
-"use client"
-
 import { LazyImage } from "@uoacs/ui"
 import Link from "next/link"
 import { type ProjectCardVariants, projectCardVariants } from "./ProjectCard.variants"
