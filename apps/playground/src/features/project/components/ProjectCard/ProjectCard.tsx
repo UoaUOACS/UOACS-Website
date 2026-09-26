@@ -1,6 +1,7 @@
 import { LazyImage } from "@uoacs/ui"
 import Link from "next/link"
-import { formatLikes } from "../../helpers/format"
+import { formatLikes } from "@/features/project/helpers/format"
+import { Routes } from "@/lib/routes"
 import { type ProjectCardVariants, projectCardVariants } from "./ProjectCard.variants"
 
 export interface Project {
@@ -97,7 +98,7 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
   } = projectCardVariants({ variant })
 
   return (
-    <Link className={base({ className })} href={`/projects/${id}`}>
+    <Link className={base({ className })} href={Routes.PROJECTS(id)}>
       <div className={imageWrapper()}>
         {imageURL ? (
           <LazyImage
