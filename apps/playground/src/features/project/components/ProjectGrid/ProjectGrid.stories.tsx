@@ -39,7 +39,6 @@ const meta = {
   component: ProjectGrid,
   parameters: {
     layout: "fullscreen",
-    backgrounds: { default: "pink-shell" },
   },
 } satisfies Meta<typeof ProjectGrid>
 
