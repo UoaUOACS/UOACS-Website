@@ -32,16 +32,8 @@
 
 @font-face {
   font-family: "Neulis Cursive";
-  src: url("./fonts/Neulis-Cursive-Hairline.woff2") format("woff2");
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Neulis Cursive";
   src: url("./fonts/Neulis-Cursive-Thin.woff2") format("woff2");
-  font-weight: 150;
+  font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
