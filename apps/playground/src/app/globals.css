@@ -2,6 +2,7 @@
 @import "@uoacs/ui/styles/cartograph.css";
 @import "tailwindcss";
 @import "@uoacs/ui/styles/theme.css";
+@import "@uoacs/ui/styles/fonts.css";
 
 :root {
   --background: #ffffff;
@@ -13,6 +14,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-neulis: var(--font-neulis);
 }
 
 @media (prefers-color-scheme: dark) {
