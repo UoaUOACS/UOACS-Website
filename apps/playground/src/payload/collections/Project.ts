@@ -39,6 +39,8 @@ export const Project: CollectionConfig = {
       type: "blocks",
       blocks: [Text, ImageGrid],
       required: true,
+      minRows: 1,
+      maxRows: 50,
     },
   ],
 }
