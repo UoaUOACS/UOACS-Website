@@ -36,7 +36,7 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
   } = projectCardVariants({ variant })
 
   return (
-    <Link className={base({ className })} href={Routes.PROJECTS(id)}>
+    <Link className={base({ className })} href={Routes.PROJECTS.ID(id)}>
       <div className={imageWrapper()}>
         {imageURL ? (
           <LazyImage
