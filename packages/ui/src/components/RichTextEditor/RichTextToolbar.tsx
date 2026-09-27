@@ -239,43 +239,40 @@ export const RichTextToolbar = ({ disabled }: { disabled: boolean }) => {
       role="toolbar"
     >
       <ToolbarGroup label="Font">
-        <div className={cn(disabled && "pointer-events-none opacity-50")} inert={disabled}>
-          <Dropdown
-            fast
-            label={<span className="w-16 text-left">{fontLabel}</span>}
-            options={FONTS.map((font) => ({
-              label: font.label,
-              onClick: () => setFont(font.value),
-              theme: font.value === state.fontFamily ? "primary" : "ghost",
-            }))}
-            popoverClassName="right-auto left-0 z-30 items-stretch gap-1 rounded-xl border border-gray-200 bg-white p-2 shadow-md"
-            theme="ghost"
-            trigger={{
-              triggerClassName: "font-semibold text-sm",
-              triggerIcon: <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />,
-            }}
-          />
-        </div>
+        <Dropdown
+          disabled={disabled}
+          fast
+          label={<span className="w-16 text-left">{fontLabel}</span>}
+          options={FONTS.map((font) => ({
+            label: font.label,
+            onClick: () => setFont(font.value),
+            theme: font.value === state.fontFamily ? "primary" : "ghost",
+          }))}
+          popoverClassName="right-auto left-0 z-30 items-stretch gap-1 rounded-xl border border-gray-200 bg-white p-2 shadow-md"
+          theme="ghost"
+          trigger={{
+            triggerClassName: "font-semibold text-sm disabled:opacity-50",
+            triggerIcon: <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />,
+          }}
+        />
       </ToolbarGroup>
       <ToolbarGroup label="Block type">
-        {/* Dropdown has no disabled state, so the wrapper blocks it while the editor is disabled. */}
-        <div className={cn(disabled && "pointer-events-none opacity-50")} inert={disabled}>
-          <Dropdown
-            fast
-            label={<span className="w-20 text-left">{textStyleLabel}</span>}
-            options={TEXT_STYLES.map((style) => ({
-              label: style.label,
-              onClick: () => setTextStyle(style.value),
-              theme: style.value === state.blockType ? "primary" : "ghost",
-            }))}
-            popoverClassName="right-auto left-0 z-30 items-stretch gap-1 rounded-xl border border-gray-200 bg-white p-2 shadow-md"
-            theme="ghost"
-            trigger={{
-              triggerClassName: "font-semibold text-sm",
-              triggerIcon: <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />,
-            }}
-          />
-        </div>
+        <Dropdown
+          disabled={disabled}
+          fast
+          label={<span className="w-20 text-left">{textStyleLabel}</span>}
+          options={TEXT_STYLES.map((style) => ({
+            label: style.label,
+            onClick: () => setTextStyle(style.value),
+            theme: style.value === state.blockType ? "primary" : "ghost",
+          }))}
+          popoverClassName="right-auto left-0 z-30 items-stretch gap-1 rounded-xl border border-gray-200 bg-white p-2 shadow-md"
+          theme="ghost"
+          trigger={{
+            triggerClassName: "font-semibold text-sm disabled:opacity-50",
+            triggerIcon: <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />,
+          }}
+        />
       </ToolbarGroup>
       <ToolbarGroup label="Text format">
         <ToolbarButton
