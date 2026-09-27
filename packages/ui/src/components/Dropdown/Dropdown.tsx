@@ -26,6 +26,11 @@ export interface DropdownProps extends ButtonVariantProps {
    */
   fast?: boolean
   /**
+   * Whether a mouse click on the dropdown leaves focus where it is, such as in a text editor.
+   * Keyboard users can still tab to the trigger to use the menu.
+   */
+  keepFocus?: boolean
+  /**
    * Options for the dropdown menu.
    */
   options: DropdownOptionProps[]
@@ -50,6 +55,7 @@ export const Dropdown = ({
   label,
   disabled = false,
   fast = false,
+  keepFocus = false,
   options,
   popoverClassName,
   trigger,
@@ -87,8 +93,8 @@ export const Dropdown = ({
   })
 
   useEffect(() => {
-    if (isOpen) triggerRef.current?.focus()
-  }, [isOpen])
+    if (isOpen && !keepFocus) triggerRef.current?.focus()
+  }, [isOpen, keepFocus])
 
   const triggerClassName = trigger !== false ? trigger?.triggerClassName : undefined
   const triggerRight =
@@ -99,8 +105,13 @@ export const Dropdown = ({
         ))
 
   return (
-    // biome-ignore lint/a11y/noStaticElementInteractions: delegates keydown from the trigger/menu items below to the shared popover nav handler
-    <div className="relative inline-flex" onKeyDown={onKeyDown} ref={ref}>
+    // biome-ignore lint/a11y/noStaticElementInteractions: delegates keydown from the trigger/menu items below to the shared popover nav handler, and mousedown to keep focus
+    <div
+      className="relative inline-flex"
+      onKeyDown={onKeyDown}
+      onMouseDown={keepFocus ? (event) => event.preventDefault() : undefined}
+      ref={ref}
+    >
       <Button
         aria-expanded={isOpen}
         className={cn("z-20", triggerClassName)}

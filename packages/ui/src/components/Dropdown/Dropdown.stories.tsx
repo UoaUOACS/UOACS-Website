@@ -9,6 +9,7 @@ const meta: Meta<typeof Dropdown> = {
     label: { control: "text" },
     disabled: { control: "boolean" },
     fast: { control: "boolean" },
+    keepFocus: { control: "boolean" },
     options: { control: "object" },
     popoverClassName: { control: "text" },
     trigger: { control: false },
