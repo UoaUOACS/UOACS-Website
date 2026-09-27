@@ -18,6 +18,10 @@ export interface DropdownProps extends ButtonVariantProps {
    */
   label: string | ReactNode
   /**
+   * Whether the dropdown button is disabled. A disabled dropdown closes and cannot open.
+   */
+  disabled?: boolean
+  /**
    * Whether the options animate in and out quickly, with no stagger.
    */
   fast?: boolean
@@ -44,6 +48,7 @@ export interface DropdownProps extends ButtonVariantProps {
  */
 export const Dropdown = ({
   label,
+  disabled = false,
   fast = false,
   options,
   popoverClassName,
@@ -70,6 +75,10 @@ export const Dropdown = ({
     }
   }, [])
 
+  useEffect(() => {
+    if (disabled) setIsOpen(false)
+  }, [disabled])
+
   const onKeyDown = usePopoverKeyboardNav({
     isOpen,
     onClose: () => setIsOpen(false),
@@ -95,6 +104,7 @@ export const Dropdown = ({
       <Button
         aria-expanded={isOpen}
         className={cn("z-20", triggerClassName)}
+        disabled={disabled}
         onClick={() => setIsOpen(!isOpen)}
         ref={triggerRef}
         right={triggerRight}
