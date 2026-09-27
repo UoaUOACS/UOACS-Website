@@ -1,6 +1,7 @@
 export * from "./BorderButton/BorderButton"
 export * from "./Button/Button"
 export * from "./Container/Container"
+export * from "./Dialog/Dialog"
 export * from "./Dropdown/Dropdown"
 export * from "./EmptyState/EmptyState"
 export * from "./Heading/Heading"
