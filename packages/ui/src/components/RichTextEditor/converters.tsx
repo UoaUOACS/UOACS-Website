@@ -1,39 +1,11 @@
-import type {
-  SerializedAutoLinkNode,
-  SerializedLinkNode,
-  SerializedTextNode,
-} from "@payloadcms/richtext-lexical"
+import type { SerializedTextNode } from "@payloadcms/richtext-lexical"
 import type {
   JSXConverter,
   JSXConverters,
   JSXConvertersFunction,
 } from "@payloadcms/richtext-lexical/react"
 import { fontFamilyFromStyle } from "./fonts"
-
-const SAFE_PROTOCOLS = new Set(["http:", "https:", "mailto:"])
-
-const safeHref = (url: unknown) => {
-  if (typeof url !== "string") return null
-  try {
-    return SAFE_PROTOCOLS.has(new URL(url).protocol) ? url : null
-  } catch {
-    return null
-  }
-}
-
-// Payload's converter renders any URL, so only safe ones stay links. The rest render as plain text.
-const link: JSXConverter<SerializedAutoLinkNode | SerializedLinkNode> = ({ node, nodesToJSX }) => {
-  const children = nodesToJSX({ nodes: node.children ?? [] })
-  const href = node.fields?.linkType === "internal" ? null : safeHref(node.fields?.url)
-  if (!href) return <>{children}</>
-  return node.fields.newTab ? (
-    <a href={href} rel="noopener noreferrer" target="_blank">
-      {children}
-    </a>
-  ) : (
-    <a href={href}>{children}</a>
-  )
-}
+import { SUPPORTED_NODE_TYPES } from "./nodes"
 
 // Payload's converter ignores the text style. Only fonts from FONTS are kept, not any CSS.
 const withFont =
@@ -45,21 +17,17 @@ const withFont =
   }
 
 /**
- * Payload's default JSX converters, with these changes:
+ * Payload's default JSX converters for the nodes RichTextEditor supports, with these changes:
  * - Text keeps its font when the font is one the toolbar offers.
- * - Links are kept only for http, https and mailto URLs.
- * - Uploads render nothing. Payload's converter uses the upload URL with no check, and the editor
- *   cannot make upload nodes.
- * - Nodes with no converter render nothing, not the text "unknown node".
+ * - Other nodes, such as links, uploads and blocks, are logged and render nothing.
  */
 export const richTextConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
-  ...defaultConverters,
-  autolink: link,
-  link,
+  ...Object.fromEntries(
+    Object.entries(defaultConverters).filter(([type]) => SUPPORTED_NODE_TYPES.has(type)),
+  ),
   text: withFont(defaultConverters.text),
-  upload: () => null,
   unknown: ({ node }) => {
-    console.error("RichTextContent: no converter for node type", node.type)
+    console.error("richTextConverters: unsupported node type", node.type)
     return null
   },
 })
