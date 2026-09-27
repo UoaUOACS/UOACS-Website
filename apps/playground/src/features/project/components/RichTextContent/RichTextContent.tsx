@@ -5,7 +5,6 @@ import type { ComponentProps } from "react"
 
 /**
  * Renders saved rich text with the same `rich-text` styles as RichTextEditor.
- * `null` is an empty optional field and renders nothing.
  */
 export const RichTextContent = ({
   className,

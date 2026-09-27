@@ -89,8 +89,7 @@ const findLoadProblem = (value: RichTextValue) => {
 const isEmpty = (value: RichTextValue) =>
   Array.isArray(value.root?.children) && value.root.children.length === 0
 
-// Text is what the rendered page shows, so a block with no text, such as an empty heading, is
-// empty too.
+// Text is what the rendered page shows, so a block with no text, such as an empty heading, is empty too.
 const toValue = (state: EditorState) =>
   state.read(() => $getRoot().getTextContent().trim()) === ""
     ? null
@@ -110,16 +109,11 @@ const TRANSFORMERS = [
   ITALIC_UNDERSCORE,
 ]
 
-// Underline renders as a plain span, and bold with italic renders as one <strong>, so the
-// text formats still need classes.
+// Underline renders as a plain span, and bold with italic renders as one <strong>, so the text formats still need classes.
 const theme: EditorThemeClasses = {
   text: { bold: "font-bold", italic: "italic", underline: "underline" },
 }
 
-/**
- * Payload `richText` state. The index signature matches Payload's generated field types, so
- * the value can go to and from a Payload field without a cast.
- */
 export type RichTextValue = SerializedEditorState & { [key: string]: unknown }
 
 export interface RichTextEditorProps {
@@ -135,7 +129,6 @@ export interface RichTextEditorProps {
   disabled?: boolean
   id?: string
   onBlur?: () => void
-  /** Gets `null` when the editor has no text, the same as an empty `defaultValue`. */
   onChange?: (value: RichTextValue | null) => void
   placeholder?: string
 }
