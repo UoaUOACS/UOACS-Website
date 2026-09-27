@@ -1,5 +1,14 @@
-import type { SerializedAutoLinkNode, SerializedLinkNode } from "@payloadcms/richtext-lexical"
-import type { JSXConverter, JSXConvertersFunction } from "@payloadcms/richtext-lexical/react"
+import type {
+  SerializedAutoLinkNode,
+  SerializedLinkNode,
+  SerializedTextNode,
+} from "@payloadcms/richtext-lexical"
+import type {
+  JSXConverter,
+  JSXConverters,
+  JSXConvertersFunction,
+} from "@payloadcms/richtext-lexical/react"
+import { fontFamilyFromStyle } from "./fonts"
 
 const SAFE_PROTOCOLS = new Set(["http:", "https:", "mailto:"])
 
@@ -26,8 +35,18 @@ const link: JSXConverter<SerializedAutoLinkNode | SerializedLinkNode> = ({ node,
   )
 }
 
+// Payload's converter ignores the text style. Only fonts from FONTS are kept, not any CSS.
+const withFont =
+  (render: JSXConverters<SerializedTextNode>["text"]): JSXConverter<SerializedTextNode> =>
+  (args) => {
+    const fontFamily = fontFamilyFromStyle(args.node.style)
+    const text = typeof render === "function" ? render(args) : render
+    return fontFamily ? <span style={{ fontFamily }}>{text}</span> : text
+  }
+
 /**
  * Payload's default JSX converters, with these changes:
+ * - Text keeps its font when the font is one the toolbar offers.
  * - Links are kept only for http, https and mailto URLs.
  * - Uploads render nothing. Payload's converter uses the upload URL with no check, and the editor
  *   cannot make upload nodes.
@@ -37,6 +56,7 @@ export const richTextConverters: JSXConvertersFunction = ({ defaultConverters })
   ...defaultConverters,
   autolink: link,
   link,
+  text: withFont(defaultConverters.text),
   upload: () => null,
   unknown: ({ node }) => {
     console.error("RichTextContent: no converter for node type", node.type)

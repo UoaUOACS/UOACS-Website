@@ -28,7 +28,11 @@ import {
   $isHeadingNode,
   $isQuoteNode,
 } from "@lexical/rich-text"
-import { $setBlocksType } from "@lexical/selection"
+import {
+  $getSelectionStyleValueForProperty,
+  $patchStyleText,
+  $setBlocksType,
+} from "@lexical/selection"
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils"
 import {
   $createParagraphNode,
@@ -51,6 +55,7 @@ import { type ComponentType, type ReactNode, type SVGProps, useEffect, useState 
 import { cn } from "../../utils"
 import { Button } from "../Button/Button"
 import { Dropdown } from "../Dropdown/Dropdown"
+import { FONTS } from "./fonts"
 
 const TEXT_STYLES = [
   { label: "Paragraph", value: "paragraph" },
@@ -79,6 +84,7 @@ type ToolbarState = {
   blockType: BlockType
   canRedo: boolean
   canUndo: boolean
+  fontFamily: string
   isBold: boolean
   isItalic: boolean
   isUnderline: boolean
@@ -89,6 +95,7 @@ const initialState: ToolbarState = {
   blockType: "paragraph",
   canRedo: false,
   canUndo: false,
+  fontFamily: "",
   isBold: false,
   isItalic: false,
   isUnderline: false,
@@ -128,6 +135,8 @@ function useToolbarState() {
       const next = {
         alignment,
         blockType,
+        // Empty when the selected text has more than one font.
+        fontFamily: $getSelectionStyleValueForProperty(selection, "font-family", ""),
         isBold: selection.hasFormat("bold"),
         isItalic: selection.hasFormat("italic"),
         isUnderline: selection.hasFormat("underline"),
@@ -191,6 +200,15 @@ export const RichTextToolbar = ({ disabled }: { disabled: boolean }) => {
     editor.focus()
   }
 
+  const setFont = (fontFamily: string) => {
+    editor.update(() => {
+      const selection = $getSelection()
+      if (!$isRangeSelection(selection)) return
+      $patchStyleText(selection, { "font-family": fontFamily || null })
+    })
+    editor.focus()
+  }
+
   const toggleList = (type: Exclude<ListType, "check">) => {
     if (state.blockType === type) {
       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
@@ -205,6 +223,8 @@ export const RichTextToolbar = ({ disabled }: { disabled: boolean }) => {
   const textStyleLabel =
     TEXT_STYLES.find((style) => style.value === state.blockType)?.label ?? "Text style"
 
+  const fontLabel = FONTS.find((font) => font.value === state.fontFamily)?.label ?? "Font"
+
   return (
     <div
       aria-label="Formatting"
@@ -212,6 +232,25 @@ export const RichTextToolbar = ({ disabled }: { disabled: boolean }) => {
       data-slot="rich-text-toolbar"
       role="toolbar"
     >
+      <ToolbarGroup label="Font">
+        <div className={cn(disabled && "pointer-events-none opacity-50")} inert={disabled}>
+          <Dropdown
+            fast
+            label={<span className="w-16 text-left">{fontLabel}</span>}
+            options={FONTS.map((font) => ({
+              label: font.label,
+              onClick: () => setFont(font.value),
+              theme: font.value === state.fontFamily ? "primary" : "ghost",
+            }))}
+            popoverClassName="right-auto left-0 z-30 items-stretch gap-1 rounded-xl border border-gray-200 bg-white p-2 shadow-md"
+            theme="ghost"
+            trigger={{
+              triggerClassName: "font-semibold text-sm",
+              triggerIcon: <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />,
+            }}
+          />
+        </div>
+      </ToolbarGroup>
       <ToolbarGroup label="Block type">
         {/* Dropdown has no disabled state, so the wrapper blocks it while the editor is disabled. */}
         <div className={cn(disabled && "pointer-events-none opacity-50")} inert={disabled}>
