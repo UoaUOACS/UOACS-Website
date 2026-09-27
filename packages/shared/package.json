@@ -13,9 +13,11 @@
   "devDependencies": {
     "@uoacs/config": "workspace:*",
     "typescript": "catalog:",
-    "payload": "catalog:payload"
+    "payload": "catalog:payload",
+    "@payloadcms/richtext-lexical": "catalog:payload"
   },
   "peerDependencies": {
+    "@payloadcms/richtext-lexical": ">=3",
     "payload": ">=3"
   }
 }

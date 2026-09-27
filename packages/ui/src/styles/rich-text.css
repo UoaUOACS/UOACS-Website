@@ -1,0 +1,43 @@
+/* Element styles for rich text rendered from data (Payload `<RichText>`, the Lexical editor) */
+@utility rich-text {
+  /* Block, not flex: Chrome places no caret on a click in the empty part of a flex contenteditable. */
+  @apply leading-relaxed;
+
+  & > * + * {
+    @apply mt-3;
+  }
+
+  & :is(h1, h2, h3, h4, h5, h6) {
+    @apply font-inter font-semibold tracking-[-0.04em];
+  }
+  & h1 {
+    @apply text-2xl;
+  }
+  & h2 {
+    @apply text-xl;
+  }
+  & h3 {
+    @apply text-lg;
+  }
+  & h4 {
+    @apply text-base;
+  }
+  & h5 {
+    @apply text-sm;
+  }
+  & h6 {
+    @apply text-gray-500 text-sm;
+  }
+  & ul {
+    @apply list-disc pl-5;
+  }
+  & ol {
+    @apply list-decimal pl-5;
+  }
+  & blockquote {
+    @apply border-gray-300 border-l-2 pl-3 italic;
+  }
+  & a {
+    @apply underline;
+  }
+}

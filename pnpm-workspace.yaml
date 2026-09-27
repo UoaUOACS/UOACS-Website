@@ -27,6 +27,15 @@ catalogs:
     "@payloadcms/richtext-lexical": 3.86.0
     "@payloadcms/storage-s3": 3.86.0
     "@payloadcms/ui": 3.86.0
+  # Must match the Lexical version that @payloadcms/richtext-lexical uses.
+  lexical:
+    lexical: 0.41.0
+    "@lexical/list": 0.41.0
+    "@lexical/markdown": 0.41.0
+    "@lexical/react": 0.41.0
+    "@lexical/rich-text": 0.41.0
+    "@lexical/selection": 0.41.0
+    "@lexical/utils": 0.41.0
   storybook:
     storybook: ^10.5.3
     "@storybook/nextjs-vite": ^10.5.3
