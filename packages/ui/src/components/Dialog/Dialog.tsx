@@ -43,6 +43,7 @@ export interface DialogProps {
 export const Dialog = ({ open, onClose, title, children, className }: DialogProps) => {
   const ref = useRef<HTMLDialogElement>(null)
   const titleId = useId()
+  const pressedBackdrop = useRef(false)
 
   useEffect(() => {
     const dialog = ref.current
@@ -63,10 +64,20 @@ export const Dialog = ({ open, onClose, title, children, className }: DialogProp
         "open:backdrop:bg-black/50 starting:open:backdrop:bg-black/0",
         className,
       )}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose()
+      onCancel={(e) => {
+        e.preventDefault()
+        onClose()
       }}
-      onClose={onClose}
+      onClick={(e) => {
+        if (pressedBackdrop.current && e.target === e.currentTarget) onClose()
+        pressedBackdrop.current = false
+      }}
+      onClose={() => {
+        if (open) onClose()
+      }}
+      onPointerDown={(e) => {
+        pressedBackdrop.current = e.target === e.currentTarget
+      }}
       ref={ref}
     >
       <div className="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 pb-4">
