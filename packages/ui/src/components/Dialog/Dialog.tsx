@@ -56,7 +56,7 @@ export const Dialog = ({ open, onClose, title, children, className }: DialogProp
     <dialog
       aria-labelledby={title ? titleId : undefined}
       className={cn(
-        "m-auto w-[calc(100%-2rem)] max-w-lg rounded-2xl bg-white p-0 text-black shadow-lg",
+        "m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg flex-col overflow-hidden rounded-2xl bg-white p-0 text-black shadow-lg open:flex",
         "opacity-0 transition-[opacity,scale,display,overlay] transition-discrete duration-200 ease-out",
         "scale-95 open:scale-100 starting:open:scale-95 open:opacity-100 starting:open:opacity-0",
         "backdrop:bg-black/0 backdrop:transition-[background-color,display,overlay] backdrop:transition-discrete backdrop:duration-200",
@@ -69,24 +69,22 @@ export const Dialog = ({ open, onClose, title, children, className }: DialogProp
       onClose={onClose}
       ref={ref}
     >
-      <div className="flex flex-col gap-4 p-6">
-        <div className="flex items-start justify-between gap-4">
-          {title && (
-            <h2 className="font-medium text-lg" id={titleId}>
-              {title}
-            </h2>
-          )}
-          <button
-            aria-label="Close"
-            className="ml-auto cursor-pointer rounded-sm p-1 text-gray-700 transition-colors duration-300 hover:bg-gray-200"
-            onClick={onClose}
-            type="button"
-          >
-            <XMarkIcon className="h-5 w-5" />
-          </button>
-        </div>
-        {children}
+      <div className="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 pb-4">
+        {title && (
+          <h2 className="font-medium text-lg" id={titleId}>
+            {title}
+          </h2>
+        )}
+        <button
+          aria-label="Close"
+          className="ml-auto cursor-pointer rounded-sm p-1 text-gray-700 transition-colors duration-300 hover:bg-gray-200"
+          onClick={onClose}
+          type="button"
+        >
+          <XMarkIcon className="h-5 w-5" />
+        </button>
       </div>
+      <div className="flex min-h-0 flex-col gap-4 overflow-y-auto px-6 pb-6">{children}</div>
     </dialog>
   )
 }
