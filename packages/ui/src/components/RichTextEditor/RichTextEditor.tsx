@@ -22,7 +22,9 @@ import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPl
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import {
+  $getRoot,
   createEditor,
+  type EditorState,
   type EditorThemeClasses,
   type SerializedEditorState,
   type SerializedLexicalNode,
@@ -87,6 +89,13 @@ const findLoadProblem = (value: RichTextValue) => {
 const isEmpty = (value: RichTextValue) =>
   Array.isArray(value.root?.children) && value.root.children.length === 0
 
+// Text is what the rendered page shows, so a block with no text, such as an empty heading, is
+// empty too.
+const toValue = (state: EditorState) =>
+  state.read(() => $getRoot().getTextContent().trim()) === ""
+    ? null
+    : (state.toJSON() as RichTextValue)
+
 // Only the formats the toolbar offers. Their nodes must be in RICH_TEXT_NODES.
 const TRANSFORMERS = [
   HEADING,
@@ -126,7 +135,8 @@ export interface RichTextEditorProps {
   disabled?: boolean
   id?: string
   onBlur?: () => void
-  onChange?: (value: RichTextValue) => void
+  /** Gets `null` when the editor has no text, the same as an empty `defaultValue`. */
+  onChange?: (value: RichTextValue | null) => void
   placeholder?: string
 }
 
@@ -204,10 +214,7 @@ export const RichTextEditor = ({
         <HistoryPlugin />
         <ListPlugin />
         <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-        <OnChangePlugin
-          ignoreSelectionChange
-          onChange={(state) => onChange?.(state.toJSON() as RichTextValue)}
-        />
+        <OnChangePlugin ignoreSelectionChange onChange={(state) => onChange?.(toValue(state))} />
         <EditablePlugin editable={!disabled} />
       </LexicalComposer>
     </EditorErrorBoundary>

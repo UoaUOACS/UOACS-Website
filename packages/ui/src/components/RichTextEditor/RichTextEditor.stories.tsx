@@ -72,7 +72,7 @@ export const Invalid: Story = {
 
 export const JsonPreview: Story = {
   render: (args) => {
-    const [value, setValue] = useState<RichTextValue | undefined>(sample)
+    const [value, setValue] = useState<RichTextValue | null>(sample)
     return (
       <div className="flex flex-col gap-4">
         <RichTextEditor {...args} defaultValue={sample} onChange={setValue} />
@@ -86,11 +86,13 @@ export const JsonPreview: Story = {
 
 export const RenderedPreview: Story = {
   render: (args) => {
-    const [value, setValue] = useState<RichTextValue>(sample)
+    const [value, setValue] = useState<RichTextValue | null>(sample)
     return (
       <div className="flex flex-col gap-4">
         <RichTextEditor {...args} defaultValue={sample} onChange={setValue} />
-        <RichText className="rich-text text-sm" converters={richTextConverters} data={value} />
+        {value && (
+          <RichText className="rich-text text-sm" converters={richTextConverters} data={value} />
+        )}
       </div>
     )
   },
