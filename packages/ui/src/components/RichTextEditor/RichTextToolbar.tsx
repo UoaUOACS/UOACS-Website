@@ -216,6 +216,7 @@ export const RichTextToolbar = ({ disabled }: { disabled: boolean }) => {
         {/* Dropdown has no disabled state, so the wrapper blocks it while the editor is disabled. */}
         <div className={cn(disabled && "pointer-events-none opacity-50")} inert={disabled}>
           <Dropdown
+            fast
             label={<span className="w-20 text-left">{textStyleLabel}</span>}
             options={TEXT_STYLES.map((style) => ({
               label: style.label,
