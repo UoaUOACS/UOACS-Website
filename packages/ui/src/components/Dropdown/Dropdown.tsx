@@ -130,6 +130,10 @@ export const Dropdown = ({
               >
                 <DropdownOption
                   {...option}
+                  onClick={() => {
+                    option.onClick?.()
+                    setIsOpen(false)
+                  }}
                   ref={(el) => {
                     optionRefs.current[i] = el
                   }}
