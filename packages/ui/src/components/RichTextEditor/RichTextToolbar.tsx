@@ -84,11 +84,14 @@ type ToolbarState = {
   blockType: BlockType
   canRedo: boolean
   canUndo: boolean
-  fontFamily: string
+  /** `""` is no font, and `null` is more than one font. */
+  fontFamily: string | null
   isBold: boolean
   isItalic: boolean
   isUnderline: boolean
 }
+
+const NO_FONT = "inherit"
 
 const initialState: ToolbarState = {
   alignment: "left",
@@ -131,12 +134,14 @@ function useToolbarState() {
       const format = $isElementNode(alignBlock) ? alignBlock.getFormatType() : ""
       const alignment: Alignment = format === "center" || format === "right" ? format : "left"
 
+      // Lexical gives "" for more than one font, so text with no font needs a different default.
+      const font = $getSelectionStyleValueForProperty(selection, "font-family", NO_FONT)
+
       // Read everything here: React runs the updater later, outside the editor state.
       const next = {
         alignment,
         blockType,
-        // Empty when the selected text has more than one font.
-        fontFamily: $getSelectionStyleValueForProperty(selection, "font-family", ""),
+        fontFamily: font === "" ? null : font === NO_FONT ? "" : font,
         isBold: selection.hasFormat("bold"),
         isItalic: selection.hasFormat("italic"),
         isUnderline: selection.hasFormat("underline"),
@@ -223,6 +228,7 @@ export const RichTextToolbar = ({ disabled }: { disabled: boolean }) => {
   const textStyleLabel =
     TEXT_STYLES.find((style) => style.value === state.blockType)?.label ?? "Text style"
 
+  // More than one font matches no option, so it shows the placeholder.
   const fontLabel = FONTS.find((font) => font.value === state.fontFamily)?.label ?? "Font"
 
   return (
