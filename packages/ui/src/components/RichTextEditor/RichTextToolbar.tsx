@@ -242,6 +242,7 @@ export const RichTextToolbar = ({ disabled }: { disabled: boolean }) => {
         <Dropdown
           disabled={disabled}
           fast
+          keepFocus
           label={<span className="w-16 text-left">{fontLabel}</span>}
           options={FONTS.map((font) => ({
             label: font.label,
@@ -260,6 +261,7 @@ export const RichTextToolbar = ({ disabled }: { disabled: boolean }) => {
         <Dropdown
           disabled={disabled}
           fast
+          keepFocus
           label={<span className="w-20 text-left">{textStyleLabel}</span>}
           options={TEXT_STYLES.map((style) => ({
             label: style.label,
