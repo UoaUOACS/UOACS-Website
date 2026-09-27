@@ -18,6 +18,10 @@ export interface DropdownProps extends ButtonVariantProps {
    */
   label: string | ReactNode
   /**
+   * Whether the options animate in and out quickly, with no stagger.
+   */
+  fast?: boolean
+  /**
    * Options for the dropdown menu.
    */
   options: DropdownOptionProps[]
@@ -40,6 +44,7 @@ export interface DropdownProps extends ButtonVariantProps {
  */
 export const Dropdown = ({
   label,
+  fast = false,
   options,
   popoverClassName,
   trigger,
@@ -108,13 +113,17 @@ export const Dropdown = ({
             exit="closed"
             initial="closed"
             role="menu"
-            transition={{
-              type: "spring",
-              stiffness: 400,
-              damping: 25,
-              duration: 0.15,
-              delayChildren: stagger(0.05),
-            }}
+            transition={
+              fast
+                ? { duration: 0.1, ease: "easeOut" }
+                : {
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 25,
+                    duration: 0.15,
+                    delayChildren: stagger(0.05),
+                  }
+            }
             variants={{
               open: { opacity: 1, y: 0 },
               closed: { opacity: 0, y: -5 },
@@ -123,6 +132,7 @@ export const Dropdown = ({
             {options.map((option, i) => (
               <motion.div
                 key={option.href ?? option.label?.toString()}
+                transition={fast ? { duration: 0.1, ease: "easeOut" } : undefined}
                 variants={{
                   open: { opacity: 1, y: 0 },
                   closed: { opacity: 0, y: -5 },
