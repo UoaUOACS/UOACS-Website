@@ -9,6 +9,7 @@ const mockProjects: Project[] = [
     imageURL: "https://placehold.co/400x300",
     authorName: "Name Of Author",
     likes: 1000,
+    awardType: "Best Design",
   },
   {
     id: "2",
