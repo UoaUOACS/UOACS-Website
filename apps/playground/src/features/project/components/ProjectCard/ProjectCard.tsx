@@ -1,7 +1,8 @@
-import { HeartIcon, TrophyIcon, UserIcon } from "@heroicons/react/24/outline"
+import { HeartIcon, UserIcon } from "@heroicons/react/24/outline"
 import { LazyImage } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import Link from "next/link"
+import AwardIcon from "@/features/project/components/AwardIcon/AwardIcon"
 import { formatLikes } from "@/features/project/helpers/format"
 import { Routes } from "@/lib/routes"
 import { type ProjectCardVariants, projectCardVariants } from "./ProjectCard.variants"
@@ -24,12 +25,14 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
   const {
     base,
     imageWrapper,
+    overlay,
+    title: titleStyles,
     footer,
     authorGroup,
     avatarIcon,
     authorName: authorNameStyles,
     statsGroup,
-    trophyIcon,
+    awardIcon,
     likesGroup,
     heartIcon,
     likesCount,
@@ -48,6 +51,10 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
             src={imageURL}
           />
         ) : null}
+
+        <div className={overlay()}>
+          <span className={titleStyles()}>{title}</span>
+        </div>
       </div>
 
       <div className={footer()}>
@@ -57,9 +64,9 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
         </div>
 
         <div className={statsGroup()}>
-          <TrophyIcon aria-hidden="true" className={cn(trophyIcon(), "h-4.5 w-4.5")} />
+          <AwardIcon className={cn(awardIcon(), "h-4.5 w-4.5")} />
           <div className={likesGroup()}>
-            <HeartIcon aria-hidden="true" className={cn(heartIcon(), "h-3.5 w-3.5")} />
+            <HeartIcon aria-hidden="true" className={cn(heartIcon(), "h-4 w-4")} />
             <span className={likesCount()}>{formatLikes(likes)}</span>
           </div>
         </div>
