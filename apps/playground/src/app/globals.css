@@ -2,6 +2,7 @@
 @import "@uoacs/ui/styles/cartograph.css";
 @import "tailwindcss";
 @import "@uoacs/ui/styles/theme.css";
+@import "@uoacs/ui/styles/rich-text.css";
 @import "@uoacs/ui/styles/fonts.css";
 
 :root {

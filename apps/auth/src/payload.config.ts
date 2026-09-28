@@ -4,6 +4,7 @@ import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { AuthCollectionSlugs } from "@uoacs/shared"
+import { richTextFeatures } from "@uoacs/shared/payload"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { EmailVerificationCode } from "./payload/collections/EmailVerificationCode"
@@ -23,7 +24,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Member, EmailVerificationCode],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({ features: richTextFeatures }),
   graphQL: {
     disable: true,
   },
