@@ -1,3 +1,4 @@
+export * from "./AnimatedSuspense/AnimatedSuspense"
 export * from "./BorderButton/BorderButton"
 export * from "./Button/Button"
 export * from "./Container/Container"
