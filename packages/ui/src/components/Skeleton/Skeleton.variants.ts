@@ -10,7 +10,7 @@ export const skeletonVariants = tv({
     },
     animation: {
       shimmer:
-        "animate-shimmer bg-linear-to-r from-gray-200 via-gray-50 to-gray-200 bg-size-[200%_100%]",
+        "animate-shimmer bg-linear-to-r from-transparent via-white/60 to-transparent bg-size-[200%_100%] motion-reduce:bg-none",
       pulse: "animate-pulse",
       none: "",
     },
