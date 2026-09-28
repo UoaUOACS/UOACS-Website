@@ -10,6 +10,12 @@ const meta: Meta<typeof Skeleton> = {
       control: { type: "select" },
       options: skeletonVariants.variants.shape ? Object.keys(skeletonVariants.variants.shape) : [],
     },
+    animation: {
+      control: { type: "select" },
+      options: skeletonVariants.variants.animation
+        ? Object.keys(skeletonVariants.variants.animation)
+        : [],
+    },
   },
 }
 
@@ -19,6 +25,7 @@ type Story = StoryObj<typeof Skeleton>
 export const Default: Story = {
   args: {
     shape: "rect",
+    animation: "shimmer",
   },
 }
 
@@ -31,6 +38,12 @@ export const Text: Story = {
       <Skeleton className="paragraph w-2/3" shape="text" />
     </div>
   ),
+}
+
+export const Pulse: Story = {
+  args: {
+    animation: "pulse",
+  },
 }
 
 export const Circle: Story = {

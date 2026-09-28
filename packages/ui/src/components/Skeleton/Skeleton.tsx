@@ -11,13 +11,18 @@ export interface SkeletonProps
 }
 
 /**
- * A pulsing placeholder shown while content loads. Use it as a building block for
+ * An animated placeholder shown while content loads. Use it as a building block for
  * larger loading states, e.g. a card or list item skeleton.
  *
  * @param shape The base shape: `rect` (default), `text` (one line at the current font size), or `circle`.
+ * @param animation The loading animation: `shimmer` (default), `pulse`, or `none`. Shows a plain block when the user prefers reduced motion.
  * @param className Classes to set the size, radius, or colour. These override the shape defaults.
  * @returns A styled placeholder element.
  */
-export const Skeleton = ({ shape, className, ...props }: SkeletonProps) => (
-  <div className={cn(skeletonVariants({ shape }), className)} {...props} aria-hidden="true" />
+export const Skeleton = ({ shape, animation, className, ...props }: SkeletonProps) => (
+  <div
+    className={cn(skeletonVariants({ shape, animation }), className)}
+    {...props}
+    aria-hidden="true"
+  />
 )
