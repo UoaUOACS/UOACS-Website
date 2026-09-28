@@ -21,6 +21,10 @@ export interface DropdownOptionProps extends ButtonVariantProps {
    */
   onClick?: () => void
   /**
+   * Additional class names for the underlying link/button element.
+   */
+  className?: string
+  /**
    * A ref to the underlying link/button element, used for keyboard roving focus.
    */
   ref?: Ref<HTMLElement>
@@ -32,7 +36,14 @@ export interface DropdownOptionProps extends ButtonVariantProps {
  * @param props {@link DropdownOptionProps} for the DropdownOption component.
  * @returns A styled dropdown option element.
  */
-export const DropdownOption = ({ label, href, onClick, ref, ...variant }: DropdownOptionProps) => {
+export const DropdownOption = ({
+  label,
+  href,
+  onClick,
+  className,
+  ref,
+  ...variant
+}: DropdownOptionProps) => {
   const setRef = (el: HTMLElement | null) => {
     if (typeof ref === "function") ref(el)
     else if (ref) ref.current = el
@@ -49,14 +60,16 @@ export const DropdownOption = ({ label, href, onClick, ref, ...variant }: Dropdo
         role="menuitem"
         target={isExternal ? "_blank" : "_self"}
       >
-        <div className={cn(variantClasses, "whitespace-nowrap")}>{label || "Option"}</div>
+        <div className={cn(variantClasses, className, "whitespace-nowrap")}>
+          {label || "Option"}
+        </div>
       </Link>
     )
   }
 
   return (
     <Button
-      className="z-5 whitespace-nowrap"
+      className={cn("z-5 whitespace-nowrap", className)}
       onClick={onClick}
       ref={setRef}
       role="menuitem"
