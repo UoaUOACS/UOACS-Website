@@ -102,9 +102,11 @@ jobs:
           CONFIG_FILE: apps/playground/fly.staging.toml
           DOCKERFILE: apps/playground/Dockerfile
           SECRETS: >-
-            NEXT_PUBLIC_AUTH_URL
+            DATABASE_URI NEXT_PUBLIC_AUTH_URL PAYLOAD_SECRET
         env:
           NEXT_PUBLIC_AUTH_URL: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
 
   deploy-website-prod:
     name: Deploy Website Production
@@ -194,6 +196,8 @@ jobs:
           CONFIG_FILE: apps/playground/fly.toml
           DOCKERFILE: apps/playground/Dockerfile
           SECRETS: >-
-            NEXT_PUBLIC_AUTH_URL
+            DATABASE_URI NEXT_PUBLIC_AUTH_URL PAYLOAD_SECRET
         env:
           NEXT_PUBLIC_AUTH_URL: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}

@@ -3,7 +3,7 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "env": ["NEXT_PUBLIC_AUTH_URL"]
+      "env": ["DATABASE_URI", "NEXT_PUBLIC_AUTH_URL", "PAYLOAD_SECRET"]
     }
   }
 }
