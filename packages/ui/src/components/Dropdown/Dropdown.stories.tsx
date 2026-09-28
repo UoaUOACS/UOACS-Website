@@ -7,6 +7,9 @@ const meta: Meta<typeof Dropdown> = {
   component: Dropdown,
   argTypes: {
     label: { control: "text" },
+    disabled: { control: "boolean" },
+    fast: { control: "boolean" },
+    keepFocus: { control: "boolean" },
     options: { control: "object" },
     popoverClassName: { control: "text" },
     trigger: { control: false },
@@ -40,6 +43,18 @@ export const TriggerIcon: Story = {
 export const NoTriggerIcon: Story = {
   args: {
     trigger: false,
+  },
+}
+
+export const Fast: Story = {
+  args: {
+    fast: true,
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
   },
 }
 

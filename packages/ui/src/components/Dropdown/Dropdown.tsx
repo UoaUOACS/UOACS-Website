@@ -18,6 +18,19 @@ export interface DropdownProps extends ButtonVariantProps {
    */
   label: string | ReactNode
   /**
+   * Whether the dropdown button is disabled. A disabled dropdown closes and cannot open.
+   */
+  disabled?: boolean
+  /**
+   * Whether the options animate in and out quickly, with no stagger.
+   */
+  fast?: boolean
+  /**
+   * Whether a mouse click on the dropdown leaves focus where it is, such as in a text editor.
+   * Keyboard users can still tab to the trigger to use the menu.
+   */
+  keepFocus?: boolean
+  /**
    * Options for the dropdown menu.
    */
   options: DropdownOptionProps[]
@@ -40,6 +53,9 @@ export interface DropdownProps extends ButtonVariantProps {
  */
 export const Dropdown = ({
   label,
+  disabled = false,
+  fast = false,
+  keepFocus = false,
   options,
   popoverClassName,
   trigger,
@@ -65,6 +81,10 @@ export const Dropdown = ({
     }
   }, [])
 
+  useEffect(() => {
+    if (disabled) setIsOpen(false)
+  }, [disabled])
+
   const onKeyDown = usePopoverKeyboardNav({
     isOpen,
     onClose: () => setIsOpen(false),
@@ -73,8 +93,8 @@ export const Dropdown = ({
   })
 
   useEffect(() => {
-    if (isOpen) triggerRef.current?.focus()
-  }, [isOpen])
+    if (isOpen && !keepFocus) triggerRef.current?.focus()
+  }, [isOpen, keepFocus])
 
   const triggerClassName = trigger !== false ? trigger?.triggerClassName : undefined
   const triggerRight =
@@ -85,11 +105,17 @@ export const Dropdown = ({
         ))
 
   return (
-    // biome-ignore lint/a11y/noStaticElementInteractions: delegates keydown from the trigger/menu items below to the shared popover nav handler
-    <div className="relative inline-flex" onKeyDown={onKeyDown} ref={ref}>
+    // biome-ignore lint/a11y/noStaticElementInteractions: delegates keydown from the trigger/menu items below to the shared popover nav handler, and mousedown to keep focus
+    <div
+      className="relative inline-flex"
+      onKeyDown={onKeyDown}
+      onMouseDown={keepFocus ? (event) => event.preventDefault() : undefined}
+      ref={ref}
+    >
       <Button
         aria-expanded={isOpen}
         className={cn("z-20", triggerClassName)}
+        disabled={disabled}
         onClick={() => setIsOpen(!isOpen)}
         ref={triggerRef}
         right={triggerRight}
@@ -108,13 +134,17 @@ export const Dropdown = ({
             exit="closed"
             initial="closed"
             role="menu"
-            transition={{
-              type: "spring",
-              stiffness: 400,
-              damping: 25,
-              duration: 0.15,
-              delayChildren: stagger(0.05),
-            }}
+            transition={
+              fast
+                ? { duration: 0.1, ease: "easeOut" }
+                : {
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 25,
+                    duration: 0.15,
+                    delayChildren: stagger(0.05),
+                  }
+            }
             variants={{
               open: { opacity: 1, y: 0 },
               closed: { opacity: 0, y: -5 },
@@ -123,6 +153,7 @@ export const Dropdown = ({
             {options.map((option, i) => (
               <motion.div
                 key={option.href ?? option.label?.toString()}
+                transition={fast ? { duration: 0.1, ease: "easeOut" } : undefined}
                 variants={{
                   open: { opacity: 1, y: 0 },
                   closed: { opacity: 0, y: -5 },
@@ -130,6 +161,10 @@ export const Dropdown = ({
               >
                 <DropdownOption
                   {...option}
+                  onClick={() => {
+                    option.onClick?.()
+                    setIsOpen(false)
+                  }}
                   ref={(el) => {
                     optionRefs.current[i] = el
                   }}
