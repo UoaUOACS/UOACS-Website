@@ -13,6 +13,7 @@ export interface Project {
   imageURL?: string
   authorName: string
   likes: number
+  awardType?: string
 }
 
 interface ProjectCardProps extends ProjectCardVariants {
@@ -64,7 +65,7 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
         </div>
 
         <div className={statsGroup()}>
-          <AwardIcon className={cn(awardIcon(), "h-4.5 w-4.5")} />
+          {project.awardType && <AwardIcon className={cn(awardIcon(), "h-4.5 w-4.5")} />}
           <div className={likesGroup()}>
             <HeartIcon aria-hidden="true" className={cn(heartIcon(), "h-4 w-4")} />
             <span className={likesCount()}>{formatLikes(likes)}</span>
