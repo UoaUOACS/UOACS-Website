@@ -14,7 +14,7 @@
   "devDependencies": {
     "@uoacs/config": "workspace:*",
     "typescript": "catalog:",
-    "better-auth": "^1.6.1",
+    "better-auth": "catalog:",
     "payload": "catalog:payload",
     "@payloadcms/richtext-lexical": "catalog:payload"
   },

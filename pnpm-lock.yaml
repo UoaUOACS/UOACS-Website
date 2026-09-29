@@ -21,6 +21,12 @@ catalogs:
     '@types/react-dom':
       specifier: ^19.2.3
       version: 19.3.0
+    better-auth:
+      specifier: ^1.6.1
+      version: 1.6.23
+    mongodb:
+      specifier: ^7.1.1
+      version: 7.2.0
     motion:
       specifier: ^12.23.24
       version: 12.38.0
@@ -156,10 +162,10 @@ importers:
         specifier: workspace:*
         version: link:../../packages/shared
       better-auth:
-        specifier: ^1.6.1
+        specifier: 'catalog:'
         version: 1.6.23(@opentelemetry/api@1.9.1)(mongodb@7.2.0(@aws-sdk/credential-providers@3.1032.0))(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.77.4))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(vitest@4.1.4)
       mongodb:
-        specifier: ^7.1.1
+        specifier: 'catalog:'
         version: 7.2.0(@aws-sdk/credential-providers@3.1032.0)
       next:
         specifier: 'catalog:'
@@ -217,7 +223,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/ui
       better-auth:
-        specifier: ^1.6.1
+        specifier: 'catalog:'
         version: 1.6.23(@opentelemetry/api@1.9.1)(mongodb@7.2.0(@aws-sdk/credential-providers@3.1032.0))(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.77.4))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(vitest@4.1.4)
       next:
         specifier: 'catalog:'
@@ -314,7 +320,7 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       better-auth:
-        specifier: ^1.6.1
+        specifier: 'catalog:'
         version: 1.6.23(@opentelemetry/api@1.9.1)(mongodb@7.2.0(@aws-sdk/credential-providers@3.1032.0))(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.77.4))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(vitest@4.1.4)
       dayjs:
         specifier: ^1.11.21
@@ -329,7 +335,7 @@ importers:
         specifier: ^9.0.3
         version: 9.0.3
       mongodb:
-        specifier: ^7.1.1
+        specifier: 'catalog:'
         version: 7.2.0(@aws-sdk/credential-providers@3.1032.0)
       motion:
         specifier: 'catalog:'
@@ -446,7 +452,7 @@ importers:
         specifier: workspace:*
         version: link:../config
       better-auth:
-        specifier: ^1.6.1
+        specifier: 'catalog:'
         version: 1.6.23(@opentelemetry/api@1.9.1)(mongodb@7.2.0(@aws-sdk/credential-providers@3.1032.0))(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.77.4))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(vitest@4.1.4)
       payload:
         specifier: catalog:payload
