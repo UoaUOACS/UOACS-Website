@@ -4,7 +4,9 @@ import { links } from "@/features/member/constants/links.constants"
 import { validateUnique } from "../validation/validateUnique"
 
 const validateUrl: TextFieldSingleValidation = (value, { siblingData }) => {
-  const { url } = links[(siblingData as { name: LinkName }).name]
+  const name = (siblingData as { name?: string }).name
+  if (!name || !(name in links)) return true
+  const { url } = links[name as LinkName]
   return value?.startsWith(url) || `URL must start with ${url}`
 }
 

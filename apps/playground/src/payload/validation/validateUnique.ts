@@ -1,6 +1,7 @@
 import type { ArrayFieldValidation } from "payload"
 
 export const validateUnique: ArrayFieldValidation = (rows) => {
-  const names = (rows as { name: string }[] | null | undefined)?.map((row) => row.name) ?? []
+  if (!Array.isArray(rows)) return true
+  const names = rows.map((row) => row?.name).filter(Boolean)
   return new Set(names).size === names.length || "No duplicates are allowed."
 }

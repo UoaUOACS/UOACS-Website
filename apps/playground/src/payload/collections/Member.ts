@@ -16,11 +16,15 @@ export const Member: CollectionConfig = {
       name: "username",
       type: "text",
       required: true,
+      unique: true,
+      index: true,
     },
     {
       name: "authServiceID",
       type: "text",
       required: true,
+      unique: true,
+      index: true,
     },
     {
       name: "profilePicture",
