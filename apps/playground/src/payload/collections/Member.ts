@@ -25,6 +25,9 @@ export const Member: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
+      access: {
+        read: ({ req: { user } }) => Boolean(user),
+      },
     },
     {
       name: "profilePicture",
