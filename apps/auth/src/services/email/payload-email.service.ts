@@ -1,7 +1,9 @@
-import { payload } from "@/lib/payload"
+import { getPayloadClient } from "@/lib/payload"
 
 export class PayloadEmailService {
   public static async sendResetPassword(email: string, url: string): Promise<unknown> {
+    const payload = await getPayloadClient()
+
     return payload.sendEmail({
       to: email,
       subject: "UOACS - Reset Password",
