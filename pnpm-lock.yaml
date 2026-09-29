@@ -15,6 +15,12 @@ catalogs:
     '@types/node':
       specifier: ^24
       version: 24.13.3
+    '@types/react':
+      specifier: ^19.2.13
+      version: 19.3.0
+    '@types/react-dom':
+      specifier: ^19.2.3
+      version: 19.3.0
     motion:
       specifier: ^12.23.24
       version: 12.38.0
@@ -219,6 +225,9 @@ importers:
       tailwind-variants:
         specifier: 'catalog:'
         version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.3.3)
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@storybook/addon-docs':
         specifier: catalog:storybook

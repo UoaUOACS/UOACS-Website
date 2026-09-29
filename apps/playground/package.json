@@ -25,7 +25,8 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "tailwind-variants": "catalog:",
-    "sharp": "^0.34.4"
+    "sharp": "^0.34.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@storybook/addon-docs": "catalog:storybook",
