@@ -9,12 +9,15 @@ const handlers = toNextJsHandler(auth)
  * before the caller ever sees it.
  */
 function withCors(request: Request, response: Response): Response {
+  // Every response, not just the allowed ones: a cache keyed without Origin
+  // could serve the header-less variant to an origin that should get them.
+  response.headers.append("Vary", "Origin")
+
   const origin = request.headers.get("origin")
   if (!origin || !trustedOrigins.includes(origin)) return response
 
   response.headers.set("Access-Control-Allow-Origin", origin)
   response.headers.set("Access-Control-Allow-Credentials", "true")
-  response.headers.append("Vary", "Origin")
   return response
 }
 
