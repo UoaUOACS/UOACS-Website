@@ -17,14 +17,12 @@ export const Member: CollectionConfig = {
       type: "text",
       required: true,
       unique: true,
-      index: true,
     },
     {
       name: "authServiceID",
       type: "text",
       required: true,
       unique: true,
-      index: true,
       access: {
         read: ({ req: { user } }) => Boolean(user),
       },
