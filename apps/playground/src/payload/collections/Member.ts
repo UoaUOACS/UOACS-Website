@@ -31,7 +31,7 @@ export const Member: CollectionConfig = {
     },
     {
       name: "profilePicture",
-      type: "relationship",
+      type: "upload",
       relationTo: Slugs.Collections.MEDIA,
       required: false,
     },
