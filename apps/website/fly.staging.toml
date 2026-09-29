@@ -19,6 +19,14 @@ swap_size_mb = 256
   min_machines_running = 0
   processes = ['app']
 
+  [[http_service.checks]]
+    grace_period = '30s'
+    interval = '15s'
+    method = 'GET'
+    path = '/api/health'
+    protocol = 'http'
+    timeout = '10s'
+
 [[vm]]
   memory = '256mb'
   cpus = 1

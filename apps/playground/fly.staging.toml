@@ -1,0 +1,31 @@
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+# Deploy from the monorepo root so the pnpm workspace is in the build context:
+#   flyctl deploy --config apps/playground/fly.staging.toml --dockerfile apps/playground/Dockerfile
+
+app = 'uoacs-playground-staging'
+primary_region = 'syd'
+swap_size_mb = 256
+
+[build]
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [[http_service.checks]]
+    grace_period = '30s'
+    interval = '15s'
+    method = 'GET'
+    path = '/api/health'
+    protocol = 'http'
+    timeout = '10s'
+
+[[vm]]
+  memory = '256mb'
+  cpus = 1
+  cpu_kind = 'shared'

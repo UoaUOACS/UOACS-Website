@@ -4,17 +4,16 @@ packages:
 
 catalog:
   "@heroicons/react": ^2.2.0
-  "@storybook/nextjs-vite": ^10.5.3
   "@types/react": ^19.2.13
   "@types/react-dom": ^19.2.3
   "@types/node": ^24
   motion: ^12.23.24
   next: 16.3.0
-  react: 19.2.4
-  react-dom: 19.2.4
+  react: 19.3.0
+  react-dom: 19.3.0
   tailwindcss: ^4.1.18
   "@tailwindcss/postcss": ^4
-  tailwind-variants: ^3.1.1
+  tailwind-variants: ^3.2.2
   typescript: ^5
 
 catalogs:
@@ -28,6 +27,23 @@ catalogs:
     "@payloadcms/richtext-lexical": 3.86.0
     "@payloadcms/storage-s3": 3.86.0
     "@payloadcms/ui": 3.86.0
+  # Must match the Lexical version that @payloadcms/richtext-lexical uses.
+  lexical:
+    lexical: 0.41.0
+    "@lexical/list": 0.41.0
+    "@lexical/markdown": 0.41.0
+    "@lexical/react": 0.41.0
+    "@lexical/rich-text": 0.41.0
+    "@lexical/selection": 0.41.0
+    "@lexical/utils": 0.41.0
+  storybook:
+    storybook: ^10.5.3
+    "@storybook/nextjs-vite": ^10.5.3
+    "@storybook/addon-a11y": ^10.5.3
+    "@storybook/addon-docs": ^10.5.3
+    "@storybook/addon-onboarding": ^10.5.3
+    "@storybook/addon-vitest": ^10.5.3
+    "@chromatic-com/storybook": ^5.0.0
 
 allowBuilds:
   "@tailwindcss/oxide": true

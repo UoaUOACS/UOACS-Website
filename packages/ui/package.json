@@ -7,14 +7,24 @@
     ".": "./src/index.ts",
     "./utils": "./src/utils/index.ts",
     "./toast": "./src/toast/index.tsx",
-    "./styles/theme.css": "./src/styles/theme.css"
+    "./styles/theme.css": "./src/styles/theme.css",
+    "./styles/fonts.css": "./src/styles/fonts.css",
+    "./styles/cartograph.css": "./src/styles/cartograph.css",
+    "./styles/rich-text.css": "./src/styles/rich-text.css"
   },
   "scripts": {
     "types:check": "tsc --noEmit"
   },
   "dependencies": {
     "@heroicons/react": "catalog:",
+    "@lexical/list": "catalog:lexical",
+    "@lexical/markdown": "catalog:lexical",
+    "@lexical/react": "catalog:lexical",
+    "@lexical/rich-text": "catalog:lexical",
+    "@lexical/selection": "catalog:lexical",
+    "@lexical/utils": "catalog:lexical",
     "clsx": "^2.1.1",
+    "lexical": "catalog:lexical",
     "motion": "catalog:",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
@@ -27,7 +37,8 @@
     "tailwindcss": ">=4"
   },
   "devDependencies": {
-    "@storybook/nextjs-vite": "catalog:",
+    "@payloadcms/richtext-lexical": "catalog:payload",
+    "@storybook/nextjs-vite": "catalog:storybook",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@uoacs/config": "workspace:*",

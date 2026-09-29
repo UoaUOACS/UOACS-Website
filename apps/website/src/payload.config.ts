@@ -2,18 +2,15 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { resendAdapter } from "@payloadcms/email-resend"
-import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { s3Storage } from "@payloadcms/storage-s3"
+import { richTextFeatures } from "@uoacs/shared/payload"
 import { buildConfig } from "payload"
 import sharp from "sharp"
-import { Slugs } from "./lib/payload/slugs"
 import { Admin } from "./payload/collections/Admin"
-import { EmailVerificationCode } from "./payload/collections/EmailVerificationCode"
 import { Event } from "./payload/collections/Event"
 import { Executive } from "./payload/collections/Executive"
 import { Media } from "./payload/collections/Media"
-import { Member } from "./payload/collections/Member"
 import { Polaroid } from "./payload/collections/Polaroid"
 import { Reel } from "./payload/collections/Reel"
 import { Sponsor } from "./payload/collections/Sponsor"
@@ -32,19 +29,9 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [
-    Admin,
-    Media,
-    Member,
-    Executive,
-    Sponsor,
-    Reel,
-    Polaroid,
-    EmailVerificationCode,
-    Event,
-  ],
+  collections: [Admin, Media, Executive, Sponsor, Reel, Polaroid, Event],
   globals: [HomePage, PrivacyPolicy, SocialLinks],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({ features: richTextFeatures }),
   graphQL: {
     disable: true,
   },
@@ -85,20 +72,6 @@ export default buildConfig({
         },
         region: process.env.S3_REGION,
       },
-    }),
-    importExportPlugin({
-      collections: [
-        {
-          slug: Slugs.Collections.MEMBER,
-          export: {
-            disableSave: true,
-            disableJobsQueue: true,
-          },
-          import: {
-            disableJobsQueue: true,
-          },
-        },
-      ],
     }),
   ],
 })

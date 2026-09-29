@@ -2,7 +2,8 @@
   "extends": "@uoacs/config/tsconfig/next.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@payload-config": ["./src/payload.config.ts"]
     }
   },
   "include": [

@@ -1,0 +1,13 @@
+/* The playground shell still ships the create-next-app Geist variables.
+   Alias them to the brand fonts so stories match the design system. */
+:root {
+  --font-geist-sans: var(--font-switzer);
+  --font-geist-mono: var(--font-mono);
+}
+
+html,
+body {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  font-family: var(--font-switzer);
+}
