@@ -1,6 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { SOCIAL_ICONS } from "@uoacs/ui"
+import type { DiscordWidgetData } from "../../schemas/discord"
 import { Footer } from "./Footer"
+
+const mockDiscordWidgetData: DiscordWidgetData = {
+  id: "0",
+  name: "UOACS",
+  instant_invite: "https://discord.gg/xSgqAmGE",
+  presence_count: 42,
+  members: Array.from({ length: 8 }, (_, i) => ({
+    id: String(i),
+    username: `member-${i}`,
+    avatar_url: `https://cdn.discordapp.com/embed/avatars/${i % 6}.png`,
+    status: "online" as const,
+  })),
+}
 
 const meta: Meta<typeof Footer> = {
   title: "Layout/Footer",
@@ -28,6 +42,7 @@ const meta: Meta<typeof Footer> = {
       { label: "Home", href: "/" },
       { label: "Projects", href: "/projects" },
     ],
+    discordWidgetData: mockDiscordWidgetData,
   },
   argTypes: {
     links: { control: "object" },
@@ -41,4 +56,10 @@ type Story = StoryObj<typeof Footer>
 
 export const Default: Story = {
   args: {},
+}
+
+export const NoLiveWidget: Story = {
+  args: {
+    discordWidgetData: null,
+  },
 }
