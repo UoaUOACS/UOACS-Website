@@ -6,6 +6,7 @@ import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Admin } from "./payload/collections/Admin"
 import { Media } from "./payload/collections/Media"
+import { Member } from "./payload/collections/Member"
 import { Project } from "./payload/collections/Project"
 
 const filename = fileURLToPath(import.meta.url)
@@ -19,7 +20,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Admin, Media, Project],
+  collections: [Admin, Media, Member, Project],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,

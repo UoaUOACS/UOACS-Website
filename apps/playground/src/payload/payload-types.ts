@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     admin: Admin;
     media: Media;
+    member: Member;
     project: Project;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -79,6 +80,7 @@ export interface Config {
   collectionsSelect: {
     admin: AdminSelect<false> | AdminSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    member: MemberSelect<false> | MemberSelect<true>;
     project: ProjectSelect<false> | ProjectSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -165,6 +167,139 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "member".
+ */
+export interface Member {
+  id: string;
+  name: string;
+  authServiceID: string;
+  profilePicture?: (string | null) | Media;
+  bio?: string | null;
+  skills?:
+    | (
+        | 'JavaScript'
+        | 'TypeScript'
+        | 'Python'
+        | 'Java'
+        | 'C'
+        | 'C++'
+        | 'C#'
+        | 'Go'
+        | 'Rust'
+        | 'Swift'
+        | 'Kotlin'
+        | 'Dart'
+        | 'Ruby'
+        | 'PHP'
+        | 'Scala'
+        | 'R'
+        | 'MATLAB'
+        | 'Haskell'
+        | 'Lua'
+        | 'Bash'
+        | 'SQL'
+        | 'HTML/CSS'
+        | 'React'
+        | 'Next.js'
+        | 'Vue'
+        | 'Svelte'
+        | 'Angular'
+        | 'Tailwind CSS'
+        | 'Node.js'
+        | 'Express'
+        | 'Django'
+        | 'Flask'
+        | 'FastAPI'
+        | 'Spring Boot'
+        | 'Ruby on Rails'
+        | 'Laravel'
+        | 'GraphQL'
+        | 'REST APIs'
+        | 'Mobile Development'
+        | 'iOS Development'
+        | 'Android Development'
+        | 'React Native'
+        | 'Flutter'
+        | 'Machine Learning'
+        | 'Deep Learning'
+        | 'Natural Language Processing'
+        | 'Computer Vision'
+        | 'Data Science'
+        | 'Data Analysis'
+        | 'Data Engineering'
+        | 'Data Visualisation'
+        | 'Statistics'
+        | 'PyTorch'
+        | 'TensorFlow'
+        | 'Pandas'
+        | 'DevOps'
+        | 'Cloud Computing'
+        | 'AWS'
+        | 'Azure'
+        | 'Google Cloud'
+        | 'Docker'
+        | 'Kubernetes'
+        | 'CI/CD'
+        | 'Linux'
+        | 'Networking'
+        | 'Databases'
+        | 'PostgreSQL'
+        | 'MongoDB'
+        | 'Redis'
+        | 'Cybersecurity'
+        | 'Algorithms'
+        | 'Operating Systems'
+        | 'Embedded Systems'
+        | 'Robotics'
+        | 'Blockchain'
+        | 'Game Development'
+        | 'Unity'
+        | 'Unreal Engine'
+        | 'AR/VR'
+        | 'Testing'
+        | 'Git'
+        | 'Open Source'
+        | 'UI/UX Design'
+        | 'Graphic Design'
+        | 'Figma'
+        | 'Motion Design'
+        | '3D Modelling'
+        | 'Video Editing'
+        | 'Photography'
+        | 'Product Management'
+        | 'Project Management'
+        | 'Agile'
+        | 'Leadership'
+        | 'Teamwork'
+        | 'Public Speaking'
+        | 'Technical Writing'
+        | 'Entrepreneurship'
+        | 'Marketing'
+      )[]
+    | null;
+  links?:
+    | {
+        name:
+          | 'LINKEDIN'
+          | 'GITHUB'
+          | 'GITLAB'
+          | 'PERSONAL_WEBSITE'
+          | 'BEHANCE'
+          | 'DRIBBBLE'
+          | 'FIGMA'
+          | 'DEVPOST'
+          | 'KAGGLE'
+          | 'MEDIUM'
+          | 'YOUTUBE';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "project".
  */
 export interface Project {
@@ -236,6 +371,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'member';
+        value: string | Member;
       } | null)
     | ({
         relationTo: 'project';
@@ -322,6 +461,26 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "member_select".
+ */
+export interface MemberSelect<T extends boolean = true> {
+  name?: T;
+  authServiceID?: T;
+  profilePicture?: T;
+  bio?: T;
+  skills?: T;
+  links?:
+    | T
+    | {
+        name?: T;
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
