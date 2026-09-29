@@ -20,6 +20,7 @@
     "@payloadcms/ui": "catalog:payload",
     "@uoacs/shared": "workspace:*",
     "@uoacs/ui": "workspace:*",
+    "better-auth": "^1.6.1",
     "next": "catalog:",
     "payload": "catalog:payload",
     "react": "catalog:",
