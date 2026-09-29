@@ -171,7 +171,7 @@ export interface Media {
  */
 export interface Member {
   id: string;
-  name: string;
+  username: string;
   authServiceID: string;
   profilePicture?: (string | null) | Media;
   bio?: string | null;
@@ -467,7 +467,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "member_select".
  */
 export interface MemberSelect<T extends boolean = true> {
-  name?: T;
+  username?: T;
   authServiceID?: T;
   profilePicture?: T;
   bio?: T;

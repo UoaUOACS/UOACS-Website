@@ -6,14 +6,14 @@ import { ProfileLink } from "../fields/ProfileLink"
 export const Member: CollectionConfig = {
   slug: Slugs.Collections.MEMBER,
   admin: {
-    useAsTitle: "name",
+    useAsTitle: "username",
   },
   access: {
     read: () => true,
   },
   fields: [
     {
-      name: "name",
+      name: "username",
       type: "text",
       required: true,
     },
