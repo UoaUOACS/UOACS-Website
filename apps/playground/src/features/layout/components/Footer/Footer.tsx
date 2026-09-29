@@ -86,11 +86,11 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
         </nav>
       </div>
 
-      <div className="flex flex-row items-center justify-between gap-2 md:flex-col md:items-start md:justify-start md:gap-4">
-        <div className="flex shrink-0 flex-row items-center gap-2">
-          <SocialIcon className="h-6 w-6" icon="discord" />
-        </div>
-        {discordHref && (
+      {discordHref && (
+        <div className="flex flex-row items-center justify-between gap-2 md:flex-col md:items-start md:justify-start md:gap-4">
+          <div className="flex shrink-0 flex-row items-center gap-2">
+            <SocialIcon className="h-6 w-6" icon="discord" />
+          </div>
           <a className="shrink-0" href={discordHref} rel="noopener noreferrer" target="_blank">
             <Button
               className="paragraph-sm"
@@ -100,8 +100,8 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
               Join Discord
             </Button>
           </a>
-        )}
-      </div>
+        </div>
+      )}
 
       <nav aria-label="Footer navigation" className="hidden flex-col items-start gap-4 md:flex">
         <p className="paragraph-sm text-gray-400">Pages</p>

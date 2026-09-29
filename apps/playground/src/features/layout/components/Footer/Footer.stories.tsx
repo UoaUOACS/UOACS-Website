@@ -3,7 +3,7 @@ import { SOCIAL_ICONS } from "@uoacs/ui"
 import { Footer } from "./Footer"
 
 const meta: Meta<typeof Footer> = {
-  title: "Home/Footer",
+  title: "Layout/Footer",
   component: Footer,
   args: {
     socialLinks: [
