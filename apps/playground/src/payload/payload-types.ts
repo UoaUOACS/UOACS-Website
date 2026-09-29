@@ -306,7 +306,7 @@ export interface Project {
   id: string;
   name: string;
   summary: string;
-  author: string;
+  author: string | Member;
   collaborators?: string[] | null;
   coverImage: string | Media;
   pageContent: (
