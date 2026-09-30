@@ -7,6 +7,8 @@ catalog:
   "@types/react": ^19.2.13
   "@types/react-dom": ^19.2.3
   "@types/node": ^24
+  better-auth: ^1.6.1
+  mongodb: ^7.1.1
   motion: ^12.23.24
   next: 16.3.0
   react: 19.3.0
@@ -15,6 +17,7 @@ catalog:
   "@tailwindcss/postcss": ^4
   tailwind-variants: ^3.2.2
   typescript: ^5
+  zod: ^4.3.6
 
 catalogs:
   payload:

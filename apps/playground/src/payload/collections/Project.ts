@@ -28,6 +28,12 @@ export const Project: CollectionConfig = {
       required: true,
     },
     {
+      name: "collaborators",
+      type: "text", // TODO: update to relationship once member collection set up
+      hasMany: true,
+      required: false,
+    },
+    {
       name: "coverImage",
       type: "upload",
       relationTo: Slugs.Collections.MEDIA,

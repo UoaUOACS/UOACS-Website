@@ -55,7 +55,8 @@ ENV NODE_ENV=production
 RUN --mount=type=secret,id=DATABASE_URI,required=true \
     --mount=type=secret,id=PAYLOAD_SECRET,required=true \
     --mount=type=secret,id=NEXT_PUBLIC_AUTH_URL,required=true \
-    sh -euc 'for name in DATABASE_URI PAYLOAD_SECRET NEXT_PUBLIC_AUTH_URL; do \
+    --mount=type=secret,id=DISCORD_SERVER_ID,required=true \
+    sh -euc 'for name in DATABASE_URI PAYLOAD_SECRET NEXT_PUBLIC_AUTH_URL DISCORD_SERVER_ID; do \
                value=$(cat "/run/secrets/$name"); \
                [ -n "$value" ] || { echo "Build secret $name is empty" >&2; exit 1; }; \
                export "$name=$value"; \

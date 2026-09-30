@@ -1,6 +1,7 @@
 "use client"
 
 import { ArrowUpRightIcon, UserIcon } from "@heroicons/react/24/solid"
+import { type DiscordWidgetData, shuffle } from "@uoacs/shared"
 import { Button, SocialIcon } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { motion } from "motion/react"
@@ -12,8 +13,6 @@ import { type SocialLink, SocialLinks } from "@/components/Generic"
 import { useSession } from "@/context/SessionContext"
 import { Routes } from "@/lib/routes"
 
-import { shuffle } from "@/lib/utils"
-import type { DiscordWidgetData } from "@/types/schemas/discord"
 import { NavbarGradient } from "../Navbar/NavbarGradient"
 
 /**

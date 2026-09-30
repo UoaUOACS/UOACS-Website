@@ -172,6 +172,7 @@ export interface Project {
   name: string;
   summary: string;
   author: string;
+  collaborators?: string[] | null;
   coverImage: string | Media;
   pageContent: (
     | {
@@ -330,6 +331,7 @@ export interface ProjectSelect<T extends boolean = true> {
   name?: T;
   summary?: T;
   author?: T;
+  collaborators?: T;
   coverImage?: T;
   pageContent?:
     | T

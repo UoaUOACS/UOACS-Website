@@ -20,12 +20,14 @@
     "@payloadcms/ui": "catalog:payload",
     "@uoacs/shared": "workspace:*",
     "@uoacs/ui": "workspace:*",
+    "better-auth": "catalog:",
     "next": "catalog:",
     "payload": "catalog:payload",
     "react": "catalog:",
     "react-dom": "catalog:",
     "tailwind-variants": "catalog:",
-    "sharp": "^0.34.4"
+    "sharp": "^0.34.4",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@storybook/addon-docs": "catalog:storybook",

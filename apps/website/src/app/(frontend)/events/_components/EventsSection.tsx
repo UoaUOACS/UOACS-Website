@@ -1,9 +1,9 @@
 "use client"
 
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
-import { Button, EmptyState, type EmptyStateProps } from "@uoacs/ui"
+import { Button, EmptyState, type EmptyStateProps, Section } from "@uoacs/ui"
 import Image from "next/image"
-import { EventCard, Section } from "@/components/Generic"
+import { EventCard } from "@/components/Generic"
 import { useEvents } from "@/queries/useEvents"
 
 export const EventsSection = ({

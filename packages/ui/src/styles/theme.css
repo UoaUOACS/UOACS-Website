@@ -282,6 +282,17 @@
 
   --shadow-md: 0 2px 6.5px rgb(0 0 0 / 0.25);
   --shadow-lg: 0px 3.88px 11.64px 0px rgba(0, 0, 0, 0.25);
+
+  --animate-shimmer: shimmer 1.5s ease-in-out infinite;
+
+  @keyframes shimmer {
+    from {
+      background-position: 150% 0;
+    }
+    to {
+      background-position: -50% 0;
+    }
+  }
 }
 
 @layer components {
