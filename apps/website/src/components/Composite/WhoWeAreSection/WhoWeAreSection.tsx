@@ -1,8 +1,8 @@
 "use client"
 
-import { Heading } from "@uoacs/ui"
+import { Heading, Section } from "@uoacs/ui"
 import { useEffect, useRef, useState } from "react"
-import { Polaroid, Section } from "@/components/Generic"
+import { Polaroid } from "@/components/Generic"
 import type { Polaroid as PolaroidType } from "@/payload/payload-types"
 
 /**

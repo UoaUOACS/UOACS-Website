@@ -5,6 +5,7 @@ import type { Sponsor } from "@/payload/payload-types"
 export const SponsorsServerSection = async () => {
   const { docs: sponsors }: { docs: Sponsor[] } = await payload.find({
     collection: Slugs.Collections.SPONSOR,
+    pagination: false,
   })
 
   return <SponsorsSection sponsors={sponsors} />
