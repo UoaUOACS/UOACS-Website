@@ -1,6 +1,7 @@
 import type { Project } from "@/features/project/components/ProjectCard/ProjectCard"
 
 export const Routes = {
+  HOME: "/",
   PROJECTS: {
     ID: (id: Project["id"]) => `/projects/${id}`,
   },
