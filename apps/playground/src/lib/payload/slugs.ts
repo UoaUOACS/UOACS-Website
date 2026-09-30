@@ -4,6 +4,7 @@ export const Slugs = {
     ADMIN: "admin",
     PROJECT: "project",
     MEMBER: "member",
+    SPONSOR: "sponsor",
   },
   Globals: {},
   Blocks: {
