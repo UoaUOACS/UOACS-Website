@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { Section } from "./Section"
 
 const meta: Meta<typeof Section> = {
-  title: "Generic Components/Section",
+  title: "Primitive Components/Section",
   component: Section,
   argTypes: {
     title: { control: "text" },

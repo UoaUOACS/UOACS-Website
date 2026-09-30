@@ -1,5 +1,6 @@
+import { Section } from "@uoacs/ui"
 import Image from "next/image"
-import { Section, ValuesAccordion } from "@/components/Generic"
+import { ValuesAccordion } from "@/components/Generic"
 import { VALUES } from "./ValuesSection.constants"
 
 export const ValuesSection = () => {
