@@ -16,8 +16,6 @@ interface ProjectSortDropdownProps {
  */
 export const ProjectSortDropdown = ({ sort, tab }: ProjectSortDropdownProps) => (
   <Dropdown
-    // Link options don't close the menu, so remount on navigation to close it
-    key={sort}
     label={
       <>
         <span className="sr-only">Sort by </span>
@@ -28,9 +26,9 @@ export const ProjectSortDropdown = ({ sort, tab }: ProjectSortDropdownProps) => 
       label: PROJECT_SORT_OPTIONS[value].label,
       href: getDiscoverHref({ tab, sort: value }),
       theme: "ghost" as const,
+      className: "w-full",
     }))}
-    // Options can't take a className, so stretch each link and its inner button to the menu width
-    popoverClassName="items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md [&_a>div]:w-full [&_a]:block"
+    popoverClassName="items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md"
     theme="ghost"
     trigger={{
       triggerClassName: "rounded-lg border border-gray-300 font-cartograph text-sm",
