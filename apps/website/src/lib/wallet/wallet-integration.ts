@@ -1,9 +1,8 @@
+import type { Member } from "@uoacs/shared/payload"
 import { GoogleAuth } from "google-auth-library"
 import { headers } from "next/headers"
-import { auth } from "@/lib/auth/auth"
 import type { ClassIdentity, ServiceAccountCredentials } from "@/lib/wallet/wallet-basics"
 import { generateWalletLink } from "@/lib/wallet/wallet-basics"
-import type { Member } from "@/payload/payload-types"
 import { AuthService } from "@/services/auth.service"
 
 export function getLinkFromMember(
@@ -47,19 +46,12 @@ export const identity: ClassIdentity = {
 }
 
 export async function checkValidateRequest(): Promise<Response | Member> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const member = await new AuthService().getMember(await headers())
 
-  if (!session) {
-    return new Response("Unauthorized", { status: 401 })
-  }
-
-  const authService = new AuthService()
-  const member = await authService.getMemberFromUser(session.user)
-
+  // One call now covers both: the auth service answers 401 without a session
+  // and 404 without a member, and either way there is no pass to issue.
   if (!member) {
-    return new Response("Member doesn't have betterAuthUserId field", { status: 404 })
+    return new Response("Unauthorized", { status: 401 })
   }
 
   return member

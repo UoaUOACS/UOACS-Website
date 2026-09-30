@@ -1,7 +1,5 @@
 import { ZodError } from "zod"
-import { payload } from "@/lib/payload"
-import { Slugs } from "@/lib/payload/slugs"
-import { AuthService, DuplicateFieldError } from "@/services/auth.service"
+import { AuthService, AuthServiceError, DuplicateFieldError } from "@/services/auth.service"
 import { signUpSchema } from "@/types/schemas/sign-up"
 import { createUserServerSchema } from "@/types/schemas/user"
 
@@ -11,51 +9,41 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
 
-    if (body?.existingMember === true) {
-      const user = createUserServerSchema.parse(body)
-      const { user: baUser, headers } = await authService.signUpBetterAuth(user)
-      const member = await authService.linkExistingMember(user.email, baUser.id)
-      return new Response(JSON.stringify(member), { status: 201, headers })
-    }
+    const payload =
+      body?.existingMember === true
+        ? { ...createUserServerSchema.parse(body), existingMember: true as const }
+        : signUpSchema.parse(body)
 
-    const { password, ...memberData } = signUpSchema.parse(body)
+    const { member, setCookie } = await authService.signUp(payload)
 
-    const existing = await payload.find({
-      collection: Slugs.Collections.MEMBER,
-      where: { email: { equals: memberData.email } },
-      limit: 1,
-    })
-
-    const { user: baUser, headers } = await authService.signUpBetterAuth({
-      firstName: memberData.firstName,
-      lastName: memberData.lastName,
-      email: memberData.email,
-      password,
-    })
-
-    const member =
-      existing.docs.length > 0
-        ? await authService.linkExistingMember(memberData.email, baUser.id)
-        : await authService.signUpPayloadMember(memberData, baUser.id)
+    // Relayed one by one: Better Auth may set more than one cookie, and a
+    // plain object would keep only the last.
+    const headers = new Headers({ "Content-Type": "application/json" })
+    for (const cookie of setCookie) headers.append("set-cookie", cookie)
 
     return new Response(JSON.stringify(member), { status: 201, headers })
   } catch (err) {
     if (err instanceof SyntaxError) {
-      return new Response(JSON.stringify({ error: "Invalid JSON body" }), { status: 400 })
+      return Response.json({ error: "Invalid JSON body" }, { status: 400 })
     }
     if (err instanceof ZodError) {
-      const fieldErrors = err.issues.map((issue) => ({
+      const error = err.issues.map((issue) => ({
         field: issue.path.join("."),
         message: issue.message,
       }))
-      return new Response(JSON.stringify({ error: fieldErrors }), { status: 400 })
+      return Response.json({ error }, { status: 400 })
     }
     if (err instanceof DuplicateFieldError) {
-      return new Response(JSON.stringify({ error: "Value already in use", field: err.field }), {
-        status: 409,
+      return Response.json({ error: "Value already in use", field: err.field }, { status: 409 })
+    }
+    if (err instanceof AuthServiceError) {
+      console.error("[POST /api/sign-up] Auth service rejected the request", {
+        status: err.status,
+        body: err.body,
       })
+      return Response.json({ error: "Internal server error" }, { status: 500 })
     }
     console.error("[POST /api/sign-up] Unhandled error", { error: err })
-    throw err
+    return Response.json({ error: "Internal server error" }, { status: 500 })
   }
 }

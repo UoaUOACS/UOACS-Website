@@ -1,4 +1,4 @@
-import type { Member } from "@/payload/payload-types"
+import type { Member } from "@uoacs/shared/payload"
 
 export const mockMember: Member = {
   id: "1000",

@@ -6,15 +6,14 @@ import {
   Bars3Icon,
   UserIcon,
 } from "@heroicons/react/24/solid"
+import { authClient } from "@uoacs/shared/auth"
 import { Button, Dropdown, SocialIcon } from "@uoacs/ui"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import type { SocialLink } from "@/components/Generic"
-
 import { useSession } from "@/context/SessionContext"
-import { authClient } from "@/lib/auth/auth-client"
 import { Routes } from "@/lib/routes"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"

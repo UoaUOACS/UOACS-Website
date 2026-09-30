@@ -1,24 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { ZodError } from "zod"
 import { AuthService, VerificationCodeCooldownError } from "@/services/auth.service"
-import { PayloadEmailService } from "@/services/email/payload-email.service"
 import { sendCodeSchema, verifyCodeSchema } from "@/types/schemas/verification-code"
 
-/**
- * Handles POST requests to send a verification code to the provided email.
- * Validates the request body, generates a code, stores it, and sends it via email.
- *
- * @param request The incoming NextRequest containing the email in the body
- * @returns A JSON response indicating success or failure of the operation
- */
+/** Sends a verification code to the given email. */
 export async function POST(request: NextRequest) {
-  const authService = new AuthService()
-
   let email: string
   try {
-    const body = await request.json()
-    const { email: parsedEmail } = sendCodeSchema.parse(body)
-    email = parsedEmail
+    ;({ email } = sendCodeSchema.parse(await request.json()))
   } catch (err) {
     if (err instanceof SyntaxError || err instanceof ZodError) {
       return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
@@ -27,10 +16,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 
-  const code = authService.generateVerificationCode()
-
   try {
-    await authService.createVerificationCode(email, code)
+    await new AuthService().sendVerificationCode(email)
   } catch (error) {
     if (error instanceof VerificationCodeCooldownError) {
       return NextResponse.json(
@@ -38,42 +25,22 @@ export async function POST(request: NextRequest) {
         { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } },
       )
     }
-    console.error("[SignUp/verification-code] Failed to store verification code", { error })
+    console.error("[SignUp/verification-code] Failed to send verification code", { error })
     return NextResponse.json({ error: "Failed to send verification code" }, { status: 500 })
   }
-
-  void PayloadEmailService.sendVerificationCode(email, code).catch(async (error) => {
-    console.error("[SignUp/verification-code] Email delivery failed — cleaning up stored code", {
-      error,
-    })
-    await authService.deleteVerificationCodes(email).catch((e) =>
-      console.error("[SignUp/verification-code] CRITICAL: Failed to clean up phantom code", {
-        e,
-      }),
-    )
-  })
 
   return NextResponse.json({ message: "Verification code sent" })
 }
 
 /**
- * Verifies the provided code for the given email.
- * If valid, deletes all codes for that email and checks if a member account already exists.
- *
- * @param request The incoming NextRequest containing the email and code in the body
- * @returns JSON response indicating success or failure, and whether a member account exists for the email
+ * Verifies the code and reports whether the email already has a member record
+ * awaiting an account, which decides the next step in the sign-up form.
  */
 export async function PUT(request: NextRequest) {
-  const authService = new AuthService()
-  let memberExists = false
-
   let email: string
   let code: string
   try {
-    const body = await request.json()
-    const { email: parsedEmail, code: parsedCode } = verifyCodeSchema.parse(body)
-    email = parsedEmail
-    code = parsedCode
+    ;({ email, code } = verifyCodeSchema.parse(await request.json()))
   } catch (err) {
     if (err instanceof SyntaxError || err instanceof ZodError) {
       return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
@@ -83,34 +50,15 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const unexpired = await authService.getUnexpiredVerificationCodes(email)
+    const result = await new AuthService().verifyCode(email, code)
+    if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 })
 
-    if (unexpired.length === 0) {
-      return NextResponse.json({ error: "expired" }, { status: 400 })
-    }
-
-    const matchingCode = unexpired.find((c) =>
-      authService.verifyVerificationCode(code, c.hashedCode),
-    )
-
-    if (!matchingCode) {
-      return NextResponse.json({ error: "Invalid verification code" }, { status: 400 })
-    }
-  } catch (error) {
-    console.error("[SignUp/verification-code] Failed to look up verification codes", { error })
-    return NextResponse.json({ error: "Failed to verify code" }, { status: 500 })
-  }
-
-  try {
-    await authService.deleteVerificationCodes(email)
-    memberExists = await authService.checkMemberExists(email)
-  } catch (error) {
-    console.error("[SignUp/verification-code] Code was valid but post-verification step failed", {
-      email,
-      error,
+    return NextResponse.json({
+      message: "Verification successful",
+      memberExists: result.memberExists,
     })
+  } catch (error) {
+    console.error("[SignUp/verification-code] Failed to verify code", { error })
     return NextResponse.json({ error: "Failed to verify code" }, { status: 500 })
   }
-
-  return NextResponse.json({ message: "Verification successful", memberExists })
 }
