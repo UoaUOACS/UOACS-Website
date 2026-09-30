@@ -1,12 +1,10 @@
-"use client"
-
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid"
 import { Button, SocialIcon, type SocialIconName } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
-import type { DiscordWidgetData } from "../../schemas/discord"
+import { Suspense } from "react"
+import { DiscordSection, DiscordSectionSkeleton } from "../DiscordSection"
+import { CopyrightYear } from "./CopyrightYear"
 
 export interface FooterSocialLink {
   icon: SocialIconName
@@ -23,10 +21,6 @@ export interface FooterProps {
    * Social links to be displayed as icons in the footer, including Discord.
    */
   socialLinks: FooterSocialLink[]
-  /**
-   * Data for the Discord widget to be displayed in the footer.
-   */
-  discordWidgetData: DiscordWidgetData | null
 }
 
 /**
@@ -51,64 +45,22 @@ const InterestedButton = ({ className }: { className?: string }) => (
   </Link>
 )
 
-const shuffle = <T,>(items: T[]): T[] => {
-  const result = [...items]
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[result[i], result[j]] = [result[j], result[i]]
-  }
-  return result
-}
-
-const AVATAR_SIZE = 32
-const AVATAR_OVERLAP = 12
-const AVATAR_STEP = AVATAR_SIZE - AVATAR_OVERLAP
-const AVATAR_MIN_VISIBLE_COUNT = 4
-
 /**
  * A footer component for the project playground, containing links and social media icons.
  *
  * @param links Links to be displayed in the "Pages" column of the footer.
  * @param socialLinks Social links to be displayed as icons in the footer, including Discord.
- * @param discordWidgetData Data for the Discord widget to be displayed in the footer.
  */
-export const Footer = ({ links, socialLinks, discordWidgetData }: FooterProps) => {
+export const Footer = ({ links, socialLinks }: FooterProps) => {
   const discordHref = socialLinks.find((link) => link.icon === "discord")?.href
-  const joinDiscordHref = discordWidgetData?.instant_invite ?? discordHref
-  const [avatarMembers, setAvatarMembers] = useState(
-    () => discordWidgetData?.members.slice(0, 8) ?? [],
-  )
-  const avatarContainerRef = useRef<HTMLDivElement>(null)
-  const [visibleAvatarCount, setVisibleAvatarCount] = useState(0)
-
-  useEffect(() => {
-    if (!discordWidgetData) return
-    setAvatarMembers(shuffle(discordWidgetData.members).slice(0, 8))
-  }, [discordWidgetData])
-
-  useEffect(() => {
-    const container = avatarContainerRef.current
-    if (!container) return
-
-    const updateVisibleCount = () => {
-      const width = container.clientWidth
-      const fitCount = width < AVATAR_SIZE ? 0 : Math.floor((width - AVATAR_SIZE) / AVATAR_STEP) + 1
-      const count = fitCount < AVATAR_MIN_VISIBLE_COUNT ? 0 : fitCount
-      setVisibleAvatarCount(Math.max(0, Math.min(avatarMembers.length, count)))
-    }
-
-    updateVisibleCount()
-    const observer = new ResizeObserver(updateVisibleCount)
-    observer.observe(container)
-    return () => observer.disconnect()
-  }, [avatarMembers.length])
-
   return (
     <footer className="grid w-full grid-cols-1 gap-4 bg-gray-800 p-5 text-white md:grid-cols-4 md:p-6">
       <div className="flex flex-col gap-4">
         <div className="flex flex-row flex-wrap items-start justify-between gap-2">
           <div className="flex flex-col gap-1">
-            <p className="paragraph-sm text-gray-400">UOACS &copy; {new Date().getFullYear()}</p>
+            <p className="paragraph-sm text-gray-400">
+              UOACS &copy; <CopyrightYear />
+            </p>
             <Link
               className="paragraph-xs w-fit text-gray-400 transition-colors hover:text-white"
               href={PRIVACY_HREF}
@@ -136,43 +88,9 @@ export const Footer = ({ links, socialLinks, discordWidgetData }: FooterProps) =
         </nav>
       </div>
 
-      {joinDiscordHref && (
-        <div className="flex flex-row items-center justify-between gap-2 md:flex-col md:items-start md:justify-start md:gap-4">
-          <div className="flex shrink-0 flex-row items-center gap-2">
-            <SocialIcon className="h-6 w-6" icon="discord" />
-            {discordWidgetData && (
-              <p className="paragraph-sm">{discordWidgetData.presence_count} Online</p>
-            )}
-          </div>
-          {avatarMembers.length > 0 && (
-            <div
-              className="flex flex-1 flex-row justify-center overflow-hidden md:w-full md:flex-none md:justify-start"
-              ref={avatarContainerRef}
-            >
-              {avatarMembers.slice(0, visibleAvatarCount).map((member, i) => (
-                <Image
-                  alt={member.username}
-                  className={cn("h-8 w-8 rounded-full border-2 border-gray-800", i > 0 && "-ml-3")}
-                  height={32}
-                  key={member.id}
-                  src={member.avatar_url}
-                  style={{ zIndex: avatarMembers.length - i }}
-                  width={32}
-                />
-              ))}
-            </div>
-          )}
-          <a className="shrink-0" href={joinDiscordHref} rel="noopener noreferrer" target="_blank">
-            <Button
-              className="paragraph-sm"
-              right={<ArrowUpRightIcon className="h-3 w-3" />}
-              theme="primary"
-            >
-              Join Discord
-            </Button>
-          </a>
-        </div>
-      )}
+      <Suspense fallback={<DiscordSectionSkeleton />}>
+        <DiscordSection discordHref={discordHref} />
+      </Suspense>
 
       <nav aria-label="Footer navigation" className="hidden flex-col items-start gap-4 md:flex">
         <p className="paragraph-sm text-gray-400">Pages</p>

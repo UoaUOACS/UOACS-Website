@@ -1,10 +1,11 @@
+import { getDiscordWidgetData } from "@uoacs/shared"
 import localFont from "next/font/local"
 import type React from "react"
 import { Footer, Navbar } from "@/components/Composite"
 import "../globals.css"
 import type { Metadata, Viewport } from "next"
 import { getSession } from "@/lib/auth/auth-session"
-import { getDiscordWidgetData, getSocialLinks } from "@/lib/helpers"
+import { getSocialLinks } from "@/lib/helpers"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import { Providers } from "./providers"
 

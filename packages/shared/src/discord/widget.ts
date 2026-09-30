@@ -1,4 +1,4 @@
-import { type DiscordWidgetData, discordWidgetDataSchema } from "../schemas/discord"
+import { type DiscordWidgetData, discordWidgetDataSchema } from "./schema"
 
 export async function getDiscordWidgetData(): Promise<DiscordWidgetData | null> {
   const serverId = process.env.DISCORD_SERVER_ID

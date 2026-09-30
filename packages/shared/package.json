@@ -7,6 +7,9 @@
     ".": "./src/index.ts",
     "./payload": "./src/payload/index.ts"
   },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
   "scripts": {
     "types:check": "tsc --noEmit"
   },
