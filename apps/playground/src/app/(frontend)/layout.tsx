@@ -88,9 +88,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${switzer.variable} ${mono.variable} ${neulis.variable} overflow-x-hidden`}
       lang="en"
     >
-      <body className="relative flex min-h-screen flex-col overflow-hidden">
+      <body className="flex min-h-screen flex-col overflow-x-hidden">
         <SessionProvider>
-          <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:gap-9 md:px-12 lg:px-20">
+          <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:px-12 lg:px-20">
             <main className="flex grow flex-col items-center gap-14 py-9 md:gap-30">
               {children}
             </main>
