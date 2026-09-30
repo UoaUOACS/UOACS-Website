@@ -9,7 +9,7 @@
     "./payload": "./src/payload/index.ts"
   },
   "dependencies": {
-    "zod": "^4.3.6"
+    "zod": "catalog:"
   },
   "scripts": {
     "types:check": "tsc --noEmit"

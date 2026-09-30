@@ -1,6 +1,6 @@
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid"
-import { getDiscordWidgetData } from "@uoacs/shared"
 import { Button, SocialIcon } from "@uoacs/ui"
+import { getCachedDiscordWidgetData } from "../../queries/discord"
 import { DiscordAvatars } from "./DiscordAvatars"
 import { DiscordSectionLayout } from "./DiscordSectionLayout"
 
@@ -18,7 +18,7 @@ export interface DiscordSectionProps {
  * @param discordHref Fallback Discord link used when the widget has no invite or fails to load.
  */
 export const DiscordSection = async ({ discordHref }: DiscordSectionProps) => {
-  const widgetData = await getDiscordWidgetData()
+  const widgetData = await getCachedDiscordWidgetData()
   const joinHref = widgetData?.instant_invite ?? discordHref
   if (!joinHref) return null
 
