@@ -54,18 +54,18 @@ ENV NODE_ENV=production
 # build instead of being compiled in as an empty string.
 RUN --mount=type=secret,id=DATABASE_URI,required=true \
     --mount=type=secret,id=PAYLOAD_SECRET,required=true \
+    --mount=type=secret,id=NEXT_PUBLIC_AUTH_URL,required=true \
     --mount=type=secret,id=NEXT_PUBLIC_WEBSITE_URL,required=true \
     --mount=type=secret,id=NEXT_PUBLIC_PROJECTS_URL,required=true \
     --mount=type=secret,id=S3_ACCESS_KEY_ID,required=true \
     --mount=type=secret,id=S3_SECRET_ACCESS_KEY,required=true \
     --mount=type=secret,id=S3_REGION,required=true \
     --mount=type=secret,id=S3_BUCKET,required=true \
-    --mount=type=secret,id=BETTER_AUTH_SECRET,required=true \
     --mount=type=secret,id=RESEND_API_KEY,required=true \
     --mount=type=secret,id=GOOGLE_WALLET_ISSUER_ID,required=true \
     --mount=type=secret,id=GOOGLE_WALLET_SERVICE_ACCOUNT_KEY,required=true \
     --mount=type=secret,id=DISCORD_SERVER_ID,required=true \
-    sh -euc 'for name in DATABASE_URI PAYLOAD_SECRET NEXT_PUBLIC_WEBSITE_URL NEXT_PUBLIC_PROJECTS_URL S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_REGION S3_BUCKET BETTER_AUTH_SECRET RESEND_API_KEY GOOGLE_WALLET_ISSUER_ID GOOGLE_WALLET_SERVICE_ACCOUNT_KEY DISCORD_SERVER_ID; do \
+    sh -euc 'for name in DATABASE_URI PAYLOAD_SECRET NEXT_PUBLIC_AUTH_URL NEXT_PUBLIC_WEBSITE_URL NEXT_PUBLIC_PROJECTS_URL S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_REGION S3_BUCKET RESEND_API_KEY GOOGLE_WALLET_ISSUER_ID GOOGLE_WALLET_SERVICE_ACCOUNT_KEY DISCORD_SERVER_ID; do \
                value=$(cat "/run/secrets/$name"); \
                [ -n "$value" ] || { echo "Build secret $name is empty" >&2; exit 1; }; \
                export "$name=$value"; \
