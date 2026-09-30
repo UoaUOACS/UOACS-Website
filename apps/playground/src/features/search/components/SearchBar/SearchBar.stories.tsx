@@ -10,7 +10,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 610 }}>
+      <div style={{ width: 610, maxWidth: "calc(100vw - 2rem)" }}>
         <Story />
       </div>
     ),
@@ -44,13 +44,8 @@ export const Disabled: Story = {
   args: { disabled: true, defaultValue: "hackathon" },
 }
 
-/** Guards the "usable down to 360px" criterion. */
-export const Narrow: Story = {
-  decorators: [
-    (Story) => (
-      <div style={{ width: 360 }}>
-        <Story />
-      </div>
-    ),
-  ],
+/** Below the `md` breakpoint the bar is shorter, with smaller text and icons. */
+export const Mobile: Story = {
+  args: { defaultValue: "hackathon" },
+  globals: { viewport: { value: "mobile2", isRotated: false } },
 }

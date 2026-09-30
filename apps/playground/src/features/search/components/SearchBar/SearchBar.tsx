@@ -3,7 +3,7 @@
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { Input } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import { useImperativeHandle, useRef } from "react"
+import { useImperativeHandle, useRef, useState } from "react"
 
 /**
  * Props for the {@link SearchBar} component.
@@ -25,7 +25,8 @@ export interface SearchBarProps extends Omit<React.ComponentPropsWithRef<"input"
 
 /**
  * The Project Playground search control: a white pill-shaped text field with a
- * leading magnifying glass and a trailing button that clears the field.
+ * leading magnifying glass and a trailing button that clears the field once
+ * there is text. Slightly smaller below the `md` breakpoint.
  *
  * Works controlled (`value` + `onChange`/`onValueChange`) or uncontrolled
  * (`defaultValue`). Actually querying projects is out of scope.
@@ -39,6 +40,8 @@ export interface SearchBarProps extends Omit<React.ComponentPropsWithRef<"input"
 export const SearchBar = ({
   containerClassName,
   className,
+  value,
+  defaultValue,
   onChange,
   onValueChange,
   placeholder = "Search",
@@ -50,6 +53,11 @@ export const SearchBar = ({
 }: SearchBarProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
+  // Mirrors the input's text so the clear button can hide when it's empty,
+  // even when the caller isn't controlling `value`.
+  const [uncontrolledText, setUncontrolledText] = useState(String(defaultValue ?? ""))
+  const hasText = (value !== undefined ? String(value) : uncontrolledText) !== ""
+
   // Callers still get the real <input> through `ref`; we keep our own handle
   // so the clear button can reach it.
   useImperativeHandle(ref, () => inputRef.current as HTMLInputElement, [])
@@ -57,6 +65,7 @@ export const SearchBar = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event)
     onValueChange?.(event.target.value)
+    setUncontrolledText(event.target.value)
   }
 
   const handleClear = () => {
@@ -77,33 +86,35 @@ export const SearchBar = ({
     <search className={cn("relative w-full", containerClassName)}>
       <MagnifyingGlassIcon
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 left-6 size-6 -translate-y-1/2 text-black"
+        className="pointer-events-none absolute top-1/2 left-5 size-5 -translate-y-1/2 text-black md:left-6 md:size-6"
       />
       <Input
         {...props}
         aria-label={ariaLabel}
         className={cn(
-          // Per the Figma, focus shows no ring: the shadow deepens and the
-          // placeholder fades so the caret stands out.
-          "h-16 rounded-full border-0 bg-white px-16 font-switzer text-black text-lg shadow-[0_4px_16px_rgb(0_0_0/0.12)] outline-none transition-shadow placeholder:text-gray-800 focus:shadow-[0_6px_24px_rgb(0_0_0/0.2)] focus:placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-search-cancel-button]:appearance-none",
+          "h-14 rounded-full border-0 bg-white px-14 font-switzer text-base text-black shadow-lg outline-none placeholder:text-gray-800 focus:placeholder:text-gray-400 focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 md:h-16 md:px-16 md:text-lg [&::-webkit-search-cancel-button]:appearance-none",
           className,
         )}
+        defaultValue={defaultValue}
         disabled={disabled}
         onChange={handleChange}
         placeholder={placeholder}
         readOnly={readOnly}
         ref={inputRef}
         type="search"
+        value={value}
       />
-      <button
-        aria-label="Clear search"
-        className="absolute top-1/2 right-3 flex size-10 -translate-y-1/2 items-center justify-center rounded-full text-black transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
-        disabled={disabled || readOnly}
-        onClick={handleClear}
-        type="button"
-      >
-        <XMarkIcon aria-hidden="true" className="size-5" />
-      </button>
+      {hasText && (
+        <button
+          aria-label="Clear search"
+          className="absolute top-1/2 right-2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full text-black transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 md:right-3"
+          disabled={disabled || readOnly}
+          onClick={handleClear}
+          type="button"
+        >
+          <XMarkIcon aria-hidden="true" className="size-4 md:size-5" />
+        </button>
+      )}
     </search>
   )
 }
