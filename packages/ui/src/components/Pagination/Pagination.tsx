@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
-import Link from "next/link"
 import { cn } from "../../utils"
+import { PageControl } from "./PageControl"
 import { getPageItems } from "./Pagination.helpers"
 import { paginationVariants } from "./Pagination.variants"
 
@@ -45,69 +45,6 @@ interface PaginationButtonProps extends PaginationBaseProps {
  * `onPageChange` for buttons, but not both.
  */
 export type PaginationProps = PaginationLinkProps | PaginationButtonProps
-
-interface PageControlProps {
-  target: number
-  label: string
-  className: string
-  disabled?: boolean
-  current?: boolean
-  getHref?: (page: number) => string
-  onPageChange?: (page: number) => void
-  children: React.ReactNode
-}
-
-/**
- * A single pagination control, rendered as a link or a button depending on the mode.
- */
-const PageControl = ({
-  target,
-  label,
-  className,
-  disabled,
-  current,
-  getHref,
-  onPageChange,
-  children,
-}: PageControlProps) => {
-  const ariaCurrent = current ? "page" : undefined
-
-  if (getHref) {
-    // Links can't be disabled, so an unavailable arrow is shown but hidden from assistive tech
-    if (disabled) {
-      return (
-        <span aria-hidden="true" className={className}>
-          {children}
-        </span>
-      )
-    }
-    return (
-      <Link
-        aria-current={ariaCurrent}
-        aria-label={label}
-        className={className}
-        href={getHref(target)}
-      >
-        {children}
-      </Link>
-    )
-  }
-
-  return (
-    <button
-      aria-current={ariaCurrent}
-      aria-label={label}
-      className={className}
-      disabled={disabled}
-      onClick={() => {
-        if (!current) onPageChange?.(target)
-      }}
-      type="button"
-    >
-      {children}
-    </button>
-  )
-}
 
 /**
  * Pagination controls for moving between pages of results, e.g. search results or a grid of
