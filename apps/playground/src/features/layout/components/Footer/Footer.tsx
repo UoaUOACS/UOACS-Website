@@ -1,7 +1,9 @@
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid"
-import { Button, SocialIcon, type SocialIconName } from "@uoacs/ui"
+import { AnimatedSuspense, Button, SocialIcon, type SocialIconName } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import Link from "next/link"
+import { DiscordSection, DiscordSectionSkeleton } from "../DiscordSection"
+import { CopyrightYear } from "./CopyrightYear"
 
 export interface FooterSocialLink {
   icon: SocialIconName
@@ -44,21 +46,20 @@ const InterestedButton = ({ className }: { className?: string }) => (
 
 /**
  * A footer component for the project playground, containing links and social media icons.
- * Static/presentational only — no live Discord widget or session-aware state, since
- * playground doesn't yet have that surrounding infrastructure.
  *
  * @param links Links to be displayed in the "Pages" column of the footer.
  * @param socialLinks Social links to be displayed as icons in the footer, including Discord.
  */
 export const Footer = ({ links, socialLinks }: FooterProps) => {
   const discordHref = socialLinks.find((link) => link.icon === "discord")?.href
-
   return (
     <footer className="grid w-full grid-cols-1 gap-4 bg-gray-800 p-5 text-white md:grid-cols-4 md:p-6">
       <div className="flex flex-col gap-4">
         <div className="flex flex-row flex-wrap items-start justify-between gap-2">
           <div className="flex flex-col gap-1">
-            <p className="paragraph-sm text-gray-400">UOACS &copy; {new Date().getFullYear()}</p>
+            <p className="paragraph-sm text-gray-400">
+              UOACS &copy; <CopyrightYear />
+            </p>
             <Link
               className="paragraph-xs w-fit text-gray-400 transition-colors hover:text-white"
               href={PRIVACY_HREF}
@@ -86,22 +87,9 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
         </nav>
       </div>
 
-      {discordHref && (
-        <div className="flex flex-row items-center justify-between gap-2 md:flex-col md:items-start md:justify-start md:gap-4">
-          <div className="flex shrink-0 flex-row items-center gap-2">
-            <SocialIcon className="h-6 w-6" icon="discord" />
-          </div>
-          <a className="shrink-0" href={discordHref} rel="noopener noreferrer" target="_blank">
-            <Button
-              className="paragraph-sm"
-              right={<ArrowUpRightIcon className="h-3 w-3" />}
-              theme="primary"
-            >
-              Join Discord
-            </Button>
-          </a>
-        </div>
-      )}
+      <AnimatedSuspense fallback={<DiscordSectionSkeleton />}>
+        <DiscordSection discordHref={discordHref} />
+      </AnimatedSuspense>
 
       <nav aria-label="Footer navigation" className="hidden flex-col items-start gap-4 md:flex">
         <p className="paragraph-sm text-gray-400">Pages</p>

@@ -8,6 +8,9 @@
     "./auth": "./src/auth/index.ts",
     "./payload": "./src/payload/index.ts"
   },
+  "dependencies": {
+    "zod": "catalog:"
+  },
   "scripts": {
     "types:check": "tsc --noEmit"
   },

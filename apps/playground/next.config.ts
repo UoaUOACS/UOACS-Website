@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  images: {
+    localPatterns: [{ pathname: "/**" }],
+    remotePatterns: [{ hostname: "cdn.discordapp.com" }],
+  },
 }
 
 export default withPayload(nextConfig)
