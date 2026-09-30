@@ -93,6 +93,11 @@ export const MemberStep = () => {
           description:
             "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
         })
+      } else if (err instanceof ApiError && err.status === 404) {
+        toast.warning({
+          description:
+            "We couldn't find a membership waiting on that email.\nStart again and sign up as a new member.",
+        })
       } else {
         toast.error({ description: "An error occurred while submitting the form" })
       }

@@ -36,6 +36,14 @@ export async function POST(request: Request) {
     if (err instanceof DuplicateFieldError) {
       return Response.json({ error: "Value already in use", field: err.field }, { status: 409 })
     }
+    // No unlinked member row to claim — the person needs the normal sign-up
+    // flow, not an error that reads like the service broke.
+    if (err instanceof AuthServiceError && err.status === 404) {
+      return Response.json(
+        { error: "No membership awaiting an account for that email" },
+        { status: 404 },
+      )
+    }
     if (err instanceof AuthServiceError) {
       console.error("[POST /api/sign-up] Auth service rejected the request", {
         status: err.status,
