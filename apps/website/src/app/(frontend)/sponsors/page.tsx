@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 export default async function SponsorsPage() {
   const { docs: sponsors }: { docs: Sponsor[] } = await payload.find({
     collection: Slugs.Collections.SPONSOR,
+    pagination: false,
     depth: 2,
   })
 
