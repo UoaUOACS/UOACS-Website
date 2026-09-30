@@ -1,4 +1,11 @@
 import {
+  createLoader,
+  createSerializer,
+  parseAsInteger,
+  parseAsStringEnum,
+  type SearchParams,
+} from "nuqs/server"
+import {
   DEFAULT_PROJECT_SORT,
   DEFAULT_PROJECT_TAB,
   PROJECT_TABS,
@@ -15,32 +22,35 @@ export interface DiscoverState {
   page: number
 }
 
-type SearchParams = Record<string, string | string[] | undefined>
+/**
+ * URL search param parsers for the Discover section. Missing or invalid values fall back to the
+ * defaults, and only enabled tabs are accepted.
+ */
+export const discoverParsers = {
+  tab: parseAsStringEnum<ProjectTab>(
+    PROJECT_TABS.filter((tab) => tab.enabled).map((tab) => tab.value),
+  ).withDefault(DEFAULT_PROJECT_TAB),
+  sort: parseAsStringEnum<ProjectSort>(Object.values(ProjectSort)).withDefault(
+    DEFAULT_PROJECT_SORT,
+  ),
+  page: parseAsInteger.withDefault(1),
+}
 
-const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value)
-
-const isProjectSort = (value: string | undefined): value is ProjectSort =>
-  Object.values(ProjectSort).includes(value as ProjectSort)
+const loadSearchParams = createLoader(discoverParsers)
+const serialize = createSerializer(discoverParsers)
 
 /**
- * Reads the Discover state from the URL, falling back to the defaults for anything missing or
- * invalid, including tabs that aren't enabled yet.
+ * Reads the Discover state from the page's search params.
  *
  * @param searchParams The page's search params.
  * @returns The tab, sort, and page to show.
  */
-export const parseDiscoverParams = (searchParams: SearchParams): DiscoverState => {
-  const tabParam = first(searchParams.tab)
-  const sortParam = first(searchParams.sort)
-  const page = Number(first(searchParams.page))
-
-  return {
-    tab:
-      PROJECT_TABS.find((tab) => tab.enabled && tab.value === tabParam)?.value ??
-      DEFAULT_PROJECT_TAB,
-    sort: isProjectSort(sortParam) ? sortParam : DEFAULT_PROJECT_SORT,
-    page: Number.isInteger(page) && page >= 1 ? page : 1,
-  }
+export const loadDiscoverParams = async (
+  searchParams: Promise<SearchParams> | SearchParams,
+): Promise<DiscoverState> => {
+  const { tab, sort, page } = loadSearchParams(await searchParams)
+  // parseAsInteger accepts zero and negative numbers, which aren't valid pages
+  return { tab, sort, page: Math.max(page, 1) }
 }
 
 /**
@@ -50,12 +60,4 @@ export const parseDiscoverParams = (searchParams: SearchParams): DiscoverState =
  * @param state The tab, sort, and page to link to.
  * @returns The home page URL with the matching search params.
  */
-export const getDiscoverHref = ({ tab, sort, page }: Partial<DiscoverState>) => {
-  const params = new URLSearchParams()
-  if (tab && tab !== DEFAULT_PROJECT_TAB) params.set("tab", tab)
-  if (sort && sort !== DEFAULT_PROJECT_SORT) params.set("sort", sort)
-  if (page && page > 1) params.set("page", String(page))
-
-  const query = params.toString()
-  return query ? `${Routes.HOME}?${query}` : Routes.HOME
-}
+export const getDiscoverHref = (state: Partial<DiscoverState>) => serialize(Routes.HOME, state)
