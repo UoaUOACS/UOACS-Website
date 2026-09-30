@@ -20,7 +20,10 @@ export const Row: Story = {}
 
 export const Ticker: Story = {
   args: {
-    sponsors: [...mockSponsors, ...mockSponsors],
+    sponsors: [...mockSponsors, ...mockSponsors].map((sponsor, i) => ({
+      ...sponsor,
+      id: `${sponsor.id}-${i}`,
+    })),
   },
 }
 

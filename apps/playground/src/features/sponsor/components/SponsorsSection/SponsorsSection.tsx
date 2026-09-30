@@ -7,6 +7,17 @@ import {
   SponsorLogosSkeleton,
 } from "@/features/sponsor/components/SponsorLogos/SponsorLogos"
 import { SPONSORS_HREF } from "@/features/sponsor/constants"
+import { getAllSponsorsCached } from "@/features/sponsor/sponsor.queries"
+
+/**
+ * Fetches sponsors from Payload and renders {@link SponsorLogos}
+ *
+ * Async server component, so render inside a Suspense boundary (see {@link SponsorLogosSkeleton})
+ */
+const SponsorLogosAsync = async () => {
+  const sponsors = await getAllSponsorsCached()
+  return <SponsorLogos sponsors={sponsors} />
+}
 
 /**
  * @param className Additional class names to apply to the colour palette container
@@ -47,7 +58,7 @@ export const SponsorsSection = () => {
       }
     >
       <AnimatedSuspense fallback={<SponsorLogosSkeleton />}>
-        <SponsorLogos />
+        <SponsorLogosAsync />
       </AnimatedSuspense>
       <Link href={SPONSORS_HREF}>
         <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">

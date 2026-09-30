@@ -3,16 +3,16 @@ import Link from "next/link"
 import { SponsorTicker } from "@/features/sponsor/components/SponsorTicker/SponsorTicker"
 import { SPONSORS_HREF, TIER_SIZES } from "@/features/sponsor/constants"
 import { SponsorTier } from "@/features/sponsor/types/enums"
-import { getAllSponsorsCached } from "../../sponsor.queries"
+import type { Sponsor } from "@/payload/payload-types"
+
+interface SponsorLogosProps {
+  sponsors: Sponsor[]
+}
 
 /**
- * Fetches sponsors from Payload and displays their logos in a ticker when there are more than two sponsors, otherwise in a row
- *
- * Async server component, so render inside a Suspense boundary (see {@link SponsorLogosSkeleton})
+ * Displays sponsor logos in a ticker when there are more than two sponsors, otherwise in a row
  */
-export const SponsorLogos = async () => {
-  const sponsors = await getAllSponsorsCached()
-
+export const SponsorLogos = ({ sponsors }: SponsorLogosProps) => {
   return sponsors.length > 2 ? (
     <SponsorTicker containerClassName="max-w-360" items={sponsors} />
   ) : (
