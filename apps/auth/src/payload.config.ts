@@ -1,6 +1,7 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
+import { resendAdapter } from "@payloadcms/email-resend"
 import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { AuthCollectionSlugs } from "@uoacs/shared"
@@ -41,6 +42,13 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
   }),
+  email: process.env.RESEND_API_KEY
+    ? resendAdapter({
+        defaultFromAddress: "noreply@uoacs.co.nz",
+        defaultFromName: "UOACS",
+        apiKey: process.env.RESEND_API_KEY,
+      })
+    : undefined,
   sharp,
   plugins: [
     importExportPlugin({
