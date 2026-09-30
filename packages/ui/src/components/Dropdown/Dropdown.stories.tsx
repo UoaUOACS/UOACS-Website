@@ -85,6 +85,21 @@ export const ManyOptions: Story = {
   },
 }
 
+export const FullWidthOptions: Story = {
+  args: {
+    label: "Sort",
+    theme: "ghost",
+    popoverClassName:
+      "items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md",
+    options: ["Recent", "A-Z", "Z-A"].map((label) => ({
+      label,
+      href: "#",
+      theme: "ghost" as const,
+      className: "w-full",
+    })),
+  },
+}
+
 export const IndividualOptionVariants: Story = {
   args: {
     label: "Rainbow",
