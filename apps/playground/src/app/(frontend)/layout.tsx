@@ -76,10 +76,10 @@ const neulis = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "UOACS Projects",
-    template: "%s - UOACS Projects",
+    default: "UOACS Project Playground",
+    template: "%s - UOACS Project Playground",
   },
-  description: "Projects built by University of Auckland Computer Society members.",
+  description: "A place for projects built by University of Auckland Computer Society members.",
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
