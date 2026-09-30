@@ -3,13 +3,6 @@ import "server-only"
 const baseUrl = process.env.NEXT_PUBLIC_AUTH_URL
 
 /**
- * The root layout awaits getSession, so every server-rendered page waits on
- * this. Without a bound, one unhealthy auth machine stalls the whole site
- * rather than rendering it logged out.
- */
-const TIMEOUT_MS = 5000
-
-/**
  * Read per call rather than at module scope: this module is in the import
  * graph of several routes, so a module-level throw would make the token a
  * build-time requirement for an value that is only ever used at runtime.
@@ -28,12 +21,15 @@ function url(path: string): string {
 /**
  * Calls the auth service as the website itself, for operations that happen
  * before anyone is signed in. The token never leaves the server.
+ *
+ * Deliberately unbounded: aborting here does not stop the auth service, so a
+ * timeout on a write would report failure over work that completed. Callers
+ * that need a bound pass their own signal.
  */
 export function serviceFetch(path: string, init: RequestInit = {}): Promise<Response> {
   return fetch(url(path), {
     ...init,
     cache: "no-store",
-    signal: init.signal ?? AbortSignal.timeout(TIMEOUT_MS),
     headers: {
       "Content-Type": "application/json",
       ...init.headers,
@@ -55,7 +51,6 @@ export function sessionFetch(
   return fetch(url(path), {
     ...init,
     cache: "no-store",
-    signal: init.signal ?? AbortSignal.timeout(TIMEOUT_MS),
     headers: {
       "Content-Type": "application/json",
       ...init.headers,

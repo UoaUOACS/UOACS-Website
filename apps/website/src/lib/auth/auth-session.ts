@@ -11,7 +11,13 @@ import { sessionFetch } from "./auth-service"
  */
 export const getSession = cache(async (): Promise<AuthSessionData | null> => {
   try {
-    const response = await sessionFetch("/api/auth/get-session", await headers())
+    // The root layout awaits this, so every server-rendered page waits on it.
+    // Unbounded, one unhealthy auth machine stalls the whole site instead of
+    // rendering it logged out. Only this read is bounded — aborting a write
+    // would not stop the auth service, just hide that it succeeded.
+    const response = await sessionFetch("/api/auth/get-session", await headers(), {
+      signal: AbortSignal.timeout(5000),
+    })
     if (!response.ok) return null
 
     // Better Auth answers 200 with a literal `null` body when there is no
