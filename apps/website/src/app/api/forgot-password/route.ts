@@ -19,9 +19,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    // Both landing pages live on the website, so it passes its own paths
-    // rather than letting the auth service guess them.
-    await new AuthService().forgotPassword(email, Routes.RESET_PASSWORD, Routes.SIGN_UP)
+    // Absolute for the reset link: Better Auth resolves it against its own
+    // base URL, so a bare path would send members to the auth service.
+    await new AuthService().forgotPassword(
+      email,
+      `${process.env.NEXT_PUBLIC_WEBSITE_URL}${Routes.RESET_PASSWORD}`,
+      Routes.SIGN_UP,
+    )
   } catch (error) {
     console.error("[POST /api/forgot-password] Failed to process request", { email, error })
     return NextResponse.json(

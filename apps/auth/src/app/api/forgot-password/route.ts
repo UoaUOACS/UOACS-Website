@@ -8,8 +8,12 @@ const members = new MemberService()
 
 const bodySchema = z.object({
   email: z.email(),
-  /** Path on the website the reset link should land on, e.g. "/reset-password". */
-  redirectTo: z.string().startsWith("/"),
+  /**
+   * Absolute, not a path: Better Auth resolves this against its own base URL,
+   * so a relative value would land on the auth service rather than the site
+   * the caller meant. Better Auth checks it against trustedOrigins.
+   */
+  redirectTo: z.url(),
   /** Path on the website where an unclaimed member finishes signing up. */
   signUpPath: z.string().startsWith("/"),
 })
