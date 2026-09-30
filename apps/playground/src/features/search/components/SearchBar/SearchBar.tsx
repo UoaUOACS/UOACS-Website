@@ -3,7 +3,7 @@
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { Input } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import { useImperativeHandle, useRef, useState } from "react"
+import { useImperativeHandle, useRef } from "react"
 
 /**
  * Props for the {@link SearchBar} component.
@@ -40,8 +40,6 @@ export interface SearchBarProps extends Omit<React.ComponentPropsWithRef<"input"
 export const SearchBar = ({
   containerClassName,
   className,
-  value,
-  defaultValue,
   onChange,
   onValueChange,
   placeholder = "Search",
@@ -53,11 +51,6 @@ export const SearchBar = ({
 }: SearchBarProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Mirrors the input's text so the clear button can hide when it's empty,
-  // even when the caller isn't controlling `value`.
-  const [uncontrolledText, setUncontrolledText] = useState(String(defaultValue ?? ""))
-  const hasText = (value !== undefined ? String(value) : uncontrolledText) !== ""
-
   // Callers still get the real <input> through `ref`; we keep our own handle
   // so the clear button can reach it.
   useImperativeHandle(ref, () => inputRef.current as HTMLInputElement, [])
@@ -65,7 +58,6 @@ export const SearchBar = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event)
     onValueChange?.(event.target.value)
-    setUncontrolledText(event.target.value)
   }
 
   const handleClear = () => {
@@ -92,29 +84,28 @@ export const SearchBar = ({
         {...props}
         aria-label={ariaLabel}
         className={cn(
-          "h-14 rounded-full border-0 bg-white px-14 font-switzer text-base text-black shadow-lg outline-none placeholder:text-gray-800 focus:placeholder:text-gray-400 focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 md:h-16 md:px-16 md:text-lg [&::-webkit-search-cancel-button]:appearance-none",
+          // `peer` lets the clear button below react to this input's state.
+          "peer h-14 rounded-full border-0 bg-white px-14 font-switzer text-base text-black shadow-lg placeholder:text-gray-800 focus:placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50 md:h-16 md:px-16 md:text-lg [&::-webkit-search-cancel-button]:appearance-none",
           className,
         )}
-        defaultValue={defaultValue}
         disabled={disabled}
         onChange={handleChange}
-        placeholder={placeholder}
+        // :placeholder-shown (which hides the clear button when the field is
+        // empty) only matches inputs that have a placeholder, so never pass "".
+        placeholder={placeholder || " "}
         readOnly={readOnly}
         ref={inputRef}
         type="search"
-        value={value}
       />
-      {hasText && (
-        <button
-          aria-label="Clear search"
-          className="absolute top-1/2 right-2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full text-black transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 md:right-3"
-          disabled={disabled || readOnly}
-          onClick={handleClear}
-          type="button"
-        >
-          <XMarkIcon aria-hidden="true" className="size-4 md:size-5" />
-        </button>
-      )}
+      <button
+        aria-label="Clear search"
+        className="absolute top-1/2 right-2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full text-black transition-colors hover:bg-gray-100 disabled:pointer-events-none disabled:opacity-50 peer-placeholder-shown:hidden md:right-3"
+        disabled={disabled || readOnly}
+        onClick={handleClear}
+        type="button"
+      >
+        <XMarkIcon aria-hidden="true" className="size-4 md:size-5" />
+      </button>
     </search>
   )
 }
