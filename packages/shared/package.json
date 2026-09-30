@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./auth": "./src/auth/index.ts",
     "./payload": "./src/payload/index.ts"
   },
   "dependencies": {
@@ -16,11 +17,13 @@
   "devDependencies": {
     "@uoacs/config": "workspace:*",
     "typescript": "catalog:",
+    "better-auth": "catalog:",
     "payload": "catalog:payload",
     "@payloadcms/richtext-lexical": "catalog:payload"
   },
   "peerDependencies": {
     "@payloadcms/richtext-lexical": ">=3",
+    "better-auth": "^1.6.1",
     "payload": ">=3"
   }
 }

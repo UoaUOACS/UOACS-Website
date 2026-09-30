@@ -74,11 +74,16 @@ jobs:
           CONFIG_FILE: apps/auth/fly.staging.toml
           DOCKERFILE: apps/auth/Dockerfile
           SECRETS: >-
-            DATABASE_URI NEXT_PUBLIC_AUTH_URL PAYLOAD_SECRET
+            AUTH_COOKIE_DOMAIN BETTER_AUTH_SECRET DATABASE_URI NEXT_PUBLIC_AUTH_URL NEXT_PUBLIC_PROJECTS_URL NEXT_PUBLIC_WEBSITE_URL PAYLOAD_SECRET RESEND_API_KEY
         env:
+          AUTH_COOKIE_DOMAIN: ${{ vars.AUTH_COOKIE_DOMAIN }}
           NEXT_PUBLIC_AUTH_URL: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
+          NEXT_PUBLIC_WEBSITE_URL: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+          NEXT_PUBLIC_PROJECTS_URL: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
 
   deploy-playground-staging:
     name: Deploy Playground Staging
@@ -169,11 +174,16 @@ jobs:
           CONFIG_FILE: apps/auth/fly.toml
           DOCKERFILE: apps/auth/Dockerfile
           SECRETS: >-
-            DATABASE_URI NEXT_PUBLIC_AUTH_URL PAYLOAD_SECRET
+            AUTH_COOKIE_DOMAIN BETTER_AUTH_SECRET DATABASE_URI NEXT_PUBLIC_AUTH_URL NEXT_PUBLIC_PROJECTS_URL NEXT_PUBLIC_WEBSITE_URL PAYLOAD_SECRET RESEND_API_KEY
         env:
+          AUTH_COOKIE_DOMAIN: ${{ vars.AUTH_COOKIE_DOMAIN }}
           NEXT_PUBLIC_AUTH_URL: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
+          NEXT_PUBLIC_WEBSITE_URL: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
+          NEXT_PUBLIC_PROJECTS_URL: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
 
   deploy-playground-prod:
     name: Deploy Playground Production 
