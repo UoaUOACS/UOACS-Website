@@ -11,7 +11,12 @@ const bodySchema = z.object({
   /**
    * Absolute, not a path: Better Auth resolves this against its own base URL,
    * so a relative value would land on the auth service rather than the site
-   * the caller meant. Better Auth checks it against trustedOrigins.
+   * the caller meant.
+   *
+   * Guarded by the service token on this route, not by Better Auth here —
+   * originCheck skips direct server calls, which have no request to check.
+   * The origin is checked when the emailed link is opened, so it has to be in
+   * this service's trustedOrigins or every reset link 403s at the callback.
    */
   redirectTo: z.url(),
   /** Path on the website where an unclaimed member finishes signing up. */
