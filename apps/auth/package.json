@@ -24,7 +24,8 @@
     "payload": "catalog:payload",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "sharp": "^0.34.4"
+    "sharp": "^0.34.4",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",

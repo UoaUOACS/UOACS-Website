@@ -19,11 +19,13 @@
     "typescript": "catalog:",
     "better-auth": "catalog:",
     "payload": "catalog:payload",
-    "@payloadcms/richtext-lexical": "catalog:payload"
+    "@payloadcms/richtext-lexical": "catalog:payload",
+    "zod": "catalog:"
   },
   "peerDependencies": {
     "@payloadcms/richtext-lexical": ">=3",
     "better-auth": "^1.6.1",
-    "payload": ">=3"
+    "payload": ">=3",
+    "zod": "^4"
   }
 }
