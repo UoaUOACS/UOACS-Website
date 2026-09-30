@@ -1,8 +1,7 @@
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid"
-import { Button, SocialIcon, type SocialIconName } from "@uoacs/ui"
+import { AnimatedSuspense, Button, SocialIcon, type SocialIconName } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import Link from "next/link"
-import { Suspense } from "react"
 import { DiscordSection, DiscordSectionSkeleton } from "../DiscordSection"
 import { CopyrightYear } from "./CopyrightYear"
 
@@ -88,9 +87,9 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
         </nav>
       </div>
 
-      <Suspense fallback={<DiscordSectionSkeleton />}>
+      <AnimatedSuspense fallback={<DiscordSectionSkeleton />}>
         <DiscordSection discordHref={discordHref} />
-      </Suspense>
+      </AnimatedSuspense>
 
       <nav aria-label="Footer navigation" className="hidden flex-col items-start gap-4 md:flex">
         <p className="paragraph-sm text-gray-400">Pages</p>
