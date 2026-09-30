@@ -2,7 +2,11 @@ import { createMemberSchema } from "@uoacs/shared/payload"
 import { isAPIError } from "better-auth/api"
 import { z } from "zod"
 import { hasServiceToken, serviceTokenRequired } from "@/lib/service-token"
-import { DuplicateFieldError, MemberService } from "@/services/member.service"
+import {
+  DuplicateFieldError,
+  MemberService,
+  NoUnlinkedMemberError,
+} from "@/services/member.service"
 
 const members = new MemberService()
 
@@ -71,6 +75,12 @@ export async function POST(request: Request) {
       })
     })
 
+    if (err instanceof NoUnlinkedMemberError) {
+      return Response.json(
+        { error: "No membership awaiting an account for that email", field: "email" },
+        { status: 404 },
+      )
+    }
     if (err instanceof DuplicateFieldError) {
       return Response.json({ error: "Value already in use", field: err.field }, { status: 409 })
     }
