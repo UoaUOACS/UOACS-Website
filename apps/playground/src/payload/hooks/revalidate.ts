@@ -26,14 +26,22 @@ const revalidateTags = (tags: CacheTag[], req: PayloadRequest, source: string): 
   }
 }
 
+/**
+ * Builds revalidation hooks for the given tags
+ *
+ * Set `skipCreate` when a new document cannot be in any cached data yet (e.g. an upload that
+ * nothing references).
+ */
 export const makeRevalidateHooks = (
   tags: CacheTag[],
+  { skipCreate = false }: { skipCreate?: boolean } = {},
 ): {
   afterChange: CollectionAfterChangeHook
   afterDelete: CollectionAfterDeleteHook
   globalAfterChange: GlobalAfterChangeHook
 } => ({
-  afterChange: (({ collection, doc, req }) => {
+  afterChange: (({ collection, doc, operation, req }) => {
+    if (skipCreate && operation === "create") return
     revalidateTags(tags, req, `${collection.slug} ${doc.id} change`)
   }) satisfies CollectionAfterChangeHook,
 

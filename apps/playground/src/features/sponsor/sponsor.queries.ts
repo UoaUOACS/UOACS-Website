@@ -5,7 +5,7 @@ import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 
 export const getAllSponsorsCached = async () => {
   "use cache"
-  cacheTag(CacheTags.SPONSORS)
+  cacheTag(CacheTags.SPONSORS, CacheTags.MEDIA)
   cacheLife("max")
 
   return getAllSponsors()
