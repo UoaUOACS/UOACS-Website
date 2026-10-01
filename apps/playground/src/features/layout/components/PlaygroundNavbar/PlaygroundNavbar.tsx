@@ -8,7 +8,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Routes } from "@/lib/routes"
-import { DEFAULT_TITLE, HOME_TITLE } from "./constants"
 
 /**
  * Props for the {@link PlaygroundNavbar} component.
@@ -38,7 +37,7 @@ export function PlaygroundNavbar({
 }: PlaygroundNavbarProps) {
   const pathname = usePathname()
   const isHome = pathname === Routes.HOME
-  const title = isHome ? HOME_TITLE : DEFAULT_TITLE
+  const title = isHome ? "Presents" : "Project playground"
   const profileOptions: DropdownProps["options"] = [
     {
       href: Routes.PROFILE,
