@@ -48,25 +48,19 @@ export class MemberService {
     }
   }
 
-  /** A member row with no linked account: signed up before Better Auth existed. */
+  /**
+   * A member row with no linked account: signed up before Better Auth existed.
+   *
+   * Counted rather than fetched — the answer is a boolean, so there is no
+   * reason to pull a member's details back for it.
+   */
   public async hasUnlinkedMember(email: string): Promise<boolean> {
     const payload = await getPayloadClient()
-    const res = await payload.find({
+    const { totalDocs } = await payload.count({
       collection: AuthCollectionSlugs.MEMBER,
       where: { email: { equals: email }, betterAuthUserId: { equals: null } },
-      limit: 1,
     })
-    return res.docs.length > 0
-  }
-
-  public async existsByEmail(email: string): Promise<boolean> {
-    const payload = await getPayloadClient()
-    const res = await payload.find({
-      collection: AuthCollectionSlugs.MEMBER,
-      where: { email: { equals: email } },
-      limit: 1,
-    })
-    return res.docs.length > 0
+    return totalDocs > 0
   }
 
   public async create(data: CreateMemberInput, betterAuthUserId: string): Promise<Member> {
