@@ -1,4 +1,4 @@
-import type { AuthSessionData } from "@uoacs/shared"
+import { AuthApiRoutes, type AuthSessionData } from "@uoacs/shared"
 import { headers } from "next/headers"
 import { unstable_rethrow } from "next/navigation"
 import { cache } from "react"
@@ -15,7 +15,7 @@ export const getSession = cache(async (): Promise<AuthSessionData | null> => {
     // Unbounded, one unhealthy auth machine stalls the whole site instead of
     // rendering it logged out. Only this read is bounded — aborting a write
     // would not stop the auth service, just hide that it succeeded.
-    const response = await sessionFetch("/api/auth/get-session", await headers(), {
+    const response = await sessionFetch(AuthApiRoutes.SESSION, await headers(), {
       signal: AbortSignal.timeout(5000),
     })
     if (!response.ok) return null

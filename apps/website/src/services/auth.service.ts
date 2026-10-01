@@ -1,3 +1,4 @@
+import { AuthApiRoutes } from "@uoacs/shared"
 import type { CreateMemberInput, Member, UpdateMemberInput } from "@uoacs/shared/payload"
 import { serviceFetch, sessionFetch } from "@/lib/auth/auth-service"
 
@@ -65,7 +66,7 @@ export class AuthService {
   public async signUp(
     data: (CreateMemberInput & { password: string }) | (SignUpAccount & { existingMember: true }),
   ): Promise<SignUpResult> {
-    const response = await serviceFetch("/api/member", {
+    const response = await serviceFetch(AuthApiRoutes.MEMBER, {
       method: "POST",
       body: JSON.stringify(data),
     })
@@ -75,7 +76,7 @@ export class AuthService {
 
   /** Null for both "not signed in" and "no member", for callers that treat them alike. */
   public async getMember(headers: Headers): Promise<Member | null> {
-    const response = await sessionFetch("/api/member/me", headers)
+    const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, headers)
     if (response.status === 401 || response.status === 404) return null
     return unwrap<Member>(response, "getMember")
   }
@@ -84,7 +85,7 @@ export class AuthService {
   public async fetchMember(
     headers: Headers,
   ): Promise<{ member: Member; status: 200 } | { member: null; status: number }> {
-    const response = await sessionFetch("/api/member/me", headers)
+    const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, headers)
     if (response.ok) return { member: (await readBody(response)) as Member, status: 200 }
     return { member: null, status: response.status }
   }
@@ -93,7 +94,7 @@ export class AuthService {
     headers: Headers,
     data: UpdateMemberInput,
   ): Promise<{ member: Member; status: number } | { error: unknown; status: number }> {
-    const response = await sessionFetch("/api/member/me", headers, {
+    const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, headers, {
       method: "PATCH",
       body: JSON.stringify(data),
     })
@@ -103,14 +104,14 @@ export class AuthService {
   }
 
   public async deleteMember(id: string): Promise<number> {
-    const response = await serviceFetch(`/api/member/${encodeURIComponent(id)}`, {
+    const response = await serviceFetch(AuthApiRoutes.MEMBER_BY_ID(id), {
       method: "DELETE",
     })
     return response.status
   }
 
   public async sendVerificationCode(email: string): Promise<void> {
-    const response = await serviceFetch("/api/verification-code", {
+    const response = await serviceFetch(AuthApiRoutes.VERIFICATION_CODE, {
       method: "POST",
       body: JSON.stringify({ email }),
     })
@@ -126,7 +127,7 @@ export class AuthService {
     email: string,
     code: string,
   ): Promise<{ ok: true; memberExists: boolean } | { ok: false; error: string }> {
-    const response = await serviceFetch("/api/verification-code", {
+    const response = await serviceFetch(AuthApiRoutes.VERIFICATION_CODE, {
       method: "PUT",
       body: JSON.stringify({ email, code }),
     })
@@ -144,7 +145,7 @@ export class AuthService {
     redirectTo: string,
     signUpPath: string,
   ): Promise<void> {
-    const response = await serviceFetch("/api/forgot-password", {
+    const response = await serviceFetch(AuthApiRoutes.FORGOT_PASSWORD, {
       method: "POST",
       body: JSON.stringify({ email, redirectTo, signUpPath }),
     })

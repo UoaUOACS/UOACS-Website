@@ -1,4 +1,5 @@
 import "server-only"
+import type { AuthApiRoute } from "@uoacs/shared"
 
 const baseUrl = process.env.NEXT_PUBLIC_AUTH_URL
 
@@ -13,7 +14,7 @@ function serviceToken(): string {
   return token
 }
 
-function url(path: string): string {
+function url(path: AuthApiRoute): string {
   if (!baseUrl) throw new Error("Missing required environment variable: NEXT_PUBLIC_AUTH_URL")
   return `${baseUrl}${path}`
 }
@@ -26,7 +27,7 @@ function url(path: string): string {
  * timeout on a write would report failure over work that completed. Callers
  * that need a bound pass their own signal.
  */
-export function serviceFetch(path: string, init: RequestInit = {}): Promise<Response> {
+export function serviceFetch(path: AuthApiRoute, init: RequestInit = {}): Promise<Response> {
   return fetch(url(path), {
     ...init,
     cache: "no-store",
@@ -44,7 +45,7 @@ export function serviceFetch(path: string, init: RequestInit = {}): Promise<Resp
  * website's Host and Origin too, which Better Auth checks.
  */
 export function sessionFetch(
-  path: string,
+  path: AuthApiRoute,
   headers: Headers,
   init: RequestInit = {},
 ): Promise<Response> {
