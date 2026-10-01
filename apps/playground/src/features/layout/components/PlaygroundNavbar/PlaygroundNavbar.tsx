@@ -65,7 +65,7 @@ export function PlaygroundNavbar({
   ]
 
   return (
-    <nav className="flex flex-row items-center justify-between pt-1 pr-5 pl-5 md:h-22.5 md:pr-7 md:pl-7">
+    <nav className="flex flex-row items-center justify-between pr-5 pl-5 md:h-20 md:pr-7 md:pl-7">
       <Link className="flex h-15 flex-row items-center" href={logoHref}>
         <Image
           alt="UOACS Logo"
