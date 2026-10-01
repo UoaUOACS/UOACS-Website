@@ -17,6 +17,7 @@
     "@payloadcms/db-mongodb": "catalog:payload",
     "@payloadcms/next": "catalog:payload",
     "@payloadcms/richtext-lexical": "catalog:payload",
+    "@payloadcms/storage-s3": "catalog:payload",
     "@payloadcms/ui": "catalog:payload",
     "@uoacs/shared": "workspace:*",
     "@uoacs/ui": "workspace:*",
