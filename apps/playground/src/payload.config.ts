@@ -8,6 +8,7 @@ import { Admin } from "./payload/collections/Admin"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
 import { Project } from "./payload/collections/Project"
+import { Sponsor } from "./payload/collections/Sponsor"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -20,7 +21,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Admin, Media, Member, Project],
+  collections: [Admin, Media, Project, Sponsor, Member],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,

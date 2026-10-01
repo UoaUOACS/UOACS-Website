@@ -69,8 +69,9 @@ export interface Config {
   collections: {
     admin: Admin;
     media: Media;
-    member: Member;
     project: Project;
+    sponsor: Sponsor;
+    member: Member;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,8 +81,9 @@ export interface Config {
   collectionsSelect: {
     admin: AdminSelect<false> | AdminSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    member: MemberSelect<false> | MemberSelect<true>;
     project: ProjectSelect<false> | ProjectSelect<true>;
+    sponsor: SponsorSelect<false> | SponsorSelect<true>;
+    member: MemberSelect<false> | MemberSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -164,6 +166,48 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "project".
+ */
+export interface Project {
+  id: string;
+  name: string;
+  summary: string;
+  author: string | Member;
+  collaborators?: string[] | null;
+  coverImage: string | Media;
+  pageContent: (
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'text';
+      }
+    | {
+        images: (string | Media)[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'imageGrid';
+      }
+  )[];
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -300,43 +344,26 @@ export interface Member {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "project".
+ * via the `definition` "sponsor".
  */
-export interface Project {
+export interface Sponsor {
   id: string;
+  /**
+   * Sponsor name, e.g. 'Jane Street'
+   */
   name: string;
-  summary: string;
-  author: string | Member;
-  collaborators?: string[] | null;
-  coverImage: string | Media;
-  pageContent: (
-    | {
-        content: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        };
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'text';
-      }
-    | {
-        images: (string | Media)[];
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'imageGrid';
-      }
-  )[];
+  /**
+   * Link to visit the Sponsor, e.g. 'https://www.aleckshen.com/'
+   */
+  link: string;
+  /**
+   * Sponsor logo to be displayed
+   */
+  logo: string | Media;
+  /**
+   * Sponsor's current tier (diamond, gold, or silver)
+   */
+  tier: 'diamond' | 'gold' | 'silver';
   updatedAt: string;
   createdAt: string;
 }
@@ -373,12 +400,16 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'member';
-        value: string | Member;
-      } | null)
-    | ({
         relationTo: 'project';
         value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'sponsor';
+        value: string | Sponsor;
+      } | null)
+    | ({
+        relationTo: 'member';
+        value: string | Member;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -464,26 +495,6 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "member_select".
- */
-export interface MemberSelect<T extends boolean = true> {
-  username?: T;
-  authServiceID?: T;
-  profilePicture?: T;
-  bio?: T;
-  skills?: T;
-  links?:
-    | T
-    | {
-        name?: T;
-        url?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "project_select".
  */
 export interface ProjectSelect<T extends boolean = true> {
@@ -509,6 +520,38 @@ export interface ProjectSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsor_select".
+ */
+export interface SponsorSelect<T extends boolean = true> {
+  name?: T;
+  link?: T;
+  logo?: T;
+  tier?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "member_select".
+ */
+export interface MemberSelect<T extends boolean = true> {
+  username?: T;
+  authServiceID?: T;
+  profilePicture?: T;
+  bio?: T;
+  skills?: T;
+  links?:
+    | T
+    | {
+        name?: T;
+        url?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;
