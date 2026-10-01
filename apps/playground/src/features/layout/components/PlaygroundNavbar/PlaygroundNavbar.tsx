@@ -75,7 +75,7 @@ export function PlaygroundNavbar({
         <span
           className={cn(
             "ml-3 hidden font-bold font-cartograph text-2xl italic leading-7 md:inline",
-            isHome ? "text-white" : "text-[#B4B1B1]",
+            isHome ? "text-white" : "text-gray-400",
           )}
         >
           {title}
