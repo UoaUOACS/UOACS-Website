@@ -1,5 +1,12 @@
-import { AuthApiRoutes } from "@uoacs/shared"
+import {
+  AuthApiRoutes,
+  apiErrorSchema,
+  memberResponseSchema,
+  messageResponseSchema,
+  verifyCodeResponseSchema,
+} from "@uoacs/shared"
 import type { CreateMemberInput, Member, UpdateMemberInput } from "@uoacs/shared/payload"
+import type { z } from "zod"
 import { serviceFetch, sessionFetch } from "@/lib/auth/auth-service"
 
 export class DuplicateFieldError extends Error {
@@ -38,16 +45,26 @@ async function readBody(response: Response): Promise<unknown> {
 }
 
 function fieldFrom(body: unknown): string | null {
-  if (body && typeof body === "object" && "field" in body) {
-    const field = (body as { field: unknown }).field
-    if (typeof field === "string") return field
-  }
-  return null
+  return apiErrorSchema.safeParse(body).data?.field ?? null
 }
 
-async function unwrap<T>(response: Response, context: string): Promise<T> {
+/**
+ * Parses rather than asserts. A cast would make a shape change in the auth
+ * service surface somewhere far from here, as a property that is undefined at
+ * runtime but typed as present.
+ */
+async function unwrap<T>(response: Response, schema: z.ZodType<T>, context: string): Promise<T> {
   const body = await readBody(response)
-  if (response.ok) return body as T
+
+  if (response.ok) {
+    const parsed = schema.safeParse(body)
+    if (parsed.success) return parsed.data
+    throw new AuthServiceError(
+      `${context} returned an unexpected shape`,
+      response.status,
+      parsed.error.issues,
+    )
+  }
 
   const field = fieldFrom(body)
   if (response.status === 409 && field !== null) throw new DuplicateFieldError(field)
@@ -70,7 +87,7 @@ export class AuthService {
       method: "POST",
       body: JSON.stringify(data),
     })
-    const member = await unwrap<Member>(response, "signUp")
+    const member = await unwrap(response, memberResponseSchema, "signUp")
     return { member, setCookie: response.headers.getSetCookie() }
   }
 
@@ -78,7 +95,7 @@ export class AuthService {
   public async getMember(headers: Headers): Promise<Member | null> {
     const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, headers)
     if (response.status === 401 || response.status === 404) return null
-    return unwrap<Member>(response, "getMember")
+    return unwrap(response, memberResponseSchema, "getMember")
   }
 
   /** Keeps 401 and 404 apart, for the route that proxies them to the browser. */
@@ -86,7 +103,9 @@ export class AuthService {
     headers: Headers,
   ): Promise<{ member: Member; status: 200 } | { member: null; status: number }> {
     const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, headers)
-    if (response.ok) return { member: (await readBody(response)) as Member, status: 200 }
+    if (response.ok) {
+      return { member: await unwrap(response, memberResponseSchema, "fetchMember"), status: 200 }
+    }
     return { member: null, status: response.status }
   }
 
@@ -99,7 +118,7 @@ export class AuthService {
       body: JSON.stringify(data),
     })
     const body = await readBody(response)
-    if (response.ok) return { member: body as Member, status: response.status }
+    if (response.ok) return { member: memberResponseSchema.parse(body), status: response.status }
     return { error: body, status: response.status }
   }
 
@@ -120,7 +139,7 @@ export class AuthService {
       const retryAfter = Number(response.headers.get("Retry-After") ?? "60")
       throw new VerificationCodeCooldownError(Number.isFinite(retryAfter) ? retryAfter : 60)
     }
-    await unwrap<unknown>(response, "sendVerificationCode")
+    await unwrap(response, messageResponseSchema, "sendVerificationCode")
   }
 
   public async verifyCode(
@@ -131,11 +150,15 @@ export class AuthService {
       method: "PUT",
       body: JSON.stringify({ email, code }),
     })
-    const body = (await readBody(response)) as { memberExists?: boolean; error?: string } | null
+    if (response.ok) {
+      const { memberExists } = await unwrap(response, verifyCodeResponseSchema, "verifyCode")
+      return { ok: true, memberExists }
+    }
 
-    if (response.ok) return { ok: true, memberExists: Boolean(body?.memberExists) }
+    const body = await readBody(response)
     if (response.status === 400) {
-      return { ok: false, error: body?.error ?? "Invalid verification code" }
+      const error = apiErrorSchema.safeParse(body).data?.error
+      return { ok: false, error: typeof error === "string" ? error : "Invalid verification code" }
     }
     throw new AuthServiceError("verifyCode failed", response.status, body)
   }
@@ -149,7 +172,7 @@ export class AuthService {
       method: "POST",
       body: JSON.stringify({ email, redirectTo, signUpPath }),
     })
-    await unwrap<unknown>(response, "forgotPassword")
+    await unwrap(response, messageResponseSchema, "forgotPassword")
   }
 }
 

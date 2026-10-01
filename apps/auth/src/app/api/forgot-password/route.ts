@@ -1,4 +1,5 @@
-import { z } from "zod"
+import { forgotPasswordBodySchema } from "@uoacs/shared"
+import type { z } from "zod"
 import { auth } from "@/lib/auth/auth"
 import { hasServiceToken, serviceTokenRequired } from "@/lib/service-token"
 import { PayloadEmailService } from "@/services/email/payload-email.service"
@@ -6,29 +7,12 @@ import { MemberService } from "@/services/member.service"
 
 const members = new MemberService()
 
-const bodySchema = z.object({
-  email: z.email(),
-  /**
-   * Absolute, not a path: Better Auth resolves this against its own base URL,
-   * so a relative value would land on the auth service rather than the site
-   * the caller meant.
-   *
-   * Guarded by the service token on this route, not by Better Auth here —
-   * originCheck skips direct server calls, which have no request to check.
-   * The origin is checked when the emailed link is opened, so it has to be in
-   * this service's trustedOrigins or every reset link 403s at the callback.
-   */
-  redirectTo: z.url(),
-  /** Path on the website where an unclaimed member finishes signing up. */
-  signUpPath: z.string().startsWith("/"),
-})
-
 export async function POST(request: Request) {
   if (!hasServiceToken(request)) return serviceTokenRequired()
 
-  let body: z.infer<typeof bodySchema>
+  let body: z.infer<typeof forgotPasswordBodySchema>
   try {
-    body = bodySchema.parse(await request.json())
+    body = forgotPasswordBodySchema.parse(await request.json())
   } catch {
     return Response.json({ error: "Invalid request body" }, { status: 400 })
   }

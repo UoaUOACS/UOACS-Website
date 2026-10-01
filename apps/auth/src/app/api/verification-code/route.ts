@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { sendCodeSchema, verifyCodeSchema } from "@uoacs/shared"
 import { hasServiceToken, serviceTokenRequired } from "@/lib/service-token"
 import { PayloadEmailService } from "@/services/email/payload-email.service"
 import { MemberService } from "@/services/member.service"
@@ -10,18 +10,12 @@ import {
 const codes = new VerificationCodeService()
 const members = new MemberService()
 
-const sendSchema = z.object({ email: z.email() })
-const verifySchema = z.object({
-  email: z.email(),
-  code: z.string().length(6).regex(/^\d+$/),
-})
-
 export async function POST(request: Request) {
   if (!hasServiceToken(request)) return serviceTokenRequired()
 
   let email: string
   try {
-    ;({ email } = sendSchema.parse(await request.json()))
+    ;({ email } = sendCodeSchema.parse(await request.json()))
   } catch {
     return Response.json({ error: "Invalid request body" }, { status: 400 })
   }
@@ -62,7 +56,7 @@ export async function PUT(request: Request) {
   let email: string
   let code: string
   try {
-    ;({ email, code } = verifySchema.parse(await request.json()))
+    ;({ email, code } = verifyCodeSchema.parse(await request.json()))
   } catch {
     return Response.json({ error: "Invalid request body" }, { status: 400 })
   }

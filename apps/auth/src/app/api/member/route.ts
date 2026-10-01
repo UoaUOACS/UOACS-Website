@@ -1,3 +1,4 @@
+import { type SignUpBody, signUpBodySchema } from "@uoacs/shared"
 import { createMemberSchema } from "@uoacs/shared/payload"
 import { isAPIError } from "better-auth/api"
 import { z } from "zod"
@@ -10,18 +11,6 @@ import {
 
 const members = new MemberService()
 
-const accountSchema = z.object({
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-  email: z.email(),
-  password: z.string().min(8),
-})
-
-const bodySchema = z.union([
-  z.object({ existingMember: z.literal(true) }).and(accountSchema),
-  createMemberSchema.extend({ password: z.string().min(8) }),
-])
-
 /**
  * Creates the account and its member row together, and hands back Better
  * Auth's Set-Cookie so the caller can sign the person straight in.
@@ -33,9 +22,9 @@ const bodySchema = z.union([
 export async function POST(request: Request) {
   if (!hasServiceToken(request)) return serviceTokenRequired()
 
-  let body: z.infer<typeof bodySchema>
+  let body: SignUpBody
   try {
-    body = bodySchema.parse(await request.json())
+    body = signUpBodySchema.parse(await request.json())
   } catch (err) {
     if (err instanceof SyntaxError) {
       return Response.json({ error: "Invalid JSON body" }, { status: 400 })
