@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { PlaygroundNavbar } from "./PlaygroundNavbar"
 
 const meta: Meta<typeof PlaygroundNavbar> = {
-  title: "Features/PlaygroundNavbar",
+  title: "Features/Layout/PlaygroundNavbar",
   component: PlaygroundNavbar,
   parameters: {
     nextjs: {
@@ -21,9 +21,24 @@ const meta: Meta<typeof PlaygroundNavbar> = {
 export default meta
 type Story = StoryObj<typeof PlaygroundNavbar>
 
-export const Home: Story = {}
+export const Home: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ background: "#FF307C" }}>
+        <Story />
+      </div>
+    ),
+  ],
+}
 
 export const Regular: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ background: "linear-gradient(to right, transparent 50%, #FF307C 50%)" }}>
+        <Story />
+      </div>
+    ),
+  ],
   parameters: {
     nextjs: {
       navigation: {
