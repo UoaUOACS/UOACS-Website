@@ -24,7 +24,8 @@ export const Project: CollectionConfig = {
     },
     {
       name: "author",
-      type: "text", // TODO: update to relationship once member collection set up
+      type: "relationship",
+      relationTo: Slugs.Collections.MEMBER,
       required: true,
     },
     {

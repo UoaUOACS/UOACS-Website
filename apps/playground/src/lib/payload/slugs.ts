@@ -3,6 +3,7 @@ export const Slugs = {
     MEDIA: "media",
     ADMIN: "admin",
     PROJECT: "project",
+    MEMBER: "member",
   },
   Globals: {},
   Blocks: {
