@@ -2,6 +2,7 @@
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ArrowLeftEndOnRectangleIcon, ArrowRightIcon } from "@heroicons/react/24/solid"
+import { authClient } from "@uoacs/shared/auth"
 import { BorderButton, Button, Heading, SocialIcon } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { AnimatePresence, motion } from "motion/react"
@@ -9,9 +10,7 @@ import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-
 import { useSession } from "@/context/SessionContext"
-import { authClient } from "@/lib/auth/auth-client"
 import { Routes } from "@/lib/routes"
 
 import type { NavbarProps } from "../Navbar"

@@ -1,13 +1,13 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { authClient } from "@uoacs/shared/auth"
 import { Button, Input } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { authClient } from "@/lib/auth/auth-client"
 import { Routes } from "@/lib/routes"
 import { type LoginInput, type LoginOutput, loginSchema } from "@/types/schemas/login"
 

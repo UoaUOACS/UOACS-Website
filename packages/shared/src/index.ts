@@ -1,3 +1,5 @@
+export * from "./auth/routes"
+export * from "./auth/schemas"
 export * from "./auth/session"
 export * from "./discord"
 export * from "./payload/slugs"
