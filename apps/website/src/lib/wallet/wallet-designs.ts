@@ -1,4 +1,4 @@
-import type { Member } from "@/payload/payload-types"
+import type { Member } from "@uoacs/shared/payload"
 import type {
   ClassIdentity,
   WalletPassClassPayload,

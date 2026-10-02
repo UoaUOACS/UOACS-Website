@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { authClient } from "@uoacs/shared/auth"
 import { Button, Input, MultiSelect, Radio, Select } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
 import Link from "next/link"
@@ -10,7 +11,6 @@ import { Controller, useForm } from "react-hook-form"
 import type { z as zType } from "zod"
 import { z } from "zod"
 import { ApiError, api } from "@/lib/api/api-client"
-import { authClient } from "@/lib/auth/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import { memberSchema } from "@/types/schemas/member"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
@@ -92,6 +92,11 @@ export const MemberStep = () => {
         toast.warning({
           description:
             "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
+        })
+      } else if (err instanceof ApiError && err.status === 404) {
+        toast.warning({
+          description:
+            "We couldn't find a membership waiting on that email.\nStart again and sign up as a new member.",
         })
       } else {
         toast.error({ description: "An error occurred while submitting the form" })
