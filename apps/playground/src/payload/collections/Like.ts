@@ -1,5 +1,5 @@
 import type { CollectionConfig } from "payload"
-import { CacheTags, projectTag } from "@/lib/cache"
+import { CacheTags } from "@/lib/cache"
 import { getRelationID } from "@/lib/payload/getRelationID"
 import { Slugs } from "@/lib/payload/slugs"
 import { adjustLikeCount } from "../hooks/adjustLikeCount"
@@ -8,8 +8,8 @@ import type { Like as LikeDoc } from "../payload-types"
 
 // The like count is changed outside Payload, so the Project hooks do not revalidate for it
 const { afterChange, afterDelete } = makeRevalidateHooks((doc: LikeDoc) => [
-  CacheTags.PROJECTS,
-  projectTag(getRelationID(doc.project)),
+  CacheTags.PROJECTS.ROOT,
+  CacheTags.PROJECTS.ID(getRelationID(doc.project)),
 ])
 
 export const Like: CollectionConfig = {

@@ -1,5 +1,5 @@
 import type { CollectionConfig } from "payload"
-import { CacheTags, projectTag } from "@/lib/cache"
+import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload/slugs"
 import { ImageGrid } from "../blocks/ImageGrid"
 import { Text } from "../blocks/Text"
@@ -8,8 +8,8 @@ import { makeRevalidateHooks } from "../hooks/revalidate"
 import type { Project as ProjectDoc } from "../payload-types"
 
 const { afterChange, afterDelete } = makeRevalidateHooks((doc: ProjectDoc) => [
-  CacheTags.PROJECTS,
-  projectTag(doc.id),
+  CacheTags.PROJECTS.ROOT,
+  CacheTags.PROJECTS.ID(doc.id),
 ])
 
 export const Project: CollectionConfig = {
