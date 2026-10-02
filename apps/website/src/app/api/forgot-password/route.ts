@@ -1,18 +1,13 @@
 import { NextResponse } from "next/server"
 import { ZodError } from "zod"
-import { auth } from "@/lib/auth/auth"
 import { Routes } from "@/lib/routes"
 import { AuthService } from "@/services/auth.service"
-import { PayloadEmailService } from "@/services/email/payload-email.service"
 import { forgotPasswordSchema } from "@/types/schemas/forgot-password"
 
 export async function POST(request: Request) {
-  const authService = new AuthService()
-
   let email: string
   try {
-    const body = await request.json()
-    ;({ email } = forgotPasswordSchema.parse(body))
+    ;({ email } = forgotPasswordSchema.parse(await request.json()))
   } catch (err) {
     if (err instanceof SyntaxError || err instanceof ZodError) {
       return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
@@ -23,24 +18,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 
-  let step: "checkMember" | "sendCompleteSignUp" | "requestPasswordReset" = "checkMember"
   try {
-    const hasUnlinkedMember = await authService.checkMemberExists(email)
-
-    // Members created before Better Auth sign-up existed have no linked account
-    // so Better Auth's own reset flow silently no-ops for them.
-    if (hasUnlinkedMember) {
-      step = "sendCompleteSignUp"
-      const url = `${process.env.NEXT_PUBLIC_WEBSITE_URL}${Routes.SIGN_UP}`
-      await PayloadEmailService.sendCompleteSignUp(email, url)
-    } else {
-      step = "requestPasswordReset"
-      await auth.api.requestPasswordReset({
-        body: { email, redirectTo: Routes.RESET_PASSWORD },
-      })
-    }
+    // Absolute for the reset link: Better Auth resolves it against its own
+    // base URL, so a bare path would send members to the auth service.
+    await new AuthService().forgotPassword(
+      email,
+      `${process.env.NEXT_PUBLIC_WEBSITE_URL}${Routes.RESET_PASSWORD}`,
+      Routes.SIGN_UP,
+    )
   } catch (error) {
-    console.error("[POST /api/forgot-password] Failed to process request", { email, step, error })
+    console.error("[POST /api/forgot-password] Failed to process request", { email, error })
     return NextResponse.json(
       { error: "An error occurred while processing your request" },
       { status: 500 },

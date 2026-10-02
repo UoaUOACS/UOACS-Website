@@ -1,13 +1,13 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { authClient } from "@uoacs/shared/auth"
 import { Button, PinInput } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { ApiError, api } from "@/lib/api/api-client"
-import { authClient } from "@/lib/auth/auth-client"
 import { ApiRoutes, Routes } from "@/lib/routes"
 import {
   type EmailVerificationCodeForm,

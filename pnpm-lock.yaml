@@ -185,6 +185,9 @@ importers:
       sharp:
         specifier: ^0.34.4
         version: 0.34.5
+      zod:
+        specifier: 'catalog:'
+        version: 4.3.6
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -479,6 +482,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
+      zod:
+        specifier: 'catalog:'
+        version: 4.3.6
 
   packages/ui:
     dependencies:

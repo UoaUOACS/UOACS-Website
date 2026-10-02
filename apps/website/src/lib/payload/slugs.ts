@@ -1,8 +1,5 @@
-import { AuthCollectionSlugs } from "@uoacs/shared"
-
 export const Slugs = {
   Collections: {
-    ...AuthCollectionSlugs,
     EXECUTIVE: "executive",
     MEDIA: "media",
     POLAROID: "polaroid",

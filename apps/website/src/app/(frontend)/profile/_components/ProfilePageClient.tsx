@@ -1,9 +1,9 @@
 "use client"
 
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/solid"
+import { authClient } from "@uoacs/shared/auth"
 import { Button, Heading } from "@uoacs/ui"
 import type { User } from "better-auth"
-import { authClient } from "@/lib/auth/auth-client"
 import { useMember } from "@/queries/useMember"
 import { MemberDetailsForm } from "./MemberDetailsForm"
 
