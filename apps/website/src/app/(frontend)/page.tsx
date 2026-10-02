@@ -1,6 +1,7 @@
+import { getDiscordWidgetData } from "@uoacs/shared"
 import type { Metadata } from "next"
 import { AboutUsSection, HeroSection, ValuesSection, WhoWeAreSection } from "@/components/Composite"
-import { getDiscordWidgetData, getSocialLinks } from "@/lib/helpers"
+import { getSocialLinks } from "@/lib/helpers"
 import { payload, Slugs } from "@/lib/payload"
 import type { Reel } from "@/payload/payload-types"
 import { SponsorsServerSection } from "./_components/SponsorsServerSection"

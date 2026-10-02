@@ -7,6 +7,9 @@ const meta: Meta<typeof Dropdown> = {
   component: Dropdown,
   argTypes: {
     label: { control: "text" },
+    disabled: { control: "boolean" },
+    fast: { control: "boolean" },
+    keepFocus: { control: "boolean" },
     options: { control: "object" },
     popoverClassName: { control: "text" },
     trigger: { control: false },
@@ -43,6 +46,18 @@ export const NoTriggerIcon: Story = {
   },
 }
 
+export const Fast: Story = {
+  args: {
+    fast: true,
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+  },
+}
+
 export const LongOptions: Story = {
   args: {
     label: "Long Options",
@@ -66,6 +81,21 @@ export const ManyOptions: Story = {
     options: Array.from({ length: 10 }).map((_, i) => ({
       label: `Option ${i + 1}`,
       href: "#",
+    })),
+  },
+}
+
+export const FullWidthOptions: Story = {
+  args: {
+    label: "Sort",
+    theme: "ghost",
+    popoverClassName:
+      "items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md",
+    options: ["Recent", "A-Z", "Z-A"].map((label) => ({
+      label,
+      href: "#",
+      theme: "ghost" as const,
+      className: "w-full",
     })),
   },
 }

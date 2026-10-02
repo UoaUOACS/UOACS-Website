@@ -1,9 +1,11 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
+import { resendAdapter } from "@payloadcms/email-resend"
 import { importExportPlugin } from "@payloadcms/plugin-import-export"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { AuthCollectionSlugs } from "@uoacs/shared"
+import { richTextFeatures } from "@uoacs/shared/payload"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { EmailVerificationCode } from "./payload/collections/EmailVerificationCode"
@@ -23,7 +25,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Member, EmailVerificationCode],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({ features: richTextFeatures }),
   graphQL: {
     disable: true,
   },
@@ -40,6 +42,13 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
   }),
+  email: process.env.RESEND_API_KEY
+    ? resendAdapter({
+        defaultFromAddress: "noreply@uoacs.co.nz",
+        defaultFromName: "UOACS",
+        apiKey: process.env.RESEND_API_KEY,
+      })
+    : undefined,
   sharp,
   plugins: [
     importExportPlugin({

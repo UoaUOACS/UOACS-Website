@@ -3,6 +3,7 @@
 import Image, { type ImageProps } from "next/image"
 import { useState } from "react"
 import { cn } from "../../utils"
+import { Skeleton } from "../Skeleton/Skeleton"
 
 /**
  * A component that displays an image with a loading placeholder.
@@ -40,12 +41,7 @@ export function LazyImage({
 
   return (
     <div className={cn("relative", containerClassName)} style={{ width, height }}>
-      {!isLoaded && (
-        <div
-          aria-live="polite"
-          className={cn("absolute inset-0 animate-pulse rounded-lg bg-gray-200", skeletonClassName)}
-        />
-      )}
+      {!isLoaded && <Skeleton className={cn("absolute inset-0 h-auto", skeletonClassName)} />}
       <Image
         className={cn(
           "h-full w-full object-contain transition-opacity duration-300",

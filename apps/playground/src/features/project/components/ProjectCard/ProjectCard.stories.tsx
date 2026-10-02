@@ -40,6 +40,13 @@ export const Default: Story = {
   },
 }
 
+export const WithAward: Story = {
+  name: "With award",
+  args: {
+    project: { ...mockProjectWithImage, awardType: "Best Design" },
+  },
+}
+
 export const NoImage: Story = {
   name: "No image (fallback gray surface)",
   args: {
@@ -47,8 +54,15 @@ export const NoImage: Story = {
   },
 }
 
+export const NoImageWithAward: Story = {
+  name: "No image with award",
+  args: {
+    project: { ...mockProjectNoImage, awardType: "Best Design" },
+  },
+}
+
 export const LongAuthorName: Story = {
-  name: "Long author name (check truncation in footer)",
+  name: "Long author name",
   args: {
     project: {
       id: "3",
@@ -56,6 +70,20 @@ export const LongAuthorName: Story = {
       imageURL: "https://placehold.co/400x300",
       authorName: "A Very Long Author Name That Should Truncate Nicely",
       likes: 1000,
+      awardType: "Best Design",
+    },
+  },
+}
+
+export const LongTitle: Story = {
+  name: "Long title",
+  args: {
+    project: {
+      id: "4",
+      title: "A Very Long Project Title That Might Wrap Onto Several Lines Over The Image",
+      imageURL: "https://placehold.co/400x300",
+      authorName: "Name Of Author",
+      likes: 31415,
     },
   },
 }

@@ -3,7 +3,16 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "env": ["DATABASE_URI", "NEXT_PUBLIC_AUTH_URL", "PAYLOAD_SECRET"]
+      "env": [
+        "AUTH_COOKIE_DOMAIN",
+        "BETTER_AUTH_SECRET",
+        "DATABASE_URI",
+        "NEXT_PUBLIC_AUTH_URL",
+        "NEXT_PUBLIC_PROJECTS_URL",
+        "NEXT_PUBLIC_WEBSITE_URL",
+        "PAYLOAD_SECRET",
+        "RESEND_API_KEY"
+      ]
     }
   }
 }

@@ -8,18 +8,28 @@
     "build": "next build",
     "start": "next start",
     "types:check": "tsc --noEmit",
-    "types:generate": "next typegen",
+    "types:generate": "payload generate:types && next typegen",
     "storybook": "storybook dev -p 6008",
     "storybook:build": "storybook build"
   },
   "dependencies": {
     "@heroicons/react": "catalog:",
+    "@payloadcms/db-mongodb": "catalog:payload",
+    "@payloadcms/next": "catalog:payload",
+    "@payloadcms/richtext-lexical": "catalog:payload",
+    "@payloadcms/storage-s3": "catalog:payload",
+    "@payloadcms/ui": "catalog:payload",
     "@uoacs/shared": "workspace:*",
     "@uoacs/ui": "workspace:*",
+    "better-auth": "catalog:",
     "next": "catalog:",
+    "payload": "catalog:payload",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "tailwind-variants": "catalog:"
+    "react-smart-ticker": "^1.6.7",
+    "tailwind-variants": "catalog:",
+    "sharp": "^0.34.4",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@storybook/addon-docs": "catalog:storybook",
