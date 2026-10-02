@@ -1,7 +1,11 @@
 import type { CollectionConfig } from "payload"
+import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload/slugs"
 import { ImageGrid } from "../blocks/ImageGrid"
 import { Text } from "../blocks/Text"
+import { makeRevalidateHooks } from "../hooks/revalidate"
+
+const { afterChange, afterDelete } = makeRevalidateHooks([CacheTags.PROJECTS])
 
 export const Project: CollectionConfig = {
   slug: Slugs.Collections.PROJECT,
@@ -50,4 +54,5 @@ export const Project: CollectionConfig = {
       maxRows: 50,
     },
   ],
+  hooks: { afterChange: [afterChange], afterDelete: [afterDelete] },
 }

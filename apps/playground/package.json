@@ -23,6 +23,7 @@
     "@uoacs/ui": "workspace:*",
     "better-auth": "catalog:",
     "next": "catalog:",
+    "nuqs": "^2.10.1",
     "payload": "catalog:payload",
     "react": "catalog:",
     "react-dom": "catalog:",
