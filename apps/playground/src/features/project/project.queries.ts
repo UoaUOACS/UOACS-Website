@@ -18,7 +18,7 @@ export interface ProjectsPage {
 
 export const getProjectsCached = async (state: DiscoverState) => {
   "use cache"
-  cacheTag(CacheTags.PROJECTS)
+  cacheTag(CacheTags.PROJECTS, CacheTags.MEDIA)
   cacheLife("max")
 
   return getProjects(state)
@@ -35,6 +35,8 @@ export const getProjects = async ({ tab, sort, page }: DiscoverState): Promise<P
     page,
     depth: 1,
     select: { name: true, author: true, coverImage: true },
+    // Only the author's username is shown, so don't load the rest of the member
+    populate: { [Slugs.Collections.MEMBER]: { username: true } },
   })
   return { projects: docs.map(toProjectCard), totalPages }
 }

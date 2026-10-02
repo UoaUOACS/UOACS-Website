@@ -11,6 +11,11 @@ export const PROJECTS_PER_PAGE = 9
  */
 export const PLACEHOLDER_LIKES = 0
 
+/**
+ * Author name shown on a project card when the project's author can't be loaded.
+ */
+export const UNKNOWN_AUTHOR_NAME = "Unknown author"
+
 export const DEFAULT_PROJECT_SORT = ProjectSort.RECENT
 
 /**
