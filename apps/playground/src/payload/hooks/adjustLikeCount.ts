@@ -8,6 +8,8 @@ import { Slugs } from "@/lib/payload/slugs"
  * This goes around Payload, so concurrent likes cannot overwrite each other and the Project
  * hooks do not run. It joins the request's transaction, so a rolled-back like also rolls back
  * the count.
+ *
+ * Payload validation does not run here, so the decrement filter keeps the count at 0 or more.
  */
 export const adjustLikeCount = async (
   req: PayloadRequest,
@@ -19,7 +21,7 @@ export const adjustLikeCount = async (
   const session = transactionID ? db.sessions[transactionID] : undefined
 
   await db.collections[Slugs.Collections.PROJECT].updateOne(
-    { _id: projectID },
+    delta === -1 ? { _id: projectID, likeCount: { $gt: 0 } } : { _id: projectID },
     { $inc: { likeCount: delta } },
     { session },
   )
