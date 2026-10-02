@@ -71,7 +71,7 @@ export function PlaygroundNavbar({
 
       {signedIn ? (
         <Dropdown
-          label={<UserIcon className=“h-4 w-4" />}
+          label={<UserIcon className="h-4 w-4" />}
           options={profileOptions}
           shape="pill"
           size="icon"
