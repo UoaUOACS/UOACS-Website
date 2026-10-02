@@ -16,6 +16,8 @@ export const Like: CollectionConfig = {
   slug: Slugs.Collections.LIKE,
   access: {
     read: () => true,
+    // A like is only created or deleted, so its project and member cannot move
+    update: () => false,
   },
   indexes: [{ fields: ["project", "member"], unique: true }],
   fields: [
