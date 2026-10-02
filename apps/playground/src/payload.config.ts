@@ -37,6 +37,10 @@ export default buildConfig({
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
+    // Compare strings case-insensitively, so sorting by name doesn't put lowercase names last
+    collation: {
+      strength: 2,
+    },
   }),
   sharp,
   plugins: [
