@@ -36,13 +36,13 @@ export function PlaygroundNavbar({
 }: PlaygroundNavbarProps) {
   const pathname = usePathname()
   const isHome = pathname === Routes.HOME
-  const title = isHome ? "Presents" : "Project playground"
+  const title = isHome ? "Presents" : "Project Playground"
   const profileOptions: DropdownProps["options"] = [
     {
       href: Routes.PROFILE,
       label: (
         <div className="flex flex-row items-center gap-2">
-          <UserIcon className="h-5 w-5" />
+          <UserIcon className="h-4 w-4" />
           <p>Profile</p>
         </div>
       ),
@@ -51,7 +51,7 @@ export function PlaygroundNavbar({
     {
       label: (
         <div className="flex flex-row items-center gap-2">
-          <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />
+          <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
           <p>Log Out</p>
         </div>
       ),
@@ -61,17 +61,17 @@ export function PlaygroundNavbar({
   ]
 
   return (
-    <nav className="flex w-full flex-row items-center justify-between pr-5 pl-5 md:h-20 md:pr-7 md:pl-7">
-      <Link className="flex h-15 flex-row items-center" href={logoHref}>
+    <nav className="flex w-full flex-row items-center justify-between px-5 md:h-20 md:px-7">
+      <Link className="flex h-15 flex-row items-center gap-3" href={logoHref}>
         <Image alt="UOACS Logo" height={24} src="/uoacs-logo-pink.svg" width={99} />
-        <span className="ml-3 hidden font-bold font-cartograph text-2xl text-gray-400 italic leading-7 md:inline">
+        <span className="hidden font-bold font-cartograph text-2xl text-gray-400 italic leading-7 md:inline">
           {title}
         </span>
       </Link>
 
       {signedIn ? (
         <Dropdown
-          label={<UserIcon className="h-5 w-5" />}
+          label={<UserIcon className=“h-4 w-4" />}
           options={profileOptions}
           shape="pill"
           size="icon"
@@ -90,7 +90,7 @@ export function PlaygroundNavbar({
             </Button>
           </Link>
           <Link className="hidden md:inline-flex" href={Routes.SIGN_UP}>
-            <Button right={<ArrowUpRightIcon className="h-5 w-5" />} tabIndex={-1} theme="primary">
+            <Button right={<ArrowUpRightIcon className="h-4 w-4" />} tabIndex={-1} theme="primary">
               Sign Up
             </Button>
           </Link>
