@@ -7,6 +7,7 @@ export const Routes = {
   PROFILE: "/profile",
   PROJECTS: {
     ID: (id: Project["id"]) => `/projects/${id}`,
+    CREATE: "/projects/create",
   },
 } as const
 
