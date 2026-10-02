@@ -3,6 +3,7 @@ import { CacheTags, projectTag } from "@/lib/cache"
 import { Slugs } from "@/lib/payload/slugs"
 import { ImageGrid } from "../blocks/ImageGrid"
 import { Text } from "../blocks/Text"
+import { makeDeleteLikesHook } from "../hooks/deleteLikes"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 import type { Project as ProjectDoc } from "../payload-types"
 
@@ -73,5 +74,9 @@ export const Project: CollectionConfig = {
       maxRows: 50,
     },
   ],
-  hooks: { afterChange: [afterChange], afterDelete: [afterDelete] },
+  hooks: {
+    afterChange: [afterChange],
+    beforeDelete: [makeDeleteLikesHook("project")],
+    afterDelete: [afterDelete],
+  },
 }
