@@ -24,7 +24,7 @@ type Story = StoryObj<typeof PlaygroundNavbar>
 export const Home: Story = {
   decorators: [
     (Story) => (
-      <div style={{ background: "#FF307C" }}>
+      <div>
         <Story />
       </div>
     ),
@@ -34,7 +34,7 @@ export const Home: Story = {
 export const Regular: Story = {
   decorators: [
     (Story) => (
-      <div style={{ background: "linear-gradient(to right, transparent 50%, #FF307C 50%)" }}>
+      <div>
         <Story />
       </div>
     ),
