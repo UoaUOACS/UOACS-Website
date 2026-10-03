@@ -13,10 +13,15 @@ const movedAuthPaths = ["/login", "/sign-up", "/forgot-password", "/reset-passwo
 const nextConfig: NextConfig = {
   reactCompiler: true,
   async redirects() {
-    // Read here, not at module level: `next typegen` and Storybook load this
-    // file without the auth URL set.
+    // Check both URLs here, not at module level: `next typegen` and Storybook
+    // load this file without them. The navbar and footer build return URLs
+    // from the website URL, so a missing one fails build or dev start here
+    // instead of crashing the render for every logged-out visitor.
     const authUrl = process.env.NEXT_PUBLIC_AUTH_URL
     if (!authUrl) throw new Error("NEXT_PUBLIC_AUTH_URL is not set")
+    if (!process.env.NEXT_PUBLIC_WEBSITE_URL) {
+      throw new Error("NEXT_PUBLIC_WEBSITE_URL is not set")
+    }
     const authOrigin = new URL(authUrl).origin
     return movedAuthPaths.map((source) => ({
       source,

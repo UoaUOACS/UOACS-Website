@@ -2,7 +2,7 @@ import { z } from "zod"
 import { createMemberSchema, memberSchema } from "../payload/schemas/member"
 
 /**
- * Sign-up, verification and member shapes.
+ * Sign-up, password and member shapes.
  *
  * Shared so the auth app's forms and server actions, and every app that reads
  * a member, validate the same shapes. Separate copies drift into accepting
