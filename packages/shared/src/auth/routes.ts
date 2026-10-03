@@ -9,7 +9,6 @@
 export const AuthApiRoutes = {
   SESSION: "/api/auth/get-session",
   MEMBER_ME: "/api/member/me",
-  MEMBER_BY_ID: (id: string): `/api/member/${string}` => `/api/member/${encodeURIComponent(id)}`,
 } as const
 
 type RouteValue<T> = T extends (...args: never[]) => infer R ? R : T

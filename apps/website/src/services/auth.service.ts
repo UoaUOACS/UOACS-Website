@@ -122,13 +122,6 @@ export class AuthService {
     return { error: body, status: response.status }
   }
 
-  public async deleteMember(id: string): Promise<number> {
-    const response = await serviceFetch(AuthApiRoutes.MEMBER_BY_ID(id), {
-      method: "DELETE",
-    })
-    return response.status
-  }
-
   public async sendVerificationCode(email: string): Promise<void> {
     const response = await serviceFetch(AuthApiRoutes.VERIFICATION_CODE, {
       method: "POST",
