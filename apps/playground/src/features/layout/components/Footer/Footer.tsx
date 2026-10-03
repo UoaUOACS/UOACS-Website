@@ -1,4 +1,5 @@
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid"
+import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { AnimatedSuspense, Button, SocialIcon, type SocialIconName } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import Link from "next/link"
@@ -23,17 +24,14 @@ export interface FooterProps {
 }
 
 /**
- * Placeholder until playground has a sign-up route of its own.
- */
-const JOIN_HREF = "/"
-
-/**
  * Placeholder until playground has a privacy policy route of its own.
  */
 const PRIVACY_HREF = "/"
 
 const InterestedButton = ({ className }: { className?: string }) => (
-  <Link href={JOIN_HREF}>
+  // A plain <a>, not next/link, because the auth app is on a different origin.
+  // Footer is a server component with no pathname, so return to the playground home.
+  <a href={authPageUrl(AuthPages.SIGN_UP, `${process.env.NEXT_PUBLIC_PROJECTS_URL}/`)}>
     <Button
       className={cn("whitespace-nowrap", className)}
       right={<ArrowUpRightIcon className="h-4 w-4 text-white" />}
@@ -41,7 +39,7 @@ const InterestedButton = ({ className }: { className?: string }) => (
     >
       Interested? Join UOACS
     </Button>
-  </Link>
+  </a>
 )
 
 /**
