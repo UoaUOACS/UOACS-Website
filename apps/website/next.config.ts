@@ -5,25 +5,20 @@ import type { NextConfig } from "next"
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// The auth pages moved to the auth app. Old links and emails still point here,
-// so send them on. Next keeps the query string, so `?token=` in old reset
-// emails still works.
-const movedAuthPaths = ["/login", "/sign-up", "/forgot-password", "/reset-password"]
+const redirectedAuthPaths = ["/login", "/sign-up", "/forgot-password", "/reset-password"]
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
   async redirects() {
     // Check both URLs here, not at module level: `next typegen` and Storybook
-    // load this file without them. The navbar and footer build return URLs
-    // from the website URL, so a missing one fails build or dev start here
-    // instead of crashing the render for every logged-out visitor.
+    // load this file without them.
     const authUrl = process.env.NEXT_PUBLIC_AUTH_URL
     if (!authUrl) throw new Error("NEXT_PUBLIC_AUTH_URL is not set")
     if (!process.env.NEXT_PUBLIC_WEBSITE_URL) {
       throw new Error("NEXT_PUBLIC_WEBSITE_URL is not set")
     }
     const authOrigin = new URL(authUrl).origin
-    return movedAuthPaths.map((source) => ({
+    return redirectedAuthPaths.map((source) => ({
       source,
       destination: `${authOrigin}${source}`,
       permanent: true,
