@@ -10,8 +10,8 @@ const redirectedAuthPaths = ["/login", "/sign-up", "/forgot-password", "/reset-p
 const nextConfig: NextConfig = {
   reactCompiler: true,
   async redirects() {
-    // Check both URLs here, not at module level: `next typegen` and Storybook
-    // load this file without them.
+    // Checked here, not at module level, so only commands that build redirects
+    // need them. `next typegen` is one of them, so CI sets both for it.
     const authUrl = process.env.NEXT_PUBLIC_AUTH_URL
     if (!authUrl) throw new Error("NEXT_PUBLIC_AUTH_URL is not set")
     if (!process.env.NEXT_PUBLIC_WEBSITE_URL) {
