@@ -1,9 +1,8 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { type ReactNode, useEffect } from "react"
 import { useSession } from "@/context/SessionContext"
-import { Routes } from "@/lib/routes"
 
 export const UserOnly = ({
   children,
@@ -13,13 +12,12 @@ export const UserOnly = ({
   fallback?: ReactNode
 }) => {
   const session = useSession()
-  const router = useRouter()
 
   useEffect(() => {
     if (session === null) {
-      router.replace(Routes.LOGIN)
+      window.location.assign(authPageUrl(AuthPages.LOGIN, window.location.href))
     }
-  }, [session, router])
+  }, [session])
 
   if (session === null) return fallback
   return children

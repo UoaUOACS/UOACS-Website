@@ -2,13 +2,14 @@
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ArrowLeftEndOnRectangleIcon, ArrowRightIcon } from "@heroicons/react/24/solid"
+import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { authClient } from "@uoacs/shared/auth"
 import { BorderButton, Button, Heading, SocialIcon } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import Link, { type LinkProps } from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useSession } from "@/context/SessionContext"
 import { Routes } from "@/lib/routes"
@@ -26,6 +27,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const session = useSession()
   const router = useRouter()
+  const pathname = usePathname()
 
   const extendedLinks = [...links, { label: "Profile", href: Routes.PROFILE }]
 
@@ -128,9 +130,12 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                   </Button>
                 </div>
               ) : (
-                <Link
+                <a
                   className="grid grid-cols-4"
-                  href={Routes.LOGIN}
+                  href={authPageUrl(
+                    AuthPages.LOGIN,
+                    `${process.env.NEXT_PUBLIC_WEBSITE_URL}${pathname}`,
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
                   <Button className="col-span-4 rounded-b-none" theme="dark">
@@ -140,7 +145,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                   <div className="h-0.5 w-full bg-blue-400" />
                   <div className="h-0.5 w-full bg-purple-400" />
                   <div className="h-0.5 w-full rounded-br-[2px] bg-pink-400" />
-                </Link>
+                </a>
               )}
             </div>
           </motion.div>

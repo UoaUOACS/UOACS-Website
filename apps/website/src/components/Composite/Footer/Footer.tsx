@@ -1,7 +1,7 @@
 "use client"
 
 import { ArrowUpRightIcon, UserIcon } from "@heroicons/react/24/solid"
-import { type DiscordWidgetData, shuffle } from "@uoacs/shared"
+import { AuthPages, authPageUrl, type DiscordWidgetData, shuffle } from "@uoacs/shared"
 import { Button, SocialIcon } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { motion } from "motion/react"
@@ -41,21 +41,32 @@ export interface FooterProps {
  */
 const InterestedButton = ({ className }: { className?: string }) => {
   const session = useSession()
-  return (
-    <Link href={session ? Routes.PROFILE : Routes.SIGN_UP}>
-      <Button
-        className={cn("whitespace-nowrap", className)}
-        right={
-          !session && (
-            <ArrowUpRightIcon className={cn("h-4 w-4", session ? "text-black" : "text-white")} />
-          )
-        }
-        theme={session ? "light" : "primary"}
-      >
-        {session && <UserIcon className="h-4 w-4" />}
-        {session ? "Profile" : "Interested? Join UOACS"}
-      </Button>
-    </Link>
+  const button = (
+    <Button
+      className={cn("whitespace-nowrap", className)}
+      right={
+        !session && (
+          <ArrowUpRightIcon className={cn("h-4 w-4", session ? "text-black" : "text-white")} />
+        )
+      }
+      theme={session ? "light" : "primary"}
+    >
+      {session && <UserIcon className="h-4 w-4" />}
+      {session ? "Profile" : "Interested? Join UOACS"}
+    </Button>
+  )
+  return session ? (
+    <Link href={Routes.PROFILE}>{button}</Link>
+  ) : (
+    // A plain <a>, not next/link, because the auth app is on a different origin.
+    <a
+      href={authPageUrl(
+        AuthPages.SIGN_UP,
+        `${process.env.NEXT_PUBLIC_WEBSITE_URL}${Routes.PROFILE}`,
+      )}
+    >
+      {button}
+    </a>
   )
 }
 

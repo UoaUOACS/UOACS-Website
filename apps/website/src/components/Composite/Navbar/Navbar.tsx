@@ -6,12 +6,13 @@ import {
   Bars3Icon,
   UserIcon,
 } from "@heroicons/react/24/solid"
+import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { authClient } from "@uoacs/shared/auth"
 import { Button, Dropdown, SocialIcon } from "@uoacs/ui"
 import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import type { SocialLink } from "@/components/Generic"
 import { useSession } from "@/context/SessionContext"
 import { Routes } from "@/lib/routes"
@@ -42,6 +43,7 @@ export interface NavbarProps {
 export function Navbar({ links, socialLinks }: NavbarProps) {
   const session = useSession()
   const router = useRouter()
+  const pathname = usePathname()
 
   const handleLogout = async () => {
     await authClient.signOut()
@@ -116,11 +118,17 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               trigger={false}
             />
           ) : (
-            <Link href={Routes.LOGIN}>
+            // A plain <a>, not next/link, because the auth app is on a different origin.
+            <a
+              href={authPageUrl(
+                AuthPages.LOGIN,
+                `${process.env.NEXT_PUBLIC_WEBSITE_URL}${pathname}`,
+              )}
+            >
               <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
                 Log In
               </Button>
-            </Link>
+            </a>
           )}
         </div>
       </nav>
