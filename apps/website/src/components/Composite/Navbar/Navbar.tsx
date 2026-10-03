@@ -15,7 +15,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import type { SocialLink } from "@/components/Generic"
 import { useSession } from "@/context/SessionContext"
-import { Routes } from "@/lib/routes"
+import { Routes, websiteUrl } from "@/lib/routes"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"
 
@@ -119,12 +119,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
             />
           ) : (
             // A plain <a>, not next/link, because the auth app is on a different origin.
-            <a
-              href={authPageUrl(
-                AuthPages.LOGIN,
-                `${process.env.NEXT_PUBLIC_WEBSITE_URL}${pathname}`,
-              )}
-            >
+            <a href={authPageUrl(AuthPages.LOGIN, websiteUrl(pathname))}>
               <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
                 Log In
               </Button>

@@ -4,7 +4,7 @@ import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { Button } from "@uoacs/ui"
 import { useSession } from "@/context/SessionContext"
-import { Routes } from "@/lib/routes"
+import { Routes, websiteUrl } from "@/lib/routes"
 import type { Reel as ReelDocument } from "@/payload/payload-types"
 import { Reel } from "../Reel/Reel"
 
@@ -50,13 +50,7 @@ export const AboutUsSection = ({ reels, instagramHref }: AboutUsSectionProps) =>
         <div className="flex flex-col items-center gap-6 md:items-start">
           {!session && (
             // A plain <a>, not next/link, because the auth app is on a different origin.
-            <a
-              className="w-fit"
-              href={authPageUrl(
-                AuthPages.SIGN_UP,
-                `${process.env.NEXT_PUBLIC_WEBSITE_URL}${Routes.PROFILE}`,
-              )}
-            >
+            <a className="w-fit" href={authPageUrl(AuthPages.SIGN_UP, websiteUrl(Routes.PROFILE))}>
               <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
                 Interested? Join UOACS
               </Button>

@@ -12,7 +12,7 @@ import Link, { type LinkProps } from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useSession } from "@/context/SessionContext"
-import { Routes } from "@/lib/routes"
+import { Routes, websiteUrl } from "@/lib/routes"
 
 import type { NavbarProps } from "../Navbar"
 import { mobileNavbarVariants } from "./variants"
@@ -130,12 +130,10 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                   </Button>
                 </div>
               ) : (
+                // A plain <a>, not next/link, because the auth app is on a different origin.
                 <a
                   className="grid grid-cols-4"
-                  href={authPageUrl(
-                    AuthPages.LOGIN,
-                    `${process.env.NEXT_PUBLIC_WEBSITE_URL}${pathname}`,
-                  )}
+                  href={authPageUrl(AuthPages.LOGIN, websiteUrl(pathname))}
                   onClick={() => setIsOpen(false)}
                 >
                   <Button className="col-span-4 rounded-b-none" theme="dark">

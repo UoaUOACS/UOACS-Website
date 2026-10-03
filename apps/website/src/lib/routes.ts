@@ -10,6 +10,18 @@ export const Routes = {
 
 export type Route = (typeof Routes)[keyof typeof Routes]
 
+/**
+ * Absolute website URL for a path, for example to use as an auth return URL.
+ *
+ * @param path The path on the website, for example `/profile`.
+ * @returns The absolute URL.
+ */
+export function websiteUrl(path: string): string {
+  const base = process.env.NEXT_PUBLIC_WEBSITE_URL
+  if (!base) throw new Error("Missing required environment variable: NEXT_PUBLIC_WEBSITE_URL")
+  return new URL(path, base).toString()
+}
+
 export const ApiRoutes = {
   MEMBER: {
     ME: "/api/member/me",

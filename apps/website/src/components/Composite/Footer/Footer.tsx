@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react"
 import { type SocialLink, SocialLinks } from "@/components/Generic"
 
 import { useSession } from "@/context/SessionContext"
-import { Routes } from "@/lib/routes"
+import { Routes, websiteUrl } from "@/lib/routes"
 
 import { NavbarGradient } from "../Navbar/NavbarGradient"
 
@@ -59,14 +59,7 @@ const InterestedButton = ({ className }: { className?: string }) => {
     <Link href={Routes.PROFILE}>{button}</Link>
   ) : (
     // A plain <a>, not next/link, because the auth app is on a different origin.
-    <a
-      href={authPageUrl(
-        AuthPages.SIGN_UP,
-        `${process.env.NEXT_PUBLIC_WEBSITE_URL}${Routes.PROFILE}`,
-      )}
-    >
-      {button}
-    </a>
+    <a href={authPageUrl(AuthPages.SIGN_UP, websiteUrl(Routes.PROFILE))}>{button}</a>
   )
 }
 
