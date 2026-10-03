@@ -143,6 +143,9 @@ importers:
 
   apps/auth:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.82.0(react@19.3.0))
       '@payloadcms/db-mongodb':
         specifier: catalog:payload
         version: 3.86.0(@aws-sdk/credential-providers@3.1032.0)(payload@3.86.0(graphql@16.13.2)(supports-color@7.2.0)(typescript@5.9.3))(supports-color@7.2.0)
@@ -164,6 +167,9 @@ importers:
       '@uoacs/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@uoacs/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       better-auth:
         specifier: 'catalog:'
         version: 1.6.23(@opentelemetry/api@1.9.1)(mongodb@7.2.0(@aws-sdk/credential-providers@3.1032.0))(next@16.3.0(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.77.4))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(vitest@4.1.4)
@@ -182,13 +188,22 @@ importers:
       react-dom:
         specifier: 'catalog:'
         version: 19.3.0(react@19.3.0)
+      react-hook-form:
+        specifier: ^7.71.2
+        version: 7.82.0(react@19.3.0)
       sharp:
         specifier: ^0.34.4
         version: 0.34.5
       zod:
         specifier: 'catalog:'
         version: 4.3.6
+      zustand:
+        specifier: ^5.0.12
+        version: 5.0.12(@types/react@19.3.0)(react@19.3.0)(use-sync-external-store@1.6.0(react@19.3.0))
     devDependencies:
+      '@tailwindcss/postcss':
+        specifier: 'catalog:'
+        version: 4.3.3
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.3
@@ -201,6 +216,9 @@ importers:
       '@uoacs/config':
         specifier: workspace:*
         version: link:../../packages/config
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 4.3.3
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -482,9 +500,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
-      zod:
-        specifier: 'catalog:'
-        version: 4.3.6
 
   packages/ui:
     dependencies:
