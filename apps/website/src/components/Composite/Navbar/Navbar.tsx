@@ -7,7 +7,6 @@ import {
   UserIcon,
 } from "@heroicons/react/24/solid"
 import { AuthPages, authPageUrl } from "@uoacs/shared"
-import { authClient } from "@uoacs/shared/auth"
 import { Button, Dropdown, SocialIcon } from "@uoacs/ui"
 import { motion } from "motion/react"
 import Image from "next/image"
@@ -15,6 +14,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import type { SocialLink } from "@/components/Generic"
 import { useSession } from "@/context/SessionContext"
+import { logOut } from "@/lib/auth/log-out"
 import { Routes, websiteUrl } from "@/lib/routes"
 import { MobileNavbar } from "./MobileNavbar/MobileNavbar"
 import { NavbarGradient } from "./NavbarGradient"
@@ -45,10 +45,7 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleLogout = async () => {
-    await authClient.signOut()
-    router.refresh()
-  }
+  const handleLogout = () => logOut(router)
 
   const dropdownOptions = socialLinks.map((socialLink) => ({
     label: (
