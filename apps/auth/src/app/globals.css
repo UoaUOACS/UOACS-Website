@@ -1,0 +1,13 @@
+/* Must precede the Tailwind import: it carries a remote @import. */
+@import "@uoacs/ui/styles/cartograph.css";
+@import "tailwindcss";
+@import "@uoacs/ui/styles/theme.css";
+
+@layer base {
+  html {
+    font-family: var(--font-switzer);
+    background-color: var(--color-white);
+    color: var(--color-black);
+    scroll-behavior: smooth;
+  }
+}

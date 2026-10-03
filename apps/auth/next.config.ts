@@ -11,7 +11,9 @@ const nextConfig: NextConfig = {
   // Trace from the workspace root so standalone output resolves dependencies
   // hoisted to the monorepo's node_modules, not just this app's.
   outputFileTracingRoot: path.join(dirname, "../.."),
-  transpilePackages: ["@uoacs/shared"],
+  // @uoacs/ui and @uoacs/shared are published as raw TypeScript source, so Next
+  // has to compile them.
+  transpilePackages: ["@uoacs/ui", "@uoacs/shared"],
   images: {
     localPatterns: [
       {
