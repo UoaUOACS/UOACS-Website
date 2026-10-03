@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AuthPages } from "@uoacs/shared"
-import { authClient } from "@uoacs/shared/auth"
 import { Button, PinInput } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
 import { useRouter } from "next/navigation"
@@ -15,6 +14,12 @@ import {
   emailVerificationCodeFormSchema,
 } from "@/types/schemas/verification-code"
 import type { SignUpStepProps } from "./SignUpForm"
+import {
+  confirmSession,
+  duplicateMessage,
+  NO_UNLINKED_MEMBER_MESSAGE,
+  SESSION_UNCONFIRMED_MESSAGE,
+} from "./sign-up-result"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
 
 const RESEND_COOLDOWN_S = 60
@@ -32,9 +37,9 @@ export const EmailVerificationStep = ({ redirect, returnTo }: SignUpStepProps) =
     formState: { errors },
   } = useForm<EmailVerificationCodeForm>({ resolver: zodResolver(emailVerificationCodeFormSchema) })
 
-  const startCooldown = () => {
+  const startCooldown = (seconds = RESEND_COOLDOWN_S) => {
     if (cooldownRef.current) clearInterval(cooldownRef.current)
-    setResendCooldown(RESEND_COOLDOWN_S)
+    setResendCooldown(seconds)
     const id = setInterval(() => {
       setResendCooldown((prev) => {
         if (prev <= 1) {
@@ -53,19 +58,27 @@ export const EmailVerificationStep = ({ redirect, returnTo }: SignUpStepProps) =
     try {
       const result = await sendVerificationCode(step1.email)
       if (!result.ok) {
-        setResendCooldown(0)
         if (result.error === "cooldown") {
+          startCooldown(result.retryAfter)
           toast.warning({ description: "Please wait before requesting another code." })
+        } else if (result.error === "invalid") {
+          setResendCooldown(0)
+          toast.warning({ description: "Please check your email address." })
         } else {
+          setResendCooldown(0)
           toast.error({ description: "Failed to send verification email. Please try again." })
         }
         return
       }
       startCooldown()
       toast.success({ description: "Verification email sent! Please check your inbox." })
-    } catch {
+    } catch (error) {
+      console.error("[EmailVerificationStep] Resending verification code threw", { error })
       setResendCooldown(0)
-      toast.error({ description: "Failed to send verification email. Please try again." })
+      toast.error({
+        description:
+          "Failed to send verification email. Please try again. If this keeps happening, refresh the page.",
+      })
     }
   }
 
@@ -91,13 +104,19 @@ export const EmailVerificationStep = ({ redirect, returnTo }: SignUpStepProps) =
     }
 
     setSubmitting(true)
+    let leaving = false
     try {
       const verifyResult = await verifyCode(step1.email, code)
       if (!verifyResult.ok) {
         if (verifyResult.error === "expired") {
           toast.warning({ description: "Your code has expired. Please request a new one." })
-        } else {
+        } else if (verifyResult.error === "invalid") {
           toast.warning({ description: "Incorrect code. Please check your email and try again." })
+        } else {
+          console.error("[EmailVerificationStep] Verifying code failed", {
+            error: verifyResult.error,
+          })
+          toast.error({ description: "We couldn't check your code. Please try again in a moment." })
         }
         return
       }
@@ -106,35 +125,34 @@ export const EmailVerificationStep = ({ redirect, returnTo }: SignUpStepProps) =
         const signUpResult = await signUp({ ...step1, existingMember: true })
         if (!signUpResult.ok) {
           if (signUpResult.error === "duplicate") {
-            toast.warning({
-              description:
-                "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
-            })
+            toast.warning({ description: duplicateMessage(signUpResult.field) })
+          } else if (signUpResult.error === "no-unlinked-member") {
+            toast.warning({ description: NO_UNLINKED_MEMBER_MESSAGE })
           } else {
             toast.error({ description: "An error occurred while submitting the form" })
           }
           return
         }
 
-        reset()
-        const { data: session, error } = await authClient.getSession()
-        if (!session || error) {
-          console.error("Session confirmation failed after sign-up", error)
-          toast.error({
-            description: "Signed up, but we couldn't confirm your session. Please log in.",
-          })
+        if (!(await confirmSession())) {
+          toast.error({ description: SESSION_UNCONFIRMED_MESSAGE })
+          reset()
           router.push(withRedirect(AuthPages.LOGIN, redirect))
           return
         }
-
+        leaving = true
         window.location.assign(returnTo)
       } else {
         nextStep()
       }
-    } catch {
-      toast.error({ description: "An error occurred. Please try again." })
+    } catch (error) {
+      console.error("[EmailVerificationStep] Verifying code threw", { error })
+      toast.error({
+        description:
+          "An error occurred. Please try again. If this keeps happening, refresh the page.",
+      })
     } finally {
-      setSubmitting(false)
+      if (!leaving) setSubmitting(false)
     }
   }
 

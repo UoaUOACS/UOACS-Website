@@ -28,6 +28,7 @@ export const LoginForm = ({ redirect, returnTo }: LoginFormProps) => {
 
   const onSubmit = async (data: LoginOutput) => {
     setLoading(true)
+    let leaving = false
     try {
       const { error } = await authClient.signIn.email({
         email: data.email,
@@ -39,7 +40,12 @@ export const LoginForm = ({ redirect, returnTo }: LoginFormProps) => {
           toast.error({
             description: "Incorrect email or password",
           })
+        } else if (error.status === 429) {
+          toast.error({
+            description: "Too many attempts. Please wait a moment and try again.",
+          })
         } else {
+          console.error("[LoginForm] Log in failed", { error })
           toast.error({
             description: "An error occurred while logging in",
           })
@@ -56,13 +62,16 @@ export const LoginForm = ({ redirect, returnTo }: LoginFormProps) => {
         return
       }
 
+      leaving = true
       window.location.assign(returnTo)
-    } catch {
+    } catch (error) {
+      console.error("[LoginForm] Log in threw", { error })
       toast.error({
-        description: "An error occurred while logging in",
+        description:
+          "An error occurred while logging in. If this keeps happening, refresh the page.",
       })
     } finally {
-      setLoading(false)
+      if (!leaving) setLoading(false)
     }
   }
 

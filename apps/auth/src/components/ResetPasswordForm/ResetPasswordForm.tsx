@@ -44,12 +44,20 @@ export const ResetPasswordForm = ({ token, error, redirect }: ResetPasswordFormP
       })
 
       if (resetError) {
-        toast.error({
-          description:
-            resetError.code === "INVALID_TOKEN"
-              ? "This reset link is invalid or has expired. Please request a new one."
-              : "An error occurred while resetting your password",
-        })
+        if (resetError.code === "INVALID_TOKEN") {
+          toast.error({
+            description: "This reset link is invalid or has expired. Please request a new one.",
+          })
+        } else if (resetError.status === 429) {
+          toast.error({
+            description: "Too many attempts. Please wait a moment and try again.",
+          })
+        } else {
+          console.error("[ResetPasswordForm] Reset password failed", { error: resetError })
+          toast.error({
+            description: "An error occurred while resetting your password",
+          })
+        }
         return
       }
 
