@@ -38,15 +38,22 @@ export const UserStep = () => {
       const result = await sendVerificationCode(userData.email)
       if (!result.ok) {
         if (result.error === "cooldown") {
-          toast.warning({ description: "Please wait before requesting another code." })
+          toast.warning({ description: "We sent you a code recently. Check your inbox." })
+          nextStep()
+        } else if (result.error === "invalid") {
+          toast.warning({ description: "Please check your email address." })
         } else {
           toast.error({ description: "Failed to send verification email. Please try again." })
         }
         return
       }
       nextStep()
-    } catch {
-      toast.error({ description: "Failed to send verification email. Please try again." })
+    } catch (error) {
+      console.error("[UserStep] Sending verification code threw", { error })
+      toast.error({
+        description:
+          "Failed to send verification email. Please try again. If this keeps happening, refresh the page.",
+      })
     } finally {
       setSubmitting(false)
     }

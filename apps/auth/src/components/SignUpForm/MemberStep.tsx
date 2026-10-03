@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AuthPages } from "@uoacs/shared"
-import { authClient } from "@uoacs/shared/auth"
 import { memberSchema } from "@uoacs/shared/payload"
 import { Button, Input, MultiSelect, Radio, Select } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
@@ -14,29 +13,37 @@ import { z } from "zod"
 import { signUp } from "@/actions/sign-up"
 import { withRedirect } from "@/lib/redirect"
 import type { SignUpStepProps } from "./SignUpForm"
+import {
+  confirmSession,
+  duplicateMessage,
+  NO_UNLINKED_MEMBER_MESSAGE,
+  SESSION_UNCONFIRMED_MESSAGE,
+} from "./sign-up-result"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
 
-const step2Schema = memberSchema
-  .omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-    firstName: true,
-    lastName: true,
-    email: true,
-  })
-  .superRefine((data, ctx) => {
-    if (!data.compsciStudent && (!data.otherMajors || data.otherMajors.length === 0)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Please enter your major(s)",
-        path: ["otherMajors"],
-      })
-    }
-  })
+const step2Fields = memberSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  firstName: true,
+  lastName: true,
+  email: true,
+})
+
+const step2Schema = step2Fields.superRefine((data, ctx) => {
+  if (!data.compsciStudent && (!data.otherMajors || data.otherMajors.length === 0)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Please enter your major(s)",
+      path: ["otherMajors"],
+    })
+  }
+})
 
 type FormInput = zType.input<typeof step2Schema>
 type FormOutput = zType.output<typeof step2Schema>
+
+const isFormField = (field: string): field is keyof FormInput => field in step2Fields.shape
 
 export const MemberStep = ({ redirect, returnTo }: SignUpStepProps) => {
   const { step1, step2, setStep2, prevStep, reset } = useSignUpFormStore()
@@ -49,6 +56,7 @@ export const MemberStep = ({ redirect, returnTo }: SignUpStepProps) => {
     handleSubmit,
     watch,
     getValues,
+    setError,
     reset: resetForm,
     formState: { errors },
   } = useForm<FormInput, unknown, FormOutput>({
@@ -69,41 +77,37 @@ export const MemberStep = ({ redirect, returnTo }: SignUpStepProps) => {
     }
     setStep2(step2Data)
     setLoading(true)
+    let leaving = false
     try {
       const result = await signUp({ ...step1, ...step2Data })
       if (!result.ok) {
         if (result.error === "duplicate") {
-          toast.warning({
-            description:
-              "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz",
-          })
+          if (isFormField(result.field)) setError(result.field, { message: "Already in use" })
+          toast.warning({ description: duplicateMessage(result.field) })
         } else if (result.error === "no-unlinked-member") {
-          toast.warning({
-            description:
-              "We couldn't find a membership waiting on that email.\nStart again and sign up as a new member.",
-          })
+          toast.warning({ description: NO_UNLINKED_MEMBER_MESSAGE })
         } else {
           toast.error({ description: "An error occurred while submitting the form" })
         }
         return
       }
 
-      reset()
-      const { data: session, error } = await authClient.getSession()
-      if (!session || error) {
-        console.error("Session confirmation failed after sign-up", error)
-        toast.error({
-          description: "Signed up, but we couldn't confirm your session. Please log in.",
-        })
+      if (!(await confirmSession())) {
+        toast.error({ description: SESSION_UNCONFIRMED_MESSAGE })
+        reset()
         router.push(withRedirect(AuthPages.LOGIN, redirect))
         return
       }
-
+      leaving = true
       window.location.assign(returnTo)
-    } catch {
-      toast.error({ description: "An error occurred while submitting the form" })
+    } catch (error) {
+      console.error("[MemberStep] Sign up threw", { error })
+      toast.error({
+        description:
+          "An error occurred while submitting the form. If this keeps happening, refresh the page.",
+      })
     } finally {
-      setLoading(false)
+      if (!leaving) setLoading(false)
     }
   }
 
