@@ -167,7 +167,7 @@ export class MemberService {
   public async register(body: SignUpBody): Promise<Member> {
     let user: User
     try {
-      ;({ user } = await this.signUp(body))
+      user = await this.signUp(body)
     } catch (err) {
       if (isAPIError(err) && err.body?.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
         throw new DuplicateFieldError("email")
@@ -198,15 +198,14 @@ export class MemberService {
     lastName: string
     email: string
     password: string
-  }): Promise<{ user: User; headers: Headers }> {
-    const { response, headers } = await auth.api.signUpEmail({
+  }): Promise<User> {
+    const { user } = await auth.api.signUpEmail({
       body: {
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
         password: data.password,
       },
-      returnHeaders: true,
     })
-    return { user: response.user, headers }
+    return user
   }
 }

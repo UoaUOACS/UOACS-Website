@@ -49,22 +49,6 @@ export const forgotPasswordSchema = z.object({
   email: z.email({ error: "Please enter a valid email" }),
 })
 
-export const forgotPasswordBodySchema = forgotPasswordSchema.extend({
-  /**
-   * Absolute, not a path: Better Auth resolves this against its own base URL,
-   * so a relative value would land on the auth service rather than the site
-   * the caller meant.
-   *
-   * Guarded by the auth service's own token check, not by Better Auth —
-   * originCheck skips direct server calls, which have no request to inspect.
-   * The origin is checked when the emailed link is opened, so it has to be in
-   * the auth service's trustedOrigins or every reset link 403s at the callback.
-   */
-  redirectTo: z.url(),
-  /** Path on the caller's site where an unclaimed member finishes signing up. */
-  signUpPath: z.string().startsWith("/"),
-})
-
 /** What the service sends back, so callers can parse rather than assert. */
 export const memberResponseSchema = memberSchema
 
