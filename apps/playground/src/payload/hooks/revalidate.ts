@@ -26,6 +26,12 @@ const revalidateTags = (tags: CacheTag[], req: PayloadRequest, source: string): 
   }
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: the document shape depends on the collection
+type Tags = CacheTag[] | ((doc: any) => CacheTag[])
+
+const resolveTags = (tags: Tags, doc: unknown): CacheTag[] =>
+  typeof tags === "function" ? tags(doc) : tags
+
 /**
  * Builds revalidation hooks for the given tags
  *
@@ -33,7 +39,7 @@ const revalidateTags = (tags: CacheTag[], req: PayloadRequest, source: string): 
  * nothing references).
  */
 export const makeRevalidateHooks = (
-  tags: CacheTag[],
+  tags: Tags,
   { skipCreate = false }: { skipCreate?: boolean } = {},
 ): {
   afterChange: CollectionAfterChangeHook
@@ -42,14 +48,14 @@ export const makeRevalidateHooks = (
 } => ({
   afterChange: (({ collection, doc, operation, req }) => {
     if (skipCreate && operation === "create") return
-    revalidateTags(tags, req, `${collection.slug} ${doc.id} change`)
+    revalidateTags(resolveTags(tags, doc), req, `${collection.slug} ${doc.id} change`)
   }) satisfies CollectionAfterChangeHook,
 
-  afterDelete: (({ collection, id, req }) => {
-    revalidateTags(tags, req, `${collection.slug} ${id} delete`)
+  afterDelete: (({ collection, doc, id, req }) => {
+    revalidateTags(resolveTags(tags, doc), req, `${collection.slug} ${id} delete`)
   }) satisfies CollectionAfterDeleteHook,
 
-  globalAfterChange: (({ global, req }) => {
-    revalidateTags(tags, req, `${global.slug} change`)
+  globalAfterChange: (({ doc, global, req }) => {
+    revalidateTags(resolveTags(tags, doc), req, `${global.slug} change`)
   }) satisfies GlobalAfterChangeHook,
 })

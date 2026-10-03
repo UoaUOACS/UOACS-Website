@@ -72,6 +72,7 @@ export interface Config {
     project: Project;
     sponsor: Sponsor;
     member: Member;
+    like: Like;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     project: ProjectSelect<false> | ProjectSelect<true>;
     sponsor: SponsorSelect<false> | SponsorSelect<true>;
     member: MemberSelect<false> | MemberSelect<true>;
+    like: LikeSelect<false> | LikeSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -179,6 +181,10 @@ export interface Project {
   author: string | Member;
   collaborators?: string[] | null;
   coverImage: string | Media;
+  /**
+   * Number of likes. Kept up to date by the Like collection.
+   */
+  likeCount?: number | null;
   pageContent: (
     | {
         content: {
@@ -370,6 +376,17 @@ export interface Sponsor {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "like".
+ */
+export interface Like {
+  id: string;
+  project: string | Project;
+  member: string | Member;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -411,6 +428,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'member';
         value: string | Member;
+      } | null)
+    | ({
+        relationTo: 'like';
+        value: string | Like;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -505,6 +526,7 @@ export interface ProjectSelect<T extends boolean = true> {
   author?: T;
   collaborators?: T;
   coverImage?: T;
+  likeCount?: T;
   pageContent?:
     | T
     | {
@@ -555,6 +577,16 @@ export interface MemberSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "like_select".
+ */
+export interface LikeSelect<T extends boolean = true> {
+  project?: T;
+  member?: T;
   updatedAt?: T;
   createdAt?: T;
 }

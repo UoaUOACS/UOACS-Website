@@ -10,7 +10,7 @@ export const Routes = {
   },
 } as const
 
-type DeepValues<T> = T extends (...args: never[]) => infer R
+export type DeepValues<T> = T extends (...args: never[]) => infer R
   ? R
   : T extends object
     ? { [K in keyof T]: DeepValues<T[K]> }[keyof T]
