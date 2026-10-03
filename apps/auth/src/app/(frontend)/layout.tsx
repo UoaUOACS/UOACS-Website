@@ -53,7 +53,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex min-h-screen flex-col overflow-x-hidden">
         <Toaster />
         <div className="mx-auto flex w-full max-w-lg grow flex-col items-center gap-9 px-4 py-6 md:py-12">
-          {/* The website is another origin, so a plain anchor, not next/link. */}
           <a href={process.env.NEXT_PUBLIC_WEBSITE_URL}>
             <Image alt="UOACS Logo" height={40} src="/uoacs-logo.svg" width={168} />
           </a>
