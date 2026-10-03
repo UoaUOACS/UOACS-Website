@@ -15,7 +15,7 @@ import { Routes } from "@/lib/routes"
 export interface PlaygroundNavbarProps {
   /**
    * Whether the user is signed in. Rendered as a profile dropdown when true,
-   * or a Log In button linking to the sign-up page when false.
+   * or Log In and Sign Up links to the hosted auth app when false.
    */
   signedIn?: boolean
   /**
@@ -85,6 +85,7 @@ export function PlaygroundNavbar({
         />
       ) : (
         <div className="flex flex-row items-center gap-3">
+          {/* A plain <a>, not next/link, because the auth app is on a different origin. */}
           <a
             className="inline-flex"
             href={authPageUrl(
