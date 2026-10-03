@@ -1,8 +1,12 @@
 "use server"
 
 import { type SignUpBody, sendCodeSchema, signUpBodySchema, verifyCodeSchema } from "@uoacs/shared"
+import { cookies } from "next/headers"
+import { z } from "zod"
+import { auth } from "@/lib/auth/auth"
 import { PayloadEmailService } from "@/services/email/payload-email.service"
 import {
+  AccountRollbackError,
   DuplicateFieldError,
   MemberService,
   NoUnlinkedMemberError,
@@ -32,7 +36,7 @@ export type SignUpResult =
   | { ok: false; error: "server" }
 
 /**
- * Emails a sign-up verification code. Replaces `POST /api/verification-code`.
+ * Emails a sign-up verification code.
  *
  * Anyone can call a server action, so the per-email cooldown is the only
  * limit here. It does not rely on the caller.
@@ -69,7 +73,7 @@ export async function sendVerificationCode(email: string): Promise<SendVerificat
 }
 
 /**
- * Checks a sign-up verification code. Replaces `PUT /api/verification-code`.
+ * Checks a sign-up verification code.
  *
  * Anyone can call a server action. `memberExists` tells the form whether to
  * show the claim-your-account step or the full member form.
@@ -82,8 +86,9 @@ export async function verifyCode(email: string, code: string): Promise<VerifyCod
     const result = await codes.verify(parsed.data.email, parsed.data.code)
     if (result === "expired" || result === "invalid") return { ok: false, error: result }
 
-    await codes.deleteAll(parsed.data.email)
+    // Counted before the code is spent, so a failed count does not burn it.
     const memberExists = await members.hasUnlinkedMember(parsed.data.email)
+    await codes.deleteAll(parsed.data.email)
     return { ok: true, memberExists }
   } catch (error) {
     console.error("[verifyCode] Failed to verify", { error })
@@ -92,22 +97,15 @@ export async function verifyCode(email: string, code: string): Promise<VerifyCod
 }
 
 /**
- * Creates the account and its member row, then signs the person in. Replaces
- * `POST /api/member`. Better Auth's `nextCookies()` plugin sets the session
- * cookie.
+ * Creates the account and its member row, then signs the person in. Better
+ * Auth's `nextCookies()` plugin sets the session cookie.
  *
  * Anyone can call a server action, so this does not rely on a secret from the
  * caller.
  */
 export async function signUp(body: SignUpBody): Promise<SignUpResult> {
   const parsed = signUpBodySchema.safeParse(body)
-  if (!parsed.success) {
-    const issues = parsed.error.issues.map((i) => ({
-      field: i.path.join("."),
-      message: i.message,
-    }))
-    return { ok: false, error: "invalid", issues }
-  }
+  if (!parsed.success) return { ok: false, error: "invalid", issues: toIssues(parsed.error) }
 
   try {
     await members.register(parsed.data)
@@ -116,7 +114,40 @@ export async function signUp(body: SignUpBody): Promise<SignUpResult> {
     if (err instanceof DuplicateFieldError)
       return { ok: false, error: "duplicate", field: err.field }
     if (err instanceof NoUnlinkedMemberError) return { ok: false, error: "no-unlinked-member" }
+    if (err instanceof z.ZodError) return { ok: false, error: "invalid", issues: toIssues(err) }
+    if (err instanceof AccountRollbackError) await clearSessionCookies()
     console.error("[signUp] Sign up failed", { email: parsed.data.email, error: err })
     return { ok: false, error: "server" }
+  }
+}
+
+function toIssues(error: z.ZodError): { field: string; message: string }[] {
+  return error.issues.map((i) => ({ field: i.path.join("."), message: i.message }))
+}
+
+/**
+ * `nextCookies()` sets the session cookie as soon as the account exists. If
+ * the account could not be undone, expire the cookie so the browser does not
+ * keep a session that resolves to no member. Same cookies as Better Auth's own
+ * `deleteSessionCookie`, with the cross-subdomain domain when it is set.
+ */
+async function clearSessionCookies(): Promise<void> {
+  try {
+    const { authCookies } = await auth.$context
+    const jar = await cookies()
+    for (const { name, attributes } of [
+      authCookies.sessionToken,
+      authCookies.sessionData,
+      authCookies.dontRememberToken,
+    ]) {
+      // Name, domain and path must match for the browser to replace it;
+      // secure is required for the __Secure- prefix.
+      const { domain, path, secure } = attributes
+      jar.set(name, "", { domain, path, secure, maxAge: 0 })
+    }
+  } catch (error) {
+    console.error("[signUp] CRITICAL: could not clear session cookie after failed rollback", {
+      error,
+    })
   }
 }

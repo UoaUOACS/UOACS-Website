@@ -25,6 +25,17 @@ export class DuplicateFieldError extends Error {
   }
 }
 
+/** The account was created but could not be deleted after a later failure. */
+export class AccountRollbackError extends Error {
+  constructor(
+    public readonly betterAuthUserId: string,
+    cause: unknown,
+  ) {
+    super("Account rollback failed", { cause })
+    this.name = "AccountRollbackError"
+  }
+}
+
 function duplicateField(err: unknown): string | null {
   if (!(err instanceof ValidationError)) return null
   const duplicate = err.data?.errors?.find((e) => e.message === "Value must be unique")
@@ -159,12 +170,22 @@ export class MemberService {
   /**
    * Creates the account and its member row together. A person who predates
    * Better Auth gets their existing row linked; everyone else gets a new one.
+   * A full member body for an email with an unlinked member links that row and
+   * ignores the member fields.
    *
-   * Throws `DuplicateFieldError` when the email or a unique member field is
-   * taken, and `NoUnlinkedMemberError` when an existing-member claim finds no
-   * row to link.
+   * Throws `ZodError` for an invalid member body (before any account exists),
+   * `DuplicateFieldError` when the email or a unique member field is taken,
+   * `NoUnlinkedMemberError` when an existing-member claim finds no row to link,
+   * and `AccountRollbackError` when the account could not be undone.
    */
   public async register(body: SignUpBody): Promise<Member> {
+    let memberData: CreateMemberInput | null = null
+    if (!("existingMember" in body)) {
+      const parsed = createMemberSchema.safeParse(body)
+      if (!parsed.success) throw parsed.error
+      memberData = parsed.data
+    }
+
     let user: User
     try {
       user = await this.signUp(body)
@@ -176,19 +197,23 @@ export class MemberService {
     }
 
     try {
-      const linkOnly = "existingMember" in body || (await this.hasUnlinkedMember(body.email))
-      return linkOnly
-        ? await this.link(body.email, user.id)
-        : await this.create(createMemberSchema.parse(body), user.id)
+      if (!memberData || (await this.hasUnlinkedMember(body.email))) {
+        return await this.link(body.email, user.id)
+      }
+      return await this.create(memberData, user.id)
     } catch (err) {
       // The account exists but has no member row, so it would be a login that
       // resolves to nothing. Undo it rather than leave that behind.
-      await this.deleteAccount(user.id).catch((cleanupError) => {
+      try {
+        await this.deleteAccount(user.id)
+      } catch (cleanupError) {
         console.error("[MemberService] CRITICAL: account rollback failed, record leaked", {
           betterAuthUserId: user.id,
           error: cleanupError,
+          originalError: err,
         })
-      })
+        throw new AccountRollbackError(user.id, cleanupError)
+      }
       throw err
     }
   }

@@ -11,11 +11,11 @@ export type ForgotPasswordResult = { ok: true } | { ok: false; error: "invalid" 
 
 /**
  * Sends a password reset link, or a finish-sign-up link to a member who has no
- * account yet. Replaces `POST /api/forgot-password`.
+ * account yet.
  *
  * Anyone can call a server action. `redirect` is user input, so it is passed
- * on only when it is an absolute URL. The pages check it with `safeRedirect`
- * when the person returns.
+ * on only when it is an absolute URL. The login and sign-up pages check it
+ * with `safeRedirect` before sending the person to it.
  */
 export async function forgotPassword(
   email: string,

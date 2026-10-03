@@ -2,12 +2,11 @@ import { z } from "zod"
 import { createMemberSchema, memberSchema } from "../payload/schemas/member"
 
 /**
- * The request and response shapes of the auth service.
+ * Sign-up, verification and member shapes.
  *
- * Shared because both ends validate the same bytes: the website parses form
- * input against these before sending, the auth service parses the body it
- * receives, and the website parses the response that comes back. Three copies
- * drift into accepting and returning different things.
+ * Shared so the auth app's forms and server actions, and every app that reads
+ * a member, validate the same shapes. Separate copies drift into accepting
+ * different things.
  */
 
 const password = z.string().min(8, "Password must be at least 8 characters")
@@ -52,11 +51,13 @@ export const forgotPasswordSchema = z.object({
 /** What the service sends back, so callers can parse rather than assert. */
 export const memberResponseSchema = memberSchema
 
+/** @deprecated Only the website's old sign-up proxy uses this; removed in Stage 3. */
 export const verifyCodeResponseSchema = z.object({
   message: z.string(),
   memberExists: z.boolean(),
 })
 
+/** @deprecated Only the website's old sign-up proxy uses this; removed in Stage 3. */
 export const messageResponseSchema = z.object({ message: z.string() })
 
 /** Errors carry a `field` when the problem is a specific input. */
