@@ -3,7 +3,6 @@
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ArrowLeftEndOnRectangleIcon, ArrowRightIcon } from "@heroicons/react/24/solid"
 import { AuthPages, authPageUrl } from "@uoacs/shared"
-import { authClient } from "@uoacs/shared/auth"
 import { BorderButton, Button, Heading, SocialIcon } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { AnimatePresence, motion } from "motion/react"
@@ -12,6 +11,7 @@ import Link, { type LinkProps } from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useSession } from "@/context/SessionContext"
+import { logOut } from "@/lib/auth/log-out"
 import { Routes, websiteUrl } from "@/lib/routes"
 
 import type { NavbarProps } from "../Navbar"
@@ -33,8 +33,7 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
 
   const handleLogout = async () => {
     setIsOpen(false)
-    await authClient.signOut()
-    router.refresh()
+    await logOut(router)
   }
 
   useEffect(() => {
