@@ -1,5 +1,6 @@
 import { toNextJsHandler } from "better-auth/next-js"
-import { auth, trustedOrigins } from "@/lib/auth/auth"
+import { auth } from "@/lib/auth/auth"
+import { trustedOrigins } from "@/lib/auth/trusted-origins"
 
 const handlers = toNextJsHandler(auth)
 
