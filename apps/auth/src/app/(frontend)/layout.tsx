@@ -54,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Toaster />
         <div className="mx-auto flex w-full max-w-lg grow flex-col items-center gap-9 px-4 py-6 md:py-12">
           <a href={process.env.NEXT_PUBLIC_WEBSITE_URL}>
-            <Image alt="UOACS Logo" height={40} src="/uoacs-logo.svg" width={168} />
+            <Image alt="UOACS Logo" height={40} loading="eager" src="/uoacs-logo.svg" width={168} />
           </a>
           <main className="flex w-full grow flex-col items-center">{children}</main>
         </div>
