@@ -19,3 +19,32 @@ export const AuthApiRoutes = {
 type RouteValue<T> = T extends (...args: never[]) => infer R ? R : T
 
 export type AuthApiRoute = RouteValue<(typeof AuthApiRoutes)[keyof typeof AuthApiRoutes]>
+
+/**
+ * Pages the hosted auth app serves.
+ *
+ * Shared so every app links to the same pages through `authPageUrl` instead
+ * of a hand-written URL. Renaming a page directory in apps/auth means
+ * changing it here too.
+ */
+export const AuthPages = {
+  LOGIN: "/login",
+  SIGN_UP: "/sign-up",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+} as const
+
+export type AuthPage = (typeof AuthPages)[keyof typeof AuthPages]
+
+/** Absolute link to a hosted auth page that returns to `returnTo` when done. */
+export function authPageUrl(page: AuthPage, returnTo?: string): string {
+  const base = process.env.NEXT_PUBLIC_AUTH_URL
+  if (!base) {
+    throw new Error("Missing required environment variable: NEXT_PUBLIC_AUTH_URL")
+  }
+  const url = new URL(page, base)
+  if (returnTo !== undefined) {
+    url.searchParams.set("redirect", returnTo)
+  }
+  return url.toString()
+}
