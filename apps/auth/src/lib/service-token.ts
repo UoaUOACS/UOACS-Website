@@ -1,9 +1,9 @@
 import { timingSafeEqual } from "node:crypto"
 
 /**
- * Guards the endpoints that run before any user session exists — verification
- * codes, the member-exists probe, sign-up and admin deletion. Everything else
- * authenticates as the member, via the Better Auth session cookie.
+ * Guards admin deletion (`DELETE /api/member/:id`), which another app calls on
+ * behalf of its operator. Everything else authenticates as the member, via the
+ * Better Auth session cookie.
  *
  * The secret is read per call so it stays a runtime concern; reading it at
  * module scope would make it a build-time requirement for every route here.
