@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
+import { nextCookies } from "better-auth/next-js"
 import { trustedOrigins } from "@/lib/auth/trusted-origins"
 import { mongoClient } from "@/lib/mongo"
 import { PayloadEmailService } from "@/services/email/payload-email.service"
@@ -34,4 +35,6 @@ export const auth = betterAuth({
     },
     revokeSessionsOnPasswordReset: true,
   },
+  // Lets server actions set the session cookie. Must stay the last plugin.
+  plugins: [nextCookies()],
 })
