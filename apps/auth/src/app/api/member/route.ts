@@ -1,6 +1,4 @@
 import { type SignUpBody, signUpBodySchema } from "@uoacs/shared"
-import { createMemberSchema } from "@uoacs/shared/payload"
-import { isAPIError } from "better-auth/api"
 import { z } from "zod"
 import { hasServiceToken, serviceTokenRequired } from "@/lib/service-token"
 import {
@@ -12,8 +10,8 @@ import {
 const members = new MemberService()
 
 /**
- * Creates the account and its member row together, and hands back Better
- * Auth's Set-Cookie so the caller can sign the person straight in.
+ * Creates the account and its member row together. Better Auth's nextCookies()
+ * plugin sets the session cookie on the response.
  *
  * Service-token guarded rather than open: the website gates sign-up behind an
  * emailed verification code, and an unauthenticated endpoint here would let
@@ -36,34 +34,10 @@ export async function POST(request: Request) {
     throw err
   }
 
-  let user: Awaited<ReturnType<MemberService["signUp"]>>
   try {
-    user = await members.signUp(body)
+    const member = await members.register(body)
+    return Response.json(member, { status: 201 })
   } catch (err) {
-    if (isAPIError(err) && err.body?.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
-      return Response.json({ error: "Value already in use", field: "email" }, { status: 409 })
-    }
-    console.error("[POST /api/member] Sign up failed", { email: body.email, error: err })
-    return Response.json({ error: "Internal server error" }, { status: 500 })
-  }
-
-  try {
-    const linkOnly = "existingMember" in body || (await members.hasUnlinkedMember(body.email))
-    const member = linkOnly
-      ? await members.link(body.email, user.user.id)
-      : await members.create(createMemberSchema.parse(body), user.user.id)
-
-    return Response.json(member, { status: 201, headers: user.headers })
-  } catch (err) {
-    // The account exists but has no member row, so it would be a login that
-    // resolves to nothing. Undo it rather than leave that behind.
-    await members.deleteAccount(user.user.id).catch((cleanupError) => {
-      console.error("[POST /api/member] CRITICAL: account rollback failed, record leaked", {
-        betterAuthUserId: user.user.id,
-        error: cleanupError,
-      })
-    })
-
     if (err instanceof NoUnlinkedMemberError) {
       return Response.json(
         { error: "No membership awaiting an account for that email", field: "email" },
@@ -73,7 +47,7 @@ export async function POST(request: Request) {
     if (err instanceof DuplicateFieldError) {
       return Response.json({ error: "Value already in use", field: err.field }, { status: 409 })
     }
-    console.error("[POST /api/member] Member creation failed, account rolled back", { error: err })
+    console.error("[POST /api/member] Sign up failed", { email: body.email, error: err })
     return Response.json({ error: "Internal server error" }, { status: 500 })
   }
 }

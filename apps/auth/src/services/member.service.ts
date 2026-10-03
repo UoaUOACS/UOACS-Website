@@ -1,6 +1,12 @@
-import { AuthCollectionSlugs } from "@uoacs/shared"
-import type { CreateMemberInput, Member, UpdateMemberInput } from "@uoacs/shared/payload"
+import { AuthCollectionSlugs, type SignUpBody } from "@uoacs/shared"
+import {
+  type CreateMemberInput,
+  createMemberSchema,
+  type Member,
+  type UpdateMemberInput,
+} from "@uoacs/shared/payload"
 import type { User } from "better-auth"
+import { isAPIError } from "better-auth/api"
 import { NotFound, ValidationError } from "payload"
 import { auth } from "@/lib/auth/auth"
 import { getPayloadClient } from "@/lib/payload"
@@ -148,6 +154,43 @@ export class MemberService {
     const context = await auth.$context
     await context.internalAdapter.deleteAccounts(userId)
     await context.internalAdapter.deleteUser(userId)
+  }
+
+  /**
+   * Creates the account and its member row together. A person who predates
+   * Better Auth gets their existing row linked; everyone else gets a new one.
+   *
+   * Throws `DuplicateFieldError` when the email or a unique member field is
+   * taken, and `NoUnlinkedMemberError` when an existing-member claim finds no
+   * row to link.
+   */
+  public async register(body: SignUpBody): Promise<Member> {
+    let user: User
+    try {
+      ;({ user } = await this.signUp(body))
+    } catch (err) {
+      if (isAPIError(err) && err.body?.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
+        throw new DuplicateFieldError("email")
+      }
+      throw err
+    }
+
+    try {
+      const linkOnly = "existingMember" in body || (await this.hasUnlinkedMember(body.email))
+      return linkOnly
+        ? await this.link(body.email, user.id)
+        : await this.create(createMemberSchema.parse(body), user.id)
+    } catch (err) {
+      // The account exists but has no member row, so it would be a login that
+      // resolves to nothing. Undo it rather than leave that behind.
+      await this.deleteAccount(user.id).catch((cleanupError) => {
+        console.error("[MemberService] CRITICAL: account rollback failed, record leaked", {
+          betterAuthUserId: user.id,
+          error: cleanupError,
+        })
+      })
+      throw err
+    }
   }
 
   public async signUp(data: {
