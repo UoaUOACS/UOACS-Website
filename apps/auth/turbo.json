@@ -5,7 +5,6 @@
     "build": {
       "env": [
         "AUTH_COOKIE_DOMAIN",
-        "AUTH_SERVICE_TOKEN",
         "BETTER_AUTH_SECRET",
         "DATABASE_URI",
         "NEXT_PUBLIC_AUTH_URL",
