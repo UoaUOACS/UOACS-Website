@@ -2,7 +2,7 @@ import { z } from "zod"
 import { createMemberSchema, memberSchema } from "../payload/schemas/member"
 
 /**
- * Sign-up, verification and member shapes.
+ * Sign-up, password and member shapes.
  *
  * Shared so the auth app's forms and server actions, and every app that reads
  * a member, validate the same shapes. Separate copies drift into accepting
@@ -50,18 +50,3 @@ export const forgotPasswordSchema = z.object({
 
 /** What the service sends back, so callers can parse rather than assert. */
 export const memberResponseSchema = memberSchema
-
-/** @deprecated Only the website's old sign-up proxy uses this; removed in Stage 3. */
-export const verifyCodeResponseSchema = z.object({
-  message: z.string(),
-  memberExists: z.boolean(),
-})
-
-/** @deprecated Only the website's old sign-up proxy uses this; removed in Stage 3. */
-export const messageResponseSchema = z.object({ message: z.string() })
-
-/** Errors carry a `field` when the problem is a specific input. */
-export const apiErrorSchema = z.object({
-  error: z.unknown(),
-  field: z.string().optional(),
-})

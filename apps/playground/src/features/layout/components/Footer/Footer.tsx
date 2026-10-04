@@ -1,9 +1,8 @@
-import { ArrowUpRightIcon } from "@heroicons/react/24/solid"
-import { AnimatedSuspense, Button, SocialIcon, type SocialIconName } from "@uoacs/ui"
-import { cn } from "@uoacs/ui/utils"
+import { AnimatedSuspense, SocialIcon, type SocialIconName } from "@uoacs/ui"
 import Link from "next/link"
 import { DiscordSection, DiscordSectionSkeleton } from "../DiscordSection"
 import { CopyrightYear } from "./CopyrightYear"
+import { InterestedButton } from "./InterestedButton"
 
 export interface FooterSocialLink {
   icon: SocialIconName
@@ -23,26 +22,9 @@ export interface FooterProps {
 }
 
 /**
- * Placeholder until playground has a sign-up route of its own.
- */
-const JOIN_HREF = "/"
-
-/**
  * Placeholder until playground has a privacy policy route of its own.
  */
 const PRIVACY_HREF = "/"
-
-const InterestedButton = ({ className }: { className?: string }) => (
-  <Link href={JOIN_HREF}>
-    <Button
-      className={cn("whitespace-nowrap", className)}
-      right={<ArrowUpRightIcon className="h-4 w-4 text-white" />}
-      theme="primary"
-    >
-      Interested? Join UOACS
-    </Button>
-  </Link>
-)
 
 /**
  * A footer component for the project playground, containing links and social media icons.

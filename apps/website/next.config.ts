@@ -5,8 +5,25 @@ import type { NextConfig } from "next"
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
+const redirectedAuthPaths = ["/login", "/sign-up", "/forgot-password", "/reset-password"]
+
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  async redirects() {
+    // Checked here, not at module level, so only commands that build redirects
+    // need them. `next typegen` is one of them, so CI sets both for it.
+    const authUrl = process.env.NEXT_PUBLIC_AUTH_URL
+    if (!authUrl) throw new Error("NEXT_PUBLIC_AUTH_URL is not set")
+    if (!process.env.NEXT_PUBLIC_WEBSITE_URL) {
+      throw new Error("NEXT_PUBLIC_WEBSITE_URL is not set")
+    }
+    const authOrigin = new URL(authUrl).origin
+    return redirectedAuthPaths.map((source) => ({
+      source,
+      destination: `${authOrigin}${source}`,
+      permanent: true,
+    }))
+  },
   output: "standalone",
   // Trace from the workspace root so standalone output resolves dependencies
   // hoisted to the monorepo's node_modules, not just this app's.
