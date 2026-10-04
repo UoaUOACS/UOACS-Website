@@ -4,11 +4,11 @@
   "tasks": {
     "build": {
       "env": [
-        "BETTER_AUTH_SECRET",
         "DATABASE_URI",
         "DISCORD_SERVER_ID",
         "GOOGLE_WALLET_ISSUER_ID",
         "GOOGLE_WALLET_SERVICE_ACCOUNT_KEY",
+        "NEXT_PUBLIC_AUTH_URL",
         "NEXT_PUBLIC_WEBSITE_URL",
         "NEXT_PUBLIC_PROJECTS_URL",
         "PAYLOAD_SECRET",

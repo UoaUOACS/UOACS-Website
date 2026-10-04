@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
+import type { Member } from "@uoacs/shared/payload"
 import { api } from "@/lib/api/api-client"
 import { ApiRoutes } from "@/lib/routes"
-import type { Member } from "@/payload/payload-types"
 import { QueryKeys } from "./QueryKeys"
 
 export function useMember(userId: string) {

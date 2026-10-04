@@ -100,6 +100,9 @@ jobs:
       - name: Run Type Check
         env:
           NODE_ENV: production
+          # `next typegen` calls the website's redirects(), which needs these.
+          NEXT_PUBLIC_WEBSITE_URL: http://localhost:3000
+          NEXT_PUBLIC_AUTH_URL: http://localhost:3002
         run: pnpm types:check
 
   codegen:
@@ -138,6 +141,9 @@ jobs:
       - name: Generate typing
         env:
           NODE_ENV: production
+          # `next typegen` calls the website's redirects(), which needs these.
+          NEXT_PUBLIC_WEBSITE_URL: http://localhost:3000
+          NEXT_PUBLIC_AUTH_URL: http://localhost:3002
         run: pnpm types:generate
 
       - name: Write git diff

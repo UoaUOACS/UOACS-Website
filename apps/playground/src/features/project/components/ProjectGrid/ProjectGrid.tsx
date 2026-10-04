@@ -5,6 +5,12 @@ interface ProjectGridProps {
   projects: Project[]
 }
 
+/**
+ * The grid layout, shared with {@link ProjectGridSkeleton} so loading and loaded states line up.
+ */
+export const projectGridClassName =
+  "grid grid-cols-1 justify-items-center gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3"
+
 export const ProjectGrid = ({ projects }: ProjectGridProps) => {
   if (projects.length === 0) {
     return (
@@ -16,7 +22,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 justify-items-center gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <div className={projectGridClassName}>
       {projects.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}

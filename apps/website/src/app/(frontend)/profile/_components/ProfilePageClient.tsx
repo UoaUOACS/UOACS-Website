@@ -3,7 +3,8 @@
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/solid"
 import { Button, Heading } from "@uoacs/ui"
 import type { User } from "better-auth"
-import { authClient } from "@/lib/auth/auth-client"
+import { useRouter } from "next/navigation"
+import { logOut } from "@/lib/auth/log-out"
 import { useMember } from "@/queries/useMember"
 import { MemberDetailsForm } from "./MemberDetailsForm"
 
@@ -13,6 +14,7 @@ export type ProfilePageClientProps = {
 
 export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
   const { data: member, isLoading, isError } = useMember(user.id)
+  const router = useRouter()
   const displayName = `${member?.firstName ?? ""} ${member?.lastName ?? ""}`.trim() || user.name
 
   return (
@@ -76,7 +78,7 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
           left={<ArrowLeftEndOnRectangleIcon className="h-4 w-4" />}
           onClick={async () => {
             try {
-              await authClient.signOut()
+              await logOut(router)
             } catch (err) {
               console.error("[ProfilePageClient] signOut failed", { error: err })
             }

@@ -1,9 +1,15 @@
-import { Heading } from "@uoacs/ui"
+import { HeroSection } from "@/features/layout/components/HeroSection/HeroSection"
+import { DiscoverProjects } from "@/features/project/components/DiscoverProjects/DiscoverProjects"
+import { SponsorsSection } from "@/features/sponsor/components/SponsorsSection/SponsorsSection"
 
-export default function Home() {
+export default function Home({ searchParams }: PageProps<"/">) {
   return (
-    <Heading h={1} period>
-      Project Playground
-    </Heading>
+    <>
+      <HeroSection />
+
+      <DiscoverProjects searchParams={searchParams} />
+
+      <SponsorsSection />
+    </>
   )
 }

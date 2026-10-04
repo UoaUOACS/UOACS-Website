@@ -19,8 +19,18 @@ export interface ButtonProps
  * @param right Optional right icon or element to display inside the button.
  * @returns A styled button element.
  */
-export const Button = ({ children, className, left, right, theme, ...props }: ButtonProps) => {
-  const variantClasses = buttonVariants({ theme })
+export const Button = ({
+  children,
+  className,
+  left,
+  right,
+  theme,
+  size,
+  shape,
+  font,
+  ...props
+}: ButtonProps) => {
+  const variantClasses = buttonVariants({ theme, size, shape, font })
 
   return (
     <button className={cn(variantClasses, className)} type="button" {...props}>

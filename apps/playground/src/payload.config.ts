@@ -2,11 +2,15 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import { s3Storage } from "@payloadcms/storage-s3"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Admin } from "./payload/collections/Admin"
+import { Like } from "./payload/collections/Like"
 import { Media } from "./payload/collections/Media"
+import { Member } from "./payload/collections/Member"
 import { Project } from "./payload/collections/Project"
+import { Sponsor } from "./payload/collections/Sponsor"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -19,7 +23,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Admin, Media, Project],
+  collections: [Admin, Media, Project, Sponsor, Member, Like],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,
@@ -34,7 +38,25 @@ export default buildConfig({
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || "",
+    // Compare strings case-insensitively, so sorting by name doesn't put lowercase names last
+    collation: {
+      strength: 2,
+    },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    s3Storage({
+      collections: {
+        media: { prefix: "playground/media" },
+      },
+      bucket: process.env.S3_BUCKET ?? "",
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
+        },
+        region: process.env.S3_REGION,
+      },
+    }),
+  ],
 })

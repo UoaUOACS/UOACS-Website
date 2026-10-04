@@ -70,6 +70,9 @@ export interface Config {
     admin: Admin;
     media: Media;
     project: Project;
+    sponsor: Sponsor;
+    member: Member;
+    like: Like;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +83,9 @@ export interface Config {
     admin: AdminSelect<false> | AdminSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     project: ProjectSelect<false> | ProjectSelect<true>;
+    sponsor: SponsorSelect<false> | SponsorSelect<true>;
+    member: MemberSelect<false> | MemberSelect<true>;
+    like: LikeSelect<false> | LikeSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -151,6 +157,7 @@ export interface Admin {
 export interface Media {
   id: string;
   alt: string;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -171,9 +178,13 @@ export interface Project {
   id: string;
   name: string;
   summary: string;
-  author: string;
+  author: string | Member;
   collaborators?: string[] | null;
   coverImage: string | Media;
+  /**
+   * Number of likes. Kept up to date by the Like collection.
+   */
+  likeCount?: number | null;
   pageContent: (
     | {
         content: {
@@ -202,6 +213,175 @@ export interface Project {
         blockType: 'imageGrid';
       }
   )[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "member".
+ */
+export interface Member {
+  id: string;
+  username: string;
+  authServiceID: string;
+  profilePicture?: (string | null) | Media;
+  bio?: string | null;
+  skills?:
+    | (
+        | 'JavaScript'
+        | 'TypeScript'
+        | 'Python'
+        | 'Java'
+        | 'C'
+        | 'C++'
+        | 'C#'
+        | 'Go'
+        | 'Rust'
+        | 'Swift'
+        | 'Kotlin'
+        | 'Dart'
+        | 'Ruby'
+        | 'PHP'
+        | 'Scala'
+        | 'R'
+        | 'MATLAB'
+        | 'Haskell'
+        | 'Lua'
+        | 'Bash'
+        | 'SQL'
+        | 'HTML/CSS'
+        | 'React'
+        | 'Next.js'
+        | 'Vue'
+        | 'Svelte'
+        | 'Angular'
+        | 'Tailwind CSS'
+        | 'Node.js'
+        | 'Express'
+        | 'Django'
+        | 'Flask'
+        | 'FastAPI'
+        | 'Spring Boot'
+        | 'Ruby on Rails'
+        | 'Laravel'
+        | 'GraphQL'
+        | 'REST APIs'
+        | 'Mobile Development'
+        | 'iOS Development'
+        | 'Android Development'
+        | 'React Native'
+        | 'Flutter'
+        | 'Machine Learning'
+        | 'Deep Learning'
+        | 'Natural Language Processing'
+        | 'Computer Vision'
+        | 'Data Science'
+        | 'Data Analysis'
+        | 'Data Engineering'
+        | 'Data Visualisation'
+        | 'Statistics'
+        | 'PyTorch'
+        | 'TensorFlow'
+        | 'Pandas'
+        | 'DevOps'
+        | 'Cloud Computing'
+        | 'AWS'
+        | 'Azure'
+        | 'Google Cloud'
+        | 'Docker'
+        | 'Kubernetes'
+        | 'CI/CD'
+        | 'Linux'
+        | 'Networking'
+        | 'Databases'
+        | 'PostgreSQL'
+        | 'MongoDB'
+        | 'Redis'
+        | 'Cybersecurity'
+        | 'Algorithms'
+        | 'Operating Systems'
+        | 'Embedded Systems'
+        | 'Robotics'
+        | 'Blockchain'
+        | 'Game Development'
+        | 'Unity'
+        | 'Unreal Engine'
+        | 'AR/VR'
+        | 'Testing'
+        | 'Git'
+        | 'Open Source'
+        | 'UI/UX Design'
+        | 'Graphic Design'
+        | 'Figma'
+        | 'Motion Design'
+        | '3D Modelling'
+        | 'Video Editing'
+        | 'Photography'
+        | 'Product Management'
+        | 'Project Management'
+        | 'Agile'
+        | 'Leadership'
+        | 'Teamwork'
+        | 'Public Speaking'
+        | 'Technical Writing'
+        | 'Entrepreneurship'
+        | 'Marketing'
+      )[]
+    | null;
+  links?:
+    | {
+        name:
+          | 'LINKEDIN'
+          | 'GITHUB'
+          | 'GITLAB'
+          | 'PERSONAL_WEBSITE'
+          | 'BEHANCE'
+          | 'DRIBBBLE'
+          | 'FIGMA'
+          | 'DEVPOST'
+          | 'KAGGLE'
+          | 'MEDIUM'
+          | 'YOUTUBE';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsor".
+ */
+export interface Sponsor {
+  id: string;
+  /**
+   * Sponsor name, e.g. 'Jane Street'
+   */
+  name: string;
+  /**
+   * Link to visit the Sponsor, e.g. 'https://www.aleckshen.com/'
+   */
+  link: string;
+  /**
+   * Sponsor logo to be displayed
+   */
+  logo: string | Media;
+  /**
+   * Sponsor's current tier (diamond, gold, or silver)
+   */
+  tier: 'diamond' | 'gold' | 'silver';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "like".
+ */
+export interface Like {
+  id: string;
+  project: string | Project;
+  member: string | Member;
   updatedAt: string;
   createdAt: string;
 }
@@ -240,6 +420,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'project';
         value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'sponsor';
+        value: string | Sponsor;
+      } | null)
+    | ({
+        relationTo: 'member';
+        value: string | Member;
+      } | null)
+    | ({
+        relationTo: 'like';
+        value: string | Like;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -311,6 +503,7 @@ export interface AdminSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -333,6 +526,7 @@ export interface ProjectSelect<T extends boolean = true> {
   author?: T;
   collaborators?: T;
   coverImage?: T;
+  likeCount?: T;
   pageContent?:
     | T
     | {
@@ -351,6 +545,48 @@ export interface ProjectSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsor_select".
+ */
+export interface SponsorSelect<T extends boolean = true> {
+  name?: T;
+  link?: T;
+  logo?: T;
+  tier?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "member_select".
+ */
+export interface MemberSelect<T extends boolean = true> {
+  username?: T;
+  authServiceID?: T;
+  profilePicture?: T;
+  bio?: T;
+  skills?: T;
+  links?:
+    | T
+    | {
+        name?: T;
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "like_select".
+ */
+export interface LikeSelect<T extends boolean = true> {
+  project?: T;
+  member?: T;
   updatedAt?: T;
   createdAt?: T;
 }

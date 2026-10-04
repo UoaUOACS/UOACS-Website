@@ -1,7 +1,16 @@
 import type { CollectionConfig } from "payload"
+import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload/slugs"
 import { ImageGrid } from "../blocks/ImageGrid"
 import { Text } from "../blocks/Text"
+import { makeDeleteLikesHook } from "../hooks/deleteLikes"
+import { makeRevalidateHooks } from "../hooks/revalidate"
+import type { Project as ProjectDoc } from "../payload-types"
+
+const { afterChange, afterDelete } = makeRevalidateHooks((doc: ProjectDoc) => [
+  CacheTags.PROJECTS.ROOT,
+  CacheTags.PROJECTS.ID(doc.id),
+])
 
 export const Project: CollectionConfig = {
   slug: Slugs.Collections.PROJECT,
@@ -24,7 +33,8 @@ export const Project: CollectionConfig = {
     },
     {
       name: "author",
-      type: "text", // TODO: update to relationship once member collection set up
+      type: "relationship",
+      relationTo: Slugs.Collections.MEMBER,
       required: true,
     },
     {
@@ -39,7 +49,22 @@ export const Project: CollectionConfig = {
       relationTo: Slugs.Collections.MEDIA,
       required: true,
     },
-    // TODO: add link to awards and add link to likes once collections are set up
+    {
+      name: "likeCount",
+      type: "number",
+      defaultValue: 0,
+      min: 0,
+      index: true,
+      admin: {
+        readOnly: true,
+        description: "Number of likes. Kept up to date by the Like collection.",
+      },
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+    },
+    // TODO: add link to awards once collection is set up
     {
       name: "pageContent",
       type: "blocks",
@@ -49,4 +74,9 @@ export const Project: CollectionConfig = {
       maxRows: 50,
     },
   ],
+  hooks: {
+    afterChange: [afterChange],
+    beforeDelete: [makeDeleteLikesHook("project")],
+    afterDelete: [afterDelete],
+  },
 }
