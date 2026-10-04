@@ -90,7 +90,11 @@ export function PlaygroundNavbar({
             </Button>
           </Link>
           <Link className="hidden md:inline-flex" href={Routes.SIGN_UP}>
-            <Button right={<ArrowUpRightIcon className="h-4 w-4" />} tabIndex={-1} theme="primary">
+            <Button
+              right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />}
+              tabIndex={-1}
+              theme="primary"
+            >
               Sign Up
             </Button>
           </Link>
