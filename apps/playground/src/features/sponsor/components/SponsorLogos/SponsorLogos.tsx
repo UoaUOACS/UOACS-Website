@@ -1,5 +1,4 @@
 import { LazyImage, Skeleton } from "@uoacs/ui"
-import Link from "next/link"
 import { SponsorTicker } from "@/features/sponsor/components/SponsorTicker/SponsorTicker"
 import { SPONSORS_HREF, TIER_SIZES } from "@/features/sponsor/constants"
 import { SponsorTier } from "@/features/sponsor/types/enums"
@@ -33,7 +32,7 @@ export const SponsorLogos = ({ sponsors }: SponsorLogosProps) => {
         if (!src) return null
 
         return (
-          <Link href={SPONSORS_HREF} key={sponsor.id}>
+          <a href={SPONSORS_HREF} key={sponsor.id}>
             <LazyImage
               alt={sponsor.name || "Sponsor Logo"}
               className="max-h-full max-w-full object-contain"
@@ -41,7 +40,7 @@ export const SponsorLogos = ({ sponsors }: SponsorLogosProps) => {
               src={src}
               width={TIER_SIZES[sponsor.tier]?.width}
             />
-          </Link>
+          </a>
         )
       })}
     </div>
