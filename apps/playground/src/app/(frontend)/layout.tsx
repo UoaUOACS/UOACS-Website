@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import { SessionProvider } from "@/features/user/context/SessionContext"
+import { Routes } from "@/lib/routes"
 import "../globals.css"
 import { Footer } from "@/features/layout/components/Footer/Footer"
 import { PlaygroundNavbar } from "@/features/layout/components/PlaygroundNavbar/PlaygroundNavbar"
@@ -98,7 +99,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               {children}
             </main>
           </div>
-          <Footer links={[]} socialLinks={[]} />
+          <Footer
+            links={[
+              { label: "Home", href: Routes.HOME },
+              { label: "Search", href: Routes.SEARCH },
+            ]}
+          />
         </SessionProvider>
       </body>
     </html>
