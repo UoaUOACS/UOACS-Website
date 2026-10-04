@@ -17,7 +17,7 @@ export const ProfileTabs = ({ panels }: ProfileTabsProps) => {
 
   return (
     <div className="flex w-full flex-col gap-8">
-      <div className="flex justify-center gap-6 sm:gap-40" role="tablist">
+      <div className="flex justify-center gap-6 sm:gap-28" role="tablist">
         {PROFILE_TABS.map((tab) => (
           <Button
             aria-controls={`profile-panel-${tab}`}
