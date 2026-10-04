@@ -49,7 +49,6 @@ export const AboutUsSection = ({ reels, instagramHref }: AboutUsSectionProps) =>
         </p>
         <div className="flex flex-col items-center gap-6 md:items-start">
           {!session && (
-            // A plain <a>, not next/link, because the auth app is on a different origin.
             <a className="w-fit" href={authPageUrl(AuthPages.SIGN_UP, websiteUrl(Routes.PROFILE))}>
               <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
                 Interested? Join UOACS

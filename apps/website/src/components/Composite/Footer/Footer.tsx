@@ -58,7 +58,6 @@ const InterestedButton = ({ className }: { className?: string }) => {
   return session ? (
     <Link href={Routes.PROFILE}>{button}</Link>
   ) : (
-    // A plain <a>, not next/link, because the auth app is on a different origin.
     <a href={authPageUrl(AuthPages.SIGN_UP, websiteUrl(Routes.PROFILE))}>{button}</a>
   )
 }
