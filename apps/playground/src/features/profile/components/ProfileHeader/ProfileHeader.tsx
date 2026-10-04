@@ -1,7 +1,6 @@
-import { UserIcon } from "@heroicons/react/24/outline"
+import { PencilIcon, UserIcon } from "@heroicons/react/24/outline"
 import type { Member as AuthMember } from "@uoacs/shared/payload"
 import { Button, Heading, LazyImage, Skeleton } from "@uoacs/ui"
-import PenLineIcon from "@/features/profile/components/PenLineIcon/PenLineIcon"
 import type { Member } from "@/payload/payload-types"
 
 const LAYOUT_CLASS_NAME = "flex flex-col gap-6 md:flex-row md:items-center md:gap-12"
@@ -20,7 +19,7 @@ export interface ProfileHeaderProps {
 }
 
 const AccountLabel = () => (
-  <p className="font-mono text-xs">
+  <p className="font-mono font-paragraph-sm">
     {/** biome-ignore lint/suspicious/noCommentText: the // is not for a comment */}
     <span className="text-primary">// </span>YOUR ACCOUNT
   </p>
@@ -54,10 +53,10 @@ export const ProfileHeader = ({ member, account }: ProfileHeaderProps) => {
       <div className="flex flex-col items-start gap-4">
         <div className="flex flex-col items-start gap-2">
           <AccountLabel />
-          <Heading className="justify-start text-left" h={3} period>
+          <Heading className="justify-start text-left" h={2} period>
             {name}
           </Heading>
-          <p className="flex flex-row justify-start gap-2 font-mono text-xs">
+          <p className="flex flex-row justify-start gap-2 font-mono text-paragraph-sm">
             <span>
               UPI <span className="font-bold text-black">{account.upi}</span>
             </span>
@@ -67,14 +66,8 @@ export const ProfileHeader = ({ member, account }: ProfileHeaderProps) => {
             </span>
           </p>
         </div>
-        <Button
-          className="font-light"
-          left={<PenLineIcon className="size-4" />}
-          shape="rounded"
-          size="lg"
-          theme="dark"
-        >
-          edit profile
+        <Button left={<PencilIcon className="size-4" />} shape="rounded" theme="dark">
+          Edit Profile
         </Button>
       </div>
     </header>
@@ -91,10 +84,10 @@ export const ProfileHeaderSkeleton = () => (
     <div className="flex flex-col items-start gap-4">
       <div className="flex flex-col items-start gap-2">
         <AccountLabel />
-        <Skeleton className="heading-3 w-56" shape="text" />
-        <Skeleton className="h-4 w-48" shape="text" />
+        <Skeleton className="heading-2 w-72" shape="text" />
+        <Skeleton className="h-6 w-64" shape="text" />
       </div>
-      <Skeleton className="h-16.75 w-45 rounded-[10px]" />
+      <Skeleton className="h-6.5 w-32 rounded-[10px] md:h-8.5" />
     </div>
   </div>
 )
