@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload"
 import { skills } from "@/features/member/constants/skills.constants"
 import { Slugs } from "@/lib/payload/slugs"
 import { ProfileLink } from "../fields/ProfileLink"
+import { makeDeleteLikesHook } from "../hooks/deleteLikes"
 
 export const Member: CollectionConfig = {
   slug: Slugs.Collections.MEMBER,
@@ -47,4 +48,5 @@ export const Member: CollectionConfig = {
     },
     ProfileLink,
   ],
+  hooks: { beforeDelete: [makeDeleteLikesHook("member")] },
 }

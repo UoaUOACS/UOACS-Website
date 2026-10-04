@@ -6,6 +6,7 @@ import { s3Storage } from "@payloadcms/storage-s3"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Admin } from "./payload/collections/Admin"
+import { Like } from "./payload/collections/Like"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
 import { Project } from "./payload/collections/Project"
@@ -22,7 +23,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Admin, Media, Project, Sponsor, Member],
+  collections: [Admin, Media, Project, Sponsor, Member, Like],
   editor: lexicalEditor(),
   graphQL: {
     disable: true,

@@ -18,7 +18,7 @@ export interface ProjectsPage {
 
 export const getProjectsCached = async (state: DiscoverState) => {
   "use cache"
-  cacheTag(CacheTags.PROJECTS, CacheTags.MEDIA)
+  cacheTag(CacheTags.PROJECTS.ROOT, CacheTags.MEDIA)
   cacheLife("max")
 
   return getProjects(state)
