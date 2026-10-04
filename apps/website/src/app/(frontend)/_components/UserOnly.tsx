@@ -1,9 +1,9 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { type ReactNode, useEffect } from "react"
 import { useSession } from "@/context/SessionContext"
-import { Routes } from "@/lib/routes"
+import { isLoggingOut, useGuardedPage } from "@/lib/auth/log-out"
 
 export const UserOnly = ({
   children,
@@ -13,13 +13,14 @@ export const UserOnly = ({
   fallback?: ReactNode
 }) => {
   const session = useSession()
-  const router = useRouter()
+  useGuardedPage()
 
   useEffect(() => {
-    if (session === null) {
-      router.replace(Routes.LOGIN)
+    // A deliberate log-out sends the person home itself (see `logOut`).
+    if (session === null && !isLoggingOut()) {
+      window.location.assign(authPageUrl(AuthPages.LOGIN, window.location.href))
     }
-  }, [session, router])
+  }, [session])
 
   if (session === null) return fallback
   return children

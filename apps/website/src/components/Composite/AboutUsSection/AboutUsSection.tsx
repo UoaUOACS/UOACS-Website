@@ -1,10 +1,10 @@
 "use client"
 
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
+import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { Button } from "@uoacs/ui"
-import Link from "next/link"
 import { useSession } from "@/context/SessionContext"
-import { Routes } from "@/lib/routes"
+import { Routes, websiteUrl } from "@/lib/routes"
 import type { Reel as ReelDocument } from "@/payload/payload-types"
 import { Reel } from "../Reel/Reel"
 
@@ -49,11 +49,11 @@ export const AboutUsSection = ({ reels, instagramHref }: AboutUsSectionProps) =>
         </p>
         <div className="flex flex-col items-center gap-6 md:items-start">
           {!session && (
-            <Link className="w-fit" href={Routes.SIGN_UP}>
+            <a className="w-fit" href={authPageUrl(AuthPages.SIGN_UP, websiteUrl(Routes.PROFILE))}>
               <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
                 Interested? Join UOACS
               </Button>
-            </Link>
+            </a>
           )}
           <p className="paragraph-sm font-medium">Membership is 100% free so come join us!</p>
         </div>

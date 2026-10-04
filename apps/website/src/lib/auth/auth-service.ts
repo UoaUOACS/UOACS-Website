@@ -20,8 +20,9 @@ function url(path: AuthApiRoute): string {
 }
 
 /**
- * Calls the auth service as the website itself, for operations that happen
- * before anyone is signed in. The token never leaves the server.
+ * Calls the auth service as the website itself, for operations no user
+ * session can authorise, such as admin member deletion. The token never
+ * leaves the server.
  *
  * Deliberately unbounded: aborting here does not stop the auth service, so a
  * timeout on a write would report failure over work that completed. Callers
