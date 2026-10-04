@@ -4,6 +4,7 @@ import { type SignUpBody, sendCodeSchema, signUpBodySchema, verifyCodeSchema } f
 import { cookies } from "next/headers"
 import { z } from "zod"
 import { auth } from "@/lib/auth/auth"
+import { clearVerifiedEmail, isEmailVerified, setVerifiedEmail } from "@/lib/verified-email"
 import { PayloadEmailService } from "@/services/email/payload-email.service"
 import {
   AccountRollbackError,
@@ -32,6 +33,7 @@ export type SignUpResult =
   | { ok: true }
   | { ok: false; error: "duplicate"; field: string }
   | { ok: false; error: "no-unlinked-member" }
+  | { ok: false; error: "unverified" }
   | { ok: false; error: "invalid"; issues: { field: string; message: string }[] }
   | { ok: false; error: "server" }
 
@@ -75,8 +77,9 @@ export async function sendVerificationCode(email: string): Promise<SendVerificat
 /**
  * Checks a sign-up verification code.
  *
- * Anyone can call a server action. `memberExists` tells the form whether to
- * show the claim-your-account step or the full member form.
+ * Anyone can call a server action. On success it sets a short-lived signed
+ * cookie that `signUp` checks. `memberExists` tells the form whether to show
+ * the claim-your-account step or the full member form.
  */
 export async function verifyCode(email: string, code: string): Promise<VerifyCodeResult> {
   const parsed = verifyCodeSchema.safeParse({ email, code })
@@ -89,6 +92,8 @@ export async function verifyCode(email: string, code: string): Promise<VerifyCod
     // Counted before the code is spent, so a failed count does not burn it.
     const memberExists = await members.hasUnlinkedMember(parsed.data.email)
     await codes.deleteAll(parsed.data.email)
+    // The code is spent now. If this fails, the person must request a new one.
+    await setVerifiedEmail(parsed.data.email)
     return { ok: true, memberExists }
   } catch (error) {
     console.error("[verifyCode] Failed to verify", { error })
@@ -100,16 +105,23 @@ export async function verifyCode(email: string, code: string): Promise<VerifyCod
  * Creates the account and its member row, then signs the person in. Better
  * Auth's `nextCookies()` plugin sets the session cookie.
  *
- * Anyone can call a server action, so this does not rely on a secret from the
- * caller.
+ * Anyone can call a server action, so it only goes ahead if the signed cookie
+ * from `verifyCode` proves this browser owns the email.
  */
 export async function signUp(body: SignUpBody): Promise<SignUpResult> {
   const parsed = signUpBodySchema.safeParse(body)
   if (!parsed.success) return { ok: false, error: "invalid", issues: toIssues(parsed.error) }
 
   try {
+    if (!(await isEmailVerified(parsed.data.email))) return { ok: false, error: "unverified" }
+  } catch (error) {
+    console.error("[signUp] Failed to read verified email", { error })
+    return { ok: false, error: "server" }
+  }
+
+  // The cookie is kept on failure, so the person can fix a duplicate and retry.
+  try {
     await members.register(parsed.data)
-    return { ok: true }
   } catch (err) {
     if (err instanceof DuplicateFieldError)
       return { ok: false, error: "duplicate", field: err.field }
@@ -119,6 +131,12 @@ export async function signUp(body: SignUpBody): Promise<SignUpResult> {
     console.error("[signUp] Sign up failed", { email: parsed.data.email, error: err })
     return { ok: false, error: "server" }
   }
+
+  // The account exists now, so a failure here is only logged.
+  await clearVerifiedEmail().catch((error) =>
+    console.error("[signUp] Failed to clear verified email", { error }),
+  )
+  return { ok: true }
 }
 
 function toIssues(error: z.ZodError): { field: string; message: string }[] {
