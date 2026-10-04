@@ -1,13 +1,12 @@
+// Proof that this browser entered a valid sign-up code for an email. The code
+// is spent once it is checked, so `signUp` reads this signed cookie instead.
+
 import { createHmac, timingSafeEqual } from "node:crypto"
 import { cookies } from "next/headers"
 
-/**
- * Proof that this browser entered a valid sign-up code for an email. The code
- * is spent once it is checked, so `signUp` reads this signed cookie instead.
- */
 const COOKIE_NAME = "uoacs.verified-email"
 const TTL_SECONDS = 15 * 60
-// Kept apart from other uses of the same secret.
+// Prefix so this signature cannot be reused as another signature made with BETTER_AUTH_SECRET.
 const PURPOSE = "verified-email:"
 
 function sign(payload: string): Buffer {
@@ -26,8 +25,8 @@ export function signVerifiedEmail(email: string, now = Date.now()): string {
   return `${payload}.${sign(payload).toString("base64url")}`
 }
 
-/** False for anything that is not a valid, unexpired value for `email`. */
-export function readVerifiedEmail(
+/** True only for a valid, unexpired value for this exact email. Throws if the secret is missing. */
+export function isValidVerifiedEmail(
   value: string | undefined,
   email: string,
   now = Date.now(),
@@ -44,7 +43,8 @@ export function readVerifiedEmail(
   try {
     const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"))
     return data?.email === email && typeof data.exp === "number" && data.exp > now
-  } catch {
+  } catch (error) {
+    console.error("[verified-email] Signed payload failed to parse", { error })
     return false
   }
 }
@@ -67,11 +67,11 @@ export async function setVerifiedEmail(email: string): Promise<void> {
 
 export async function isEmailVerified(email: string): Promise<boolean> {
   const jar = await cookies()
-  return readVerifiedEmail(jar.get(COOKIE_NAME)?.value, email)
+  return isValidVerifiedEmail(jar.get(COOKIE_NAME)?.value, email)
 }
 
 export async function clearVerifiedEmail(): Promise<void> {
   const jar = await cookies()
-  // Same name and path, so the browser replaces it.
+  // Same name and path with maxAge 0, so the browser deletes it.
   jar.set(COOKIE_NAME, "", cookieOptions(0))
 }

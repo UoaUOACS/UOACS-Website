@@ -106,20 +106,25 @@ export async function verifyCode(email: string, code: string): Promise<VerifyCod
  * Auth's `nextCookies()` plugin sets the session cookie.
  *
  * Anyone can call a server action, so it only goes ahead if the signed cookie
- * from `verifyCode` proves this browser owns the email.
+ * from `verifyCode` matches the email. If not, it returns `"unverified"`. The
+ * cookie is cleared once the account exists.
  */
 export async function signUp(body: SignUpBody): Promise<SignUpResult> {
   const parsed = signUpBodySchema.safeParse(body)
   if (!parsed.success) return { ok: false, error: "invalid", issues: toIssues(parsed.error) }
 
   try {
-    if (!(await isEmailVerified(parsed.data.email))) return { ok: false, error: "unverified" }
+    if (!(await isEmailVerified(parsed.data.email))) {
+      console.warn("[signUp] Email not verified", { email: parsed.data.email })
+      return { ok: false, error: "unverified" }
+    }
   } catch (error) {
     console.error("[signUp] Failed to read verified email", { error })
     return { ok: false, error: "server" }
   }
 
-  // The cookie is kept on failure, so the person can fix a duplicate and retry.
+  // The cookie is kept on any failure, so the person can retry with the same email.
+  // A new email needs a new code.
   try {
     await members.register(parsed.data)
   } catch (err) {
@@ -132,7 +137,7 @@ export async function signUp(body: SignUpBody): Promise<SignUpResult> {
     return { ok: false, error: "server" }
   }
 
-  // The account exists now, so a failure here is only logged.
+  // The account exists now, so a failure here is only logged. The cookie then expires on its own.
   await clearVerifiedEmail().catch((error) =>
     console.error("[signUp] Failed to clear verified email", { error }),
   )

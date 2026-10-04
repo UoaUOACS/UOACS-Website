@@ -19,7 +19,7 @@ import {
   duplicateMessage,
   NO_UNLINKED_MEMBER_MESSAGE,
   SESSION_UNCONFIRMED_MESSAGE,
-  UNVERIFIED_MESSAGE,
+  UNVERIFIED_REQUEST_CODE_MESSAGE,
 } from "./sign-up-result"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
 
@@ -130,8 +130,9 @@ export const EmailVerificationStep = ({ redirect, returnTo }: SignUpStepProps) =
           } else if (signUpResult.error === "no-unlinked-member") {
             toast.warning({ description: NO_UNLINKED_MEMBER_MESSAGE })
           } else if (signUpResult.error === "unverified") {
-            toast.warning({ description: UNVERIFIED_MESSAGE })
-            reset()
+            // The cookie was just set, so it was likely not stored (e.g. blocked cookies).
+            console.error("[EmailVerificationStep] Sign up says email not verified")
+            toast.warning({ description: UNVERIFIED_REQUEST_CODE_MESSAGE })
           } else {
             toast.error({ description: "An error occurred while submitting the form" })
           }

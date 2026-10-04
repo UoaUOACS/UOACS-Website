@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import type { z as zType } from "zod"
 import { z } from "zod"
-import { signUp } from "@/actions/sign-up"
+import { sendVerificationCode, signUp } from "@/actions/sign-up"
 import { withRedirect } from "@/lib/redirect"
 import type { SignUpStepProps } from "./SignUpForm"
 import {
@@ -19,6 +19,7 @@ import {
   NO_UNLINKED_MEMBER_MESSAGE,
   SESSION_UNCONFIRMED_MESSAGE,
   UNVERIFIED_MESSAGE,
+  UNVERIFIED_REQUEST_CODE_MESSAGE,
 } from "./sign-up-result"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
 
@@ -47,7 +48,7 @@ type FormOutput = zType.output<typeof step2Schema>
 const isFormField = (field: string): field is keyof FormInput => field in step2Fields.shape
 
 export const MemberStep = ({ redirect, returnTo }: SignUpStepProps) => {
-  const { step1, step2, setStep2, prevStep, reset } = useSignUpFormStore()
+  const { step1, step2, setStep2, prevStep, backToVerification, reset } = useSignUpFormStore()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -88,8 +89,18 @@ export const MemberStep = ({ redirect, returnTo }: SignUpStepProps) => {
         } else if (result.error === "no-unlinked-member") {
           toast.warning({ description: NO_UNLINKED_MEMBER_MESSAGE })
         } else if (result.error === "unverified") {
-          toast.warning({ description: UNVERIFIED_MESSAGE })
-          reset()
+          // Send a new code first, so the step's "We sent a code" text and cooldown are true.
+          const sent = await sendVerificationCode(step1.email).then(
+            (r) => r.ok,
+            (error) => {
+              console.error("[MemberStep] Sending a new code threw", { error })
+              return false
+            },
+          )
+          toast.warning({
+            description: sent ? UNVERIFIED_MESSAGE : UNVERIFIED_REQUEST_CODE_MESSAGE,
+          })
+          backToVerification()
         } else {
           toast.error({ description: "An error occurred while submitting the form" })
         }
