@@ -1,8 +1,9 @@
 import { Toaster } from "@uoacs/ui/toast"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
-import Image from "next/image"
 import type React from "react"
+import { AuthFooter } from "@/components/AuthFooter/AuthFooter"
+import { AuthNavbar } from "@/components/AuthNavbar/AuthNavbar"
 import "../globals.css"
 
 const inter = localFont({
@@ -50,14 +51,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${inter.variable} ${switzer.variable} ${mono.variable} overflow-x-hidden`}
       lang="en"
     >
-      <body className="flex min-h-screen flex-col overflow-x-hidden">
+      <body className="relative flex min-h-screen flex-col overflow-hidden">
         <Toaster />
-        <div className="mx-auto flex w-full max-w-lg grow flex-col items-center gap-9 px-4 py-6 md:py-12">
-          <a href={process.env.NEXT_PUBLIC_WEBSITE_URL}>
-            <Image alt="UOACS Logo" height={40} loading="eager" src="/uoacs-logo.svg" width={168} />
-          </a>
-          <main className="flex w-full grow flex-col items-center">{children}</main>
+        <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:gap-9 md:px-12 lg:px-20">
+          <AuthNavbar />
+          <main className="flex w-full grow flex-col items-center py-9">{children}</main>
         </div>
+        <AuthFooter />
       </body>
     </html>
   )
