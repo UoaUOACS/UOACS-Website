@@ -1,6 +1,12 @@
-import { AuthCollectionSlugs } from "@uoacs/shared"
-import type { CreateMemberInput, Member, UpdateMemberInput } from "@uoacs/shared/payload"
+import { AuthCollectionSlugs, type SignUpBody } from "@uoacs/shared"
+import {
+  type CreateMemberInput,
+  createMemberSchema,
+  type Member,
+  type UpdateMemberInput,
+} from "@uoacs/shared/payload"
 import type { User } from "better-auth"
+import { isAPIError } from "better-auth/api"
 import { NotFound, ValidationError } from "payload"
 import { auth } from "@/lib/auth/auth"
 import { getPayloadClient } from "@/lib/payload"
@@ -16,6 +22,17 @@ export class DuplicateFieldError extends Error {
   constructor(public readonly field: string) {
     super("Value already in use")
     this.name = "DuplicateFieldError"
+  }
+}
+
+/** The account was created but could not be deleted after a later failure. */
+export class AccountRollbackError extends Error {
+  constructor(
+    public readonly betterAuthUserId: string,
+    cause: unknown,
+  ) {
+    super("Account rollback failed", { cause })
+    this.name = "AccountRollbackError"
   }
 }
 
@@ -150,20 +167,70 @@ export class MemberService {
     await context.internalAdapter.deleteUser(userId)
   }
 
+  /**
+   * Creates the account and its member row together. A person who predates
+   * Better Auth gets their existing row linked; everyone else gets a new one.
+   * A full member body for an email with an unlinked member links that row and
+   * ignores the member fields.
+   *
+   * Throws `ZodError` for an invalid member body (before any account exists),
+   * `DuplicateFieldError` when the email or a unique member field is taken,
+   * `NoUnlinkedMemberError` when an existing-member claim finds no row to link,
+   * and `AccountRollbackError` when the account could not be undone.
+   */
+  public async register(body: SignUpBody): Promise<Member> {
+    let memberData: CreateMemberInput | null = null
+    if (!("existingMember" in body)) {
+      const parsed = createMemberSchema.safeParse(body)
+      if (!parsed.success) throw parsed.error
+      memberData = parsed.data
+    }
+
+    let user: User
+    try {
+      user = await this.signUp(body)
+    } catch (err) {
+      if (isAPIError(err) && err.body?.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
+        throw new DuplicateFieldError("email")
+      }
+      throw err
+    }
+
+    try {
+      if (!memberData || (await this.hasUnlinkedMember(body.email))) {
+        return await this.link(body.email, user.id)
+      }
+      return await this.create(memberData, user.id)
+    } catch (err) {
+      // The account exists but has no member row, so it would be a login that
+      // resolves to nothing. Undo it rather than leave that behind.
+      try {
+        await this.deleteAccount(user.id)
+      } catch (cleanupError) {
+        console.error("[MemberService] CRITICAL: account rollback failed, record leaked", {
+          betterAuthUserId: user.id,
+          error: cleanupError,
+          originalError: err,
+        })
+        throw new AccountRollbackError(user.id, cleanupError)
+      }
+      throw err
+    }
+  }
+
   public async signUp(data: {
     firstName: string
     lastName: string
     email: string
     password: string
-  }): Promise<{ user: User; headers: Headers }> {
-    const { response, headers } = await auth.api.signUpEmail({
+  }): Promise<User> {
+    const { user } = await auth.api.signUpEmail({
       body: {
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
         password: data.password,
       },
-      returnHeaders: true,
     })
-    return { user: response.user, headers }
+    return user
   }
 }

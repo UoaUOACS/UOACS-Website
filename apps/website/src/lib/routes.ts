@@ -15,9 +15,6 @@ export const Routes = {
 export type Route = (typeof Routes)[keyof typeof Routes]
 
 export const ApiRoutes = {
-  ADMIN: {
-    MEMBERS: (id: string | number | undefined) => `/api/admin/members/${id ?? ""}`,
-  } as const,
   MEMBER: {
     ME: "/api/member/me",
   } as const,
