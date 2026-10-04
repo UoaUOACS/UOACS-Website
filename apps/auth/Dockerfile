@@ -77,6 +77,8 @@ ENV PORT=3000
 COPY --from=builder /app/apps/auth/.next/standalone ./
 # Copy static assets
 COPY --from=builder /app/apps/auth/.next/static ./apps/auth/.next/static
+# Copy public assets
+COPY --from=builder /app/apps/auth/public ./apps/auth/public
 
 EXPOSE 3000
 
