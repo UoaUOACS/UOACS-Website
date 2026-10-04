@@ -20,6 +20,7 @@ export interface SignUpFormStore {
   setStep2: (data: Step2Data) => void
   nextStep: () => void
   prevStep: () => void
+  backToVerification: () => void
   reset: () => void
 }
 
@@ -51,5 +52,7 @@ export const useSignUpFormStore = create<SignUpFormStore>((set) => ({
   setStep2: (data) => set({ step2: data }),
   nextStep: () => set((s) => ({ currentStep: pageTransitions[s.currentStep].next })),
   prevStep: () => set((s) => ({ currentStep: pageTransitions[s.currentStep].prev })),
+  // Keeps step1 and step2, so the person does not lose what they typed.
+  backToVerification: () => set({ currentStep: SIGN_UP_STEPS.EMAIL_VERIFICATION }),
   reset: () => set(defaultValues),
 }))
