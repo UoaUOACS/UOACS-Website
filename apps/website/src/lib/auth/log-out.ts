@@ -3,8 +3,6 @@ import type { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { Routes } from "@/lib/routes"
 
-// Module state is enough: logging back in goes through the auth app, which is a
-// full page load, so neither value outlives the session it describes.
 let loggingOut = false
 let mountedGuards = 0
 
@@ -19,7 +17,8 @@ export function useGuardedPage() {
   useEffect(() => {
     mountedGuards++
     return () => {
-      mountedGuards--
+      // The last guard unmounts once the log-out has left the guarded page.
+      if (--mountedGuards === 0) loggingOut = false
     }
   }, [])
 }
@@ -37,6 +36,10 @@ export async function logOut(router: ReturnType<typeof useRouter>): Promise<void
     throw error
   }
 
-  if (mountedGuards > 0) router.replace(Routes.HOME)
-  else router.refresh()
+  if (mountedGuards > 0) {
+    router.replace(Routes.HOME)
+  } else {
+    router.refresh()
+    loggingOut = false
+  }
 }
