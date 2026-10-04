@@ -1,6 +1,6 @@
 import { AnimatedSuspense, SocialIcon, type SocialIconName } from "@uoacs/ui"
 import Link from "next/link"
-import { getSocialLinks } from "../../queries/social-links"
+import { getSocialLinksCached } from "../../queries/social-links"
 import { DiscordSection, DiscordSectionSkeleton } from "../DiscordSection"
 import { CopyrightYear } from "./CopyrightYear"
 import { InterestedButton } from "./InterestedButton"
@@ -24,7 +24,7 @@ const PRIVACY_HREF = `${process.env.NEXT_PUBLIC_WEBSITE_URL}/privacy`
  * Social media icons from the website's CMS, excluding Discord, which has its own section.
  */
 const FooterSocialLinks = async () => {
-  const socialLinks = await getSocialLinks()
+  const socialLinks = await getSocialLinksCached()
   if (!socialLinks) return null
   return (
     <nav aria-label="Social media links" className="flex flex-row items-start gap-4">
@@ -50,7 +50,7 @@ const FooterSocialLinks = async () => {
  * {@link DiscordSection} with the Discord link from the website's CMS as its fallback link.
  */
 const FooterDiscordSection = async () => {
-  const socialLinks = await getSocialLinks()
+  const socialLinks = await getSocialLinksCached()
   const discordHref = socialLinks.find((link) => link.icon === "discord")?.href
   return <DiscordSection discordHref={discordHref} />
 }
