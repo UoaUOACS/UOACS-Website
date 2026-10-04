@@ -6,6 +6,8 @@ export const NO_UNLINKED_MEMBER_MESSAGE =
 export const SESSION_UNCONFIRMED_MESSAGE =
   "Signed up, but we couldn't confirm your session. Please log in."
 
+export const UNVERIFIED_MESSAGE = "Your email check has expired. Please start again."
+
 export const duplicateMessage = (field: string) =>
   field === "email"
     ? "This email is already in use.\nIf you think this is a mistake, please contact us at admin@uoacs.co.nz"
