@@ -85,7 +85,6 @@ export function PlaygroundNavbar({
         />
       ) : (
         <div className="flex flex-row items-center gap-3">
-          {/* A plain <a>, not next/link, because the auth app is on a different origin. */}
           <a
             className="inline-flex"
             href={authPageUrl(
