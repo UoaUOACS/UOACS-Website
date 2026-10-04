@@ -1,57 +1,102 @@
-import { EllipsisHorizontalIcon, PencilIcon, UserIcon } from "@heroicons/react/24/outline"
-import { LazyImage } from "@uoacs/ui"
-import type { ProfileMember } from "@/features/profile/types"
+import { PencilIcon, UserIcon } from "@heroicons/react/24/outline"
+import type { Member as AuthMember } from "@uoacs/shared/payload"
+import { Button, Heading, LazyImage, Skeleton } from "@uoacs/ui"
+import type { Member } from "@/payload/payload-types"
 
-interface ProfileHeaderProps {
-  member: ProfileMember
+// From md up, a grid row (unlike a flex row) lets the square avatar take its width from the
+// details' height. Its contents are absolutely positioned so they don't add to that height.
+// When a long name wraps, the avatar is capped to its column and clipped to a centred circle
+// rather than overlapping the details. Phones stack a fixed-size avatar instead.
+const LAYOUT_CLASS_NAME = "flex flex-col gap-6 md:grid md:grid-cols-[auto_minmax(0,1fr)] md:gap-10"
+const AVATAR_CLASS_NAME =
+  "relative aspect-square size-28 bg-gray-200 [clip-path:circle(closest-side)] md:h-full md:w-auto md:max-w-full"
+
+export interface ProfileHeaderProps {
+  /**
+   * The member's playground profile, for their profile picture.
+   */
+  member: Member
+  /**
+   * The member's record from the auth service, for their name, UPI and ID.
+   */
+  account: Pick<AuthMember, "firstName" | "lastName" | "upi" | "uoaID">
 }
 
-export const ProfileHeader = ({ member }: ProfileHeaderProps) => (
-  <header className="flex w-full flex-col items-center gap-8 sm:flex-row sm:gap-12">
-    <div className="relative size-40 shrink-0 overflow-hidden rounded-full bg-gray-200 sm:size-60">
-      {member.avatarURL ? (
-        <LazyImage
-          alt={member.name}
-          className="object-cover!"
-          containerClassName="h-full w-full"
-          fill
-          sizes="240px"
-          src={member.avatarURL}
-        />
-      ) : (
-        <UserIcon aria-hidden="true" className="size-full p-10 text-gray-400" />
-      )}
-    </div>
+const AccountLabel = () => (
+  <p className="font-mono">
+    {/** biome-ignore lint/suspicious/noCommentText: the // is not for a comment */}
+    <span className="text-primary">// </span>YOUR ACCOUNT
+  </p>
+)
 
-    <div className="flex flex-col items-center gap-2 sm:items-start">
-      <p className="font-mono text-sm uppercase">
-        <span className="text-pink-500">{/*  */}</span> Your account
-      </p>
-      <h1 className="font-inter font-semibold text-4xl tracking-tight sm:text-6xl">
-        {member.name}
-        <span className="text-pink-500">.</span>
-      </h1>
-      <p className="font-mono text-sm">
-        UPI <span className="font-medium">{member.upi}</span> / ID{" "}
-        <span className="font-medium">{member.id}</span>
-      </p>
+/**
+ * The top of a member's profile: their profile picture, name, UPI and ID, and an edit button.
+ */
+export const ProfileHeader = ({ member, account }: ProfileHeaderProps) => {
+  const { profilePicture } = member
+  const name = `${account.firstName} ${account.lastName}`
+  const profilePictureURL = typeof profilePicture === "object" ? profilePicture?.url : undefined
 
-      <div className="mt-4 flex items-center gap-3">
-        <button
-          className="flex h-20 items-center gap-3 rounded-lg bg-black px-7 text-2xl text-white"
-          type="button"
-        >
-          <PencilIcon aria-hidden="true" className="size-7" />
-          edit profile
-        </button>
-        <button
-          aria-label="More options"
-          className="flex size-20 items-center justify-center rounded-full bg-black text-white"
-          type="button"
-        >
-          <EllipsisHorizontalIcon aria-hidden="true" className="size-8" />
-        </button>
+  return (
+    <header className={LAYOUT_CLASS_NAME}>
+      <div className={AVATAR_CLASS_NAME}>
+        {profilePictureURL ? (
+          <LazyImage
+            alt={name}
+            className="object-cover!"
+            containerClassName="absolute! inset-0"
+            fill
+            sizes="240px"
+            src={profilePictureURL}
+          />
+        ) : (
+          <UserIcon
+            aria-hidden="true"
+            className="absolute inset-0 size-full p-[20%] text-gray-400"
+          />
+        )}
       </div>
+
+      <div className="flex flex-col items-start gap-6">
+        <div className="flex flex-col items-start gap-2">
+          <AccountLabel />
+          <Heading className="justify-start text-left" h={2} period>
+            {name}
+          </Heading>
+          <p className="flex flex-row justify-start gap-2 font-mono">
+            <span>
+              UPI <span className="font-bold text-black">{account.upi}</span>
+            </span>
+            <span> / </span>
+            <span>
+              ID <span className="font-bold text-black">{account.uoaID}</span>
+            </span>
+          </p>
+        </div>
+        <Button left={<PencilIcon className="size-4" />} shape="rounded" size="lg" theme="dark">
+          edit profile
+        </Button>
+      </div>
+    </header>
+  )
+}
+
+/**
+ * A loading placeholder with the same layout as {@link ProfileHeader}.
+ */
+export const ProfileHeaderSkeleton = () => (
+  <div aria-hidden="true" className={LAYOUT_CLASS_NAME}>
+    <div className={AVATAR_CLASS_NAME}>
+      <Skeleton className="absolute inset-0 size-full" shape="circle" />
     </div>
-  </header>
+
+    <div className="flex flex-col items-start gap-6">
+      <div className="flex flex-col items-start gap-2">
+        <AccountLabel />
+        <Skeleton className="heading-2 w-64" shape="text" />
+        <Skeleton className="h-6 w-56" shape="text" />
+      </div>
+      <Skeleton className="h-16.75 w-48 rounded-[10px]" />
+    </div>
+  </div>
 )
