@@ -143,6 +143,9 @@ importers:
 
   apps/auth:
     dependencies:
+      '@heroicons/react':
+        specifier: 'catalog:'
+        version: 2.2.0(react@19.3.0)
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.82.0(react@19.3.0))

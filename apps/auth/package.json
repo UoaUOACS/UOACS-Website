@@ -11,6 +11,7 @@
     "types:generate": "payload generate:types && node scripts/strip-payload-augmentation.mjs && next typegen"
   },
   "dependencies": {
+    "@heroicons/react": "catalog:",
     "@hookform/resolvers": "^5.2.2",
     "@payloadcms/db-mongodb": "catalog:payload",
     "@payloadcms/email-resend": "catalog:payload",
