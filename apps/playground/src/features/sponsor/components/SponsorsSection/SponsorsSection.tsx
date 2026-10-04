@@ -1,7 +1,6 @@
 import { ArrowRightIcon } from "@heroicons/react/24/solid"
 import { AnimatedSuspense, Button, Section } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import Link from "next/link"
 import {
   SponsorLogos,
   SponsorLogosSkeleton,
@@ -60,11 +59,11 @@ export const SponsorsSection = () => {
       <AnimatedSuspense fallback={<SponsorLogosSkeleton />}>
         <SponsorLogosAsync />
       </AnimatedSuspense>
-      <Link href={SPONSORS_HREF}>
+      <a href={SPONSORS_HREF}>
         <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
           See All Our Sponsors
         </Button>
-      </Link>
+      </a>
     </Section>
   )
 }
