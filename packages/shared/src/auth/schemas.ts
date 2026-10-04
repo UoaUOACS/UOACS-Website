@@ -2,12 +2,11 @@ import { z } from "zod"
 import { createMemberSchema, memberSchema } from "../payload/schemas/member"
 
 /**
- * The request and response shapes of the auth service.
+ * Sign-up, verification and member shapes.
  *
- * Shared because both ends validate the same bytes: the website parses form
- * input against these before sending, the auth service parses the body it
- * receives, and the website parses the response that comes back. Three copies
- * drift into accepting and returning different things.
+ * Shared so the auth app's forms and server actions, and every app that reads
+ * a member, validate the same shapes. Separate copies drift into accepting
+ * different things.
  */
 
 const password = z.string().min(8, "Password must be at least 8 characters")
@@ -49,30 +48,16 @@ export const forgotPasswordSchema = z.object({
   email: z.email({ error: "Please enter a valid email" }),
 })
 
-export const forgotPasswordBodySchema = forgotPasswordSchema.extend({
-  /**
-   * Absolute, not a path: Better Auth resolves this against its own base URL,
-   * so a relative value would land on the auth service rather than the site
-   * the caller meant.
-   *
-   * Guarded by the auth service's own token check, not by Better Auth —
-   * originCheck skips direct server calls, which have no request to inspect.
-   * The origin is checked when the emailed link is opened, so it has to be in
-   * the auth service's trustedOrigins or every reset link 403s at the callback.
-   */
-  redirectTo: z.url(),
-  /** Path on the caller's site where an unclaimed member finishes signing up. */
-  signUpPath: z.string().startsWith("/"),
-})
-
 /** What the service sends back, so callers can parse rather than assert. */
 export const memberResponseSchema = memberSchema
 
+/** @deprecated Only the website's old sign-up proxy uses this; removed in Stage 3. */
 export const verifyCodeResponseSchema = z.object({
   message: z.string(),
   memberExists: z.boolean(),
 })
 
+/** @deprecated Only the website's old sign-up proxy uses this; removed in Stage 3. */
 export const messageResponseSchema = z.object({ message: z.string() })
 
 /** Errors carry a `field` when the problem is a specific input. */

@@ -4,7 +4,6 @@
   "tasks": {
     "build": {
       "env": [
-        "AUTH_SERVICE_TOKEN",
         "DATABASE_URI",
         "DISCORD_SERVER_ID",
         "GOOGLE_WALLET_ISSUER_ID",
