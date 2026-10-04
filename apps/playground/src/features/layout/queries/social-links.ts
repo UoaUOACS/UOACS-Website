@@ -1,5 +1,4 @@
 import { cacheLife } from "next/cache"
-import { connection } from "next/server"
 import { cache } from "react"
 import { z } from "zod"
 import type { FooterSocialLink } from "../components/Footer/Footer"
@@ -18,12 +17,9 @@ const websiteSocialLinksSchema = z.object({
 
 /**
  * Fetches the social links global from the website's Payload REST API, leaving out links with no
- * URL. Throws on failure so a failed fetch is not cached.
+ * URL. Throws on failure.
  */
-async function fetchSocialLinks(): Promise<FooterSocialLink[]> {
-  "use cache"
-  cacheLife("hours")
-
+async function getSocialLinks(): Promise<FooterSocialLink[]> {
   const res = await fetch(SOCIAL_LINKS_URL, { signal: AbortSignal.timeout(5000) })
   if (!res.ok) {
     throw new Error(`Website API returned non-OK status: ${res.status} ${res.statusText}`)
@@ -44,19 +40,24 @@ async function fetchSocialLinks(): Promise<FooterSocialLink[]> {
 }
 
 /**
- * Gets the social links managed in the website's CMS, or an empty list if the fetch fails. On
- * failure, it waits for a request so the empty list is not prerendered into the static shell.
- * Deduplicated per request, as the footer reads it in more than one place.
+ * Gets the social links managed in the website's CMS, or an empty list if the fetch fails. Errors
+ * are caught inside the cache scope, as a thrown error fails the prerender. A failed fetch uses
+ * the short-lived `seconds` profile, so the empty list is not prerendered into the static shell
+ * and is retried soon. Deduplicated per request, as the footer reads it in more than one place.
  */
-export const getSocialLinks = cache(async (): Promise<FooterSocialLink[]> => {
+export const getSocialLinksCached = cache(async (): Promise<FooterSocialLink[]> => {
+  "use cache"
+
   try {
-    return await fetchSocialLinks()
+    const links = await getSocialLinks()
+    cacheLife("hours")
+    return links
   } catch (error) {
     console.error("[getSocialLinks] Failed to fetch social links from the website", {
       error,
       url: SOCIAL_LINKS_URL,
     })
-    await connection()
+    cacheLife("seconds")
     return []
   }
 })
