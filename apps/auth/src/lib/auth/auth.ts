@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
+import { APIError, createAuthMiddleware } from "better-auth/api"
 import { nextCookies } from "better-auth/next-js"
 import { trustedOrigins } from "@/lib/auth/trusted-origins"
 import { mongoClient } from "@/lib/mongo"
@@ -34,6 +35,13 @@ export const auth = betterAuth({
       })
     },
     revokeSessionsOnPasswordReset: true,
+  },
+  hooks: {
+    // Sign-up must go through the `signUp` server action, which checks the
+    // verified email. HTTP calls have `ctx.request`; `auth.api` calls do not.
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path === "/sign-up/email" && ctx.request) throw new APIError("NOT_FOUND")
+    }),
   },
   // Lets server actions set the session cookie. Must stay the last plugin.
   plugins: [nextCookies()],
