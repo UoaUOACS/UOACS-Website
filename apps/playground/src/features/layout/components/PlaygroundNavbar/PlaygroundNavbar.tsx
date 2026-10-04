@@ -61,9 +61,9 @@ export function PlaygroundNavbar({
   ]
 
   return (
-    <nav className="flex w-full flex-row items-center justify-between px-5 md:h-20 md:px-7">
-      <Link className="flex h-15 flex-row items-center gap-3" href={logoHref}>
-        <Image alt="UOACS Logo" height={24} src="/uoacs-logo-pink.svg" width={99} />
+    <nav className="flex w-full flex-row items-center justify-between">
+      <Link className="flex flex-row items-center gap-3" href={logoHref}>
+        <Image alt="UOACS Logo" height={40} src="/uoacs-logo-pink.svg" width={167} />
         <span className="hidden font-bold font-cartograph text-2xl text-gray-400 italic leading-7 md:inline">
           {title}
         </span>

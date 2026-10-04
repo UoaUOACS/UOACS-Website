@@ -85,7 +85,7 @@ export const SearchBar = ({
         aria-label={ariaLabel}
         className={cn(
           // `peer` lets the clear button below react to this input's state.
-          "peer h-14 rounded-full border-0 bg-white px-14 font-switzer text-base text-black shadow-lg placeholder:text-gray-800 focus:placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50 md:h-16 md:px-16 md:text-lg [&::-webkit-search-cancel-button]:appearance-none",
+          "peer h-14 rounded-3xl border-0 bg-white px-14 font-switzer text-base text-black shadow-lg placeholder:text-gray-800 focus:placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50 md:h-16 md:px-16 md:text-lg [&::-webkit-search-cancel-button]:appearance-none",
           className,
         )}
         disabled={disabled}

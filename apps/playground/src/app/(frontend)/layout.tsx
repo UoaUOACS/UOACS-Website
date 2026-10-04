@@ -3,6 +3,7 @@ import localFont from "next/font/local"
 import { SessionProvider } from "@/features/user/context/SessionContext"
 import "../globals.css"
 import { Footer } from "@/features/layout/components/Footer/Footer"
+import { PlaygroundNavbar } from "@/features/layout/components/PlaygroundNavbar/PlaygroundNavbar"
 
 const inter = localFont({
   src: "../../../../../packages/ui/src/styles/fonts/InterTight-Variable.woff2",
@@ -91,6 +92,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-screen flex-col overflow-x-hidden">
         <SessionProvider>
           <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:px-12 lg:px-20">
+            <PlaygroundNavbar />
+
             <main className="flex grow flex-col items-center gap-14 py-9 md:gap-30">
               {children}
             </main>
