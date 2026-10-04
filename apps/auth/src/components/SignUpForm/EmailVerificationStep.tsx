@@ -19,6 +19,7 @@ import {
   duplicateMessage,
   NO_UNLINKED_MEMBER_MESSAGE,
   SESSION_UNCONFIRMED_MESSAGE,
+  UNVERIFIED_MESSAGE,
 } from "./sign-up-result"
 import { useSignUpFormStore } from "./stores/SignUpForm.store"
 
@@ -128,6 +129,9 @@ export const EmailVerificationStep = ({ redirect, returnTo }: SignUpStepProps) =
             toast.warning({ description: duplicateMessage(signUpResult.field) })
           } else if (signUpResult.error === "no-unlinked-member") {
             toast.warning({ description: NO_UNLINKED_MEMBER_MESSAGE })
+          } else if (signUpResult.error === "unverified") {
+            toast.warning({ description: UNVERIFIED_MESSAGE })
+            reset()
           } else {
             toast.error({ description: "An error occurred while submitting the form" })
           }
