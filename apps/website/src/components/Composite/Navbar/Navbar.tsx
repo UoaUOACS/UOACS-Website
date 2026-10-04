@@ -115,7 +115,6 @@ export function Navbar({ links, socialLinks }: NavbarProps) {
               trigger={false}
             />
           ) : (
-            // A plain <a>, not next/link, because the auth app is on a different origin.
             <a href={authPageUrl(AuthPages.LOGIN, websiteUrl(pathname))}>
               <Button right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
                 Log In

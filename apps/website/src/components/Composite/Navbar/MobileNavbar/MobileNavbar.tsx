@@ -129,7 +129,6 @@ export const MobileNavbar = ({ links, socialLinks }: NavbarProps) => {
                   </Button>
                 </div>
               ) : (
-                // A plain <a>, not next/link, because the auth app is on a different origin.
                 <a
                   className="grid grid-cols-4"
                   href={authPageUrl(AuthPages.LOGIN, websiteUrl(pathname))}
