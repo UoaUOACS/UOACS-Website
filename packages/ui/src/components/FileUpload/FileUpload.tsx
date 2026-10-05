@@ -1,9 +1,10 @@
 "use client"
 
 import { ArrowUpTrayIcon, DocumentIcon, XMarkIcon } from "@heroicons/react/24/outline"
+import { DocumentIcon as DocumentSolidIcon } from "@heroicons/react/24/solid"
 import { type DragEvent, useEffect, useId, useState } from "react"
 import { cn } from "../../utils"
-import { fileKey, formatFileSize, matchesAccept } from "./FileUpload.helpers"
+import { fileKey, formatAccept, formatFileSize, matchesAccept } from "./FileUpload.helpers"
 import {
   type FileUploadPreviewVariantProps,
   fileUploadPreviewVariants,
@@ -108,6 +109,7 @@ export const FileUpload = ({
   const styles = fileUploadPreviewVariants({ previewVariant })
   const fileLimit = multiple ? (maxFiles ?? Number.POSITIVE_INFINITY) : 1
   const isFull = value.length >= fileLimit
+  const fileNoun = multiple ? "files" : "file"
 
   const addFiles = (files: File[]) => {
     const accepted: File[] = []
@@ -176,40 +178,58 @@ export const FileUpload = ({
         </p>
       )}
       {!(hideWhenFull && isFull) && (
-        <label
-          className={cn(
-            "flex cursor-pointer flex-col items-center justify-center gap-2 rounded border border-gray-300 border-dashed px-3 py-6 text-center text-gray-500 text-sm focus-within:[outline:-webkit-focus-ring-color_auto_1px]",
-            isDragging && "border-brand-pink bg-gray-50",
-            error && "border-red-600",
-            disabled && "cursor-not-allowed opacity-50",
-            className,
+        <div className="flex flex-col gap-2">
+          <label
+            className={cn(
+              "flex cursor-pointer flex-col items-center justify-center gap-4 rounded-lg border-2 border-gray-300 border-dashed px-6 py-12 text-center text-gray-700 text-sm focus-within:[outline:-webkit-focus-ring-color_auto_1px]",
+              isDragging && "border-brand-pink bg-gray-50",
+              error && "border-red-600",
+              disabled && "cursor-not-allowed opacity-50",
+              className,
+            )}
+            htmlFor={inputId}
+            onDragLeave={() => setIsDragging(false)}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          >
+            <span aria-hidden className="relative">
+              <DocumentSolidIcon className="size-14 text-gray-200" />
+              <span className="absolute -right-1.5 -bottom-1 flex size-7 items-center justify-center rounded-full bg-gray-900 ring-2 ring-white">
+                <ArrowUpTrayIcon className="size-4 stroke-2 text-white" />
+              </span>
+            </span>
+            <span>
+              Drag and drop {fileNoun} here or{" "}
+              <span className="font-semibold text-gray-900 underline underline-offset-4">
+                Choose {fileNoun}
+              </span>
+            </span>
+            <input
+              accept={accept}
+              aria-describedby={describedBy}
+              aria-invalid={error ? true : undefined}
+              aria-label={label ?? "Upload file"}
+              className="sr-only"
+              disabled={disabled}
+              id={inputId}
+              multiple={multiple}
+              onChange={(e) => {
+                addFiles(Array.from(e.target.files ?? []))
+                e.target.value = ""
+              }}
+              required={required && value.length === 0}
+              type="file"
+            />
+          </label>
+          {(accept || maxSize !== undefined) && (
+            <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-gray-400 text-xs">
+              {accept && <span>Supported formats: {formatAccept(accept)}</span>}
+              {maxSize !== undefined && (
+                <span className="ml-auto">Maximum size: {formatFileSize(maxSize)}</span>
+              )}
+            </div>
           )}
-          htmlFor={inputId}
-          onDragLeave={() => setIsDragging(false)}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-        >
-          <ArrowUpTrayIcon aria-hidden className="size-6" />
-          <span>
-            <span className="font-medium text-gray-700">Click to upload</span> or drag and drop
-          </span>
-          <input
-            accept={accept}
-            aria-describedby={describedBy}
-            aria-invalid={error ? true : undefined}
-            aria-label={label ?? "Upload file"}
-            className="sr-only"
-            disabled={disabled}
-            id={inputId}
-            multiple={multiple}
-            onChange={(e) => {
-              addFiles(Array.from(e.target.files ?? []))
-              e.target.value = ""
-            }}
-            required={required && value.length === 0}
-            type="file"
-          />
-        </label>
+        </div>
       )}
       {value.length > 0 && (
         <ul className={styles.list()}>

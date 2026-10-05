@@ -17,6 +17,22 @@ export const fileKey = (file: File) => `${file.name}-${file.size}-${file.lastMod
 
 export const formatFileSize = (bytes: number) => {
   if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  if (bytes < 1024 * 1024) return `${Number((bytes / 1024).toFixed(1))} KB`
+  return `${Number((bytes / (1024 * 1024)).toFixed(1))} MB`
 }
+
+/**
+ * Turns an `accept` string into a readable list, e.g. `"image/png,.pdf"` → `"PNG, PDF"`.
+ */
+export const formatAccept = (accept: string) =>
+  accept
+    .split(",")
+    .map((token) => token.trim())
+    .filter(Boolean)
+    .map((token) => {
+      if (token.startsWith(".")) return token.slice(1).toUpperCase()
+      const [type, subtype] = token.split("/")
+      if (subtype === "*") return `${type.charAt(0).toUpperCase()}${type.slice(1)} files`
+      return subtype.toUpperCase()
+    })
+    .join(", ")
