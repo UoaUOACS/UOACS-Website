@@ -78,8 +78,16 @@ const FilePreview = ({
 
   if (!url) return <DocumentIcon aria-hidden className={iconClassName} />
 
-  // biome-ignore lint/performance/noImgElement: object URLs cannot use next/image
-  return <img alt="" className={thumbnailClassName} src={url} />
+  return (
+    // biome-ignore lint/performance/noImgElement: object URLs cannot use next/image
+    <img
+      alt=""
+      className={thumbnailClassName}
+      // Formats like HEIC match `image/*` but most browsers cannot render them
+      onError={() => setUrl(undefined)}
+      src={url}
+    />
+  )
 }
 
 export const FileUpload = ({
