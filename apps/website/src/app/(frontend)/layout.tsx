@@ -83,7 +83,7 @@ const navbarLinks: { label: string; href: string }[] = [
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
-  const [socialLinks, session, discordWidgetData] = await Promise.all([
+  const [socialLinks, sessionResult, discordWidgetData] = await Promise.all([
     getSocialLinks(),
     getSession(),
     getDiscordWidgetData(),
@@ -95,7 +95,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       lang="en"
     >
       <body className="relative flex min-h-screen flex-col overflow-hidden">
-        <Providers initialSession={session}>
+        <Providers initialSession={sessionResult}>
           <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:gap-9 md:px-12 lg:px-20">
             <Navbar links={navbarLinks} socialLinks={socialLinks} />
             <main className="flex grow flex-col items-center gap-14 py-9 md:gap-30">
