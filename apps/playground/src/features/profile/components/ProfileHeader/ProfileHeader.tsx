@@ -19,7 +19,7 @@ export interface ProfileHeaderProps {
 }
 
 const AccountLabel = () => (
-  <p className="font-mono font-paragraph-sm">
+  <p className="font-mono">
     {/** biome-ignore lint/suspicious/noCommentText: the // is not for a comment */}
     <span className="text-primary">// </span>YOUR ACCOUNT
   </p>
@@ -56,7 +56,7 @@ export const ProfileHeader = ({ member, account }: ProfileHeaderProps) => {
           <Heading className="justify-start text-left" h={2} period>
             {name}
           </Heading>
-          <p className="flex flex-row justify-start gap-2 font-mono text-paragraph-sm">
+          <p className="flex flex-row justify-start gap-2 font-mono">
             <span>
               UPI <span className="font-bold text-black">{account.upi}</span>
             </span>
