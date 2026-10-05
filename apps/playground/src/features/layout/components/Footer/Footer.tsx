@@ -25,7 +25,7 @@ const PRIVACY_HREF = `${process.env.NEXT_PUBLIC_WEBSITE_URL}/privacy`
  */
 const FooterSocialLinks = async () => {
   const socialLinks = await getSocialLinksCached()
-  if (!socialLinks) return null
+  if (socialLinks.length === 0) return null
   return (
     <nav aria-label="Social media links" className="flex flex-row items-start gap-4">
       {socialLinks
