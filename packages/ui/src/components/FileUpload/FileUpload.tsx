@@ -178,7 +178,7 @@ export const FileUpload = ({
       {!(hideWhenFull && isFull) && (
         <label
           className={cn(
-            "flex cursor-pointer flex-col items-center justify-center gap-2 rounded border border-gray-300 border-dashed px-3 py-6 text-center text-gray-500 text-sm focus-within:ring-2 focus-within:ring-brand-pink",
+            "flex cursor-pointer flex-col items-center justify-center gap-2 rounded border border-gray-300 border-dashed px-3 py-6 text-center text-gray-500 text-sm focus-within:[outline:-webkit-focus-ring-color_auto_1px]",
             isDragging && "border-brand-pink bg-gray-50",
             error && "border-red-600",
             disabled && "cursor-not-allowed opacity-50",
