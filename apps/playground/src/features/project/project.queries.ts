@@ -1,4 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache"
+import type { Where } from "payload"
 import type { Project as ProjectCardData } from "@/features/project/components/ProjectCard/ProjectCard"
 import type { DiscoverState } from "@/features/project/helpers/discover"
 import { toProjectCard } from "@/features/project/helpers/toProjectCard"
@@ -16,20 +17,30 @@ export interface ProjectsPage {
   totalPages: number
 }
 
-export const getProjectsCached = async (state: DiscoverState) => {
+export interface ProjectsQuery extends DiscoverState {
+  /**
+   * Text to match against project names. Omit for no search filter.
+   */
+  q?: string
+}
+export const getProjectsCached = async (query: ProjectsQuery) => {
   "use cache"
   cacheTag(CacheTags.PROJECTS.ROOT, CacheTags.MEDIA)
   cacheLife("max")
 
-  return getProjects(state)
+  return getProjects(query)
 }
 
-export const getProjects = async ({ tab, sort, page }: DiscoverState): Promise<ProjectsPage> => {
+export const getProjects = async ({ tab, sort, page, q }: ProjectsQuery): Promise<ProjectsPage> => {
   const payload = await getPayloadClient()
+
+  const tabWhere = PROJECT_TABS.find((option) => option.value === tab)?.where
+  const searchWhere: Where | undefined = q ? { name: { contains: q } } : undefined
+  const filters = [tabWhere, searchWhere].filter((where): where is Where => where !== undefined)
 
   const { docs, totalPages } = await payload.find({
     collection: Slugs.Collections.PROJECT,
-    where: PROJECT_TABS.find((option) => option.value === tab)?.where,
+    where: filters.length > 0 ? { and: filters } : undefined,
     sort: PROJECT_SORT_OPTIONS[sort].payloadSort,
     limit: PROJECTS_PER_PAGE,
     page,

@@ -1,7 +1,11 @@
 import { Pagination } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { useId } from "react"
-import { type DiscoverState, getDiscoverHref } from "@/features/project/helpers/discover"
+import {
+  type DiscoverState,
+  type GetDiscoverHref,
+  getDiscoverHref,
+} from "@/features/project/helpers/discover"
 import { PROJECT_TABS } from "@/features/project/project.constants"
 import type { Project } from "../ProjectCard/ProjectCard"
 import { ProjectGrid } from "../ProjectGrid/ProjectGrid"
@@ -12,6 +16,15 @@ import { discoverProjectsVariants } from "./DiscoverProjects.variants"
 interface DiscoverProjectsViewProps extends DiscoverState {
   projects: Project[]
   totalPages: number
+  /**
+   * Builds the link for a state, so the view can live on pages other than home. Defaults to the
+   * home page's links.
+   */
+  getHref?: GetDiscoverHref
+  /**
+   * Shows every tab as disabled, e.g. on the search page.
+   */
+  disableTabs?: boolean
   className?: string
 }
 
@@ -25,6 +38,8 @@ export const DiscoverProjectsView = ({
   page,
   projects,
   totalPages,
+  getHref = getDiscoverHref,
+  disableTabs = false,
   className,
 }: DiscoverProjectsViewProps) => {
   const { root, header, sort: sortClass, heading, pagination } = discoverProjectsVariants()
@@ -34,9 +49,9 @@ export const DiscoverProjectsView = ({
   return (
     <section aria-labelledby={headingId} className={cn(root(), className)}>
       <div className={header()}>
-        <ProjectTabs activeTab={tab} sort={sort} />
+        <ProjectTabs activeTab={tab} disabled={disableTabs} getHref={getHref} sort={sort} />
         <div className={sortClass()}>
-          <ProjectSortDropdown sort={sort} tab={tab} />
+          <ProjectSortDropdown getHref={getHref} sort={sort} tab={tab} />
         </div>
       </div>
 
@@ -50,7 +65,7 @@ export const DiscoverProjectsView = ({
         <Pagination
           aria-label="Projects pagination"
           className={pagination()}
-          getHref={(target) => getDiscoverHref({ tab, sort, page: target })}
+          getHref={(target) => getHref({ tab, sort, page: target })}
           page={page}
           totalPages={totalPages}
         />
