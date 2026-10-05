@@ -26,17 +26,18 @@ export const SessionProvider = ({
   children: ReactNode
   initialSession: SessionResult
 }) => {
-  const { data, error, isPending } = authClient.useSession()
-  const hasResolvedOnce = useRef(false)
-  if (!isPending) hasResolvedOnce.current = true
+  const { data, error, isPending, isRefetching } = authClient.useSession()
+  // Better Auth clears `error` at the start of every request, so mid-request
+  // state can look signed out. Only read it once the request has settled.
+  const settled = useRef(initialSession)
+  if (!isPending && !isRefetching) {
+    // No session normally comes back as `data: null` with no error; a 401 also
+    // means signed out. Any other error, including a failed request, means the
+    // service could not say either way.
+    if (data) settled.current = { status: "authenticated", session: data }
+    else if (error && error.status !== 401) settled.current = { status: "unavailable" }
+    else settled.current = { status: "unauthenticated" }
+  }
 
-  let result: SessionResult
-  if (isPending && !hasResolvedOnce.current) result = initialSession
-  else if (data) result = { status: "authenticated", session: data }
-  // Better Auth reports a missing session as a 401; anything else, including
-  // a failed request, means it could not say either way.
-  else if (error && error.status !== 401) result = { status: "unavailable" }
-  else result = { status: "unauthenticated" }
-
-  return <SessionContext.Provider value={result}>{children}</SessionContext.Provider>
+  return <SessionContext.Provider value={settled.current}>{children}</SessionContext.Provider>
 }
