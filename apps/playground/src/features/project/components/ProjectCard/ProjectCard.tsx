@@ -14,6 +14,8 @@ export interface Project {
   authorName: string
   likes: number
   awardType?: string
+  summary?: string
+  awardEvent?: string
 }
 
 interface ProjectCardProps extends ProjectCardVariants {
@@ -22,7 +24,7 @@ interface ProjectCardProps extends ProjectCardVariants {
 }
 
 export const ProjectCard = ({ project, className, variant }: ProjectCardProps) => {
-  const { id, title, imageURL, authorName, likes } = project
+  const { id, title, imageURL, authorName, likes, awardType, summary, awardEvent } = project
   const {
     base,
     imageWrapper,
@@ -37,7 +39,52 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
     likesGroup,
     heartIcon,
     likesCount,
+    content,
+    description,
+    awardGroup,
+    awardTitle,
+    awardSubtitle,
   } = projectCardVariants({ variant })
+
+  if (variant === "profile") {
+    return (
+      <Link className={base({ className })} href={Routes.PROJECTS.ID(id)}>
+        <div className={imageWrapper()}>
+          {imageURL ? (
+            <LazyImage
+              alt={title}
+              className="object-cover!"
+              containerClassName="h-full w-full"
+              fill
+              sizes="400px"
+              src={imageURL}
+            />
+          ) : null}
+        </div>
+
+        <div className={content()}>
+          <div className="row-start-2">
+            <h3 className={titleStyles()}>{title}</h3>
+            {summary ? <p className={description()}>{summary}</p> : null}
+          </div>
+          <div className={cn(likesGroup(), "row-start-3 mb-4 self-end")}>
+            <HeartIcon aria-hidden="true" className={cn(heartIcon(), "size-[18px]")} />
+            <span className={likesCount()}>{formatLikes(likes)}</span>
+          </div>
+        </div>
+
+        {awardType ? (
+          <div className={awardGroup()}>
+            <AwardIcon className={cn(awardIcon(), "size-[31px]")} />
+            <div>
+              <p className={awardTitle()}>{awardType}</p>
+              {awardEvent ? <p className={awardSubtitle()}>Awarded at {awardEvent}</p> : null}
+            </div>
+          </div>
+        ) : null}
+      </Link>
+    )
+  }
 
   return (
     <Link className={base({ className })} href={Routes.PROJECTS.ID(id)}>
@@ -65,7 +112,7 @@ export const ProjectCard = ({ project, className, variant }: ProjectCardProps) =
         </div>
 
         <div className={statsGroup()}>
-          {project.awardType && <AwardIcon className={cn(awardIcon(), "h-4.5 w-4.5")} />}
+          {awardType && <AwardIcon className={cn(awardIcon(), "h-4.5 w-4.5")} />}
           <div className={likesGroup()}>
             <HeartIcon aria-hidden="true" className={cn(heartIcon(), "h-4 w-4")} />
             <span className={likesCount()}>{formatLikes(likes)}</span>

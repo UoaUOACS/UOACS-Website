@@ -1,12 +1,28 @@
 import { Skeleton } from "@uoacs/ui"
-import { projectCardVariants } from "./ProjectCard.variants"
+import { type ProjectCardVariants, projectCardVariants } from "./ProjectCard.variants"
 
 /**
  * A loading placeholder with the same shape as a {@link ProjectCard}. It reuses the card's own
  * layout classes so its footer is the same height as a real card's.
  */
-export const ProjectCardSkeleton = () => {
-  const { footer, authorGroup, authorName, likesGroup } = projectCardVariants()
+export const ProjectCardSkeleton = ({ variant }: ProjectCardVariants) => {
+  const { base, imageWrapper, content, footer, authorGroup, authorName, likesGroup } =
+    projectCardVariants({ variant })
+
+  if (variant === "profile") {
+    return (
+      <div className={base()}>
+        <Skeleton className={`${imageWrapper()} aspect-4/3 h-auto rounded-2xl`} />
+        <div className={content()}>
+          <div className="space-y-2">
+            <Skeleton className="w-48 text-[28px]" shape="text" />
+            <Skeleton className="w-full max-w-md text-xl" shape="text" />
+          </div>
+          <Skeleton className="w-12" shape="text" />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex w-full max-w-sm flex-col">

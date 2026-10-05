@@ -16,10 +16,26 @@ export const projectCardVariants = tv({
     likesGroup: "flex items-center gap-1",
     heartIcon: "shrink-0 stroke-2 text-gray-900",
     likesCount: "text-xs font-medium text-gray-500",
+    content: "",
+    description: "",
+    awardGroup: "",
+    awardTitle: "",
+    awardSubtitle: "",
   },
   variants: {
     variant: {
       default: {},
+      profile: {
+        base: "max-w-none flex-row gap-10 rounded-[5px] bg-white px-[22px] pt-[22px] pb-[43px]",
+        imageWrapper: "w-100 shrink-0",
+        title: "font-inter text-[30px] font-bold break-words text-black",
+        likesCount: "font-cartograph text-[15px] font-normal text-[#727272]",
+        content: "grid min-w-0 flex-1 grid-rows-[1fr_auto_1fr] gap-4 pr-6",
+        description: "font-inter mt-2 line-clamp-3 text-xl font-normal text-black",
+        awardGroup: "absolute top-[43px] right-[39px] flex w-80 items-start gap-2",
+        awardTitle: "font-inter text-xl font-semibold text-black",
+        awardSubtitle: "font-inter text-[15px] font-normal text-[#b5b5b5]",
+      },
     },
   },
   defaultVariants: {

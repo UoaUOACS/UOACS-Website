@@ -87,3 +87,65 @@ export const LongTitle: Story = {
     },
   },
 }
+
+const mockProfileProject: Project = {
+  ...mockProjectWithImage,
+  summary: "A playground where UOACS members can showcase and discover projects.",
+  awardType: "Most Creative",
+  awardEvent: "UOACS x DEV Hackathon 2026",
+}
+
+// The default decorator fixes the width at 320px, which is too narrow for the wide card.
+const widthDecorator = (width: number): Story["decorators"] => [
+  (Story) => (
+    <div style={{ width }}>
+      <Story />
+    </div>
+  ),
+]
+
+export const Profile: Story = {
+  parameters: { layout: "padded" },
+  decorators: widthDecorator(1265),
+  args: {
+    variant: "profile",
+    project: { ...mockProfileProject, awardType: undefined, awardEvent: undefined },
+  },
+}
+
+export const ProfileWithAward: Story = {
+  name: "Profile with award",
+  parameters: { layout: "padded" },
+  decorators: widthDecorator(1265),
+  args: { variant: "profile", project: mockProfileProject },
+}
+
+export const ProfileNoImage: Story = {
+  name: "Profile no image",
+  parameters: { layout: "padded" },
+  decorators: widthDecorator(1265),
+  args: { variant: "profile", project: { ...mockProfileProject, imageURL: undefined } },
+}
+
+export const ProfileLongSummary: Story = {
+  name: "Profile long summary",
+  parameters: { layout: "padded" },
+  decorators: widthDecorator(1265),
+  args: {
+    variant: "profile",
+    project: { ...mockProfileProject, summary: "A very long description. ".repeat(30) },
+  },
+}
+
+export const ProfileLongTitle: Story = {
+  name: "Profile long title",
+  parameters: { layout: "padded" },
+  decorators: widthDecorator(1265),
+  args: {
+    variant: "profile",
+    project: {
+      ...mockProfileProject,
+      title: "A Very Long Project Title That Might Wrap Onto Several Lines Beside The Image",
+    },
+  },
+}
