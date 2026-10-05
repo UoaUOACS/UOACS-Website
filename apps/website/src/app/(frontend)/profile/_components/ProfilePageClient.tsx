@@ -20,14 +20,14 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
   return (
     <div className="flex w-full flex-col gap-12">
       <section className="flex w-full flex-col items-start gap-2">
-        <p className="font-mono font-paragraph">
+        <p className="font-mono">
           {/** biome-ignore lint/suspicious/noCommentText: the // is not for a comment */}
           <span className="text-primary">// </span>YOUR ACCOUNT
         </p>
         <Heading h={2} period>
           {displayName}
         </Heading>
-        <p className="flex flex-row justify-start gap-2 font-mono text-paragraph-sm">
+        <p className="flex flex-row justify-start gap-2 font-mono">
           <span>
             UPI{" "}
             <span className="font-bold text-black">
@@ -54,7 +54,7 @@ export const ProfilePageClient = ({ user }: ProfilePageClientProps) => {
 
       <section className="flex w-full flex-col items-start gap-6">
         <div className="flex flex-col items-start gap-2">
-          <p className="font-mono font-paragraph">
+          <p className="font-mono">
             {/** biome-ignore lint/suspicious/noCommentText: the // is not for a comment */}
             <span className="text-primary">// </span>MEMBER DETAILS
           </p>
