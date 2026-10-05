@@ -33,6 +33,6 @@ export const formatAccept = (accept: string) =>
       if (token.startsWith(".")) return token.slice(1).toUpperCase()
       const [type, subtype] = token.split("/")
       if (subtype === "*") return `${type.charAt(0).toUpperCase()}${type.slice(1)} files`
-      return subtype.toUpperCase()
+      return subtype.split("+")[0].toUpperCase()
     })
     .join(", ")
