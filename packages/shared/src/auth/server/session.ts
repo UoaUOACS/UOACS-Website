@@ -1,8 +1,10 @@
-import { AuthApiRoutes, type AuthSessionData } from "@uoacs/shared"
+import "server-only"
 import { headers } from "next/headers"
 import { unstable_rethrow } from "next/navigation"
 import { cache } from "react"
-import { sessionFetch } from "./auth-service"
+import { AuthApiRoutes } from "../routes"
+import type { AuthSessionData } from "../session"
+import { sessionFetch } from "./service"
 
 /**
  * The session now lives in the auth service, so this is a network call rather

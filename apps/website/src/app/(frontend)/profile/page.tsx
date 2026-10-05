@@ -1,6 +1,6 @@
 import { AuthPages, authPageUrl } from "@uoacs/shared"
+import { getSessionOrThrow } from "@uoacs/shared/auth/server"
 import { redirect } from "next/navigation"
-import { getSessionOrThrow } from "@/lib/auth/auth-session"
 import { Routes, websiteUrl } from "@/lib/routes"
 import { UserOnly } from "../_components/UserOnly"
 import { ProfilePageClient } from "./_components/ProfilePageClient"

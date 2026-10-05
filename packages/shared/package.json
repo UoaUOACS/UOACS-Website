@@ -6,26 +6,33 @@
   "exports": {
     ".": "./src/index.ts",
     "./auth": "./src/auth/index.ts",
+    "./auth/server": "./src/auth/server/index.ts",
     "./payload": "./src/payload/index.ts"
   },
   "dependencies": {
+    "server-only": "^0.0.1",
     "zod": "catalog:"
   },
   "scripts": {
     "types:check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@uoacs/config": "workspace:*",
-    "typescript": "catalog:",
-    "better-auth": "catalog:",
-    "payload": "catalog:payload",
     "@payloadcms/richtext-lexical": "catalog:payload",
+    "@types/react": "catalog:",
+    "@uoacs/config": "workspace:*",
+    "better-auth": "catalog:",
+    "next": "catalog:",
+    "payload": "catalog:payload",
+    "react": "catalog:",
+    "typescript": "catalog:",
     "zod": "catalog:"
   },
   "peerDependencies": {
     "@payloadcms/richtext-lexical": ">=3",
     "better-auth": "^1.6.1",
+    "next": ">=16",
     "payload": ">=3",
+    "react": ">=19.3",
     "zod": "^4"
   }
 }

@@ -1,5 +1,5 @@
 import "server-only"
-import type { AuthApiRoute } from "@uoacs/shared"
+import type { AuthApiRoute } from "../routes"
 
 const baseUrl = process.env.NEXT_PUBLIC_AUTH_URL
 
@@ -10,8 +10,8 @@ function url(path: AuthApiRoute): string {
 
 /**
  * Calls the auth service as the signed-in person, by replaying their cookie.
- * Only the cookie is forwarded — passing the whole header set would send the
- * website's Host and Origin too, which Better Auth checks.
+ * Only the cookie is forwarded - passing the whole header set would send the
+ * calling app's Host and Origin too, which Better Auth checks.
  */
 export function sessionFetch(
   path: AuthApiRoute,
