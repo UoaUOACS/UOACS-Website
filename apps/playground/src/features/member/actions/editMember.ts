@@ -4,40 +4,35 @@ import { getCurrentMember } from "@/features/member/member.queries"
 import { editMemberSchema } from "@/features/member/schemas/editMember.schema"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
-import type { Member } from "@/payload/payload-types"
 
 export type EditMemberResult =
-  | { ok: true; member: Member }
+  | { ok: true }
   | { ok: false; error: "invalid" | "unauthenticated" | "unavailable" | "server" }
 
 /**
- * Updates the signed-in person's own profile. The form sends the whole view,
- * so omitted `skills` and `links` clear them rather than being left alone.
- *
- * Anyone can call a server action with anything, so the member being edited
- * comes from the session rather than from the caller — a member id in the
- * input would let someone edit a profile that is not theirs. The collection
- * keeps Payload's admin-only create and update for the same reason, which is
- * why the write below bypasses access control: this function is the check.
+ * Replaces the signed-in person's own profile fields. The member comes from the
+ * session, never the input, so this is the check that the collection's
+ * admin-only update would be — hence `overrideAccess`, which also lifts the
+ * read access hiding `authServiceID`, so nothing is returned.
  */
 export async function editMember(input: unknown): Promise<EditMemberResult> {
   const parsed = editMemberSchema.safeParse(input)
   if (!parsed.success) return { ok: false, error: "invalid" }
 
-  const current = await getCurrentMember()
-  if (current.status !== "authenticated") return { ok: false, error: current.status }
-
   try {
+    const current = await getCurrentMember()
+    if (current.status !== "authenticated") return { ok: false, error: current.status }
+
     const payload = await getPayloadClient()
-    const member = await payload.update({
+    await payload.update({
       collection: Slugs.Collections.MEMBER,
       id: current.member.id,
       data: parsed.data,
       overrideAccess: true,
     })
-    return { ok: true, member }
+    return { ok: true }
   } catch (error) {
-    console.error("[editMember] Failed to update the member", { error })
+    console.error("[editMember] Failed to edit the member", { error })
     return { ok: false, error: "server" }
   }
 }

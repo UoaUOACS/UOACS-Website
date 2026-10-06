@@ -19,13 +19,15 @@ const linkSchema = z
   })
 
 /**
- * The fields a member may edit on their own profile, mirroring the rules the
- * `member` collection enforces. Shared with the edit form (#446) so the browser
- * and the server action agree on what is valid.
+ * What a member may edit on their own profile, mirroring the collection's rules
+ * and shared with the form in #446. The arrays are required, so omitting one is
+ * rejected rather than silently clearing it.
  */
 export const editMemberSchema = z.object({
   bio: z.string().nullish(),
-  skills: z.array(z.enum(skills)).default([]),
+  skills: z
+    .array(z.enum(skills))
+    .refine((rows) => new Set(rows).size === rows.length, "Each skill can only appear once."),
   links: z
     .array(linkSchema)
     .max(linkNames.length)
@@ -41,8 +43,7 @@ export const editMemberSchema = z.object({
         }
         seen.add(row.name)
       }
-    })
-    .default([]),
+    }),
 })
 
 export type EditMemberInput = z.infer<typeof editMemberSchema>
