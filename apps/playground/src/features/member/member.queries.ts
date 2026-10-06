@@ -10,21 +10,16 @@ import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 import type { Member } from "@/payload/payload-types"
 
-/**
- * Mirrors `SessionResult`, because `unavailable` is not "logged out". Telling
- * the two apart is the whole point of the shared `getSession`, so collapsing
- * them to `null` here would undo it.
- */
+/** Mirrors `SessionResult`: `unavailable` is not "logged out". */
 export type CurrentMemberResult =
   | { status: "authenticated"; member: Member }
   | { status: "unauthenticated" }
   | { status: "unavailable" }
 
 /**
- * Only the two fields used, rather than the whole member: the auth service
- * stores `gender` as free text while the shared schema narrows it to four
- * values, so parsing the full shape would reject a valid member over a field
- * the playground never reads.
+ * Only the two fields used. The auth service stores `gender` as free text while
+ * the shared schema narrows it to four values, so parsing the whole member
+ * would reject a valid one over a field the playground never reads.
  */
 const authNamesSchema = z.object({
   firstName: z.string().min(1),
@@ -33,7 +28,6 @@ const authNamesSchema = z.object({
 
 type AuthNames = z.infer<typeof authNamesSchema>
 
-/** How many usernames to try before giving up; each ends in 10 random digits. */
 const USERNAME_ATTEMPTS = 5
 
 function duplicateField(err: unknown): string | null {
@@ -44,9 +38,8 @@ function duplicateField(err: unknown): string | null {
 
 /**
  * The session carries only the email, so names come from the auth service.
- *
- * `null` means "could not find out", never "has no name". Callers fall back to
- * the stored copy, so one unhappy auth service does not lock everyone out.
+ * `null` means "could not find out", never "has no name", so callers fall back
+ * to the stored copy rather than locking everyone out.
  */
 async function fetchAuthNames(): Promise<AuthNames | null> {
   let body: unknown
@@ -118,22 +111,24 @@ async function withCurrentNames(member: Member, names: AuthNames | null): Promis
     collection: Slugs.Collections.MEMBER,
     id: member.id,
     data: names,
+    // `revalidateTag` throws during render, and this request reads the updated
+    // document straight back, so there is nothing stale to invalidate anyway.
+    context: { disableRevalidate: true },
   })
 }
 
 /**
  * The playground member for whoever is signed in, created on their first visit
  * so every logged-in person has a profile without signing up a second time.
- *
- * Cached per request, since a page may ask for it in several places.
+ * Deduplicated per request, as a page may read it in more than one place.
  */
 export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => {
   const session = await getSession()
   if (session.status !== "authenticated") return session
 
   const authServiceID = session.session.user.id
-  // Neither lookup needs the other, and the name refresh is only a refresh, so
-  // a failing auth service must not keep someone out of a member we already have.
+  // The names are only a refresh, so a failing auth service must not keep
+  // someone out of a member we already have.
   const [existing, names] = await Promise.all([
     findByAuthServiceID(authServiceID),
     fetchAuthNames(),

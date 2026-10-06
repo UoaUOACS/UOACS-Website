@@ -35,9 +35,8 @@ export const Member: CollectionConfig = {
         read: ({ req: { user } }) => Boolean(user),
       },
     },
-    // Copied from the auth service rather than fetched, so a page listing many
-    // members doesn't make a request per person. `getCurrentMember` refreshes
-    // each person's copy when they next open the playground.
+    // Copied from the auth service, which only exposes the caller's own member,
+    // so there is no other way to show someone else's name.
     {
       name: "firstName",
       type: "text",
