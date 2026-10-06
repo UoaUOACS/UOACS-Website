@@ -1,6 +1,6 @@
 import type { SessionResult } from "@uoacs/shared"
 import { authClient } from "@uoacs/shared/auth"
-import { createContext, type ReactNode, useContext, useRef } from "react"
+import { createContext, type ReactNode, useContext } from "react"
 
 export type Session = typeof authClient.$Infer.Session | null
 
@@ -27,17 +27,13 @@ export const SessionProvider = ({
   initialSession: SessionResult
 }) => {
   const { data, error, isPending, isRefetching } = authClient.useSession()
-  // Better Auth clears `error` at the start of every request, so mid-request
-  // state can look signed out. Only read it once the request has settled.
-  const settled = useRef(initialSession)
-  if (!isPending && !isRefetching) {
-    // No session normally comes back as `data: null` with no error; a 401 also
-    // means signed out. Any other error, including a failed request, means the
-    // service could not say either way.
-    if (data) settled.current = { status: "authenticated", session: data }
-    else if (error && error.status !== 401) settled.current = { status: "unavailable" }
-    else settled.current = { status: "unauthenticated" }
-  }
+  // No session normally comes back as `data: null` with no error;
+  // a 401 also means signed out. Any other error, including a
+  // failed request, isn't an answer, so fall back to the server's.
+  let result: SessionResult
+  if (data) result = { status: "authenticated", session: data }
+  else if (isPending || isRefetching || (error && error.status !== 401)) result = initialSession
+  else result = { status: "unauthenticated" }
 
-  return <SessionContext.Provider value={settled.current}>{children}</SessionContext.Provider>
+  return <SessionContext.Provider value={result}>{children}</SessionContext.Provider>
 }
