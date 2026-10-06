@@ -62,4 +62,4 @@ export const loadDiscoverParams = async (
  */
 export const getDiscoverHref = (state: Partial<DiscoverState>) => serialize(Routes.HOME, state)
 
-export type GetDiscoverHref = (state: Partial<DiscoverState>) => string
+export type GetDiscoverHref = typeof getDiscoverHref

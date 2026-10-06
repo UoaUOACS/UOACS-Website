@@ -8,6 +8,7 @@ import {
   PROJECT_TABS,
   PROJECTS_PER_PAGE,
 } from "@/features/project/project.constants"
+import type { ProjectSort } from "@/features/project/types/enums"
 import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
@@ -17,30 +18,27 @@ export interface ProjectsPage {
   totalPages: number
 }
 
-export interface ProjectsQuery extends DiscoverState {
+export interface SearchProjectsQuery {
   /**
-   * Text to match against project names. Omit for no search filter.
+   * Text to match against project names.
    */
-  q?: string
-}
-export const getProjectsCached = async (query: ProjectsQuery) => {
-  "use cache"
-  cacheTag(CacheTags.PROJECTS.ROOT, CacheTags.MEDIA)
-  cacheLife("max")
-
-  return getProjects(query)
+  q: string
+  sort: ProjectSort
+  page: number
 }
 
-export const getProjects = async ({ tab, sort, page, q }: ProjectsQuery): Promise<ProjectsPage> => {
+interface FindProjectsArgs {
+  where?: Where
+  sort: ProjectSort
+  page: number
+}
+
+const findProjects = async ({ where, sort, page }: FindProjectsArgs): Promise<ProjectsPage> => {
   const payload = await getPayloadClient()
-
-  const tabWhere = PROJECT_TABS.find((option) => option.value === tab)?.where
-  const searchWhere: Where | undefined = q ? { name: { contains: q } } : undefined
-  const filters = [tabWhere, searchWhere].filter((where): where is Where => where !== undefined)
 
   const { docs, totalPages } = await payload.find({
     collection: Slugs.Collections.PROJECT,
-    where: filters.length > 0 ? { and: filters } : undefined,
+    where,
     sort: PROJECT_SORT_OPTIONS[sort].payloadSort,
     limit: PROJECTS_PER_PAGE,
     page,
@@ -51,3 +49,20 @@ export const getProjects = async ({ tab, sort, page, q }: ProjectsQuery): Promis
   })
   return { projects: docs.map(toProjectCard), totalPages }
 }
+
+export const getProjectsCached = async (state: DiscoverState) => {
+  "use cache"
+  cacheTag(CacheTags.PROJECTS.ROOT, CacheTags.MEDIA)
+  cacheLife("max")
+
+  return getProjects(state)
+}
+
+export const getProjects = ({ tab, sort, page }: DiscoverState) =>
+  findProjects({ where: PROJECT_TABS.find((option) => option.value === tab)?.where, sort, page })
+
+/**
+ * Not cached: open-ended queries rarely repeat, so caching them would only evict useful entries.
+ */
+export const searchProjects = ({ q, sort, page }: SearchProjectsQuery) =>
+  findProjects({ where: q ? { name: { contains: q } } : undefined, sort, page })

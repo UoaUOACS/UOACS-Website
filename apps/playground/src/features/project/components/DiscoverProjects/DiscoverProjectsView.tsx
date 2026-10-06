@@ -1,14 +1,9 @@
-import { Pagination } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { useId } from "react"
-import {
-  type DiscoverState,
-  type GetDiscoverHref,
-  getDiscoverHref,
-} from "@/features/project/helpers/discover"
+import { type DiscoverState, getDiscoverHref } from "@/features/project/helpers/discover"
 import { PROJECT_TABS } from "@/features/project/project.constants"
+import { PaginatedProjectGrid } from "../PaginatedProjectGrid/PaginatedProjectGrid"
 import type { Project } from "../ProjectCard/ProjectCard"
-import { ProjectGrid } from "../ProjectGrid/ProjectGrid"
 import { ProjectSortDropdown } from "../ProjectSortDropdown/ProjectSortDropdown"
 import { ProjectTabs } from "../ProjectTabs/ProjectTabs"
 import { discoverProjectsVariants } from "./DiscoverProjects.variants"
@@ -16,15 +11,6 @@ import { discoverProjectsVariants } from "./DiscoverProjects.variants"
 interface DiscoverProjectsViewProps extends DiscoverState {
   projects: Project[]
   totalPages: number
-  /**
-   * Builds the link for a state, so the view can live on pages other than home. Defaults to the
-   * home page's links.
-   */
-  getHref?: GetDiscoverHref
-  /**
-   * Shows every tab as disabled, e.g. on the search page.
-   */
-  disableTabs?: boolean
   className?: string
 }
 
@@ -38,20 +24,21 @@ export const DiscoverProjectsView = ({
   page,
   projects,
   totalPages,
-  getHref = getDiscoverHref,
-  disableTabs = false,
   className,
 }: DiscoverProjectsViewProps) => {
-  const { root, header, sort: sortClass, heading, pagination } = discoverProjectsVariants()
+  const { root, header, sort: sortClass, heading } = discoverProjectsVariants()
   const tabLabel = PROJECT_TABS.find((option) => option.value === tab)?.label
   const headingId = useId()
 
   return (
     <section aria-labelledby={headingId} className={cn(root(), className)}>
       <div className={header()}>
-        <ProjectTabs activeTab={tab} disabled={disableTabs} getHref={getHref} sort={sort} />
+        <ProjectTabs activeTab={tab} sort={sort} />
         <div className={sortClass()}>
-          <ProjectSortDropdown getHref={getHref} sort={sort} tab={tab} />
+          <ProjectSortDropdown
+            getSortHref={(value) => getDiscoverHref({ tab, sort: value })}
+            sort={sort}
+          />
         </div>
       </div>
 
@@ -59,17 +46,12 @@ export const DiscoverProjectsView = ({
         {tabLabel}
       </h2>
 
-      <ProjectGrid projects={projects} />
-
-      {totalPages > 1 && (
-        <Pagination
-          aria-label="Projects pagination"
-          className={pagination()}
-          getHref={(target) => getHref({ tab, sort, page: target })}
-          page={page}
-          totalPages={totalPages}
-        />
-      )}
+      <PaginatedProjectGrid
+        getPageHref={(target) => getDiscoverHref({ tab, sort, page: target })}
+        page={page}
+        projects={projects}
+        totalPages={totalPages}
+      />
     </section>
   )
 }
