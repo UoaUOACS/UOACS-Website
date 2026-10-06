@@ -99,11 +99,14 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
   // Creating one is the only step that cannot proceed without a name.
   if (!names) return { status: "unavailable" }
 
-  const created = await createMember(authServiceID, names)
-  if (created) return { status: "authenticated", member: created }
-
-  // Lost a race with another request for the same person; theirs is the member.
-  const raced = await findMemberByAuthServiceId(authServiceID)
-  if (!raced) throw new Error(`Member ${authServiceID} was created and then vanished`)
-  return { status: "authenticated", member: raced }
+  try {
+    return { status: "authenticated", member: await createMember(authServiceID, names) }
+  } catch (err) {
+    // Another request for the same person may have created it first, so ask the
+    // database rather than reading the failure. If it did not, this was a real
+    // error and belongs to the caller.
+    const raced = await findMemberByAuthServiceId(authServiceID)
+    if (!raced) throw err
+    return { status: "authenticated", member: raced }
+  }
 })

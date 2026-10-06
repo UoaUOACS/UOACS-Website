@@ -7,17 +7,16 @@ import type { Member } from "@/payload/payload-types"
 
 const USERNAME_ATTEMPTS = 5
 
-function duplicateField(err: unknown): string | null {
-  if (!(err instanceof ValidationError)) return null
-  const duplicate = err.data?.errors?.find((e) => e.message === "Value must be unique")
-  return duplicate ? (duplicate.path ?? "") : null
-}
+/** Matched on the field rather than the message, which Payload translates. */
+const isUsernameClash = (err: unknown): boolean =>
+  err instanceof ValidationError && err.data?.errors?.some((e) => e.path === "username") === true
 
-/** `null` means another request created it first, so the caller should re-read. */
-export async function createMember(
-  authServiceID: string,
-  names: AuthNames,
-): Promise<Member | null> {
+/**
+ * Throws if the member could not be created, including when another request
+ * created one first. The caller re-reads to tell those apart, since the
+ * database is a better answer than the error.
+ */
+export async function createMember(authServiceID: string, names: AuthNames): Promise<Member> {
   const payload = await getPayloadClient()
 
   for (let attempt = 0; attempt < USERNAME_ATTEMPTS; attempt++) {
@@ -27,9 +26,7 @@ export async function createMember(
         data: { ...names, authServiceID, username: buildUsername(names.firstName, names.lastName) },
       })
     } catch (err) {
-      const field = duplicateField(err)
-      if (field === "authServiceID") return null
-      if (field !== "username") throw err
+      if (!isUsernameClash(err)) throw err
     }
   }
 
