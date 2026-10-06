@@ -224,6 +224,8 @@ export interface Member {
   id: string;
   username: string;
   authServiceID: string;
+  firstName: string;
+  lastName: string;
   profilePicture?: (string | null) | Media;
   bio?: string | null;
   skills?:
@@ -567,6 +569,8 @@ export interface SponsorSelect<T extends boolean = true> {
 export interface MemberSelect<T extends boolean = true> {
   username?: T;
   authServiceID?: T;
+  firstName?: T;
+  lastName?: T;
   profilePicture?: T;
   bio?: T;
   skills?: T;
