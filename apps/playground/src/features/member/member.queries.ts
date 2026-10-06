@@ -32,7 +32,7 @@ export type AuthNames = z.infer<typeof authNamesSchema>
  * `null` means "could not find out", never "has no name", so callers fall back
  * to the stored copy rather than locking everyone out.
  */
-async function fetchAuthNames(): Promise<AuthNames | null> {
+async function fetchCurrentMemberNames(): Promise<AuthNames | null> {
   let body: unknown
   try {
     const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, await headers(), {
@@ -67,7 +67,7 @@ async function fetchAuthNames(): Promise<AuthNames | null> {
   return parsed.data
 }
 
-async function findByAuthServiceID(authServiceID: string): Promise<Member | null> {
+async function findMemberByAuthServiceId(authServiceID: string): Promise<Member | null> {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: Slugs.Collections.MEMBER,
@@ -90,8 +90,8 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
   // The names are only a refresh, so a failing auth service must not keep
   // someone out of a member we already have.
   const [existing, names] = await Promise.all([
-    findByAuthServiceID(authServiceID),
-    fetchAuthNames(),
+    findMemberByAuthServiceId(authServiceID),
+    fetchCurrentMemberNames(),
   ])
 
   if (existing) return { status: "authenticated", member: await syncNames(existing, names) }
@@ -103,7 +103,7 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
   if (created) return { status: "authenticated", member: created }
 
   // Lost a race with another request for the same person; theirs is the member.
-  const raced = await findByAuthServiceID(authServiceID)
+  const raced = await findMemberByAuthServiceId(authServiceID)
   if (!raced) throw new Error(`Member ${authServiceID} was created and then vanished`)
   return { status: "authenticated", member: raced }
 })
