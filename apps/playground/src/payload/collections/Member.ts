@@ -1,8 +1,15 @@
 import type { CollectionConfig } from "payload"
 import { skills } from "@/features/member/constants/skills.constants"
+import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload/slugs"
 import { ProfileLink } from "../fields/ProfileLink"
 import { makeDeleteLikesHook } from "../hooks/deleteLikes"
+import { makeRevalidateHooks } from "../hooks/revalidate"
+import type { Member as MemberDoc } from "../payload-types"
+
+const { afterChange, afterDelete } = makeRevalidateHooks((doc: MemberDoc) => [
+  CacheTags.MEMBERS.ID(doc.id),
+])
 
 export const Member: CollectionConfig = {
   slug: Slugs.Collections.MEMBER,
@@ -48,5 +55,9 @@ export const Member: CollectionConfig = {
     },
     ProfileLink,
   ],
-  hooks: { beforeDelete: [makeDeleteLikesHook("member")] },
+  hooks: {
+    afterChange: [afterChange],
+    beforeDelete: [makeDeleteLikesHook("member")],
+    afterDelete: [afterDelete],
+  },
 }
