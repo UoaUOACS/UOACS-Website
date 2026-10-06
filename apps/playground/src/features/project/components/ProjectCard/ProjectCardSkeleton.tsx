@@ -1,4 +1,5 @@
 import { Skeleton } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import { type ProjectCardVariants, projectCardVariants } from "./ProjectCard.variants"
 
 /**
@@ -12,13 +13,13 @@ export const ProjectCardSkeleton = ({ variant }: ProjectCardVariants) => {
   if (variant === "profile") {
     return (
       <div className={base()}>
-        <Skeleton className={`${imageWrapper()} aspect-4/3 h-auto rounded-2xl`} />
+        <Skeleton className={cn(imageWrapper(), "h-auto rounded-2xl")} />
         <div className={content()}>
-          <div className="space-y-2">
-            <Skeleton className="w-48 text-[28px]" shape="text" />
+          <div className="space-y-2 lg:row-start-2">
+            <Skeleton className="w-48 text-3xl" shape="text" />
             <Skeleton className="w-full max-w-md text-xl" shape="text" />
           </div>
-          <Skeleton className="w-12" shape="text" />
+          <Skeleton className="w-12 lg:row-start-3 lg:self-end" shape="text" />
         </div>
       </div>
     )
