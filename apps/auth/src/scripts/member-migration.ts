@@ -7,9 +7,11 @@ if (!targetUri) throw new Error("DATABASE_URI is not set (the auth database to w
 
 const commit = process.argv.includes("--commit")
 
-// The website pluralises its Payload slug; the auth service does not.
+// Payload's mongo adapter pluralises a slug into a collection name unless the
+// collection sets `dbName`, so the `member` slug lives in `members`. Better
+// Auth's adapter does not, so its collections keep their singular names.
 const SOURCE = { member: "members", user: "user", account: "account" }
-const TARGET = { member: "member", user: "user", account: "account" }
+const TARGET = { member: "members", user: "user", account: "account" }
 
 // `compsciStudent` is required too, but it is the one field we fill in rather
 // than refuse, so it is checked separately.
