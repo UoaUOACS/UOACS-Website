@@ -1,0 +1,14 @@
+# Same as the default workspace profile, but sandboxed commands can't read or
+# write .env / .env.* files. .env.example templates stay readable.
+default_permissions = "workspace-no-env"
+
+[permissions.workspace-no-env]
+extends = ":workspace"
+
+[permissions.workspace-no-env.filesystem]
+glob_scan_max_depth = 4
+
+[permissions.workspace-no-env.filesystem.":workspace_roots"]
+"**/.env" = "deny"
+# Globs can only deny and a deny beats any read, so `[!e]` skips .env.example.
+"**/.env.[!e]*" = "deny"
