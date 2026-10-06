@@ -1,41 +1,39 @@
-import { Button } from "@uoacs/ui"
+import { Button, Heading } from "@uoacs/ui"
 import Image from "next/image"
 import Link from "next/link"
+import { Routes } from "@/lib/routes"
 
 export function NotFoundContent() {
   return (
-    <main className="flex grow items-center justify-center px-4 py-16">
-      <div className="flex w-full max-w-243.75 flex-col items-center justify-center gap-10 px-8 py-16 md:h-126.25 md:flex-row md:gap-16">
-        <div className="flex flex-col gap-6 md:pl-10">
-          <h1 className="relative font-semibold text-[50px]">
-            <span className="-translate-x-full absolute font-extrabold text-primary italic">
-              &#47;&#47;&nbsp;
-            </span>
-            404 Error
-          </h1>
-          <p className="-mt-6 max-w-140.5 font-light text-[22px]">
-            Sorry we couldn&apos;t find the page you were
-            <br />
-            looking for
-          </p>
-          <Link className="w-fit" href="/">
-            <Button
-              className="h-16.75 w-37 justify-center rounded-full text-xl md:h-16.75"
-              theme="dark"
-            >
-              Return
+    <div className="flex grow flex-col items-center justify-center gap-8 px-4 py-16 md:flex-row md:gap-16">
+      <div className="flex items-start gap-3">
+        <span aria-hidden className="heading-1 text-5xl text-primary italic md:text-7xl">
+          &#47;&#47;
+        </span>
+        <div className="flex flex-col items-start gap-8">
+          <div className="flex flex-col gap-2">
+            <Heading className="justify-start font-medium text-5xl md:text-7xl" h={1}>
+              404 Error
+            </Heading>
+            <p className="paragraph max-w-100 font-light">
+              Sorry we couldn&apos;t find the page you were looking for
+            </p>
+          </div>
+          <Link href={Routes.HOME}>
+            <Button shape="pill" size="lg" theme="dark">
+              Go Home
             </Button>
           </Link>
         </div>
-        <Image
-          alt=""
-          className="-scale-x-100 rotate-[3.98deg]"
-          height={264}
-          priority
-          src="/sad-mascot.png"
-          width={264}
-        />
       </div>
-    </main>
+      <Image
+        alt=""
+        className="size-48 md:size-64"
+        height={256}
+        priority
+        src="/sad-mascot.png"
+        width={256}
+      />
+    </div>
   )
 }
