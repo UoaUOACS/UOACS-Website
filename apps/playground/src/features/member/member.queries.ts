@@ -47,6 +47,12 @@ async function fetchAuthNames(): Promise<AuthNames | null> {
     const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, await headers(), {
       signal: AbortSignal.timeout(5000),
     })
+    // Signed in with no member behind the account: a stuck account rather than
+    // an outage, so it is not logged as one.
+    if (response.status === 404) {
+      console.warn("[getCurrentMember] Signed in but the auth service has no member")
+      return null
+    }
     if (!response.ok) {
       console.error("[getCurrentMember] Auth service answered with an error", {
         status: response.status,
@@ -111,8 +117,9 @@ async function withCurrentNames(member: Member, names: AuthNames | null): Promis
     collection: Slugs.Collections.MEMBER,
     id: member.id,
     data: names,
-    // `revalidateTag` throws during render, and this request reads the updated
-    // document straight back, so there is nothing stale to invalidate anyway.
+    // `revalidateTag` throws during render. Safe to skip only because nothing
+    // reads under `member:{id}` yet — adding such a reader means moving this
+    // name sync out of the render path.
     context: { disableRevalidate: true },
   })
 }

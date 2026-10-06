@@ -7,9 +7,13 @@ import { makeDeleteLikesHook } from "../hooks/deleteLikes"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 import type { Member as MemberDoc } from "../payload-types"
 
-const { afterChange, afterDelete } = makeRevalidateHooks((doc: MemberDoc) => [
-  CacheTags.MEMBERS.ID(doc.id),
-])
+// `skipCreate`, as a member that has just been created cannot be in any cached
+// data yet, and `getCurrentMember` creates one mid-render, where revalidating
+// throws.
+const { afterChange, afterDelete } = makeRevalidateHooks(
+  (doc: MemberDoc) => [CacheTags.MEMBERS.ID(doc.id)],
+  { skipCreate: true },
+)
 
 export const Member: CollectionConfig = {
   slug: Slugs.Collections.MEMBER,
