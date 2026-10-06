@@ -36,22 +36,20 @@ export async function createMember(authServiceID: string, names: AuthNames): Pro
 }
 
 /**
- * Writes the auth service's names onto the stored copy when they have drifted,
- * and returns the member either way. Does nothing when they already match or
- * when the auth service could not be reached.
+ * Writes the auth service's names onto the stored copy when they have drifted.
+ * Does nothing when they already match or when the auth service could not be
+ * reached. Belongs in `after()`: the member is already usable without it, so a
+ * failure must not reach the page, and the collection's revalidate hook only
+ * works outside a render.
  */
-export async function syncNames(member: Member, names: AuthNames | null): Promise<Member> {
-  if (!names) return member
-  if (member.firstName === names.firstName && member.lastName === names.lastName) return member
+export async function syncNames(member: Member, names: AuthNames | null): Promise<void> {
+  if (!names) return
+  if (member.firstName === names.firstName && member.lastName === names.lastName) return
 
   const payload = await getPayloadClient()
-  return payload.update({
+  await payload.update({
     collection: Slugs.Collections.MEMBER,
     id: member.id,
     data: names,
-    // `revalidateTag` throws during render. Safe to skip only because nothing
-    // reads under `member:{id}` yet — adding such a reader means moving this
-    // name sync out of the render path.
-    context: { disableRevalidate: true },
   })
 }

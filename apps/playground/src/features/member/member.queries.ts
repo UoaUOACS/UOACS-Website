@@ -2,6 +2,7 @@ import { AuthApiRoutes } from "@uoacs/shared"
 import { getSession, sessionFetch } from "@uoacs/shared/auth/server"
 import { headers } from "next/headers"
 import { unstable_rethrow } from "next/navigation"
+import { after } from "next/server"
 import { cache } from "react"
 import { z } from "zod"
 import { createMember, syncNames } from "@/features/member/member.mutations"
@@ -94,7 +95,16 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
     fetchCurrentMemberNames(),
   ])
 
-  if (existing) return { status: "authenticated", member: await syncNames(existing, names) }
+  if (existing) {
+    after(async () => {
+      try {
+        await syncNames(existing, names)
+      } catch (error) {
+        console.error("[getCurrentMember] Failed to sync the stored names", { error })
+      }
+    })
+    return { status: "authenticated", member: existing }
+  }
 
   // Creating one is the only step that cannot proceed without a name.
   if (!names) return { status: "unavailable" }
