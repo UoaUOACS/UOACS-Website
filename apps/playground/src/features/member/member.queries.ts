@@ -2,10 +2,9 @@ import { AuthApiRoutes } from "@uoacs/shared"
 import { getSession, sessionFetch } from "@uoacs/shared/auth/server"
 import { headers } from "next/headers"
 import { unstable_rethrow } from "next/navigation"
-import { ValidationError } from "payload"
 import { cache } from "react"
 import { z } from "zod"
-import { buildUsername } from "@/features/member/helpers/username"
+import { createMember, syncNames } from "@/features/member/member.mutations"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 import type { Member } from "@/payload/payload-types"
@@ -26,15 +25,7 @@ const authNamesSchema = z.object({
   lastName: z.string().min(1),
 })
 
-type AuthNames = z.infer<typeof authNamesSchema>
-
-const USERNAME_ATTEMPTS = 5
-
-function duplicateField(err: unknown): string | null {
-  if (!(err instanceof ValidationError)) return null
-  const duplicate = err.data?.errors?.find((e) => e.message === "Value must be unique")
-  return duplicate ? (duplicate.path ?? "") : null
-}
+export type AuthNames = z.infer<typeof authNamesSchema>
 
 /**
  * The session carries only the email, so names come from the auth service.
@@ -86,44 +77,6 @@ async function findByAuthServiceID(authServiceID: string): Promise<Member | null
   return docs[0] ?? null
 }
 
-/** `null` means another request created it first, so the caller should re-read. */
-async function createMember(authServiceID: string, names: AuthNames): Promise<Member | null> {
-  const payload = await getPayloadClient()
-
-  for (let attempt = 0; attempt < USERNAME_ATTEMPTS; attempt++) {
-    try {
-      return await payload.create({
-        collection: Slugs.Collections.MEMBER,
-        data: { ...names, authServiceID, username: buildUsername(names.firstName, names.lastName) },
-      })
-    } catch (err) {
-      const field = duplicateField(err)
-      if (field === "authServiceID") return null
-      if (field !== "username") throw err
-    }
-  }
-
-  throw new Error(
-    `Could not find a free username for member ${authServiceID} in ${USERNAME_ATTEMPTS} attempts`,
-  )
-}
-
-async function withCurrentNames(member: Member, names: AuthNames | null): Promise<Member> {
-  if (!names) return member
-  if (member.firstName === names.firstName && member.lastName === names.lastName) return member
-
-  const payload = await getPayloadClient()
-  return payload.update({
-    collection: Slugs.Collections.MEMBER,
-    id: member.id,
-    data: names,
-    // `revalidateTag` throws during render. Safe to skip only because nothing
-    // reads under `member:{id}` yet — adding such a reader means moving this
-    // name sync out of the render path.
-    context: { disableRevalidate: true },
-  })
-}
-
 /**
  * The playground member for whoever is signed in, created on their first visit
  * so every logged-in person has a profile without signing up a second time.
@@ -141,7 +94,7 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
     fetchAuthNames(),
   ])
 
-  if (existing) return { status: "authenticated", member: await withCurrentNames(existing, names) }
+  if (existing) return { status: "authenticated", member: await syncNames(existing, names) }
 
   // Creating one is the only step that cannot proceed without a name.
   if (!names) return { status: "unavailable" }
