@@ -26,6 +26,15 @@ export const Partial: Story = {
   },
 }
 
+export const Empty: Story = {
+  args: {
+    major: undefined,
+    biography: undefined,
+    languages: undefined,
+    skills: undefined,
+  },
+}
+
 export const Loading: Story = {
   render: () => <ProfileAboutSkeleton />,
 }

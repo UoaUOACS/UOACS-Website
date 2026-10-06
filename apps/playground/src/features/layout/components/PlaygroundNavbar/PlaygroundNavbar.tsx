@@ -15,12 +15,6 @@ import { Routes } from "@/lib/routes"
  */
 export interface PlaygroundNavbarProps {
   /**
-   * Overrides the session for the auth action: `true` renders the profile
-   * dropdown, `false` the Log In and Sign Up links to the hosted auth app.
-   * Left undefined, the real session decides.
-   */
-  signedIn?: boolean
-  /**
    * Route the logo links to.
    */
   logoHref?: string
@@ -29,17 +23,12 @@ export interface PlaygroundNavbarProps {
 /**
  * A responsive navbar for the playground, with logo, page title, and auth action.
  *
- * @param signedIn Overrides the session for the auth action.
  * @param logoHref Route the logo links to.
  * @returns A Navbar component with logo, tagline, and auth action.
  */
-export function PlaygroundNavbar({
-  signedIn: signedInProp, //For storybook testing, remove later
-  logoHref = Routes.HOME,
-}: PlaygroundNavbarProps) {
+export function PlaygroundNavbar({ logoHref = Routes.HOME }: PlaygroundNavbarProps) {
   const pathname = usePathname()
   const session = useSession()
-  const signedIn = signedInProp ?? Boolean(session)
   const isHome = pathname === Routes.HOME
   const title = isHome ? "Presents" : "Project Playground"
   const profileOptions: DropdownProps["options"] = [
@@ -74,7 +63,7 @@ export function PlaygroundNavbar({
         </span>
       </Link>
 
-      {signedIn ? (
+      {session ? (
         <Dropdown
           label={<UserIcon className="h-4 w-4" />}
           options={profileOptions}

@@ -5,8 +5,7 @@ import type { ReactNode } from "react"
  */
 export const SectionLabel = ({ children }: { children: ReactNode }) => (
   <p className="font-mono text-primary">
-    {/** biome-ignore lint/suspicious/noCommentText: the // is not for a comment */}
-    <span>// </span>
+    <span aria-hidden="true">/&#47; </span>
     {children}
   </p>
 )
