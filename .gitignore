@@ -50,3 +50,15 @@ next-env.d.ts
 
 *storybook.log
 storybook-static
+
+# AI agents: commit shared config only
+.claude/*
+!.claude/settings.json
+.codex/*
+!.codex/config.toml
+!.codex/hooks.json
+.agents/*
+!.agents/skills/
+.opencode/
+CLAUDE.local.md
+AGENTS.override.md
