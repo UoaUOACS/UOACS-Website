@@ -45,11 +45,13 @@ export const Member: CollectionConfig = {
       name: "firstName",
       type: "text",
       required: true,
+      admin: { readOnly: true },
     },
     {
       name: "lastName",
       type: "text",
       required: true,
+      admin: { readOnly: true },
     },
     {
       name: "profilePicture",
