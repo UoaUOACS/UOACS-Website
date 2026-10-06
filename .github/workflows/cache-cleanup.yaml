@@ -1,11 +1,10 @@
 name: Cache Cleanup
 
 # A PR's cache entries are scoped to its merge ref, so nothing else can restore
-# them once it closes. Remove them so they don't push main's entries out under
-# the 10GB limit.
+# them once it closes. 
 #
-# pull_request_target gives fork PRs a token that can delete caches. This is
-# safe here because the job never checks out or runs the PR's code.
+# pull_request_target gives fork PRs a token that can delete caches. 
+
 on:
   pull_request_target:
     types: [closed]
