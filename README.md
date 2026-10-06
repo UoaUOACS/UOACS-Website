@@ -1,278 +1,196 @@
 # UOACS Website
 
-A modern, full-stack website for the University of Auckland Computer Science Society (UOACS), built with Next.js, Payload CMS, and TypeScript.
+The monorepo behind the University of Auckland Computer Science Society (UOACS) web platform. It holds
+several Next.js + Payload CMS apps that share one design system, one auth service and one set of types.
+
+| App | Package | What it is | Local URL |
+|-----|---------|------------|-----------|
+| [`apps/website`](apps/website/README.md) | `@uoacs/website` | The main UOACS website: homepage, team, events, sponsors, member profiles and Google Wallet passes | [localhost:3000](http://localhost:3000) |
+| [`apps/playground`](apps/playground/README.md) | `@uoacs/playground` | The projects playground, where members showcase and discover projects | [localhost:3001](http://localhost:3001) |
+| [`apps/auth`](apps/auth/README.md) | `@uoacs/auth` | The hosted auth service: login, sign-up, password reset and the Better Auth API every app signs in through | [localhost:3002](http://localhost:3002) |
+
+| Package | Name | What it is |
+|---------|------|------------|
+| [`packages/ui`](packages/ui/README.md) | `@uoacs/ui` | Shared design system: brand tokens, fonts and primitive components |
+| [`packages/shared`](packages/shared/README.md) | `@uoacs/shared` | Shared auth client, session helpers, Payload types, schemas and utilities |
+| [`packages/config`](packages/config/README.md) | `@uoacs/config` | Shared `tsconfig` bases |
+
+## 🧭 How the pieces fit
+
+```
+             ┌──────────────────────┐
+             │      apps/auth       │  Better Auth + Payload (Member data)
+             │  login · sign-up ·   │  sets the session cookie
+             │  /api/auth/*         │
+             └──────────┬───────────┘
+        session cookie  │  /api/auth/get-session, /api/member/me
+          ┌─────────────┴─────────────┐
+          ▼                           ▼
+┌──────────────────┐        ┌──────────────────┐
+│   apps/website   │        │ apps/playground  │
+│  Payload: events,│        │ Payload: projects│
+│  execs, sponsors │        │ sponsors, likes  │
+└──────────────────┘        └──────────────────┘
+          └──────── @uoacs/ui · @uoacs/shared ────────┘
+```
+
+- **Auth is centralised.** Only `apps/auth` runs Better Auth. The website and playground send people to
+  its hosted pages (via `authPageUrl()` from `@uoacs/shared`) and read the session by calling the auth
+  service with the person's cookie. In production the cookie is scoped to the shared parent domain so
+  every subdomain sees it.
+- **Each app owns its own Payload CMS** (admin at `/payload/admin`) for the content it serves.
+- **Shared code lives in `packages/`** and is consumed as raw TypeScript source — there is no build
+  step for packages; each app lists them in `transpilePackages`.
 
 ## 📋 Prerequisites
 
-- **Node.js**
-- **pnpm**
+- **Node.js** — version pinned in `.nvmrc`
+- **pnpm** — version pinned in `package.json` (`packageManager`), enabled via Corepack
 - **MongoDB** instance (local or cloud)
 
 ### Node.js installation
 
-#### nvm (Node Version Manager)
-
-In the root directory of the project, you can find a `.nvmrc` file specifying the required Node.js version. If you have `nvm` installed, you can run:
+With [nvm](https://github.com/nvm-sh/nvm), from the repository root:
 
 ```bash
 nvm install
 nvm use
 ```
 
-#### Volta
+With [Volta](https://volta.sh/), the correct version is picked up automatically.
 
-If you use [Volta](https://volta.sh/), the project will automatically use the correct Node.js version specified in `package.json`.
+## 🛠️ Getting Started
 
-Follow the [Volta installation instructions](https://docs.volta.sh/guide/getting-started) if you don't have it installed.
-
-## 🛠️ Setting Up the Project
-
-### 1. Install Dependencies
+### 1. Install dependencies
 
 ```bash
 corepack enable
-
 pnpm install
 ```
 
-### 2. Environment Setup
+`postinstall` installs the Lefthook git hooks.
 
-Environment variables are per-app. Copy the example file into the app you're running and update the variables as needed:
+### 2. Set up environment variables
+
+Environment variables are per-app. Copy each app's example file and fill in the values:
 
 ```bash
 cp apps/website/.env.example apps/website/.env
+cp apps/playground/.env.example apps/playground/.env
+cp apps/auth/.env.example apps/auth/.env
 ```
 
-### 3. Start Development Server
+The apps point at each other through `NEXT_PUBLIC_WEBSITE_URL`, `NEXT_PUBLIC_PROJECTS_URL` and
+`NEXT_PUBLIC_AUTH_URL`. Locally these are `http://localhost:3000`, `:3001` and `:3002`. Each app's
+README lists the variables it needs.
+
+### 3. Start the dev servers
 
 ```bash
 pnpm dev
 ```
 
-The application will be available at:
+This starts every app in parallel through Turborepo. To run a single app:
 
-- **Frontend**: [http://localhost:3000](http://localhost:3000)
-- **Admin Panel**: [http://localhost:3000/payload/admin](http://localhost:3000/payload/admin)
+```bash
+pnpm dev --filter @uoacs/website
+```
 
-## 🔧 Important Scripts
+> Signing in from the website or playground needs `apps/auth` running too.
+
+## 🔧 Scripts
 
 Run from the repository root. Turborepo fans these out to every workspace package that defines the script.
 
 | Command | Description |
 |---------|-------------|
-| `pnpm dev` | Start development server with Turbopack |
-| `pnpm build` | Build production application |
-| `pnpm types:check` | Run TypeScript type checking |
-| `pnpm lint:check` | Run Biome linter and formatter checks |
+| `pnpm dev` | Start all app dev servers |
+| `pnpm build` | Build all apps for production |
+| `pnpm types:generate` | Regenerate Payload and Next.js route types for every app |
+| `pnpm types:check` | Run TypeScript type checking (regenerates types first) |
+| `pnpm lint:check` | Run Biome lint and format checks |
 | `pnpm lint:fix` | Fix Biome lint and format issues |
-| `pnpm lint:fix:unsafe` | Unsafely Fix Biome lint and format issues |
-| `pnpm storybook` | Start Storybook development server |
-| `pnpm storybook:build` | Build Storybook static site |
+| `pnpm lint:fix:unsafe` | Also apply Biome's unsafe fixes |
+| `pnpm storybook` | Start Storybook for the website and playground |
+| `pnpm storybook:build` | Build static Storybook sites |
 
-Use `--filter` to target a single package, e.g. `pnpm turbo run build --filter @uoacs/website`.
-
-### App-scoped Scripts
-
-These live on `@uoacs/website` and can be run with `pnpm --filter @uoacs/website <script>`, or from inside `apps/website`.
-
-| Command | Description |
-|---------|-------------|
-| `pnpm start` | Start production server |
-| `pnpm types:generate` | Generate Payload CMS TypeScript types |
-| `pnpm code:generate` | Scaffold a new component with Plop |
-| `pnpm migrate:user-admin` | Rename the `users` table to `admins` |
-| `pnpm update:google-wallet-class` | Update Google Wallet class configuration |
-
-## 🧹 Linting & Formatting
-
-This project uses **[Biome](https://biomejs.dev/)** for fast linting and formatting.
-
-### Running Linting
-
-```bash
-# Check for issues
-pnpm lint:check
-
-# Auto-fix issues where possible
-pnpm lint:fix
-
-# For some issues, you may need to run the following command to fix them:
-pnpm lint:fix:unsafe
-
-```
-
-Do note that we have a pre-commit hook set up using Lefthook to automatically run linting and formatting before each commit. This helps maintain code quality and consistency. Therefore, it should be rare that you need to run these commands manually.
-
-## 💻 IDE Setup
-
-### VS Code (Recommended)
-
-If you are using `VSCode`, extensions will be recommended to you (namely Biome's extension). You can open the extensions sidebar and install the recommended extensions. VSCode files have already been set up as part of the repository and will assist with Biome formatting.
-
-Otherwise, you are responsible for figuring out how to configure those plugins for yourself. We encourage you to contribute any configuration files back to the repository to help others.
-
-## 📝 Type Generation
-
-This project uses Payload CMS's automatic type generation for type-safe database operations.
-
-```bash
-pnpm --filter @uoacs/website types:generate
-```
-
-This will create/update:
-
-- `apps/website/src/payload/payload-types.ts` - Auto-generated TypeScript interfaces
-- Never edit this file manually - it's regenerated automatically
+Use `--filter` to target one package, e.g. `pnpm dev --filter @uoacs/playground`. App-specific
+scripts are documented in each app's README.
 
 ## 🏗️ Project Structure
 
-This is a pnpm workspace orchestrated by [Turborepo](https://turborepo.com/), so UOACS apps can share
-branding and UI without duplicating them.
+A pnpm workspace orchestrated by [Turborepo](https://turborepo.com/).
 
 ```
 apps/
-└── website/                     # The main UOACS website (@uoacs/website)
-    ├── src/
-    │   ├── app/
-    │   │   ├── (frontend)/      # Public website pages (homepage, team, sponsors, etc.)
-    │   │   │   ├── _components/ # Frontend-only components
-    │   │   │   ├── page.tsx     # Homepage
-    │   │   │   └── layout.tsx   # Frontend layout
-    │   │   ├── api/             # Custom API routes
-    │   │   ├── og/              # Open Graph image generation
-    │   │   ├── payload/         # Payload CMS admin panel
-    │   │   ├── robots.ts        # robots.txt generation
-    │   │   └── sitemap.ts       # Sitemap generation
-    │   ├── components/
-    │   │   ├── Composite/       # Page-level components (Navbar, Footer, sections, etc.)
-    │   │   └── Generic/         # Reusable feature components
-    │   ├── lib/                 # Auth, wallet, payload, and utility helpers
-    │   ├── payload/
-    │   │   ├── collections/     # CMS collections (Members, Executives, Sponsors, Media, etc.)
-    │   │   ├── globals/         # Global settings (HomePage, SocialLinks, etc.)
-    │   │   ├── components/      # Custom Payload UI components
-    │   │   ├── hooks/           # Payload lifecycle hooks
-    │   │   └── payload-types.ts # Auto-generated types (do not edit)
-    │   ├── queries/             # React Query hooks
-    │   ├── services/            # Business logic and external service integrations
-    │   ├── types/               # Shared TypeScript types, enums, and Zod schemas
-    │   ├── mocks/               # Mock data for development/testing
-    │   ├── scripts/             # Standalone maintenance scripts
-    │   └── payload.config.ts    # Payload CMS configuration
-    ├── .storybook/              # Storybook configuration
-    ├── generators/              # Plop templates for scaffolding components
-    ├── public/                  # Static assets (SVGs, fonts, images)
-    ├── Dockerfile               # Built from the repo root, not this directory
-    ├── fly.toml                 # Fly.io production deployment config
-    └── fly.staging.toml         # Fly.io staging deployment config
+├── website/          # @uoacs/website — main UOACS site
+├── playground/       # @uoacs/playground — projects playground
+└── auth/             # @uoacs/auth — hosted auth service
 
 packages/
-├── ui/                          # Shared design system (@uoacs/ui)
-│   └── src/
-│       ├── Primitive/           # Low-level UI blocks (Button, Input, Select, etc.)
-│       ├── hooks/               # Hooks backing the primitives
-│       ├── utils/               # cn() class-merging helper
-│       └── styles/theme.css     # Brand tokens and typography
-└── config/                      # Shared tsconfig bases (@uoacs/config)
+├── ui/               # @uoacs/ui — design system
+├── shared/           # @uoacs/shared — auth client, types, schemas, utils
+└── config/           # @uoacs/config — tsconfig bases
 
 .github/
-├── actions/                     # Reusable composite actions for use in workflows
-├── ISSUE_TEMPLATE/              # Issue templates (frontend, backend, devops, bug)
-├── workflows/                   # CI/CD pipelines (lint, build, deploy, renovate)
-└── pull-request-template.md     # PR template
+├── actions/          # Reusable composite actions (e.g. Fly.io deploy)
+├── ISSUE_TEMPLATE/   # Issue templates (frontend, backend, devops, full-stack, bug)
+├── workflows/        # CI (lint, types, codegen, build, Storybook) and CD (Fly.io)
+└── pull-request-template.md
 
-package.json                     # Root tooling and Turborepo entrypoints
-pnpm-workspace.yaml              # Workspace package globs
-turbo.json                       # Task graph and caching
-biome.json                       # Biome linter configuration
-lefthook.yaml                    # Git hooks configuration
+package.json          # Root tooling and Turborepo entrypoints
+pnpm-workspace.yaml   # Workspace globs and dependency catalogs
+turbo.json            # Task graph and caching
+biome.json            # Biome lint/format configuration
+lefthook.yaml         # Git hooks
 ```
 
-### Where should a component go?
+### Where should code go?
 
-- **`packages/ui` (Primitive)** — generic, brand-level building blocks with no app-specific
-  dependencies. Anything here is available to every UOACS app.
-- **`apps/*/src/components` (Generic / Composite)** — anything that depends on that app's Payload
-  types, routes, or auth session.
+- **`packages/ui`** — generic, brand-level UI with no app-specific dependencies (no Payload types, routes
+  or session). Available to every app.
+- **`packages/shared`** — non-UI code more than one app needs: the auth client and route constants,
+  session helpers, cross-app Payload types and Zod schemas.
+- **`apps/*`** — anything that depends on that app's Payload collections, routes or pages.
 
-`pnpm --filter @uoacs/website code:generate` scaffolds into the right place based on the tier you pick.
+### Dependency versions
 
-## 🧪 Testing
+Shared dependencies (Next.js, React, Payload, Lexical, Storybook, Tailwind, Zod, …) are pinned once in the
+`catalog`/`catalogs` sections of `pnpm-workspace.yaml` and referenced as `catalog:` in each `package.json`.
+Bump versions there so every app stays in sync.
 
-### Storybook Component Testing
+## 🧹 Linting & Formatting
+
+[Biome](https://biomejs.dev/) handles both. A Lefthook pre-commit hook runs it on staged files, so you
+rarely need to run it manually:
 
 ```bash
-# Start Storybook
-pnpm storybook
+pnpm lint:check
+pnpm lint:fix
+pnpm lint:fix:unsafe   # for fixes Biome marks unsafe
 ```
 
-### Component Development
+## 💻 IDE Setup
 
-- Write stories for components in `*.stories.tsx` files
-- Use Storybook for isolated component development
+VS Code will recommend the Biome extension; workspace settings are already committed. For other editors,
+configure Biome yourself,  contributions of config files are welcome.
 
 ## 🚀 Tech Stack
 
-### Core Framework
-
-- **[Next.js](https://nextjs.org/)** - React framework with App Router and Turbopack
-- **[React](https://react.dev/)** - UI library with latest concurrent features
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
-
-### Content Management
-
-- **[Payload CMS](https://payloadcms.com/)** - Headless CMS with admin panel
-- **[MongoDB](https://www.mongodb.com/)** - Document database via Mongoose adapter
-
-### Authentication
-
-- **[Better Auth](https://www.better-auth.com/)** - TypeScript-first auth
-- **[Payload CMS Built-in Auth](https://payloadcms.com/docs/authentication/overview)** - Auth management via Payload CMS for Admin users
-
-### Styling & UI
-
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)** - Form state management and schema validation
-- **[Zustand](https://zustand-demo.pmnd.rs/)** - Lightweight client state management
-- **[Motion](https://motion.dev/)** - Animations
-
-### Integrations
-
-- **[AWS S3](https://aws.amazon.com/s3/)** - Media asset storage via `@payloadcms/storage-s3`
-- **[Resend](https://resend.com/)** - Transactional email via `@payloadcms/email-resend`
-- **[Google Wallet](https://developers.google.com/wallet)** - Membership pass generation and management
-
-### Development & Testing
-
-- **[Storybook](https://storybook.js.org/)** - Component development environment
-- **[Vitest](https://vitest.dev/)** - Fast unit testing framework
-- **[Biome](https://biomejs.dev/)** - Fast formatter and linter
-- **[Lefthook](https://lefthook.dev/)** - Git hooks manager
-
-### Deployment
-
-- **[Fly.io](https://fly.io/)** - Production and staging environments
-- **[Docker](https://www.docker.com/)** - Containerised builds via standalone Next.js output
-
-### Package Management
-
-- **[pnpm](https://pnpm.io/)** - Fast, disk space efficient package manager
+- **Framework** — [Next.js](https://nextjs.org/) (App Router, Turbopack, React Compiler), [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/)
+- **CMS & data** — [Payload CMS](https://payloadcms.com/) with [MongoDB](https://www.mongodb.com/)
+- **Auth** — [Better Auth](https://www.better-auth.com/) for members; Payload's built-in auth for admins
+- **UI** — [Tailwind CSS](https://tailwindcss.com/), [tailwind-variants](https://www.tailwind-variants.org/), [Motion](https://motion.dev/), [Lexical](https://lexical.dev/)
+- **Forms & state** — [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/), [Zustand](https://zustand-demo.pmnd.rs/), [TanStack Query](https://tanstack.com/query), [nuqs](https://nuqs.dev/)
+- **Integrations** — [AWS S3](https://aws.amazon.com/s3/) (media), [Resend](https://resend.com/) (email), [Google Wallet](https://developers.google.com/wallet) (membership passes), Discord widget
+- **Tooling** — [Turborepo](https://turborepo.com/), [pnpm](https://pnpm.io/), [Biome](https://biomejs.dev/), [Lefthook](https://lefthook.dev/), [Storybook](https://storybook.js.org/), [Vitest](https://vitest.dev/)
+- **Hosting** — [Fly.io](https://fly.io/) + [Docker](https://www.docker.com/)
 
 ## 📚 Learn More
 
-### Framework Documentation
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Payload CMS Documentation](https://payloadcms.com/docs)
-- [React Documentation](https://react.dev/)
-- [Tailwind CSS Docs](https://tailwindcss.com/docs)
-
-### Development Tools
-
-- [Storybook Docs](https://storybook.js.org/docs)
-- [Biome Documentation](https://biomejs.dev/guides/getting-started/)
-- [Lefthook Documentation](https://lefthook.dev/)
+- [Next.js](https://nextjs.org/docs) · [Payload CMS](https://payloadcms.com/docs) · [Better Auth](https://www.better-auth.com/docs) · [Tailwind CSS](https://tailwindcss.com/docs)
+- [Turborepo](https://turborepo.com/docs) · [Storybook](https://storybook.js.org/docs) · [Biome](https://biomejs.dev/guides/getting-started/) · [Lefthook](https://lefthook.dev/)
 
 ## 🤝 Contributing
 
-Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to contribute to this project.
+See [CONTRIBUTING.md](CONTRIBUTING.md).

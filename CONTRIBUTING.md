@@ -19,10 +19,9 @@ All code, with the exception of emergency fixes should come from an [issue](http
 When working on a new feature or bug fix, you should always create a new branch from the `main` branch. Generally the workflow for this will be something like:
 
 ```bash
-git checkout main
+git switch main
 git pull
-git branch <branch-name>
-git switch <branch-name>
+git switch -c <branch-name>
 ```
 
 When naming branches, please use the following conventions:
