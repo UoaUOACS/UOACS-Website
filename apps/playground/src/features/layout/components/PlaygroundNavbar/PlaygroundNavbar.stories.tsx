@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
+import { SessionProvider } from "@/features/user/context/SessionContext"
 import { PlaygroundNavbar } from "./PlaygroundNavbar"
 
 const meta: Meta<typeof PlaygroundNavbar> = {
@@ -24,9 +25,9 @@ type Story = StoryObj<typeof PlaygroundNavbar>
 export const Home: Story = {
   decorators: [
     (Story) => (
-      <div>
+      <SessionProvider>
         <Story />
-      </div>
+      </SessionProvider>
     ),
   ],
 }
@@ -34,9 +35,9 @@ export const Home: Story = {
 export const Regular: Story = {
   decorators: [
     (Story) => (
-      <div>
+      <SessionProvider>
         <Story />
-      </div>
+      </SessionProvider>
     ),
   ],
   parameters: {
