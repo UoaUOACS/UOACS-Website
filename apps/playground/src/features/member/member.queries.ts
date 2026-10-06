@@ -1,8 +1,10 @@
-import { AuthApiRoutes, memberResponseSchema } from "@uoacs/shared"
+import { AuthApiRoutes } from "@uoacs/shared"
 import { getSession, sessionFetch } from "@uoacs/shared/auth/server"
 import { headers } from "next/headers"
+import { unstable_rethrow } from "next/navigation"
 import { ValidationError } from "payload"
 import { cache } from "react"
+import { z } from "zod"
 import { buildUsername } from "@/features/member/helpers/username"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
@@ -18,7 +20,18 @@ export type CurrentMemberResult =
   | { status: "unauthenticated" }
   | { status: "unavailable" }
 
-type AuthNames = { firstName: string; lastName: string }
+/**
+ * Only the two fields used, rather than the whole member: the auth service
+ * stores `gender` as free text while the shared schema narrows it to four
+ * values, so parsing the full shape would reject a valid member over a field
+ * the playground never reads.
+ */
+const authNamesSchema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+})
+
+type AuthNames = z.infer<typeof authNamesSchema>
 
 /** How many usernames to try before giving up; each ends in 10 random digits. */
 const USERNAME_ATTEMPTS = 5
@@ -29,11 +42,18 @@ function duplicateField(err: unknown): string | null {
   return duplicate ? (duplicate.path ?? "") : null
 }
 
-/** The session carries only the email, so names come from the auth service. */
+/**
+ * The session carries only the email, so names come from the auth service.
+ *
+ * `null` means "could not find out", never "has no name". Callers fall back to
+ * the stored copy, so one unhappy auth service does not lock everyone out.
+ */
 async function fetchAuthNames(): Promise<AuthNames | null> {
   let body: unknown
   try {
-    const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, await headers())
+    const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, await headers(), {
+      signal: AbortSignal.timeout(5000),
+    })
     if (!response.ok) {
       console.error("[getCurrentMember] Auth service answered with an error", {
         status: response.status,
@@ -42,18 +62,19 @@ async function fetchAuthNames(): Promise<AuthNames | null> {
     }
     body = await response.json()
   } catch (err) {
+    unstable_rethrow(err)
     console.error("[getCurrentMember] Failed to reach the auth service", { error: err })
     return null
   }
 
-  const parsed = memberResponseSchema.safeParse(body)
+  const parsed = authNamesSchema.safeParse(body)
   if (!parsed.success) {
-    console.error("[getCurrentMember] Auth service returned something that is not a member", {
+    console.error("[getCurrentMember] Auth service returned something without a name", {
       issues: parsed.error.issues.map((issue) => issue.path.join(".")),
     })
     return null
   }
-  return { firstName: parsed.data.firstName, lastName: parsed.data.lastName }
+  return parsed.data
 }
 
 async function findByAuthServiceID(authServiceID: string): Promise<Member | null> {
@@ -88,7 +109,8 @@ async function createMember(authServiceID: string, names: AuthNames): Promise<Me
   )
 }
 
-async function withCurrentNames(member: Member, names: AuthNames): Promise<Member> {
+async function withCurrentNames(member: Member, names: AuthNames | null): Promise<Member> {
+  if (!names) return member
   if (member.firstName === names.firstName && member.lastName === names.lastName) return member
 
   const payload = await getPayloadClient()
@@ -110,13 +132,17 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
   if (session.status !== "authenticated") return session
 
   const authServiceID = session.session.user.id
-  const names = await fetchAuthNames()
-  if (!names) return { status: "unavailable" }
+  // Neither lookup needs the other, and the name refresh is only a refresh, so
+  // a failing auth service must not keep someone out of a member we already have.
+  const [existing, names] = await Promise.all([
+    findByAuthServiceID(authServiceID),
+    fetchAuthNames(),
+  ])
 
-  const existing = await findByAuthServiceID(authServiceID)
-  if (existing) {
-    return { status: "authenticated", member: await withCurrentNames(existing, names) }
-  }
+  if (existing) return { status: "authenticated", member: await withCurrentNames(existing, names) }
+
+  // Creating one is the only step that cannot proceed without a name.
+  if (!names) return { status: "unavailable" }
 
   const created = await createMember(authServiceID, names)
   if (created) return { status: "authenticated", member: created }
