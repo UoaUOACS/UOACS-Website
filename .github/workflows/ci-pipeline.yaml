@@ -259,16 +259,19 @@ jobs:
           path: apps/${{ matrix.app }}/.next/cache
           key: ${{ steps.build-cache.outputs.cache-primary-key }}
 
-      # Each main push saves a new entry under a new key, and only the newest
-      # one is restored, so remove the ones it replaces.
+      # Delete only entries older than this run's, so parallel runs and reruns
+      # keep newer ones.
       - name: Delete older build caches
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        continue-on-error: true
+        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           CURRENT_KEY: ${{ steps.build-cache.outputs.cache-primary-key }}
         run: |
-          gh cache list --ref refs/heads/main --key "${{ runner.os }}-build-${{ matrix.app }}-" --limit 100 --json id,key \
-            --jq '.[] | select(.key != env.CURRENT_KEY) | .id' \
+          gh cache list --ref refs/heads/main --key "${{ runner.os }}-build-${{ matrix.app }}-" --limit 100 --json id,key,createdAt \
+            --jq '(map(select(.key == env.CURRENT_KEY)) | first | .createdAt) as $current
+              | .[] | select($current != null and .createdAt < $current) | .id' \
             | xargs -r -n1 gh cache delete
 
   build-storybook:
