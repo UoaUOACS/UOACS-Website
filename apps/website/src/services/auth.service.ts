@@ -1,7 +1,7 @@
 import { AuthApiRoutes, memberResponseSchema } from "@uoacs/shared"
+import { sessionFetch } from "@uoacs/shared/auth/server"
 import type { Member, UpdateMemberInput } from "@uoacs/shared/payload"
 import type { z } from "zod"
-import { sessionFetch } from "@/lib/auth/auth-service"
 
 export class AuthServiceError extends Error {
   constructor(

@@ -2,8 +2,9 @@
 
 import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { type ReactNode, useEffect } from "react"
-import { useSession } from "@/context/SessionContext"
+import { useSessionResult } from "@/context/SessionContext"
 import { isLoggingOut, useGuardedPage } from "@/lib/auth/log-out"
+import { SessionUnavailable } from "./SessionUnavailable"
 
 export const UserOnly = ({
   children,
@@ -12,16 +13,17 @@ export const UserOnly = ({
   children: ReactNode
   fallback?: ReactNode
 }) => {
-  const session = useSession()
+  const { status } = useSessionResult()
   useGuardedPage()
 
   useEffect(() => {
     // A deliberate log-out sends the person home itself (see `logOut`).
-    if (session === null && !isLoggingOut()) {
+    if (status === "unauthenticated" && !isLoggingOut()) {
       window.location.assign(authPageUrl(AuthPages.LOGIN, window.location.href))
     }
-  }, [session])
+  }, [status])
 
-  if (session === null) return fallback
+  if (status === "unavailable") return <SessionUnavailable />
+  if (status === "unauthenticated") return fallback
   return children
 }
