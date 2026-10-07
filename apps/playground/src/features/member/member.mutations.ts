@@ -16,7 +16,7 @@ const isUsernameClash = (err: unknown): boolean =>
  * created one first. The caller re-reads to tell those apart, since the
  * database is a better answer than the error.
  */
-export async function createMember(authServiceID: string, names: AuthNames): Promise<Member> {
+export async function createMember(betterAuthUserId: string, names: AuthNames): Promise<Member> {
   const payload = await getPayloadClient()
 
   for (let attempt = 0; attempt < USERNAME_ATTEMPTS; attempt++) {
@@ -26,7 +26,11 @@ export async function createMember(authServiceID: string, names: AuthNames): Pro
         // Single write, so a transaction gains nothing and would turn a concurrent
         // insert into a write conflict rather than the duplicate key the caller re-reads past.
         disableTransaction: true,
-        data: { ...names, authServiceID, username: buildUsername(names.firstName, names.lastName) },
+        data: {
+          ...names,
+          betterAuthUserId,
+          username: buildUsername(names.firstName, names.lastName),
+        },
       })
     } catch (err) {
       if (!isUsernameClash(err)) throw err
@@ -34,7 +38,7 @@ export async function createMember(authServiceID: string, names: AuthNames): Pro
   }
 
   throw new Error(
-    `Could not find a free username for member ${authServiceID} in ${USERNAME_ATTEMPTS} attempts`,
+    `Could not find a free username for member ${betterAuthUserId} in ${USERNAME_ATTEMPTS} attempts`,
   )
 }
 

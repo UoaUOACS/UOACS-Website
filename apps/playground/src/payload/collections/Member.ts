@@ -31,7 +31,7 @@ export const Member: CollectionConfig = {
       unique: true,
     },
     {
-      name: "authServiceID",
+      name: "betterAuthUserId",
       type: "text",
       required: true,
       unique: true,

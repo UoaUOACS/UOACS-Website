@@ -223,7 +223,7 @@ export interface Project {
 export interface Member {
   id: string;
   username: string;
-  authServiceID: string;
+  betterAuthUserId: string;
   firstName: string;
   lastName: string;
   profilePicture?: (string | null) | Media;
@@ -568,7 +568,7 @@ export interface SponsorSelect<T extends boolean = true> {
  */
 export interface MemberSelect<T extends boolean = true> {
   username?: T;
-  authServiceID?: T;
+  betterAuthUserId?: T;
   firstName?: T;
   lastName?: T;
   profilePicture?: T;

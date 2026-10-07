@@ -63,11 +63,11 @@ async function fetchCurrentMemberNames(): Promise<AuthNames | null> {
   return parsed.data
 }
 
-async function findMemberByAuthServiceId(authServiceID: string): Promise<Member | null> {
+async function findMemberByBetterAuthUserId(betterAuthUserId: string): Promise<Member | null> {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: Slugs.Collections.MEMBER,
-    where: { authServiceID: { equals: authServiceID } },
+    where: { betterAuthUserId: { equals: betterAuthUserId } },
     limit: 1,
   })
   return docs[0] ?? null
@@ -82,11 +82,11 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
   const session = await getSession()
   if (session.status !== "authenticated") return session
 
-  const authServiceID = session.session.user.id
+  const betterAuthUserId = session.session.user.id
   // The names are only a refresh, so a failing auth service must not keep
   // someone out of a member we already have.
   const [existing, names] = await Promise.all([
-    findMemberByAuthServiceId(authServiceID),
+    findMemberByBetterAuthUserId(betterAuthUserId),
     fetchCurrentMemberNames(),
   ])
 
@@ -105,12 +105,12 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
   if (!names) return { status: "unavailable" }
 
   try {
-    return { status: "authenticated", member: await createMember(authServiceID, names) }
+    return { status: "authenticated", member: await createMember(betterAuthUserId, names) }
   } catch (err) {
     // Another request for the same person may have created it first, so ask the
     // database rather than reading the failure. If it did not, this was a real
     // error and belongs to the caller.
-    const raced = await findMemberByAuthServiceId(authServiceID)
+    const raced = await findMemberByBetterAuthUserId(betterAuthUserId)
     if (!raced) throw err
     return { status: "authenticated", member: raced }
   }
