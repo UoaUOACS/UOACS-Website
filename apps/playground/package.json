@@ -19,6 +19,7 @@
     "@payloadcms/richtext-lexical": "catalog:payload",
     "@payloadcms/storage-s3": "catalog:payload",
     "@payloadcms/ui": "catalog:payload",
+    "@tanstack/react-pacer": "catalog:",
     "@uoacs/shared": "workspace:*",
     "@uoacs/ui": "workspace:*",
     "better-auth": "catalog:",

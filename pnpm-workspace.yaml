@@ -4,6 +4,7 @@ packages:
 
 catalog:
   "@heroicons/react": ^2.2.0
+  "@tanstack/react-pacer": 0.24.1
   "@types/react": ^19.2.13
   "@types/react-dom": ^19.2.3
   "@types/node": ^24
