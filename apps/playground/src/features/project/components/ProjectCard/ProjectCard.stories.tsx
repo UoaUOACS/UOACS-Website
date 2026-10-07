@@ -40,6 +40,12 @@ export const Default: Story = {
   },
 }
 
+export const Liked: Story = {
+  args: {
+    project: { ...mockProjectWithImage, liked: true },
+  },
+}
+
 export const WithAward: Story = {
   name: "With award",
   args: {
