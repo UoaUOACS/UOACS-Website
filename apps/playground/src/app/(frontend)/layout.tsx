@@ -1,3 +1,4 @@
+import { Toaster } from "@uoacs/ui/toast"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import { SessionProvider } from "@/features/user/context/SessionContext"
@@ -92,6 +93,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-screen flex-col overflow-x-hidden">
         <SessionProvider>
+          <Toaster />
           <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:px-12 lg:px-20">
             <PlaygroundNavbar />
 
