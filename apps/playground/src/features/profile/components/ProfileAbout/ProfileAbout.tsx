@@ -73,7 +73,7 @@ export const ProfileAboutSkeleton = ({ className }: { className?: string }) => {
   const { root, section } = profileAboutVariants()
 
   return (
-    <div aria-busy="true" className={cn(root(), className)}>
+    <div aria-hidden="true" className={cn(root(), className)}>
       {[0, 1, 2, 3].map((index) => (
         <section className={section()} key={index}>
           <Skeleton className="w-28" shape="text" />
