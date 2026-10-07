@@ -1,0 +1,28 @@
+name: Cache Cleanup
+
+# A PR's cache entries are scoped to its merge ref, so nothing else can restore
+# them once it closes. 
+#
+# pull_request_target gives fork PRs a token that can delete caches. 
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  actions: write
+
+jobs:
+  delete-pr-caches:
+    name: Delete PR Caches
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete caches for this PR
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REF: refs/pull/${{ github.event.pull_request.number }}/merge
+        run: |
+          gh cache list --ref "$REF" --limit 100 --json id --jq '.[].id' \
+            | xargs -r -n1 gh cache delete
