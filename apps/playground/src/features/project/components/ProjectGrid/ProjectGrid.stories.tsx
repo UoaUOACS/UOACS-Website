@@ -52,6 +52,14 @@ export const ThreeAcross: Story = {
   },
 }
 
+export const WithLikedProjects: Story = {
+  name: "With liked projects",
+  args: {
+    projects: mockProjects,
+    likedIDs: ["1", "3"],
+  },
+}
+
 export const SingleProject: Story = {
   args: {
     projects: [mockProjects[0]],
