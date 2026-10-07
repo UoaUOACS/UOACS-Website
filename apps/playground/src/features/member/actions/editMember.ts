@@ -1,5 +1,6 @@
 "use server"
 
+import { ValidationError } from "payload"
 import { getCurrentMember } from "@/features/member/member.queries"
 import { editMemberSchema } from "@/features/member/schemas/editMember.schema"
 import { Slugs } from "@/lib/payload"
@@ -13,7 +14,7 @@ export type EditMemberResult =
  * Replaces the signed-in person's own profile fields. The member comes from the
  * session, never the input, so this is the check that the collection's
  * admin-only update would be — hence `overrideAccess`, which also lifts the
- * read access hiding `authServiceID`, so nothing is returned.
+ * read access hiding `betterAuthUserId`, so nothing is returned.
  */
 export async function editMember(input: unknown): Promise<EditMemberResult> {
   const parsed = editMemberSchema.safeParse(input)
@@ -32,6 +33,12 @@ export async function editMember(input: unknown): Promise<EditMemberResult> {
     })
     return { ok: true }
   } catch (error) {
+    // The schema mirrors the collection, so a rejection here means the two have
+    // drifted rather than that the caller sent something the schema caught.
+    if (error instanceof ValidationError) {
+      console.warn("[editMember] The collection rejected input the schema allowed", { error })
+      return { ok: false, error: "invalid" }
+    }
     console.error("[editMember] Failed to edit the member", { error })
     return { ok: false, error: "server" }
   }
