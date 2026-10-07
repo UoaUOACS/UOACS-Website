@@ -1,7 +1,6 @@
-import { Toaster } from "@uoacs/ui/toast"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
-import { SessionProvider } from "@/features/user/context/SessionContext"
+import { Providers } from "@/features/layout/components/Providers/Providers"
 import { Routes } from "@/lib/routes"
 import "../globals.css"
 import { Footer } from "@/features/layout/components/Footer/Footer"
@@ -92,8 +91,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
     >
       <body className="flex min-h-screen flex-col overflow-x-hidden">
-        <SessionProvider>
-          <Toaster />
+        <Providers>
           <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:px-12 lg:px-20">
             <PlaygroundNavbar />
 
@@ -107,7 +105,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               { label: "Search", href: Routes.SEARCH },
             ]}
           />
-        </SessionProvider>
+        </Providers>
       </body>
     </html>
   )
