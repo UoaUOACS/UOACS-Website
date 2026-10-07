@@ -4,6 +4,8 @@ import { cn } from "../../utils"
 export interface ToastProps {
   type: "success" | "warning" | "error"
   description: string
+  /** Optional call to action shown after the description, e.g. a link */
+  action?: React.ReactNode
 }
 
 const config = {
@@ -27,7 +29,7 @@ const config = {
   },
 } as const
 
-export const Toast = ({ type, description }: ToastProps) => {
+export const Toast = ({ type, description, action }: ToastProps) => {
   const { Icon, iconClass, borderClass, bgClass } = config[type]
   return (
     <div
@@ -38,7 +40,8 @@ export const Toast = ({ type, description }: ToastProps) => {
       )}
     >
       <Icon className={cn("size-6 shrink-0", iconClass)} />
-      <p className="paragraph-sm text-gray-700">{description}</p>
+      <p className="paragraph-sm grow text-gray-700">{description}</p>
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   )
 }
