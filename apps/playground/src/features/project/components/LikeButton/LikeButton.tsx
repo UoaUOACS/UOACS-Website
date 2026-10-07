@@ -8,8 +8,16 @@ import { toast } from "@uoacs/ui/toast"
 import { cn } from "@uoacs/ui/utils"
 import { usePathname } from "next/navigation"
 import { useOptimistic, useRef, useState, useTransition } from "react"
-import { toggleLike } from "@/features/project/actions/toggleLike"
+import { setLike } from "@/features/project/actions/setLike"
 import { formatLikes } from "@/features/project/helpers/format"
+
+interface LikeState {
+  isLiked: boolean
+  likes: number
+}
+
+const withLiked = (state: LikeState, liked: boolean): LikeState =>
+  state.isLiked === liked ? state : { isLiked: liked, likes: state.likes + (liked ? 1 : -1) }
 
 interface LikeButtonProps {
   projectID: string
@@ -30,10 +38,7 @@ export const LikeButton = ({
 }: LikeButtonProps) => {
   // The cached count can lag behind a like, so keep the saved state here rather than in props
   const [saved, setSaved] = useState({ isLiked, likes })
-  const [optimistic, toggleOptimistic] = useOptimistic(saved, (state) => ({
-    isLiked: !state.isLiked,
-    likes: state.likes + (state.isLiked ? -1 : 1),
-  }))
+  const [optimistic, setOptimistic] = useOptimistic(saved, withLiked)
   const [, startTransition] = useTransition()
   const heartRef = useRef<HTMLSpanElement>(null)
   const pathname = usePathname()
@@ -45,19 +50,14 @@ export const LikeButton = ({
         easing: "ease-out",
       })
     }
+    const liked = !optimistic.isLiked
     startTransition(async () => {
-      toggleOptimistic(null)
+      setOptimistic(liked)
       try {
-        const result = await toggleLike(projectID)
+        const result = await setLike(projectID, liked)
         if (result.ok) {
           // Updates after an await need their own transition to land with the optimistic state
-          startTransition(() =>
-            setSaved((state) =>
-              state.isLiked === result.liked
-                ? state
-                : { isLiked: result.liked, likes: state.likes + (result.liked ? 1 : -1) },
-            ),
-          )
+          startTransition(() => setSaved((state) => withLiked(state, result.liked)))
           return
         }
         if (result.reason === "unauthenticated") {

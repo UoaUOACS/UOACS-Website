@@ -1,14 +1,14 @@
 "use server"
 
 import { updateTag } from "next/cache"
-import type { Where } from "payload"
+import { ValidationError, type Where } from "payload"
 import { z } from "zod"
 import { getCurrentMember } from "@/features/member/member.queries"
 import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 
-export type ToggleLikeResult =
+export type SetLikeResult =
   | { ok: true; liked: boolean }
   | { ok: false; error: string; reason?: "unauthenticated" }
 
@@ -16,12 +16,21 @@ export type ToggleLikeResult =
 // must not, so expire only their liked list here
 const expireLikedList = (memberID: string) => updateTag(CacheTags.MEMBERS.LIKES(memberID))
 
-const projectIDSchema = z.string().regex(/^[a-f\d]{24}$/i)
+const inputSchema = z.object({
+  projectID: z.string().regex(/^[a-f\d]{24}$/i),
+  liked: z.boolean(),
+})
 
-export async function toggleLike(projectID: string): Promise<ToggleLikeResult> {
-  const parsed = projectIDSchema.safeParse(projectID)
+/**
+ * Likes or unlikes a project for the signed-in member
+ *
+ * Sets the state the member asked for rather than toggling, so a card that shows stale state
+ * still does what the member saw, and a repeated call changes nothing.
+ */
+export async function setLike(projectID: string, liked: boolean): Promise<SetLikeResult> {
+  const parsed = inputSchema.safeParse({ projectID, liked })
   if (!parsed.success) return { ok: false, error: "Project not found" }
-  const id = parsed.data
+  const { projectID: id } = parsed.data
 
   try {
     const result = await getCurrentMember()
@@ -34,12 +43,12 @@ export async function toggleLike(projectID: string): Promise<ToggleLikeResult> {
     const payload = await getPayloadClient()
     const where: Where = { project: { equals: id }, member: { equals: member.id } }
 
-    const removed = await payload.delete({ collection: Slugs.Collections.LIKE, where, depth: 0 })
-    // A bulk delete reports a failed doc here rather than throwing
-    if (removed.errors.length > 0) {
-      throw new Error(`Failed to delete like: ${removed.errors[0].message}`)
-    }
-    if (removed.docs.length > 0) {
+    if (!parsed.data.liked) {
+      const removed = await payload.delete({ collection: Slugs.Collections.LIKE, where, depth: 0 })
+      // A bulk delete reports a failed doc here rather than throwing
+      if (removed.errors.length > 0) {
+        throw new Error(`Failed to delete like: ${removed.errors[0].message}`)
+      }
       expireLikedList(member.id)
       return { ok: true, liked: false }
     }
@@ -60,7 +69,8 @@ export async function toggleLike(projectID: string): Promise<ToggleLikeResult> {
         depth: 0,
       })
     } catch (err) {
-      // A concurrent request may have liked it first, so the unique index refuses this one
+      // The unique index refuses a like that already exists, which is the state asked for
+      if (!(err instanceof ValidationError)) throw err
       const { totalDocs } = await payload.count({ collection: Slugs.Collections.LIKE, where })
       if (totalDocs === 0) throw err
     }
@@ -68,7 +78,7 @@ export async function toggleLike(projectID: string): Promise<ToggleLikeResult> {
     expireLikedList(member.id)
     return { ok: true, liked: true }
   } catch (err) {
-    console.error("[toggleLike] failed to toggle like", { error: err, projectID: id })
+    console.error("[setLike] failed to set like", { error: err, projectID: id, liked })
     return { ok: false, error: "Something went wrong. Try again." }
   }
 }
