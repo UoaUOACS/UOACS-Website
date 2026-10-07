@@ -1,17 +1,36 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import { mockAccount, mockMember } from "@/features/profile/mocks/Member.mock"
-import { ProfileHeader, ProfileHeaderSkeleton } from "./ProfileHeader"
+import { Routes } from "@/lib/routes"
+import { ProfileHeaderSkeleton, ProfileHeaderView } from "./ProfileHeaderView"
 
 const meta = {
   title: "Profile/ProfileHeader",
-  component: ProfileHeader,
-  args: { member: mockMember, account: mockAccount },
-} satisfies Meta<typeof ProfileHeader>
+  component: ProfileHeaderView,
+  args: { member: mockMember, account: mockAccount, isOwner: true },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+      navigation: { pathname: Routes.PROFILE.USERNAME(mockMember.username) },
+    },
+  },
+} satisfies Meta<typeof ProfileHeaderView>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
+
+export const Visitor: Story = {
+  name: "Visitor (not the owner)",
+  args: { isOwner: false },
+}
+
+export const EditPage: Story = {
+  name: "Owner on the edit page",
+  parameters: {
+    nextjs: { navigation: { pathname: Routes.PROFILE.EDIT } },
+  },
+}
 
 export const WithProfilePicture: Story = {
   args: {
