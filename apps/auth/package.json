@@ -9,8 +9,7 @@
     "start": "next start",
     "types:check": "tsc --noEmit",
     "types:generate": "payload generate:types && node scripts/strip-payload-augmentation.mjs && next typegen",
-    "migrate:members": "tsx --env-file=.env src/scripts/member-migration.ts",
-    "migrate:users-admin": "tsx --env-file=.env src/scripts/users-admin-migration.ts"
+    "migrate:members": "tsx --env-file=.env src/scripts/member-migration.ts"
   },
   "dependencies": {
     "@heroicons/react": "catalog:",
