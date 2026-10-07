@@ -24,7 +24,8 @@ const linkSchema = z
  * rejected rather than silently clearing it.
  */
 export const editMemberSchema = z.object({
-  bio: z.string().nullish(),
+  // Payload's `defaultMaxTextLength`, which the collection's `bio` inherits.
+  bio: z.string().max(40000).nullish(),
   skills: z
     .array(z.enum(skills))
     .refine((rows) => new Set(rows).size === rows.length, "Each skill can only appear once."),
