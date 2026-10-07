@@ -6,15 +6,10 @@ import { after } from "next/server"
 import { cache } from "react"
 import { z } from "zod"
 import { createMember, syncNames } from "@/features/member/member.mutations"
+import type { CurrentMemberResult } from "@/features/member/member.types"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 import type { Member } from "@/payload/payload-types"
-
-/** Mirrors `SessionResult`: `unavailable` is not "logged out". */
-export type CurrentMemberResult =
-  | { status: "authenticated"; member: Member }
-  | { status: "unauthenticated" }
-  | { status: "unavailable" }
 
 /**
  * Only the two fields used. The auth service stores `gender` as free text while
