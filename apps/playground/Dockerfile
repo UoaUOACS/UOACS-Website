@@ -50,6 +50,10 @@ COPY --from=pruner /app/out/full/ ./
 
 ENV NODE_ENV=production
 
+# BuildKit leaves secret values out of the cache key, so a hash of them is
+# passed in to make a changed secret rebuild rather than reuse a stale layer.
+ARG BUILD_SECRETS_HASH
+
 # Each secret must be present and non-empty, so a missing value fails the
 # build instead of being compiled in as an empty string.
 RUN --mount=type=secret,id=DATABASE_URI,required=true \

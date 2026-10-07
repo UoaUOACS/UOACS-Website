@@ -21,6 +21,7 @@ jobs:
       name: website-staging
       url: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     concurrency:
       group: ${{ github.workflow }}-deploy-website-staging
       cancel-in-progress: true
@@ -59,6 +60,7 @@ jobs:
       name: auth-staging
       url: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     concurrency:
       group: ${{ github.workflow }}-deploy-auth-staging
       cancel-in-progress: true
@@ -92,6 +94,7 @@ jobs:
       name: playground-staging
       url: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     concurrency:
       group: ${{ github.workflow }}-deploy-playground-staging
       cancel-in-progress: true
@@ -127,6 +130,7 @@ jobs:
       name: website-prod
       url: ${{ vars.NEXT_PUBLIC_WEBSITE_URL }}
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     concurrency:
       group: ${{ github.workflow }}-deploy-website-prod
       cancel-in-progress: false
@@ -165,6 +169,7 @@ jobs:
       name: auth-prod
       url: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     concurrency:
       group: ${{ github.workflow }}-deploy-auth-prod
       cancel-in-progress: false
@@ -198,6 +203,7 @@ jobs:
       name: playground-prod
       url: ${{ vars.NEXT_PUBLIC_PROJECTS_URL }}
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     concurrency:
       group: ${{ github.workflow }}-deploy-playground-prod
       cancel-in-progress: false
