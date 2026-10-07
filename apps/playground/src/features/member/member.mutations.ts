@@ -23,6 +23,9 @@ export async function createMember(authServiceID: string, names: AuthNames): Pro
     try {
       return await payload.create({
         collection: Slugs.Collections.MEMBER,
+        // Single write, so a transaction gains nothing and would turn a concurrent
+        // insert into a write conflict rather than the duplicate key the caller re-reads past.
+        disableTransaction: true,
         data: { ...names, authServiceID, username: buildUsername(names.firstName, names.lastName) },
       })
     } catch (err) {
