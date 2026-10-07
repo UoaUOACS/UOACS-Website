@@ -2,12 +2,13 @@
 
 import { HeartIcon as HeartOutlineIcon } from "@heroicons/react/24/outline"
 import { HeartIcon as HeartSolidIcon } from "@heroicons/react/24/solid"
+import { useAsyncDebouncedCallback } from "@tanstack/react-pacer"
 import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { Button } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
 import { cn } from "@uoacs/ui/utils"
 import { usePathname } from "next/navigation"
-import { useOptimistic, useRef, useState, useTransition } from "react"
+import { useRef, useState } from "react"
 import { setLike } from "@/features/project/actions/setLike"
 import { formatLikes } from "@/features/project/helpers/format"
 
@@ -38,28 +39,29 @@ export const LikeButton = ({
 }: LikeButtonProps) => {
   // The cached count can lag behind a like, so keep the saved state here rather than in props
   const [saved, setSaved] = useState({ isLiked, likes })
-  const [optimistic, setOptimistic] = useOptimistic(saved, withLiked)
-  const [, startTransition] = useTransition()
+  const [wantedState, setWantedState] = useState<boolean | null>(null)
+  const shown = wantedState === null ? saved : withLiked(saved, wantedState)
+  const lastSent = useRef<boolean | null>(isLiked)
   const heartRef = useRef<HTMLSpanElement>(null)
   const pathname = usePathname()
 
-  const handleClick = () => {
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      heartRef.current?.animate([{ scale: 1 }, { scale: 0.8 }, { scale: 1.2 }, { scale: 1 }], {
-        duration: 400,
-        easing: "ease-out",
-      })
-    }
-    const liked = !optimistic.isLiked
-    startTransition(async () => {
-      setOptimistic(liked)
+  const save = useAsyncDebouncedCallback(
+    async (liked: boolean) => {
+      if (liked === lastSent.current) return
+      lastSent.current = liked
+
+      const revert = () => {
+        lastSent.current = null
+        setWantedState((current) => (current === liked ? null : current))
+      }
+
       try {
         const result = await setLike(projectID, liked)
         if (result.ok) {
-          // Updates after an await need their own transition to land with the optimistic state
-          startTransition(() => setSaved((state) => withLiked(state, result.liked)))
+          setSaved((state) => withLiked(state, result.liked))
           return
         }
+        revert()
         if (result.reason === "unauthenticated") {
           const loginHref = authPageUrl(
             AuthPages.LOGIN,
@@ -78,16 +80,30 @@ export const LikeButton = ({
         console.error("[LikeButton] like was not saved", { error: result.error })
         toast.error({ description: result.error })
       } catch (err) {
+        revert()
         console.error("[LikeButton] like request failed", { error: err })
         toast.error({ description: "Something went wrong. Try again." })
       }
-    })
+    },
+    { wait: 400, onUnmount: (debouncer) => debouncer.flush() },
+  )
+
+  const handleClick = () => {
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      heartRef.current?.animate([{ scale: 1 }, { scale: 0.8 }, { scale: 1.2 }, { scale: 1 }], {
+        duration: 400,
+        easing: "ease-out",
+      })
+    }
+    const liked = !shown.isLiked
+    setWantedState(liked)
+    save(liked)
   }
 
   return (
     <button
-      aria-label={optimistic.isLiked ? "Unlike project" : "Like project"}
-      aria-pressed={optimistic.isLiked}
+      aria-label={shown.isLiked ? "Unlike project" : "Like project"}
+      aria-pressed={shown.isLiked}
       className={cn("group/like cursor-pointer", className)}
       onClick={handleClick}
       type="button"
@@ -101,7 +117,7 @@ export const LikeButton = ({
             className={cn(
               "col-start-1 row-start-1 transition-opacity duration-200",
               iconClassName,
-              optimistic.isLiked && "opacity-0",
+              shown.isLiked && "opacity-0",
             )}
           />
           <HeartSolidIcon
@@ -109,12 +125,12 @@ export const LikeButton = ({
               "col-start-1 row-start-1 transition-opacity duration-200",
               iconClassName,
               "text-red-500",
-              !optimistic.isLiked && "opacity-0",
+              !shown.isLiked && "opacity-0",
             )}
           />
         </span>
       </span>
-      <span className={countClassName}>{formatLikes(optimistic.likes)}</span>
+      <span className={countClassName}>{formatLikes(shown.likes)}</span>
     </button>
   )
 }
