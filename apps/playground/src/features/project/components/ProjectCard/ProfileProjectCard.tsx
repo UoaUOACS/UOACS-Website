@@ -1,6 +1,5 @@
 import { HeartIcon } from "@heroicons/react/24/outline"
 import { LazyImage } from "@uoacs/ui"
-import { cn } from "@uoacs/ui/utils"
 import Link from "next/link"
 import AwardIcon from "@/features/project/components/AwardIcon/AwardIcon"
 import { formatLikes } from "@/features/project/helpers/format"
@@ -19,6 +18,7 @@ export const ProfileProjectCard = ({ project, className }: ProjectCardVariantPro
     heartIcon,
     likesCount,
     content,
+    textGroup,
     description,
     awardGroup,
     awardTitle,
@@ -34,7 +34,7 @@ export const ProfileProjectCard = ({ project, className }: ProjectCardVariantPro
             className="object-cover!"
             containerClassName="h-full w-full"
             fill
-            sizes="(min-width: 1024px) 400px, 100vw"
+            sizes="(min-width: 1024px) 400px, (min-width: 768px) 256px, 100vw"
             src={imageURL}
           />
         ) : null}
@@ -50,11 +50,11 @@ export const ProfileProjectCard = ({ project, className }: ProjectCardVariantPro
             </div>
           </div>
         ) : null}
-        <div className="lg:row-start-2">
+        <div className={textGroup()}>
           <h3 className={titleStyles()}>{title}</h3>
           {summary ? <p className={description()}>{summary}</p> : null}
         </div>
-        <div className={cn(likesGroup(), "lg:row-start-3 lg:self-end")}>
+        <div className={likesGroup()}>
           <HeartIcon aria-hidden="true" className={heartIcon()} />
           <span className={likesCount()}>{formatLikes(likes)}</span>
         </div>
