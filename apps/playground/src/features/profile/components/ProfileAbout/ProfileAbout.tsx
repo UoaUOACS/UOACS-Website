@@ -3,7 +3,7 @@ import { cn } from "@uoacs/ui/utils"
 import { type ProfileAboutVariants, profileAboutVariants } from "./ProfileAbout.variants"
 import { SectionLabel } from "./SectionLabel/SectionLabel"
 
-export interface ProfileAboutViewProps extends ProfileAboutVariants {
+export interface ProfileAboutProps extends ProfileAboutVariants {
   /** The member's major(s), e.g. ["Computer Science", "Finance"]. */
   major?: readonly string[]
   /** The member's biography (`Member.bio`), rendered as written. */
@@ -26,13 +26,13 @@ type AboutSection = {
  * skills as `// LABEL` sections. All sections render no matter what — empty
  * ones show a muted N/A. Presentational only.
  */
-export const ProfileAboutView = ({
+export const ProfileAbout = ({
   major,
   biography,
   languages,
   skills,
   className,
-}: ProfileAboutViewProps) => {
+}: ProfileAboutProps) => {
   const { root, section, paragraph, placeholder, list } = profileAboutVariants()
 
   const sections: AboutSection[] = [
@@ -67,7 +67,7 @@ export const ProfileAboutView = ({
 }
 
 /**
- * A loading placeholder with the same layout as {@link ProfileAboutView}.
+ * A loading placeholder with the same layout as {@link ProfileAbout}.
  */
 export const ProfileAboutSkeleton = ({ className }: { className?: string }) => {
   const { root, section } = profileAboutVariants()

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { ProfileAboutSkeleton, ProfileAboutView } from "./ProfileAbout"
+import { ProfileAbout, ProfileAboutSkeleton } from "./ProfileAbout"
 
 const meta = {
   title: "Profile/ProfileAbout",
-  component: ProfileAboutView,
+  component: ProfileAbout,
   args: {
     major: ["Computer Science and Finance"],
     biography:
@@ -11,7 +11,7 @@ const meta = {
     languages: ["English", "Chinese"],
     skills: ["Python", "UI/UX Design"],
   },
-} satisfies Meta<typeof ProfileAboutView>
+} satisfies Meta<typeof ProfileAbout>
 
 export default meta
 type Story = StoryObj<typeof meta>
