@@ -2,7 +2,7 @@
 
 import { HeartIcon as HeartOutlineIcon } from "@heroicons/react/24/outline"
 import { HeartIcon as HeartSolidIcon } from "@heroicons/react/24/solid"
-import { useAsyncDebouncedCallback } from "@tanstack/react-pacer"
+import { useDebouncedCallback } from "@tanstack/react-pacer"
 import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { Button } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
@@ -45,48 +45,50 @@ export const LikeButton = ({
   const heartRef = useRef<HTMLSpanElement>(null)
   const pathname = usePathname()
 
-  const save = useAsyncDebouncedCallback(
-    async (liked: boolean) => {
-      if (liked === lastSent.current) return
-      lastSent.current = liked
+  const send = async (liked: boolean) => {
+    if (liked === lastSent.current) return
+    lastSent.current = liked
 
-      const revert = () => {
-        lastSent.current = null
-        setWantedState((current) => (current === liked ? null : current))
-      }
+    const revert = () => {
+      lastSent.current = null
+      setWantedState((current) => (current === liked ? null : current))
+    }
 
-      try {
-        const result = await setLike(projectID, liked)
-        if (result.ok) {
-          setSaved((state) => withLiked(state, result.liked))
-          return
-        }
-        revert()
-        if (result.reason === "unauthenticated") {
-          const loginHref = authPageUrl(
-            AuthPages.LOGIN,
-            `${process.env.NEXT_PUBLIC_PROJECTS_URL}${pathname}`,
-          )
-          toast.error({
-            description: result.error,
-            action: (
-              <a href={loginHref}>
-                <Button size="sm">Log In</Button>
-              </a>
-            ),
-          })
-          return
-        }
-        console.error("[LikeButton] like was not saved", { error: result.error })
-        toast.error({ description: result.error })
-      } catch (err) {
-        revert()
-        console.error("[LikeButton] like request failed", { error: err })
-        toast.error({ description: "Something went wrong. Try again." })
+    try {
+      const result = await setLike(projectID, liked)
+      if (result.ok) {
+        setSaved((state) => withLiked(state, result.liked))
+        return
       }
-    },
-    { wait: 400, onUnmount: (debouncer) => debouncer.flush() },
-  )
+      revert()
+      if (result.reason === "unauthenticated") {
+        const loginHref = authPageUrl(
+          AuthPages.LOGIN,
+          `${process.env.NEXT_PUBLIC_PROJECTS_URL}${pathname}`,
+        )
+        toast.error({
+          description: result.error,
+          action: (
+            <a href={loginHref}>
+              <Button size="sm">Log In</Button>
+            </a>
+          ),
+        })
+        return
+      }
+      console.error("[LikeButton] like was not saved", { error: result.error })
+      toast.error({ description: result.error })
+    } catch (err) {
+      revert()
+      console.error("[LikeButton] like request failed", { error: err })
+      toast.error({ description: "Something went wrong. Try again." })
+    }
+  }
+
+  const save = useDebouncedCallback((liked: boolean) => void send(liked), {
+    wait: 400,
+    onUnmount: (debouncer) => debouncer.flush(),
+  })
 
   const handleClick = () => {
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
