@@ -35,6 +35,10 @@ export async function toggleLike(projectID: string): Promise<ToggleLikeResult> {
     const where: Where = { project: { equals: id }, member: { equals: member.id } }
 
     const removed = await payload.delete({ collection: Slugs.Collections.LIKE, where, depth: 0 })
+    // A bulk delete reports a failed doc here rather than throwing
+    if (removed.errors.length > 0) {
+      throw new Error(`Failed to delete like: ${removed.errors[0].message}`)
+    }
     if (removed.docs.length > 0) {
       expireLikedList(member.id)
       return { ok: true, liked: false }
