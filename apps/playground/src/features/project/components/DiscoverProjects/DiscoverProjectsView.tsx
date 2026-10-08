@@ -11,6 +11,8 @@ import { discoverProjectsVariants } from "./DiscoverProjects.variants"
 
 interface DiscoverProjectsViewProps extends DiscoverState {
   projects: Project[]
+  /** IDs of the projects the signed-in member has liked */
+  likedIDs?: string[]
   totalPages: number
   className?: string
 }
@@ -24,6 +26,7 @@ export const DiscoverProjectsView = ({
   sort,
   page,
   projects,
+  likedIDs,
   totalPages,
   className,
 }: DiscoverProjectsViewProps) => {
@@ -44,7 +47,7 @@ export const DiscoverProjectsView = ({
         {tabLabel}
       </h2>
 
-      <ProjectGrid projects={projects} />
+      <ProjectGrid likedIDs={likedIDs} projects={projects} />
 
       {totalPages > 1 && (
         <Pagination
