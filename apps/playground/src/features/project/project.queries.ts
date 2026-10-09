@@ -13,19 +13,11 @@ import type { ProjectSort } from "@/features/project/types/enums"
 import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
+import type { SearchState } from "../search/helpers/search"
 
 export interface ProjectsPage {
   projects: ProjectCardData[]
   totalPages: number
-}
-
-export interface SearchProjectsQuery {
-  /**
-   * Text to match against project names.
-   */
-  q: string
-  sort: ProjectSort
-  page: number
 }
 
 interface FindProjectsArgs {
@@ -65,7 +57,7 @@ export const getProjects = ({ tab, sort, page }: DiscoverState) =>
 /**
  * Not cached: open-ended queries rarely repeat, so caching them would only evict useful entries.
  */
-export const searchProjects = async ({ q, sort, page }: SearchProjectsQuery) => {
+export const searchProjects = async ({ q, sort, page }: SearchState) => {
   // Payload reads the current time in find, so wait for a real request instead of prerendering
   await connection()
 
