@@ -1,4 +1,4 @@
-import { AnimatedSuspense, EmptyState, Heading } from "@uoacs/ui"
+import { AnimatedSuspense, EmptyState, Heading, Skeleton } from "@uoacs/ui"
 import Form from "next/form"
 import { redirect } from "next/navigation"
 import type { SearchParams } from "nuqs/server"
@@ -55,9 +55,26 @@ const SearchResults = async ({ searchParams }: { searchParams: Promise<SearchPar
 export default function SearchPage({ searchParams }: PageProps<"/search">) {
   return (
     <div className="flex w-full max-w-full flex-col items-center gap-10 px-2 pt-16 md:gap-16 md:px-0 md:pt-32">
-      <AnimatedSuspense fallback={<PaginatedProjectGridSkeleton />}>
+      <AnimatedSuspense fallback={<SearchPageSkeleton />}>
         <SearchResults searchParams={searchParams} />
       </AnimatedSuspense>
     </div>
   )
 }
+
+const SearchPageSkeleton = () => (
+  <>
+    <Skeleton className="heading-3 w-48" shape="text" />
+
+    <div className="w-full md:w-1/2">
+      <SearchBar name="q" />
+    </div>
+
+    <div className="flex w-full flex-col gap-8">
+      <div className="flex justify-end">
+        <Skeleton className="h-6.5 w-25 md:h-8.5" />
+      </div>
+      <PaginatedProjectGridSkeleton />
+    </div>
+  </>
+)
