@@ -48,3 +48,27 @@ export const PROJECT_TABS: ProjectTabOption[] = [
   { value: ProjectTab.AWARDS, label: "Awards", enabled: false },
   { value: ProjectTab.STAFF_PICKS, label: "Staff-picks", enabled: false },
 ]
+
+export const PROJECT_TITLE_MAX_LENGTH = 40
+
+export const PROJECT_SUMMARY_MAX_LENGTH = 200
+
+/**
+ * Most blocks a project page can have.
+ */
+export const PROJECT_MAX_BLOCKS = 50
+
+export const IMAGE_GRID_MAX_IMAGES = 12
+
+/**
+ * Most characters of text in one text block, not counting formatting.
+ */
+export const TEXT_BLOCK_MAX_CHARACTERS = 2000
+
+/**
+ * Largest image a member can upload. Under the 5MB server action body limit, which also counts the
+ * multipart overhead.
+ */
+export const MEDIA_MAX_BYTES = 4 * 1024 * 1024
+
+export const MEDIA_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"]
