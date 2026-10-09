@@ -10,12 +10,12 @@ export { Toaster } from "sonner"
 
 export const toast = {
   success: (toast: Omit<ToastProps, "type">) => {
-    sonnerToast.custom((_id) => <Toast description={toast.description} type="success" />)
+    sonnerToast.custom((_id) => <Toast {...toast} type="success" />)
   },
   warning: (toast: Omit<ToastProps, "type">) => {
-    sonnerToast.custom((_id) => <Toast description={toast.description} type="warning" />)
+    sonnerToast.custom((_id) => <Toast {...toast} type="warning" />)
   },
   error: (toast: Omit<ToastProps, "type">) => {
-    sonnerToast.custom((_id) => <Toast description={toast.description} type="error" />)
+    sonnerToast.custom((_id) => <Toast {...toast} type="error" />)
   },
 }

@@ -1,11 +1,9 @@
 import { Pagination } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import type { Project } from "../ProjectCard/ProjectCard"
-import { ProjectGrid } from "../ProjectGrid/ProjectGrid"
+import { ProjectGrid, type ProjectGridProps } from "../ProjectGrid/ProjectGrid"
 import { paginatedProjectGridVariants } from "./PaginatedProjectGrid.variants"
 
-interface PaginatedProjectGridProps {
-  projects: Project[]
+interface PaginatedProjectGridProps extends ProjectGridProps {
   page: number
   totalPages: number
   /**
@@ -20,6 +18,7 @@ interface PaginatedProjectGridProps {
  */
 export const PaginatedProjectGrid = ({
   projects,
+  likedIDs = [],
   page,
   totalPages,
   getPageHref,
@@ -29,7 +28,7 @@ export const PaginatedProjectGrid = ({
 
   return (
     <div className={cn(root(), className)}>
-      <ProjectGrid projects={projects} />
+      <ProjectGrid likedIDs={likedIDs} projects={projects} />
 
       {totalPages > 1 && (
         <Pagination

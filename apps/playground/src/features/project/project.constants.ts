@@ -7,11 +7,6 @@ import { ProjectSort, ProjectTab } from "./types/enums"
 export const PROJECTS_PER_PAGE = 9
 
 /**
- * Like count shown on every project card until likes are stored on projects.
- */
-export const PLACEHOLDER_LIKES = 0
-
-/**
  * Author name shown on a project card when the project's author can't be loaded.
  */
 export const UNKNOWN_AUTHOR_NAME = "Unknown author"

@@ -43,7 +43,7 @@ const findProjects = async ({ where, sort, page }: FindProjectsArgs): Promise<Pr
     limit: PROJECTS_PER_PAGE,
     page,
     depth: 1,
-    select: { name: true, author: true, coverImage: true },
+    select: { name: true, author: true, coverImage: true, likeCount: true },
     // Only the author's username is shown, so don't load the rest of the member
     populate: { [Slugs.Collections.MEMBER]: { username: true } },
   })
