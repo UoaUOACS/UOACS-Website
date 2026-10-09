@@ -1,4 +1,5 @@
 import type { Block } from "payload"
+import { IMAGE_GRID_MAX_IMAGES } from "@/features/project/project.constants"
 import { Slugs } from "@/lib/payload/slugs"
 
 export const ImageGrid: Block = {
@@ -10,6 +11,7 @@ export const ImageGrid: Block = {
       relationTo: Slugs.Collections.MEDIA,
       hasMany: true,
       required: true,
+      maxRows: IMAGE_GRID_MAX_IMAGES,
     },
   ],
 }
