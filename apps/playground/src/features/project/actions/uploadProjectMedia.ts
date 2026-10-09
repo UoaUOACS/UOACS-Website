@@ -6,15 +6,15 @@ import { getCurrentMember } from "@/features/member/member.queries"
 import { MEDIA_MAX_BYTES, MEDIA_TYPES } from "@/features/project/project.constants"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
-import type { Media } from "@/payload/payload-types"
+import type { ProjectMedia } from "@/payload/payload-types"
 
 export type UploadMediaResult =
   | {
       ok: true
-      id: Media["id"]
-      url: Media["url"]
-      width: Media["width"] | null
-      height: Media["height"] | null
+      id: ProjectMedia["id"]
+      url: ProjectMedia["url"]
+      width: ProjectMedia["width"] | null
+      height: ProjectMedia["height"] | null
     }
   | { ok: false; error: "invalid" | "unauthenticated" | "unavailable" | "server" }
 
@@ -46,6 +46,7 @@ export async function uploadProjectMedia(formData: FormData): Promise<UploadMedi
   try {
     const current = await getCurrentMember()
     if (current.status !== "authenticated") return { ok: false, error: current.status }
+    const memberID = current.member.id
 
     const data = Buffer.from(await file.arrayBuffer())
     const mimetype = await detectImageType(data)
@@ -53,9 +54,14 @@ export async function uploadProjectMedia(formData: FormData): Promise<UploadMedi
 
     const payload = await getPayloadClient()
     const media = await payload.create({
-      collection: Slugs.Collections.MEDIA,
+      collection: Slugs.Collections.PROJECT_MEDIA,
       data: {
-        alt: typeof alt === "string" && alt.trim() ? alt.trim() : file.name.replace(/\.[^.]+$/, ""),
+        // `|| file.name` keeps a name like `.png` from becoming an empty, required alt
+        alt:
+          typeof alt === "string" && alt.trim()
+            ? alt.trim()
+            : file.name.replace(/\.[^.]+$/, "") || file.name,
+        uploadedBy: memberID,
       },
       file: {
         data,
@@ -75,8 +81,11 @@ export async function uploadProjectMedia(formData: FormData): Promise<UploadMedi
       height: media.height ?? null,
     }
   } catch (error) {
-    // Payload refuses some file names, e.g. `.php`, whatever the content
-    if (error instanceof ValidationError) return { ok: false, error: "invalid" }
+    // Payload checks the file content again, and can refuse a file that sharp accepts
+    if (error instanceof ValidationError) {
+      console.warn("[uploadMedia] The collection rejected the upload", { error })
+      return { ok: false, error: "invalid" }
+    }
     console.error("[uploadMedia] Failed to upload the image", { error })
     return { ok: false, error: "server" }
   }

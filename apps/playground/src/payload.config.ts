@@ -11,6 +11,7 @@ import { Like } from "./payload/collections/Like"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
 import { Project } from "./payload/collections/Project"
+import { ProjectMedia } from "./payload/collections/ProjectMedia"
 import { Sponsor } from "./payload/collections/Sponsor"
 
 const filename = fileURLToPath(import.meta.url)
@@ -24,7 +25,7 @@ export default buildConfig({
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Admin, Media, Project, Sponsor, Member, Like],
+  collections: [Admin, Media, Project, ProjectMedia, Sponsor, Member, Like],
   editor: lexicalEditor({ features: richTextFeatures }),
   graphQL: {
     disable: true,
@@ -49,6 +50,7 @@ export default buildConfig({
     s3Storage({
       collections: {
         media: { prefix: "playground/media" },
+        projectMedia: { prefix: "playground/project-media" },
       },
       bucket: process.env.S3_BUCKET ?? "",
       config: {

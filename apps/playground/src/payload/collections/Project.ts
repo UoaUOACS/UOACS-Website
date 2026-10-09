@@ -10,8 +10,10 @@ import { Slugs } from "@/lib/payload/slugs"
 import { ImageGrid } from "../blocks/ImageGrid"
 import { Text } from "../blocks/Text"
 import { makeDeleteLikesHook } from "../hooks/deleteLikes"
+import { deleteProjectMedia } from "../hooks/deleteProjectMedia"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 import type { Project as ProjectDoc } from "../payload-types"
+import { authorsProjectMedia } from "./ProjectMedia"
 
 const { afterChange, afterDelete } = makeRevalidateHooks((doc: ProjectDoc) => [
   CacheTags.PROJECTS.ROOT,
@@ -55,8 +57,9 @@ export const Project: CollectionConfig = {
     {
       name: "coverImage",
       type: "upload",
-      relationTo: Slugs.Collections.MEDIA,
+      relationTo: Slugs.Collections.PROJECT_MEDIA,
       required: true,
+      filterOptions: authorsProjectMedia,
     },
     {
       name: "likeCount",
@@ -86,6 +89,6 @@ export const Project: CollectionConfig = {
   hooks: {
     afterChange: [afterChange],
     beforeDelete: [makeDeleteLikesHook("project")],
-    afterDelete: [afterDelete],
+    afterDelete: [afterDelete, deleteProjectMedia],
   },
 }
