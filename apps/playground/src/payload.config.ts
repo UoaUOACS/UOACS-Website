@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { s3Storage } from "@payloadcms/storage-s3"
+import { richTextFeatures } from "@uoacs/shared/payload"
 import { buildConfig } from "payload"
 import sharp from "sharp"
 import { Admin } from "./payload/collections/Admin"
@@ -24,7 +25,7 @@ export default buildConfig({
     },
   },
   collections: [Admin, Media, Project, Sponsor, Member, Like],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({ features: richTextFeatures }),
   graphQL: {
     disable: true,
   },
