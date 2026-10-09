@@ -12,7 +12,6 @@
     "code:generate": "plop",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "migrate:user-admin": "tsx --env-file=.env src/scripts/user-admin-migration.ts",
     "update:google-wallet-class": "tsx --env-file=.env src/scripts/update-google-wallet-class.ts"
   },
   "dependencies": {

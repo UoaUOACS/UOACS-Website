@@ -48,36 +48,36 @@ export const WhoWeAreSection = ({ polaroids }: WhoWeAreSectionProps) => {
 
   return (
     <Section
-      subtitle="As well as being a social club, we also help out newer students through workshops and run industry related events to connect you with real companies."
+      subtitle="We're a community built around computer science. From technical workshops and industry events to competitions, academic support and social experiences, UOACS gives students opportunities to learn, build, connect and grow."
       title="Who We Are"
     >
       <div className="flex w-full flex-wrap justify-center gap-12">
         <div className="flex w-full max-w-md flex-col gap-4 md:w-auto">
           <div className="flex min-h-36 flex-col gap-2 bg-accent-purple-light p-4">
             <Heading className="justify-start text-left" h={3}>
-              Social Gatherings
+              Technical Development
             </Heading>
             <p>
-              We host regular social events to help you meet new people, make friends and have fun
-              within the CS community.
+              Hands-on workshops, hackathons and technical events that help students develop
+              practical skills beyond the classroom.
             </p>
           </div>
           <div className="flex min-h-36 flex-col gap-2 bg-accent-red-light p-4">
             <Heading className="justify-start text-left" h={3}>
-              Workshops
+              Industry &amp; Careers
             </Heading>
             <p>
-              Practical, hands-on workshops that are led by students and industry speakers to help
-              you build real skills.
+              Connecting students with leading technology companies and professionals through talks,
+              panels, networking and career opportunities.
             </p>
           </div>
           <div className="flex min-h-36 flex-col gap-2 bg-accent-yellow-light p-4">
             <Heading className="justify-start text-left" h={3}>
-              Collaborations
+              Community
             </Heading>
             <p>
-              We partner with companies, societies and other student groups to run events that
-              connect you with real-world experience and opportunities.
+              Bringing Auckland's Computer Science community together through collaborations,
+              competitions and social experiences.
             </p>
           </div>
         </div>

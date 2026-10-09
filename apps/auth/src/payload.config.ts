@@ -8,23 +8,23 @@ import { AuthCollectionSlugs } from "@uoacs/shared"
 import { richTextFeatures } from "@uoacs/shared/payload"
 import { buildConfig } from "payload"
 import sharp from "sharp"
+import { Admin } from "./payload/collections/Admin"
 import { EmailVerificationCode } from "./payload/collections/EmailVerificationCode"
 import { Media } from "./payload/collections/Media"
 import { Member } from "./payload/collections/Member"
-import { Users } from "./payload/collections/Users"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    user: Users.slug,
+    user: Admin.slug,
     importMap: {
       baseDir: path.resolve(dirname),
       importMapFile: `${path.resolve(dirname)}/app/payload/admin/importMap.js`,
     },
   },
-  collections: [Users, Media, Member, EmailVerificationCode],
+  collections: [Admin, Media, Member, EmailVerificationCode],
   editor: lexicalEditor({ features: richTextFeatures }),
   graphQL: {
     disable: true,

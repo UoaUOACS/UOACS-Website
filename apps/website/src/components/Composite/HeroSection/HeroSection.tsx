@@ -33,7 +33,9 @@ export const HeroSection = ({
             </Heading>
           </div>
           <p className="paragraph md:max-w-[28rem]">
-            UOACS is the Computer Science student association for social gathering.
+            UOACS is the University of Auckland's Computer Science student community, connecting
+            students through technical development, industry opportunities and a collaborative
+            network.
           </p>
         </div>
         <div className="mask-[linear-gradient(to_right,white,transparent)] hidden h-1.5 w-full bg-linear-to-r from-[#FF307C] to-[#2134FF] md:block" />

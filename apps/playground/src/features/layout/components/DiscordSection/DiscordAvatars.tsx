@@ -34,8 +34,13 @@ export const DiscordAvatars = ({ members }: DiscordAvatarsProps) => {
   const [avatarMembers, setAvatarMembers] = useState(() => members.slice(0, AVATAR_MAX_COUNT))
   const containerRef = useRef<HTMLDivElement>(null)
   const [visibleCount, setVisibleCount] = useState(0)
+  const shuffledFor = useRef<string>(null)
 
   useEffect(() => {
+    // Every server refresh sends a new `members` array, so only reshuffle when the avatars change
+    const key = members.map((member) => member.avatar_url).join()
+    if (shuffledFor.current === key) return
+    shuffledFor.current = key
     setAvatarMembers(shuffle(members).slice(0, AVATAR_MAX_COUNT))
   }, [members])
 
