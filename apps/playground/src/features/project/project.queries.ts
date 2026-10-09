@@ -1,4 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache"
+import { connection } from "next/server"
 import type { Where } from "payload"
 import type { Project as ProjectCardData } from "@/features/project/components/ProjectCard/ProjectCard"
 import type { DiscoverState } from "@/features/project/helpers/discover"
@@ -64,5 +65,9 @@ export const getProjects = ({ tab, sort, page }: DiscoverState) =>
 /**
  * Not cached: open-ended queries rarely repeat, so caching them would only evict useful entries.
  */
-export const searchProjects = ({ q, sort, page }: SearchProjectsQuery) =>
-  findProjects({ where: q ? { name: { contains: q } } : undefined, sort, page })
+export const searchProjects = async ({ q, sort, page }: SearchProjectsQuery) => {
+  // Payload reads the current time in find, so wait for a real request instead of prerendering
+  await connection()
+
+  return findProjects({ where: q ? { name: { contains: q } } : undefined, sort, page })
+}
