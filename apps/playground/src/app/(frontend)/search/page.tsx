@@ -27,7 +27,7 @@ const SearchResults = async ({ searchParams }: { searchParams: Promise<SearchPar
       </Heading>
 
       <Form action={Routes.SEARCH} className="w-full md:w-1/2">
-        <SearchBar defaultValue={q} name="q" />
+        <SearchBar defaultValue={q} key={q} name="q" />
       </Form>
 
       {projects.length > 0 ? (
