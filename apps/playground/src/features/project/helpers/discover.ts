@@ -61,3 +61,5 @@ export const loadDiscoverParams = async (
  * @returns The home page URL with the matching search params.
  */
 export const getDiscoverHref = (state: Partial<DiscoverState>) => serialize(Routes.HOME, state)
+
+export type GetDiscoverHref = typeof getDiscoverHref

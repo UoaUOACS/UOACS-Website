@@ -1,7 +1,7 @@
 import { EmptyState } from "@uoacs/ui"
 import { type Project, ProjectCard } from "../ProjectCard/ProjectCard"
 
-interface ProjectGridProps {
+export interface ProjectGridProps {
   projects: Project[]
   /** IDs of the projects the signed-in member has liked */
   likedIDs?: string[]
