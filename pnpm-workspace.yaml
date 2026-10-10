@@ -4,6 +4,7 @@ packages:
 
 catalog:
   "@heroicons/react": ^2.2.0
+  "@hookform/resolvers": ^5.2.2
   "@tanstack/react-pacer": 0.24.1
   "@types/react": ^19.2.13
   "@types/react-dom": ^19.2.3
@@ -14,6 +15,7 @@ catalog:
   next: 16.3.0
   react: 19.3.0
   react-dom: 19.3.0
+  react-hook-form: ^7.71.2
   tailwindcss: ^4.1.18
   "@tailwindcss/postcss": ^4
   tailwind-variants: ^3.2.2
