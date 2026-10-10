@@ -7,7 +7,7 @@ import { Button, Dropdown } from "@uoacs/ui"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Routes } from "@/lib/routes"
+import { projectsUrl, Routes } from "@/lib/routes"
 
 /**
  * Props for the {@link PlaygroundNavbar} component.
@@ -85,23 +85,14 @@ export function PlaygroundNavbar({
         />
       ) : (
         <div className="flex flex-row items-center gap-3">
-          <a
-            className="inline-flex"
-            href={authPageUrl(
-              AuthPages.LOGIN,
-              `${process.env.NEXT_PUBLIC_PROJECTS_URL}${pathname}`,
-            )}
-          >
+          <a className="inline-flex" href={authPageUrl(AuthPages.LOGIN, projectsUrl(pathname))}>
             <Button tabIndex={-1} theme="ghost">
               Log In
             </Button>
           </a>
           <a
             className="hidden md:inline-flex"
-            href={authPageUrl(
-              AuthPages.SIGN_UP,
-              `${process.env.NEXT_PUBLIC_PROJECTS_URL}${pathname}`,
-            )}
+            href={authPageUrl(AuthPages.SIGN_UP, projectsUrl(pathname))}
           >
             <Button
               right={<ArrowUpRightIcon className="h-4 w-4 md:h-6 md:w-6" />}
