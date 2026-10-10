@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@heroicons/react": "catalog:",
-    "@hookform/resolvers": "^5.2.2",
+    "@hookform/resolvers": "catalog:",
     "@payloadcms/db-mongodb": "catalog:payload",
     "@payloadcms/email-resend": "catalog:payload",
     "@payloadcms/next": "catalog:payload",
@@ -28,7 +28,7 @@
     "payload": "catalog:payload",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-hook-form": "^7.71.2",
+    "react-hook-form": "catalog:",
     "sharp": "^0.34.4",
     "zod": "catalog:",
     "zustand": "^5.0.12"

@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@heroicons/react": "catalog:",
-    "@hookform/resolvers": "^5.2.2",
+    "@hookform/resolvers": "catalog:",
     "@payloadcms/db-mongodb": "catalog:payload",
     "@payloadcms/email-resend": "catalog:payload",
     "@payloadcms/next": "catalog:payload",
@@ -40,7 +40,7 @@
     "payload": "catalog:payload",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-hook-form": "^7.71.2",
+    "react-hook-form": "catalog:",
     "react-smart-ticker": "^1.6.7",
     "sharp": "^0.34.4",
     "tailwind-variants": "catalog:",
