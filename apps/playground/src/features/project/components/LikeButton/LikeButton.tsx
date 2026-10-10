@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation"
 import { useRef, useState } from "react"
 import { setLike } from "@/features/project/actions/setLike"
 import { formatLikes } from "@/features/project/helpers/format"
+import { projectsUrl } from "@/lib/routes"
 
 interface LikeState {
   isLiked: boolean
@@ -62,10 +63,7 @@ export const LikeButton = ({
       }
       revert()
       if (result.reason === "unauthenticated") {
-        const loginHref = authPageUrl(
-          AuthPages.LOGIN,
-          `${process.env.NEXT_PUBLIC_PROJECTS_URL}${pathname}`,
-        )
+        const loginHref = authPageUrl(AuthPages.LOGIN, projectsUrl(pathname))
         toast.error({
           description: result.error,
           action: (
