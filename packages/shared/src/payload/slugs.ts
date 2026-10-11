@@ -4,6 +4,7 @@
  * Shared because both `apps/auth` and `apps/website` resolve these against same db
  */
 export const AuthCollectionSlugs = {
+  ADMIN: "admin",
   MEMBER: "member",
   EMAIL_VERIFICATION_CODE: "email-verification-code",
 } as const

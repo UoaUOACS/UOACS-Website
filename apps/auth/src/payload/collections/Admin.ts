@@ -1,7 +1,8 @@
+import { AuthCollectionSlugs } from "@uoacs/shared"
 import type { CollectionConfig } from "payload"
 
-export const Users: CollectionConfig = {
-  slug: "users",
+export const Admin: CollectionConfig = {
+  slug: AuthCollectionSlugs.ADMIN,
   admin: {
     useAsTitle: "email",
   },

@@ -26,6 +26,18 @@ export const WithLongDescription: StoryObject = {
   },
 }
 
+export const WithAction: StoryObject = {
+  args: {
+    type: "error",
+    description: "Log in to like projects",
+    action: (
+      <a className="paragraph-sm font-medium text-gray-900 underline" href="#login">
+        Log In
+      </a>
+    ),
+  },
+}
+
 export const Variants: StoryFunction = (args) => (
   <div className="flex flex-col gap-4">
     <Toast {...args} description="This is a success toast notification." type="success" />

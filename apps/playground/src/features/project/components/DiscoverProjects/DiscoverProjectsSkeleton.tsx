@@ -1,7 +1,7 @@
 import { Skeleton } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { DEFAULT_PROJECT_TAB, PROJECT_TABS } from "@/features/project/project.constants"
-import { ProjectGridSkeleton } from "../ProjectGrid/ProjectGridSkeleton"
+import { PaginatedProjectGridSkeleton } from "../PaginatedProjectGrid/PaginatedProjectGridSkeleton"
 import { ProjectTabsSkeleton } from "../ProjectTabs/ProjectTabsSkeleton"
 import { discoverProjectsVariants } from "./DiscoverProjects.variants"
 
@@ -10,7 +10,7 @@ import { discoverProjectsVariants } from "./DiscoverProjects.variants"
  * by the same classes as the content it stands in for, so nothing moves when the content loads.
  */
 export const DiscoverProjectsSkeleton = () => {
-  const { root, header, sort, heading, pagination } = discoverProjectsVariants()
+  const { root, header, sort, heading } = discoverProjectsVariants()
   const headingLabel = PROJECT_TABS.find((tab) => tab.value === DEFAULT_PROJECT_TAB)?.label ?? ""
 
   return (
@@ -27,11 +27,7 @@ export const DiscoverProjectsSkeleton = () => {
           style={{ width: `${headingLabel.length}ch` }}
         />
       </div>
-      <ProjectGridSkeleton />
-      {/* Most Discover pages are paginated, so reserve the space rather than grow on load */}
-      <div className={pagination()}>
-        <Skeleton className="h-8 w-72" />
-      </div>
+      <PaginatedProjectGridSkeleton />
     </div>
   )
 }

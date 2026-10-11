@@ -38,23 +38,33 @@ export const AboutUsSection = ({ reels, instagramHref }: AboutUsSectionProps) =>
             <span className="text-primary">// </span>ABOUT US
           </p>
           <p>
-            Computer science students are known to be slightly more on the antisocial end of the
-            spectrum, and as a club, we hope to break that stereotype.
+            UOACS is the University of Auckland's Computer Science student association, connecting
+            students with the skills, people and opportunities that help them grow in tech.
           </p>
         </div>
         <p className="paragraph">
-          University life can be daunting at times, and we hope to serve as the catalyst for
-          lifelong friendships. We do this through our mix of social, industry, educational and
-          competitive events.
+          Through technical workshops, industry events, competitions, educational initiatives and
+          social experiences, we create opportunities for students to develop beyond the classroom
+          and engage with Auckland's wider technology community.
         </p>
         <div className="flex flex-col items-center gap-6 md:items-start">
-          {!session && (
-            <a className="w-fit" href={authPageUrl(AuthPages.SIGN_UP, websiteUrl(Routes.PROFILE))}>
+          <div className="flex flex-wrap justify-center gap-4 md:justify-start">
+            {!session && (
+              <a
+                className="w-fit"
+                href={authPageUrl(AuthPages.SIGN_UP, websiteUrl(Routes.PROFILE))}
+              >
+                <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
+                  Join UOACS
+                </Button>
+              </a>
+            )}
+            <a className="w-fit" href="mailto:outreach@uoacs.co.nz">
               <Button right={<ArrowRightIcon className="h-4 w-4 md:h-6 md:w-6" />} theme="dark">
-                Interested? Join UOACS
+                Partner With Us
               </Button>
             </a>
-          )}
+          </div>
           <p className="paragraph-sm font-medium">Membership is 100% free so come join us!</p>
         </div>
       </div>

@@ -1,8 +1,10 @@
 import { EmptyState } from "@uoacs/ui"
 import { type Project, ProjectCard } from "../ProjectCard/ProjectCard"
 
-interface ProjectGridProps {
+export interface ProjectGridProps {
   projects: Project[]
+  /** IDs of the projects the signed-in member has liked */
+  likedIDs?: string[]
 }
 
 /**
@@ -11,7 +13,9 @@ interface ProjectGridProps {
 export const projectGridClassName =
   "grid grid-cols-1 justify-items-center gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3"
 
-export const ProjectGrid = ({ projects }: ProjectGridProps) => {
+export const ProjectGrid = ({ projects, likedIDs = [] }: ProjectGridProps) => {
+  const liked = new Set(likedIDs)
+
   if (projects.length === 0) {
     return (
       <EmptyState
@@ -24,7 +28,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
   return (
     <div className={projectGridClassName}>
       {projects.map((project) => (
-        <ProjectCard key={project.id} project={project} />
+        <ProjectCard key={project.id} project={{ ...project, liked: liked.has(project.id) }} />
       ))}
     </div>
   )

@@ -4,6 +4,7 @@ export interface Project {
   imageURL?: string
   authorName: string
   likes: number
+  liked?: boolean
   awardType?: string
   summary?: string
   awardEvent?: string

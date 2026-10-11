@@ -1,15 +1,15 @@
-import { HeartIcon, UserIcon } from "@heroicons/react/24/outline"
+import { UserIcon } from "@heroicons/react/24/outline"
 import { LazyImage } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import Link from "next/link"
 import AwardIcon from "@/features/project/components/AwardIcon/AwardIcon"
-import { formatLikes } from "@/features/project/helpers/format"
+import { LikeButton } from "@/features/project/components/LikeButton/LikeButton"
 import { Routes } from "@/lib/routes"
 import type { ProjectCardVariantProps } from "./ProjectCard.types"
 import { projectCardVariants } from "./ProjectCard.variants"
 
 export const BaseProjectCard = ({ project, className }: ProjectCardVariantProps) => {
-  const { id, title, imageURL, authorName, likes, awardType } = project
+  const { id, title, imageURL, authorName, likes, liked, awardType } = project
   const {
     base,
     imageWrapper,
@@ -27,8 +27,9 @@ export const BaseProjectCard = ({ project, className }: ProjectCardVariantProps)
   } = projectCardVariants()
 
   return (
-    <Link className={base({ className })} href={Routes.PROJECTS.ID(id)}>
-      <div className={imageWrapper()}>
+    // Only the image links, as the like button cannot sit inside a link
+    <div className={base({ className })}>
+      <Link className={imageWrapper()} href={Routes.PROJECTS.ID(id)}>
         {imageURL ? (
           <LazyImage
             alt={title}
@@ -43,7 +44,7 @@ export const BaseProjectCard = ({ project, className }: ProjectCardVariantProps)
         <div className={overlay()}>
           <span className={titleStyles()}>{title}</span>
         </div>
-      </div>
+      </Link>
 
       <div className={footer()}>
         <div className={authorGroup()}>
@@ -53,12 +54,16 @@ export const BaseProjectCard = ({ project, className }: ProjectCardVariantProps)
 
         <div className={statsGroup()}>
           {awardType && <AwardIcon className={cn(awardIcon(), "h-4.5 w-4.5")} />}
-          <div className={likesGroup()}>
-            <HeartIcon aria-hidden="true" className={cn(heartIcon(), "h-4 w-4")} />
-            <span className={likesCount()}>{formatLikes(likes)}</span>
-          </div>
+          <LikeButton
+            className={likesGroup()}
+            countClassName={likesCount()}
+            iconClassName={cn(heartIcon(), "h-4 w-4")}
+            isLiked={liked}
+            likes={likes}
+            projectID={id}
+          />
         </div>
       </div>
-    </Link>
+    </div>
   )
 }

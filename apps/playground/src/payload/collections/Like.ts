@@ -10,6 +10,7 @@ import type { Like as LikeDoc } from "../payload-types"
 const { afterChange, afterDelete } = makeRevalidateHooks((doc: LikeDoc) => [
   CacheTags.PROJECTS.ROOT,
   CacheTags.PROJECTS.ID(getRelationID(doc.project)),
+  CacheTags.MEMBERS.LIKES(getRelationID(doc.member)),
 ])
 
 export const Like: CollectionConfig = {
