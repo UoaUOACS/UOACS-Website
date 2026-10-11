@@ -40,6 +40,7 @@ export const LikeButton = ({
 }: LikeButtonProps) => {
   // Saved results update the button without waiting for new props
   const [saved, setSaved] = useState({ isLiked, likes })
+  // Set only while a click is not saved yet
   const [wantedState, setWantedState] = useState<boolean | null>(null)
   // Next.js keeps a page's state when you navigate away and back, so start again from the server's
   // state whenever it changes. A key would remount the button and lose keyboard focus
@@ -47,22 +48,21 @@ export const LikeButton = ({
   if (server.isLiked !== isLiked || server.likes !== likes) {
     setServer({ isLiked, likes })
     setSaved({ isLiked, likes })
-    setWantedState(null)
   }
   const shown = wantedState === null ? saved : withLiked(saved, wantedState)
   const heartRef = useRef<HTMLSpanElement>(null)
   const pathname = usePathname()
 
   const send = async (liked: boolean) => {
-    const revert = () => setWantedState((current) => (current === liked ? null : current))
+    const settle = () => setWantedState((current) => (current === liked ? null : current))
 
     try {
       const result = await setLike(projectID, liked)
+      settle()
       if (result.ok) {
         setSaved((state) => withLiked(state, result.liked))
         return
       }
-      revert()
       if (result.reason === "unauthenticated") {
         const loginHref = authPageUrl(AuthPages.LOGIN, projectsUrl(pathname))
         toast.error({
@@ -78,7 +78,7 @@ export const LikeButton = ({
       console.error("[LikeButton] like was not saved", { error: result.error })
       toast.error({ description: result.error })
     } catch (err) {
-      revert()
+      settle()
       console.error("[LikeButton] like request failed", { error: err })
       toast.error({ description: "Something went wrong. Try again." })
     }
