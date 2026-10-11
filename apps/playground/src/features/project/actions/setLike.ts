@@ -7,6 +7,7 @@ import { getCurrentMember } from "@/features/member/member.queries"
 import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
+import { getRelationID } from "@/lib/payload/getRelationID"
 
 export type SetLikeResult =
   | { ok: true; liked: boolean }
@@ -14,9 +15,10 @@ export type SetLikeResult =
 
 // The Like hooks refresh these in the background, which would pair the member's new heart with the
 // old count, so expire them now for the member who liked
-const expireLikeState = (memberID: string, projectID: string) => {
+const expireLikeState = (memberID: string, projectID: string, authorID: string) => {
   updateTag(CacheTags.MEMBERS.LIKES(memberID))
   updateTag(CacheTags.PROJECTS.ID(projectID))
+  updateTag(CacheTags.PROJECTS.AUTHOR(authorID))
   updateTag(CacheTags.PROJECTS.ROOT)
 }
 
@@ -47,24 +49,25 @@ export async function setLike(projectID: string, liked: boolean): Promise<SetLik
     const payload = await getPayloadClient()
     const where: Where = { project: { equals: id }, member: { equals: member.id } }
 
+    const project = await payload.findByID({
+      collection: Slugs.Collections.PROJECT,
+      id,
+      select: { author: true },
+      depth: 0,
+      disableErrors: true,
+    })
+    if (!project) return { ok: false, error: "Project not found" }
+    const authorID = getRelationID(project.author)
+
     if (!parsed.data.liked) {
       const removed = await payload.delete({ collection: Slugs.Collections.LIKE, where, depth: 0 })
       // A bulk delete reports a failed doc here rather than throwing
       if (removed.errors.length > 0) {
         throw new Error(`Failed to delete like: ${removed.errors[0].message}`)
       }
-      expireLikeState(member.id, id)
+      expireLikeState(member.id, id, authorID)
       return { ok: true, liked: false }
     }
-
-    const project = await payload.findByID({
-      collection: Slugs.Collections.PROJECT,
-      id,
-      select: {},
-      depth: 0,
-      disableErrors: true,
-    })
-    if (!project) return { ok: false, error: "Project not found" }
 
     try {
       await payload.create({
@@ -79,7 +82,7 @@ export async function setLike(projectID: string, liked: boolean): Promise<SetLik
       if (totalDocs === 0) throw err
     }
 
-    expireLikeState(member.id, id)
+    expireLikeState(member.id, id, authorID)
     return { ok: true, liked: true }
   } catch (err) {
     console.error("[setLike] failed to set like", { error: err, projectID: id, liked })
