@@ -2,10 +2,15 @@ import type { Project } from "@/features/project/components/ProjectCard/ProjectC
 
 export const Routes = {
   HOME: "/",
-  PROFILE: "/profile",
+  PROFILE: {
+    ROOT: "/profile",
+    ID: (id?: string) => `/profile/${id ?? ""}`,
+    EDIT: "/profile/edit",
+  },
   SEARCH: "/search",
   PROJECTS: {
     ID: (id: Project["id"]) => `/projects/${id}`,
+    EDIT: (id: Project["id"]) => `/projects/${id}/edit`,
     CREATE: "/projects/create",
   },
 } as const
