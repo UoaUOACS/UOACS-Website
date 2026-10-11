@@ -78,12 +78,15 @@ export const ProjectHeader = ({ project, actions }: ProjectHeaderProps) => {
  */
 export const ProjectHeaderSkeleton = () => (
   <div aria-hidden="true" className="flex w-full flex-col gap-6">
-    <div className="flex items-center gap-4">
-      <Skeleton className={AVATAR_CLASS_NAME} shape="circle" />
-      <div className="flex flex-col gap-1">
-        <Skeleton className="heading-3 w-56" shape="text" />
-        <Skeleton className="h-4 w-28" shape="text" />
+    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex items-center gap-4">
+        <Skeleton className={AVATAR_CLASS_NAME} shape="circle" />
+        <div className="flex flex-col gap-1">
+          <Skeleton className="heading-4 w-56" shape="text" />
+          <Skeleton className="h-5 w-28" shape="text" />
+        </div>
       </div>
+      <ProjectHeaderActionsSkeleton />
     </div>
     <Skeleton className="h-12 w-full" shape="text" />
   </div>
