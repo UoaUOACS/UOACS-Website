@@ -1,14 +1,13 @@
-import { HeartIcon } from "@heroicons/react/24/outline"
 import { LazyImage } from "@uoacs/ui"
 import Link from "next/link"
 import AwardIcon from "@/features/project/components/AwardIcon/AwardIcon"
-import { formatLikes } from "@/features/project/helpers/format"
+import { LikeButton } from "@/features/project/components/LikeButton/LikeButton"
 import { Routes } from "@/lib/routes"
 import type { ProjectCardVariantProps } from "./ProjectCard.types"
 import { projectCardVariants } from "./ProjectCard.variants"
 
 export const ProfileProjectCard = ({ project, className }: ProjectCardVariantProps) => {
-  const { id, title, imageURL, likes, awardType, summary, awardEvent } = project
+  const { id, title, imageURL, likes, liked, awardType, summary, awardEvent } = project
   const {
     base,
     imageWrapper,
@@ -26,8 +25,8 @@ export const ProfileProjectCard = ({ project, className }: ProjectCardVariantPro
   } = projectCardVariants({ variant: "profile" })
 
   return (
-    <Link className={base({ className })} href={Routes.PROJECTS.ID(id)}>
-      <div className={imageWrapper()}>
+    <div className={base({ className })}>
+      <Link className={imageWrapper()} href={Routes.PROJECTS.ID(id)}>
         {imageURL ? (
           <LazyImage
             alt={title}
@@ -38,27 +37,33 @@ export const ProfileProjectCard = ({ project, className }: ProjectCardVariantPro
             src={imageURL}
           />
         ) : null}
-      </div>
+      </Link>
 
       <div className={content()}>
-        {awardType ? (
-          <div className={awardGroup()}>
-            <AwardIcon className={awardIcon()} />
-            <div>
-              <p className={awardTitle()}>{awardType}</p>
-              {awardEvent ? <p className={awardSubtitle()}>Awarded at {awardEvent}</p> : null}
+        <Link className="flex flex-1 flex-col gap-4" href={Routes.PROJECTS.ID(id)}>
+          {awardType ? (
+            <div className={awardGroup()}>
+              <AwardIcon className={awardIcon()} />
+              <div>
+                <p className={awardTitle()}>{awardType}</p>
+                {awardEvent ? <p className={awardSubtitle()}>Awarded at {awardEvent}</p> : null}
+              </div>
             </div>
+          ) : null}
+          <div className={textGroup()}>
+            <h3 className={titleStyles()}>{title}</h3>
+            {summary ? <p className={description()}>{summary}</p> : null}
           </div>
-        ) : null}
-        <div className={textGroup()}>
-          <h3 className={titleStyles()}>{title}</h3>
-          {summary ? <p className={description()}>{summary}</p> : null}
-        </div>
-        <div className={likesGroup()}>
-          <HeartIcon aria-hidden="true" className={heartIcon()} />
-          <span className={likesCount()}>{formatLikes(likes)}</span>
-        </div>
+        </Link>
+        <LikeButton
+          className={likesGroup()}
+          countClassName={likesCount()}
+          iconClassName={heartIcon()}
+          isLiked={liked}
+          likes={likes}
+          projectID={id}
+        />
       </div>
-    </Link>
+    </div>
   )
 }
