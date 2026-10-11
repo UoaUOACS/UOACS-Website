@@ -30,13 +30,7 @@ interface LikeButtonProps {
   countClassName?: string
 }
 
-// Next.js keeps a page's state when you navigate away and back, so start again from the server's
-// state whenever it changes
-export const LikeButton = (props: LikeButtonProps) => (
-  <SyncedLikeButton key={`${props.isLiked ?? false}:${props.likes}`} {...props} />
-)
-
-const SyncedLikeButton = ({
+export const LikeButton = ({
   projectID,
   likes,
   isLiked = false,
@@ -47,19 +41,20 @@ const SyncedLikeButton = ({
   // Saved results update the button without waiting for new props
   const [saved, setSaved] = useState({ isLiked, likes })
   const [wantedState, setWantedState] = useState<boolean | null>(null)
+  // Next.js keeps a page's state when you navigate away and back, so start again from the server's
+  // state whenever it changes. A key would remount the button and lose keyboard focus
+  const [server, setServer] = useState({ isLiked, likes })
+  if (server.isLiked !== isLiked || server.likes !== likes) {
+    setServer({ isLiked, likes })
+    setSaved({ isLiked, likes })
+    setWantedState(null)
+  }
   const shown = wantedState === null ? saved : withLiked(saved, wantedState)
-  const lastSent = useRef<boolean | null>(isLiked)
   const heartRef = useRef<HTMLSpanElement>(null)
   const pathname = usePathname()
 
   const send = async (liked: boolean) => {
-    if (liked === lastSent.current) return
-    lastSent.current = liked
-
-    const revert = () => {
-      lastSent.current = null
-      setWantedState((current) => (current === liked ? null : current))
-    }
+    const revert = () => setWantedState((current) => (current === liked ? null : current))
 
     try {
       const result = await setLike(projectID, liked)
