@@ -30,7 +30,13 @@ interface LikeButtonProps {
   countClassName?: string
 }
 
-export const LikeButton = ({
+// Next.js keeps a page's state when you navigate away and back, so start again from the server's
+// state whenever it changes
+export const LikeButton = (props: LikeButtonProps) => (
+  <SyncedLikeButton key={`${props.isLiked ?? false}:${props.likes}`} {...props} />
+)
+
+const SyncedLikeButton = ({
   projectID,
   likes,
   isLiked = false,
@@ -38,7 +44,7 @@ export const LikeButton = ({
   iconClassName,
   countClassName,
 }: LikeButtonProps) => {
-  // The cached count can lag behind a like, so keep the saved state here rather than in props
+  // Saved results update the button without waiting for new props
   const [saved, setSaved] = useState({ isLiked, likes })
   const [wantedState, setWantedState] = useState<boolean | null>(null)
   const shown = wantedState === null ? saved : withLiked(saved, wantedState)

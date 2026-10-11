@@ -12,9 +12,13 @@ export type SetLikeResult =
   | { ok: true; liked: boolean }
   | { ok: false; error: string; reason?: "unauthenticated" }
 
-// Counts may lag, as the Like hooks refresh them in the background, but the member's own hearts
-// must not, so expire only their liked list here
-const expireLikedList = (memberID: string) => updateTag(CacheTags.MEMBERS.LIKES(memberID))
+// The Like hooks refresh these in the background, which would pair the member's new heart with the
+// old count, so expire them now for the member who liked
+const expireLikeState = (memberID: string, projectID: string) => {
+  updateTag(CacheTags.MEMBERS.LIKES(memberID))
+  updateTag(CacheTags.PROJECTS.ID(projectID))
+  updateTag(CacheTags.PROJECTS.ROOT)
+}
 
 const inputSchema = z.object({
   projectID: z.string().regex(/^[a-f\d]{24}$/i),
@@ -49,7 +53,7 @@ export async function setLike(projectID: string, liked: boolean): Promise<SetLik
       if (removed.errors.length > 0) {
         throw new Error(`Failed to delete like: ${removed.errors[0].message}`)
       }
-      expireLikedList(member.id)
+      expireLikeState(member.id, id)
       return { ok: true, liked: false }
     }
 
@@ -75,7 +79,7 @@ export async function setLike(projectID: string, liked: boolean): Promise<SetLik
       if (totalDocs === 0) throw err
     }
 
-    expireLikedList(member.id)
+    expireLikeState(member.id, id)
     return { ok: true, liked: true }
   } catch (err) {
     console.error("[setLike] failed to set like", { error: err, projectID: id, liked })
