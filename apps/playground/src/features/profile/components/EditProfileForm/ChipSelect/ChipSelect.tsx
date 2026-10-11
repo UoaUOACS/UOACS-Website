@@ -1,29 +1,29 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { Button, Dropdown } from "@uoacs/ui"
 
-export interface ChipSelectProps {
+export interface ChipSelectProps<T extends string> {
   label: string
   /**
    * The text of the add button, e.g. "Add a skill".
    */
   addLabel: string
-  options: readonly string[]
-  value: string[]
-  onChange: (value: string[]) => void
+  options: readonly T[]
+  value: T[]
+  onChange: (value: T[]) => void
   error?: string
 }
 
 /**
  * The picked values as removable chips, followed by a dropdown to add any of the rest.
  */
-export const ChipSelect = ({
+export const ChipSelect = <T extends string>({
   label,
   addLabel,
   options,
   value,
   onChange,
   error,
-}: ChipSelectProps) => {
+}: ChipSelectProps<T>) => {
   const unpicked = options.filter((option) => !value.includes(option))
 
   return (
