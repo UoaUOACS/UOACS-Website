@@ -15,7 +15,7 @@ export function NotFoundContent() {
             404 Error
           </Heading>
         </div>
-        <p className="paragraph max-w-100 font-light md:col-start-2">
+        <p className="paragraph max-w-100 text-pretty font-light md:col-start-2">
           Sorry we couldn&apos;t find the page you were looking for
         </p>
         <Link className="mt-6 md:col-start-2" href={Routes.HOME}>
