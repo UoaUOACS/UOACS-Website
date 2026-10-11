@@ -37,11 +37,10 @@ export const ImageGridBlockView = ({ images, compact }: ImageGridBlockViewProps)
     )
   }
 
-  const { base, label, content, thumbnail } = compactBlockVariants()
+  const { base, content, thumbnail } = compactBlockVariants()
   const hidden = images.length - COMPACT_THUMBNAILS
   return (
     <div className={base()}>
-      <span className={label()}>Image grid</span>
       <div className={content()}>
         {images.slice(0, COMPACT_THUMBNAILS).map((image) => (
           <LazyImage

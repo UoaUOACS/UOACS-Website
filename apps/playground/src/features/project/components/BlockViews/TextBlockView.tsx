@@ -14,10 +14,9 @@ export interface TextBlockViewProps {
 export const TextBlockView = ({ content, compact }: TextBlockViewProps) => {
   if (!compact) return <RichTextContent className="w-full" data={content} />
 
-  const { base, label, content: contentStyles } = compactBlockVariants()
+  const { base, content: contentStyles } = compactBlockVariants()
   return (
     <div className={base()}>
-      <span className={label()}>Text</span>
       <span className={contentStyles()}>{getFirstLineOfText(content) || "Empty"}</span>
     </div>
   )
