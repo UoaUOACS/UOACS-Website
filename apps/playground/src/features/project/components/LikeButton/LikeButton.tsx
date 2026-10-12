@@ -8,7 +8,7 @@ import { Button } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
 import { cn } from "@uoacs/ui/utils"
 import { usePathname } from "next/navigation"
-import { useRef, useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 import { setLike } from "@/features/project/actions/setLike"
 import { formatLikes } from "@/features/project/helpers/format"
 import { projectsUrl } from "@/lib/routes"
@@ -43,12 +43,12 @@ export const LikeButton = ({
   // Set only while a click is not saved yet
   const [wantedState, setWantedState] = useState<boolean | null>(null)
   // Next.js keeps a page's state when you navigate away and back, so start again from the server's
-  // state whenever it changes. A key would remount the button and lose keyboard focus
-  const [server, setServer] = useState({ isLiked, likes })
-  if (server.isLiked !== isLiked || server.likes !== likes) {
-    setServer({ isLiked, likes })
-    setSaved({ isLiked, likes })
-  }
+  // state when the page shows again or the props change. A key would remount and lose focus
+  useLayoutEffect(() => {
+    setSaved((state) =>
+      state.isLiked === isLiked && state.likes === likes ? state : { isLiked, likes },
+    )
+  }, [isLiked, likes])
   const shown = wantedState === null ? saved : withLiked(saved, wantedState)
   const heartRef = useRef<HTMLSpanElement>(null)
   const pathname = usePathname()
