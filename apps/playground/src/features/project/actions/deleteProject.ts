@@ -54,5 +54,5 @@ export async function deleteProject(id: string): Promise<DeleteProjectResult> {
   }
 
   // Outside the try, as redirect works by throwing
-  redirect(Routes.PROFILE)
+  redirect(Routes.PROFILE.ROOT)
 }
