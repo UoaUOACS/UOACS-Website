@@ -12,8 +12,14 @@ export interface ImageGridBlockViewProps {
 const COMPACT_THUMBNAILS = 3
 
 export const ImageGridBlockView = ({ images, compact }: ImageGridBlockViewProps) => {
-  // The page column is at most 768px wide
-  if (!compact) return <ImageGallery images={images} maxWidth={768} />
+  if (!compact) {
+    return (
+      // A wrapper, as the single-image layout sets its own inline max-width
+      <div className="mx-auto w-full max-w-5xl">
+        <ImageGallery images={images} maxWidth={1024} />
+      </div>
+    )
+  }
 
   const { base, content, thumbnail } = compactBlockVariants()
   const hidden = images.length - COMPACT_THUMBNAILS
