@@ -27,7 +27,6 @@ const MAX_COLUMNS = 4
  */
 const getSpan = (ratio: number) => (ratio >= 2.4 ? 4 : ratio >= 1.2 ? 2 : 1)
 
-// Phones always have 2 columns
 /**
  * Empty cells left when the grid places each image in the first row with room for it, as
  * `grid-auto-flow: dense` does
@@ -54,6 +53,7 @@ const getColumns = (spans: number[]) => {
   return best
 }
 
+// Phones always have 2 columns
 const SPAN_CLASS_NAMES: Record<number, string> = {
   1: "col-span-1",
   2: "col-span-2",
@@ -68,19 +68,30 @@ const COLUMN_CLASS_NAMES: Record<number, string> = {
 
 const TILE_CLASS_NAME = "overflow-hidden rounded-xl bg-gray-100"
 
-const Tile = ({ image, sizes, cover }: { image: GalleryImage; sizes: string; cover?: boolean }) => (
-  <ImageLightbox alt={image.alt} height={image.height} src={image.src} width={image.width}>
-    <LazyImage
-      alt=""
-      className={cover ? "object-cover!" : undefined}
-      containerClassName="size-full"
-      fill
-      focalPoint={image}
-      sizes={sizes}
-      src={image.src}
-    />
-  </ImageLightbox>
-)
+interface TileProps {
+  images: GalleryImage[]
+  index: number
+  sizes: string
+  cover?: boolean
+}
+
+const Tile = ({ images, index, sizes, cover }: TileProps) => {
+  const image = images[index]
+  if (!image) return null
+  return (
+    <ImageLightbox images={images} index={index}>
+      <LazyImage
+        alt=""
+        className={cover ? "object-cover!" : undefined}
+        containerClassName="size-full"
+        fill
+        focalPoint={image}
+        sizes={sizes}
+        src={image.src}
+      />
+    </ImageLightbox>
+  )
+}
 
 /**
  * Shows images of any shape without cropping them badly. The layout depends on the images:
@@ -89,7 +100,7 @@ const Tile = ({ image, sizes, cover }: { image: GalleryImage; sizes: string; cov
  * - anything else uses a grid where landscape images span 2 columns, cropped slightly around each
  *   focal point. Images may move to fill gaps.
  *
- * Every image opens uncropped in an {@link ImageLightbox}.
+ * Every image opens uncropped in an {@link ImageLightbox}, which steps through the whole gallery.
  */
 export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGalleryProps) => {
   const [first] = images
@@ -103,7 +114,7 @@ export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGallery
         // Caps the height at 70vh by narrowing the box, so the image keeps its shape
         style={{ aspectRatio: ratio, maxWidth: `calc(70vh * ${ratio})` }}
       >
-        <Tile image={first} sizes={`(min-width: ${maxWidth}px) ${maxWidth}px, 100vw`} />
+        <Tile images={images} index={0} sizes={`(min-width: ${maxWidth}px) ${maxWidth}px, 100vw`} />
       </div>
     )
   }
@@ -111,11 +122,12 @@ export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGallery
   if (images.every((image) => getAspectRatio(image) < 1)) {
     return (
       <div className={cn("grid w-full grid-cols-2 gap-2 md:grid-cols-3", className)}>
-        {images.map((image) => (
+        {images.map((image, index) => (
           <div className={cn("aspect-2/3", TILE_CLASS_NAME)} key={image.id}>
             <Tile
               cover
-              image={image}
+              images={images}
+              index={index}
               sizes={`(min-width: ${maxWidth}px) ${Math.round(maxWidth / 3)}px, 50vw`}
             />
           </div>
@@ -146,7 +158,8 @@ export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGallery
             <div className={cn(SPAN_CLASS_NAMES[span], TILE_CLASS_NAME)} key={image.id}>
               <Tile
                 cover
-                image={image}
+                images={images}
+                index={index}
                 sizes={`(min-width: ${maxWidth}px) ${Math.round((maxWidth * span) / columns)}px, ${span > 1 ? 100 : 50}vw`}
               />
             </div>
