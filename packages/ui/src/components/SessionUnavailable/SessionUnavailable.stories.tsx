@@ -4,7 +4,7 @@ import { SessionUnavailable } from "./SessionUnavailable"
 // The component centres itself inside the page's `<main>`, so the decorator
 // stands in for that flex parent: without a height the centring does nothing.
 const meta = {
-  title: "Auth/SessionUnavailable",
+  title: "Primitive Components/SessionUnavailable",
   component: SessionUnavailable,
   decorators: [
     (Story) => (
