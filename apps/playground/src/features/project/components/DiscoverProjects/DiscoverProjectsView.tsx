@@ -1,10 +1,9 @@
-import { Pagination } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { useId } from "react"
 import { type DiscoverState, getDiscoverHref } from "@/features/project/helpers/discover"
 import { PROJECT_TABS } from "@/features/project/project.constants"
+import { PaginatedProjectGrid } from "../PaginatedProjectGrid/PaginatedProjectGrid"
 import type { Project } from "../ProjectCard/ProjectCard"
-import { ProjectGrid } from "../ProjectGrid/ProjectGrid"
 import { ProjectSortDropdown } from "../ProjectSortDropdown/ProjectSortDropdown"
 import { ProjectTabs } from "../ProjectTabs/ProjectTabs"
 import { discoverProjectsVariants } from "./DiscoverProjects.variants"
@@ -30,7 +29,7 @@ export const DiscoverProjectsView = ({
   totalPages,
   className,
 }: DiscoverProjectsViewProps) => {
-  const { root, header, sort: sortClass, heading, pagination } = discoverProjectsVariants()
+  const { root, header, sort: sortClass, heading } = discoverProjectsVariants()
   const tabLabel = PROJECT_TABS.find((option) => option.value === tab)?.label
   const headingId = useId()
 
@@ -39,7 +38,10 @@ export const DiscoverProjectsView = ({
       <div className={header()}>
         <ProjectTabs activeTab={tab} sort={sort} />
         <div className={sortClass()}>
-          <ProjectSortDropdown sort={sort} tab={tab} />
+          <ProjectSortDropdown
+            getSortHref={(value) => getDiscoverHref({ tab, sort: value })}
+            sort={sort}
+          />
         </div>
       </div>
 
@@ -47,17 +49,13 @@ export const DiscoverProjectsView = ({
         {tabLabel}
       </h2>
 
-      <ProjectGrid likedIDs={likedIDs} projects={projects} />
-
-      {totalPages > 1 && (
-        <Pagination
-          aria-label="Projects pagination"
-          className={pagination()}
-          getHref={(target) => getDiscoverHref({ tab, sort, page: target })}
-          page={page}
-          totalPages={totalPages}
-        />
-      )}
+      <PaginatedProjectGrid
+        getPageHref={(target) => getDiscoverHref({ tab, sort, page: target })}
+        likedIDs={likedIDs}
+        page={page}
+        projects={projects}
+        totalPages={totalPages}
+      />
     </section>
   )
 }

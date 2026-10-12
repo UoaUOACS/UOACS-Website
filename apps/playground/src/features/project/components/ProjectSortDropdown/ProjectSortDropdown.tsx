@@ -1,20 +1,19 @@
 import { Dropdown } from "@uoacs/ui"
-import { getDiscoverHref } from "@/features/project/helpers/discover"
 import { PROJECT_SORT_OPTIONS } from "@/features/project/project.constants"
-import { ProjectSort, type ProjectTab } from "@/features/project/types/enums"
+import { ProjectSort } from "@/features/project/types/enums"
 
 interface ProjectSortDropdownProps {
   sort: ProjectSort
   /**
-   * The current tab, kept when changing the sort.
+   * Builds the link for a sort, so the dropdown can keep whatever else is in the page's URL.
    */
-  tab: ProjectTab
+  getSortHref: (sort: ProjectSort) => string
 }
 
 /**
- * The sort menu for the Discover section. Each option links to the first page of the new sort.
+ * The sort menu for a list of projects. Each option links to the first page of the new sort.
  */
-export const ProjectSortDropdown = ({ sort, tab }: ProjectSortDropdownProps) => (
+export const ProjectSortDropdown = ({ sort, getSortHref }: ProjectSortDropdownProps) => (
   <Dropdown
     label={
       <>
@@ -24,7 +23,7 @@ export const ProjectSortDropdown = ({ sort, tab }: ProjectSortDropdownProps) => 
     }
     options={Object.values(ProjectSort).map((value) => ({
       label: PROJECT_SORT_OPTIONS[value].label,
-      href: getDiscoverHref({ tab, sort: value }),
+      href: getSortHref(value),
       theme: "ghost" as const,
       className: "w-full",
     }))}

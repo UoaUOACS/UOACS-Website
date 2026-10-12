@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { ProjectSort, ProjectTab } from "@/features/project/types/enums"
+import { ProjectSort } from "@/features/project/types/enums"
 import { ProjectSortDropdown } from "./ProjectSortDropdown"
 
 const meta = {
@@ -10,10 +10,11 @@ const meta = {
   },
   args: {
     sort: ProjectSort.RECENT,
-    tab: ProjectTab.DISCOVER,
+    getSortHref: (sort: ProjectSort) => `?sort=${sort}`,
   },
   argTypes: {
     sort: { control: "select", options: Object.values(ProjectSort) },
+    getSortHref: { control: false },
   },
   decorators: [
     (Story) => (

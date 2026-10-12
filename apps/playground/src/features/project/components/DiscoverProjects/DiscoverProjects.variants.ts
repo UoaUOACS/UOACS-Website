@@ -6,7 +6,6 @@ export const discoverProjectsVariants = tv({
     header: "relative flex flex-col items-center gap-4 md:flex-row md:justify-center",
     sort: "self-end md:absolute md:right-0",
     heading: "border-gray-200 border-b pb-2 font-cartograph text-gray-400 text-sm",
-    pagination: "self-center pt-4",
   },
 })
 
