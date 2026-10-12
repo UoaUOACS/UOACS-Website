@@ -10,6 +10,8 @@ import {
   UnderlineFeature,
   UnorderedListFeature,
 } from "@payloadcms/richtext-lexical"
+import type { SerializedEditorState } from "@payloadcms/richtext-lexical/lexical"
+import { z } from "zod"
 
 // Only the features RichTextEditor (@uoacs/ui) can edit. It cannot load other nodes.
 // Keep in sync with packages/ui/src/components/RichTextEditor/nodes.ts.
@@ -25,3 +27,44 @@ export const richTextFeatures = [
   AlignFeature(),
   InlineToolbarFeature(),
 ]
+
+/**
+ * Rich text as Payload saves it and RichTextEditor (@uoacs/ui) edits it
+ */
+export type RichTextValue = SerializedEditorState & { [key: string]: unknown }
+
+/**
+ * Checks only the outer shape of saved rich text. Payload's editor validation checks the nodes.
+ */
+export const richTextSchema = z.custom<RichTextValue>(
+  (value) =>
+    typeof value === "object" &&
+    value !== null &&
+    "root" in value &&
+    typeof value.root === "object" &&
+    value.root !== null &&
+    "children" in value.root &&
+    Array.isArray(value.root.children),
+  "Invalid rich text",
+)
+
+type LexicalNode = { text?: unknown; children?: unknown }
+
+/**
+ * Counts the characters of text in saved rich text, not counting formatting or line breaks
+ *
+ * Safe for any input: skips nodes that are not objects, and loops rather than recurses so deep
+ * nesting cannot overflow the stack.
+ */
+export const countRichTextCharacters = (value: object): number => {
+  let total = 0
+  const stack: unknown[] = ["root" in value ? value.root : undefined]
+  while (stack.length > 0) {
+    const node = stack.pop()
+    if (typeof node !== "object" || node === null) continue
+    const { text, children } = node as LexicalNode
+    if (typeof text === "string") total += text.length
+    if (Array.isArray(children)) for (const child of children) stack.push(child)
+  }
+  return total
+}
