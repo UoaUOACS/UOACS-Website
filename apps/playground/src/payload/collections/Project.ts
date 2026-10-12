@@ -10,7 +10,7 @@ import { Slugs } from "@/lib/payload/slugs"
 import { ImageGrid } from "../blocks/ImageGrid"
 import { Text } from "../blocks/Text"
 import { makeDeleteLikesHook } from "../hooks/deleteLikes"
-import { deleteProjectMedia } from "../hooks/deleteProjectMedia"
+import { deleteProjectMedia, deleteRemovedProjectMedia } from "../hooks/deleteProjectMedia"
 import { makeRevalidateHooks } from "../hooks/revalidate"
 import type { Project as ProjectDoc } from "../payload-types"
 import { authorsProjectMedia } from "./ProjectMedia"
@@ -87,7 +87,7 @@ export const Project: CollectionConfig = {
     },
   ],
   hooks: {
-    afterChange: [afterChange],
+    afterChange: [afterChange, deleteRemovedProjectMedia],
     beforeDelete: [makeDeleteLikesHook("project")],
     afterDelete: [afterDelete, deleteProjectMedia],
   },

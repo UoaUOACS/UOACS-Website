@@ -1,4 +1,4 @@
-import type { CollectionAfterDeleteHook } from "payload"
+import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, PayloadRequest } from "payload"
 import { getRelationID } from "@/lib/payload/getRelationID"
 import { Slugs } from "@/lib/payload/slugs"
 import type { Project } from "../payload-types"
@@ -11,12 +11,16 @@ const getMediaIDs = (project: Pick<Project, "coverImage" | "pageContent">): stri
 ]
 
 /**
- * Deletes a deleted project's images, except any that another project still uses
+ * Deletes the given images, except any that a project still uses
  *
- * Runs in the delete's transaction, so an image that cannot be deleted stops the project delete.
+ * Runs in the request's transaction, so an image that cannot be deleted stops the write.
  */
-export const deleteProjectMedia: CollectionAfterDeleteHook<Project> = async ({ doc, req }) => {
-  const ids = [...new Set(getMediaIDs(doc))]
+const deleteUnusedMedia = async (
+  ids: string[],
+  req: PayloadRequest,
+  projectID: string,
+): Promise<void> => {
+  if (ids.length === 0) return
 
   const { docs: others } = await req.payload.find({
     collection: Slugs.Collections.PROJECT,
@@ -38,6 +42,29 @@ export const deleteProjectMedia: CollectionAfterDeleteHook<Project> = async ({ d
   })
 
   if (errors.length > 0) {
-    throw new Error(`Failed to delete ${errors.length} image(s) of project ${doc.id}`)
+    throw new Error(`Failed to delete ${errors.length} image(s) of project ${projectID}`)
   }
+}
+
+/**
+ * Deletes a deleted project's images, except any that another project still uses
+ */
+export const deleteProjectMedia: CollectionAfterDeleteHook<Project> = async ({ doc, req }) => {
+  await deleteUnusedMedia([...new Set(getMediaIDs(doc))], req, doc.id)
+}
+
+/**
+ * Deletes images that an update removed from a project, except any that a project still uses
+ */
+export const deleteRemovedProjectMedia: CollectionAfterChangeHook<Project> = async ({
+  doc,
+  operation,
+  previousDoc,
+  req,
+}) => {
+  if (operation !== "update") return
+
+  const kept = new Set(getMediaIDs(doc))
+  const removed = new Set(getMediaIDs(previousDoc).filter((id) => !kept.has(id)))
+  await deleteUnusedMedia([...removed], req, doc.id)
 }
