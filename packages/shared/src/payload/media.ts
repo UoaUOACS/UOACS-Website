@@ -43,9 +43,10 @@ export const makeImageDimensionsHook =
     const short = Math.min(width, height)
     const message =
       short < minSide
-        ? `The image is ${width}×${height} px. Both sides must be at least ${minSide} px.`
-        : Math.max(width, height) / short > maxRatio
-          ? `The image is ${width}×${height} px. The long side can be at most ${maxRatio} times the short side.`
+        ? `Both sides of the image must be at least ${minSide} px.`
+        : // Allows 1 px for rounding when the resize scales the short side down
+          Math.max(width, height) / (short + 1) > maxRatio
+          ? `The long side of the image can be at most ${maxRatio} times the short side.`
           : null
     if (message) {
       throw new ValidationError({
