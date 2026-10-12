@@ -61,6 +61,21 @@ export const Mixed: Story = {
   },
 }
 
+export const TwoLandscapeTwoPortrait: Story = {
+  args: {
+    images: images([
+      [1600, 1000],
+      [1600, 1000],
+      [1000, 1150],
+      [900, 1100],
+    ]),
+  },
+}
+
+export const LandscapeAndPortrait: Story = {
+  args: { images: images([LANDSCAPE, PORTRAIT]) },
+}
+
 export const UnknownSizes: Story = {
   args: {
     images: images([LANDSCAPE, LANDSCAPE, LANDSCAPE]).map(({ width, height, ...rest }) => rest),
