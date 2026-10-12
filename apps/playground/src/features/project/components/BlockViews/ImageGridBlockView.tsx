@@ -1,14 +1,8 @@
-import { LazyImage } from "@uoacs/ui"
+import { type GalleryImage, ImageGallery, LazyImage } from "@uoacs/ui"
 import { compactBlockVariants } from "./BlockViews.variants"
 
-export interface BlockImage {
-  id: string
-  url: string
-  alt: string
-}
-
 export interface ImageGridBlockViewProps {
-  images: BlockImage[]
+  images: GalleryImage[]
   /**
    * Show one fixed-height row with the first few thumbnails, for reorder mode
    */
@@ -20,19 +14,9 @@ const COMPACT_THUMBNAILS = 3
 export const ImageGridBlockView = ({ images, compact }: ImageGridBlockViewProps) => {
   if (!compact) {
     return (
-      <div className="grid w-full grid-cols-2 gap-2 md:grid-cols-3">
-        {images.map((image) => (
-          <LazyImage
-            alt={image.alt}
-            className="object-cover!"
-            containerClassName="aspect-square w-full overflow-hidden rounded-xl bg-gray-100"
-            fill
-            key={image.id}
-            // The page column is at most 768px wide
-            sizes="(min-width: 768px) 256px, 50vw"
-            src={image.url}
-          />
-        ))}
+      // A wrapper, as the single-image layout sets its own inline max-width
+      <div className="mx-auto w-full max-w-5xl">
+        <ImageGallery images={images} maxWidth={1024} />
       </div>
     )
   }
@@ -50,7 +34,7 @@ export const ImageGridBlockView = ({ images, compact }: ImageGridBlockViewProps)
             fill
             key={image.id}
             sizes="40px"
-            src={image.url}
+            src={image.src}
           />
         ))}
         {hidden > 0 && <span className="text-gray-500">+{hidden}</span>}

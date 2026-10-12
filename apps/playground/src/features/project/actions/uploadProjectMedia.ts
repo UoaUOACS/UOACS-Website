@@ -16,7 +16,14 @@ export type UploadMediaResult =
       width: ProjectMedia["width"] | null
       height: ProjectMedia["height"] | null
     }
-  | { ok: false; error: "invalid" | "unauthenticated" | "unavailable" | "server" }
+  | {
+      ok: false
+      error: "invalid" | "unauthenticated" | "unavailable" | "server"
+      /**
+       * Why the collection rejected the file, e.g. its size in px is too small
+       */
+      message?: string
+    }
 
 /**
  * The MIME type from the file's content, as the client's `file.type` can be anything. `null` when
@@ -84,7 +91,7 @@ export async function uploadProjectMedia(formData: FormData): Promise<UploadMedi
     // Payload checks the file content again, and can refuse a file that sharp accepts
     if (error instanceof ValidationError) {
       console.warn("[uploadMedia] The collection rejected the upload", { error })
-      return { ok: false, error: "invalid" }
+      return { ok: false, error: "invalid", message: error.data.errors[0]?.message }
     }
     console.error("[uploadMedia] Failed to upload the image", { error })
     return { ok: false, error: "server" }

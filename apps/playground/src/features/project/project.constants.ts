@@ -72,3 +72,13 @@ export const TEXT_BLOCK_MAX_CHARACTERS = 2000
 export const MEDIA_MAX_BYTES = 4 * 1024 * 1024
 
 export const MEDIA_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"]
+
+/**
+ * Smallest short side, in px, of an image a member can upload
+ */
+export const MEDIA_MIN_DIMENSION = 320
+
+/**
+ * Largest long side divided by short side of an image a member can upload
+ */
+export const MEDIA_MAX_ASPECT_RATIO = 3
