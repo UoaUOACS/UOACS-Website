@@ -1,6 +1,7 @@
+import { toGalleryImages } from "@uoacs/ui/utils"
 import { Slugs } from "@/lib/payload"
 import type { Project } from "@/payload/payload-types"
-import { type BlockImage, ImageGridBlockView } from "./ImageGridBlockView"
+import { ImageGridBlockView } from "./ImageGridBlockView"
 import { TextBlockView } from "./TextBlockView"
 
 interface BlockViewProps {
@@ -11,21 +12,11 @@ interface BlockViewProps {
   compact?: boolean
 }
 
-const toBlockImages = (
-  images: Extract<BlockViewProps["block"], { blockType: "imageGrid" }>["images"],
-) =>
-  images.flatMap((image): BlockImage[] =>
-    // Skip images that were deleted or not populated
-    typeof image === "object" && image.url
-      ? [{ id: image.id, url: image.url, alt: image.alt }]
-      : [],
-  )
-
 export const BlockView = ({ block, compact }: BlockViewProps) => {
   switch (block.blockType) {
     case Slugs.Blocks.TEXT:
       return <TextBlockView compact={compact} content={block.content} />
     case Slugs.Blocks.IMAGE_GRID:
-      return <ImageGridBlockView compact={compact} images={toBlockImages(block.images)} />
+      return <ImageGridBlockView compact={compact} images={toGalleryImages(block.images)} />
   }
 }

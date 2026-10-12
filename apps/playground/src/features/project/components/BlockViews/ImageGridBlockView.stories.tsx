@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { type BlockImage, ImageGridBlockView } from "./ImageGridBlockView"
+import type { GalleryImage } from "@uoacs/ui"
+import { ImageGridBlockView } from "./ImageGridBlockView"
 
-const images = (count: number): BlockImage[] =>
+const images = (count: number): GalleryImage[] =>
   Array.from({ length: count }, (_, index) => ({
     id: String(index),
-    url: `https://placehold.co/600x600?text=${index + 1}`,
+    src: `https://placehold.co/1920x1080?text=${index + 1}`,
     alt: `Image ${index + 1}`,
+    width: 1920,
+    height: 1080,
   }))
 
 const meta = {
