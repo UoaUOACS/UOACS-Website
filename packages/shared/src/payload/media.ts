@@ -30,13 +30,13 @@ interface ImageDimensionLimits {
 }
 
 /**
- * Rejects new images that are too small or too narrow to show well. Payload sets `width` and
- * `height` before this hook runs, and the file reaches storage only after it passes.
+ * Rejects new or replaced images that are too small or too narrow to show well. Payload sets
+ * `width` and `height` before this hook runs, and the file reaches storage only after it passes.
  */
 export const makeImageDimensionsHook =
   ({ minSide, maxRatio }: ImageDimensionLimits): CollectionBeforeValidateHook =>
-  ({ data, operation, req, collection }) => {
-    if (operation !== "create" || !req.file) return data
+  ({ data, req, collection }) => {
+    if (!req.file) return data
     const { width, height } = data ?? {}
     if (typeof width !== "number" || typeof height !== "number") return data
 
