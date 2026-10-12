@@ -19,6 +19,7 @@ catalog:
   tailwind-variants: ^3.2.2
   typescript: ^5
   zod: ^4.3.6
+  '@tanstack/react-form': ^1.33.5
 
 catalogs:
   payload:
