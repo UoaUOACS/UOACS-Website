@@ -1,5 +1,8 @@
+"use client"
+
+import { useState } from "react"
 import { cn, type GalleryImage, getAspectRatio } from "../../utils"
-import { ImageLightbox } from "../ImageLightbox/ImageLightbox"
+import { LightboxDialog } from "../ImageLightbox/LightboxDialog"
 import { LazyImage } from "../LazyImage/LazyImage"
 
 export type { GalleryImage }
@@ -68,35 +71,37 @@ const COLUMN_CLASS_NAMES: Record<number, string> = {
 const TILE_CLASS_NAME = "overflow-hidden rounded-xl bg-gray-100"
 
 interface TileProps {
-  images: GalleryImage[]
-  index: number
+  image: GalleryImage
   sizes: string
   cover?: boolean
+  onOpen: () => void
 }
 
-const Tile = ({ images, index, sizes, cover }: TileProps) => {
-  const image = images[index]
-  if (!image) return null
-  return (
-    <ImageLightbox images={images} index={index}>
-      <LazyImage
-        alt=""
-        className={cover ? "object-cover!" : undefined}
-        containerClassName="size-full"
-        fill
-        focalPoint={image}
-        sizes={sizes}
-        src={image.src}
-      />
-    </ImageLightbox>
-  )
+const Tile = ({ image, sizes, cover, onOpen }: TileProps) => (
+  <button
+    aria-label={`View ${image.alt}`}
+    className="block size-full cursor-zoom-in"
+    onClick={onOpen}
+    type="button"
+  >
+    <LazyImage
+      alt=""
+      className={cover ? "object-cover!" : undefined}
+      containerClassName="size-full"
+      fill
+      focalPoint={image}
+      sizes={sizes}
+      src={image.src}
+    />
+  </button>
+)
+
+interface GalleryLayoutProps extends ImageGalleryProps {
+  maxWidth: number
+  onOpen: (index: number) => void
 }
 
-/**
- * Shows images of any shape with little cropping. Each image opens uncropped in an
- * {@link ImageLightbox}, which steps through the whole gallery.
- */
-export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGalleryProps) => {
+const GalleryLayout = ({ images, maxWidth, className, onOpen }: GalleryLayoutProps) => {
   const [first] = images
   if (!first) return null
 
@@ -108,7 +113,11 @@ export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGallery
         // Caps the height at 70vh by narrowing the box, so the image keeps its shape
         style={{ aspectRatio: ratio, maxWidth: `calc(70vh * ${ratio})` }}
       >
-        <Tile images={images} index={0} sizes={`(min-width: ${maxWidth}px) ${maxWidth}px, 100vw`} />
+        <Tile
+          image={first}
+          onOpen={() => onOpen(0)}
+          sizes={`(min-width: ${maxWidth}px) ${maxWidth}px, 100vw`}
+        />
       </div>
     )
   }
@@ -120,8 +129,8 @@ export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGallery
           <div className={cn("aspect-2/3", TILE_CLASS_NAME)} key={image.id}>
             <Tile
               cover
-              images={images}
-              index={index}
+              image={image}
+              onOpen={() => onOpen(index)}
               sizes={`(min-width: ${maxWidth}px) ${Math.round(maxWidth / 3)}px, 50vw`}
             />
           </div>
@@ -152,8 +161,8 @@ export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGallery
             <div className={cn(SPAN_CLASS_NAMES[span], TILE_CLASS_NAME)} key={image.id}>
               <Tile
                 cover
-                images={images}
-                index={index}
+                image={image}
+                onOpen={() => onOpen(index)}
                 sizes={`(min-width: ${maxWidth}px) ${Math.round((maxWidth * span) / columns)}px, ${span > 1 ? 100 : 50}vw`}
               />
             </div>
@@ -161,5 +170,35 @@ export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGallery
         })}
       </div>
     </div>
+  )
+}
+
+/**
+ * Shows images of any shape with little cropping. Each image opens uncropped in one
+ * {@link LightboxDialog}, which steps through the whole gallery.
+ */
+export const ImageGallery = ({ maxWidth = 768, ...props }: ImageGalleryProps) => {
+  const [open, setOpen] = useState(false)
+  const [current, setCurrent] = useState(0)
+  if (props.images.length === 0) return null
+
+  return (
+    <>
+      <GalleryLayout
+        {...props}
+        maxWidth={maxWidth}
+        onOpen={(index) => {
+          setCurrent(index)
+          setOpen(true)
+        }}
+      />
+      <LightboxDialog
+        images={props.images}
+        index={current}
+        onClose={() => setOpen(false)}
+        onIndexChange={setCurrent}
+        open={open}
+      />
+    </>
   )
 }
