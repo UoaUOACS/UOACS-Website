@@ -10,7 +10,7 @@ export type { GalleryImage }
 export interface ImageGalleryProps {
   images: GalleryImage[]
   /**
-   * The widest the gallery gets, in px. Used for each image's `sizes`.
+   * The gallery's widest rendered width, in px, for each image's `sizes`. Does not cap the width.
    */
   maxWidth?: number
   className?: string
@@ -22,8 +22,7 @@ export interface ImageGalleryProps {
 const MAX_COLUMNS = 4
 
 /**
- * Columns an image spans in the span grid: 1 for portrait or square, 2 for landscape and 4 for
- * panoramas, so each cell is close to the image's shape
+ * Columns an image spans, so each cell is close to its shape: 1 up to 1.2:1, 2 up to 2.4:1, else 4
  */
 const getSpan = (ratio: number) => (ratio >= 2.4 ? 4 : ratio >= 1.2 ? 2 : 1)
 
@@ -94,13 +93,8 @@ const Tile = ({ images, index, sizes, cover }: TileProps) => {
 }
 
 /**
- * Shows images of any shape without cropping them badly. The layout depends on the images:
- * - one image fills the width at its own shape, up to 70% of the viewport height
- * - only portrait images use a grid of poster tiles, cropped around each focal point
- * - anything else uses a grid where landscape images span 2 columns, cropped slightly around each
- *   focal point. Images may move to fill gaps.
- *
- * Every image opens uncropped in an {@link ImageLightbox}, which steps through the whole gallery.
+ * Shows images of any shape with little cropping. Each image opens uncropped in an
+ * {@link ImageLightbox}, which steps through the whole gallery.
  */
 export const ImageGallery = ({ images, maxWidth = 768, className }: ImageGalleryProps) => {
   const [first] = images

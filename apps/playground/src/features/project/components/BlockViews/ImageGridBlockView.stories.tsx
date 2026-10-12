@@ -41,7 +41,7 @@ export const ManyImages: Story = {
   args: { images: images(12) },
 }
 
-// Small and large files, and portrait, square, landscape and panorama shapes
+// Small and large sizes, and portrait, square, landscape and panorama shapes
 export const MixedShapes: Story = {
   args: {
     images: [
