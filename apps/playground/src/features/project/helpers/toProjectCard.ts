@@ -15,6 +15,10 @@ export const toProjectCard = (
   title: project.name,
   imageURL:
     typeof project.coverImage === "object" ? (project.coverImage.url ?? undefined) : undefined,
+  imageFocalPoint:
+    typeof project.coverImage === "object"
+      ? { focalX: project.coverImage.focalX, focalY: project.coverImage.focalY }
+      : undefined,
   // An unpopulated author is just an ID, e.g. when the member has since been deleted
   authorName: typeof project.author === "object" ? project.author.username : UNKNOWN_AUTHOR_NAME,
   likes: project.likeCount ?? 0,

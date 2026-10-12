@@ -7,7 +7,8 @@ import type { ProjectCardVariantProps } from "./ProjectCard.types"
 import { projectCardVariants } from "./ProjectCard.variants"
 
 export const ProfileProjectCard = ({ project, className }: ProjectCardVariantProps) => {
-  const { id, title, imageURL, likes, liked, awardType, summary, awardEvent } = project
+  const { id, title, imageURL, imageFocalPoint, likes, liked, awardType, summary, awardEvent } =
+    project
   const {
     base,
     imageWrapper,
@@ -33,6 +34,7 @@ export const ProfileProjectCard = ({ project, className }: ProjectCardVariantPro
             className="object-cover!"
             containerClassName="h-full w-full"
             fill
+            focalPoint={imageFocalPoint}
             sizes="(min-width: 1024px) 400px, (min-width: 768px) 256px, 100vw"
             src={imageURL}
           />
