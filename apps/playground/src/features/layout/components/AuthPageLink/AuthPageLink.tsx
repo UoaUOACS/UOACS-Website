@@ -3,6 +3,7 @@
 import { type AuthPage, authPageUrl } from "@uoacs/shared"
 import { usePathname } from "next/navigation"
 import { type ComponentProps, Suspense } from "react"
+import { projectsUrl } from "@/lib/routes"
 
 /**
  * Props for the {@link AuthPageLink} component.
@@ -28,8 +29,5 @@ export const AuthPageLink = ({ page, ...props }: AuthPageLinkProps) => (
 )
 
 const AuthPageLinkWithReturn = ({ page, ...props }: AuthPageLinkProps) => (
-  <a
-    href={authPageUrl(page, `${process.env.NEXT_PUBLIC_PROJECTS_URL}${usePathname()}`)}
-    {...props}
-  />
+  <a href={authPageUrl(page, projectsUrl(usePathname()))} {...props} />
 )
