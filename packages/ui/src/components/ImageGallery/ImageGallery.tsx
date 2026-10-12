@@ -30,18 +30,21 @@ const MAX_COLUMNS = 4
 const getSpan = (ratio: number) => (ratio >= 2.4 ? 4 : ratio >= 1.2 ? 2 : 1)
 
 /**
- * Empty cells left when the grid places each image in the first row with room for it, as
- * `grid-auto-flow: dense` does
+ * Empty cells left when the grid places images in order, moving to a new row when one does not
+ * fit, as the default `grid-auto-flow: row` does
  */
 const countEmptyCells = (spans: number[], columns: number) => {
-  const space: number[] = []
+  let empty = 0
+  let column = 0
   for (const span of spans) {
     const width = Math.min(span, columns)
-    const row = space.findIndex((free) => free >= width)
-    if (row === -1) space.push(columns - width)
-    else space[row] = (space[row] ?? 0) - width
+    if (column + width > columns) {
+      empty += columns - column
+      column = 0
+    }
+    column += width
   }
-  return space.reduce((sum, free) => sum + free, 0)
+  return column === 0 ? empty : empty + columns - column
 }
 
 /**
@@ -147,7 +150,7 @@ const GalleryLayout = ({ images, maxWidth, className, onOpen }: GalleryLayoutPro
     <div className={cn("@container w-full", className)}>
       <div
         className={cn(
-          "grid grid-flow-dense grid-cols-2 gap-2",
+          "grid grid-cols-2 gap-2",
           // A row is 1.25 column widths tall: 1-column cells are 4:5, 2-column cells about 8:5
           "auto-rows-[calc((100cqw-var(--spacing)*2)/2*1.25)]",
           columns === 3 && "md:auto-rows-[calc((100cqw-var(--spacing)*4)/3*1.25)]",
