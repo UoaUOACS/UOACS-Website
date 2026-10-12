@@ -45,21 +45,37 @@ const NAV_BUTTON_CLASS_NAME =
   "-translate-y-1/2 absolute top-1/2 cursor-pointer rounded-full bg-white/80 p-2 text-gray-900 shadow transition-colors hover:bg-white"
 
 /**
- * Shows full, uncropped images in a dialog when the user clicks `children`. The arrow buttons and
- * arrow keys step through `images`, looping at each end.
- *
- * @example
- * <ImageLightbox images={images} index={2}>
- *   <LazyImage src={images[2].src} alt="" fill className="object-cover!" />
- * </ImageLightbox>
+ * Props for the {@link LightboxDialog} component.
  */
-export const ImageLightbox = ({ images, index = 0, children, className }: ImageLightboxProps) => {
-  const [open, setOpen] = useState(false)
-  const [current, setCurrent] = useState(index)
-  const image = images[current]
+export interface LightboxDialogProps {
+  /**
+   * Every image the user can step through. Previous and next buttons show when there are 2 or more.
+   */
+  images: LightboxImage[]
+  /**
+   * The image to show
+   */
+  index: number
+  open: boolean
+  onIndexChange: (index: number) => void
+  onClose: () => void
+}
+
+/**
+ * A controlled dialog that shows full, uncropped images. The arrow buttons and arrow keys step
+ * through `images`, looping at each end.
+ */
+export const LightboxDialog = ({
+  images,
+  index,
+  open,
+  onIndexChange,
+  onClose,
+}: LightboxDialogProps) => {
+  const image = images[index]
   const hasNav = images.length > 1
 
-  const step = (by: number) => setCurrent((value) => (value + by + images.length) % images.length)
+  const step = (by: number) => onIndexChange((index + by + images.length) % images.length)
 
   useEffect(() => {
     if (!open || !hasNav) return
@@ -71,22 +87,9 @@ export const ImageLightbox = ({ images, index = 0, children, className }: ImageL
     return () => window.removeEventListener("keydown", onKeyDown)
   })
 
-  if (!image) return null
-
   return (
-    <>
-      <button
-        aria-label={`View ${images[index]?.alt ?? image.alt}`}
-        className={cn("block size-full cursor-zoom-in", className)}
-        onClick={() => {
-          setCurrent(index)
-          setOpen(true)
-        }}
-        type="button"
-      >
-        {children}
-      </button>
-      <Dialog className="max-w-5xl" onClose={() => setOpen(false)} open={open} title={image.alt}>
+    <Dialog className="max-w-5xl" onClose={onClose} open={open && !!image} title={image?.alt}>
+      {image && (
         <div className="relative">
           <Image
             alt={image.alt}
@@ -118,12 +121,48 @@ export const ImageLightbox = ({ images, index = 0, children, className }: ImageL
             </>
           )}
         </div>
-        {hasNav && (
-          <p aria-live="polite" className="text-center text-gray-500 text-sm">
-            {current + 1} / {images.length}
-          </p>
-        )}
-      </Dialog>
+      )}
+      {image && hasNav && (
+        <p aria-live="polite" className="text-center text-gray-500 text-sm">
+          {index + 1} / {images.length}
+        </p>
+      )}
+    </Dialog>
+  )
+}
+
+/**
+ * Shows full, uncropped images in a {@link LightboxDialog} when the user clicks `children`.
+ *
+ * @example
+ * <ImageLightbox images={images} index={2}>
+ *   <LazyImage src={images[2].src} alt="" fill className="object-cover!" />
+ * </ImageLightbox>
+ */
+export const ImageLightbox = ({ images, index = 0, children, className }: ImageLightboxProps) => {
+  const [open, setOpen] = useState(false)
+  const [current, setCurrent] = useState(index)
+
+  return (
+    <>
+      <button
+        aria-label={`View ${images[index]?.alt ?? "image"}`}
+        className={cn("block size-full cursor-zoom-in", className)}
+        onClick={() => {
+          setCurrent(index)
+          setOpen(true)
+        }}
+        type="button"
+      >
+        {children}
+      </button>
+      <LightboxDialog
+        images={images}
+        index={current}
+        onClose={() => setOpen(false)}
+        onIndexChange={setCurrent}
+        open={open}
+      />
     </>
   )
 }
