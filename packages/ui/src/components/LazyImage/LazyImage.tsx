@@ -2,7 +2,7 @@
 
 import Image, { type ImageProps } from "next/image"
 import { useState } from "react"
-import { cn, type MediaShape, toObjectPosition } from "../../utils"
+import { cn, type FocalPoint, toObjectPosition } from "../../utils"
 import { Skeleton } from "../Skeleton/Skeleton"
 
 /**
@@ -20,7 +20,7 @@ interface LazyImageProps extends ImageProps {
   /**
    * Keeps this point in view when the image is cropped, e.g. with `object-cover`
    */
-  focalPoint?: MediaShape
+  focalPoint?: FocalPoint
 }
 
 /**

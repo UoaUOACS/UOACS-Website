@@ -1,9 +1,7 @@
 /**
- * Size and focal point as Payload stores them on an upload doc
+ * Focal point as Payload stores it on an upload doc
  */
-export interface MediaShape {
-  width?: number | null
-  height?: number | null
+export interface FocalPoint {
   /**
    * 0–100, from the left edge
    */
@@ -15,8 +13,13 @@ export interface MediaShape {
 }
 
 /**
- * An image for `ImageGallery`
+ * Size and focal point as Payload stores them on an upload doc
  */
+export interface MediaShape extends FocalPoint {
+  width?: number | null
+  height?: number | null
+}
+
 export interface GalleryImage extends MediaShape {
   id: string
   src: string
@@ -32,7 +35,7 @@ export const getAspectRatio = ({ width, height }: MediaShape) =>
 /**
  * A CSS `object-position` that keeps the focal point in view when the image is cropped
  */
-export const toObjectPosition = ({ focalX, focalY }: MediaShape) =>
+export const toObjectPosition = ({ focalX, focalY }: FocalPoint) =>
   `${focalX ?? 50}% ${focalY ?? 50}%`
 
 /**

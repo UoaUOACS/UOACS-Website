@@ -1,10 +1,10 @@
-import type { MediaShape } from "@uoacs/ui/utils"
+import type { FocalPoint } from "@uoacs/ui/utils"
 
 export interface Project {
   id: string
   title: string
   imageURL?: string
-  imageFocalPoint?: MediaShape
+  imageFocalPoint?: FocalPoint
   authorName: string
   likes: number
   liked?: boolean
