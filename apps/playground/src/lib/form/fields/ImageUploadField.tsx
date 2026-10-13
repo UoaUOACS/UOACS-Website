@@ -1,7 +1,8 @@
 "use client"
 
 import { ImageUpload, type ImageUploadProps } from "@uoacs/ui"
-import { useState } from "react"
+import { useRef, useState } from "react"
+import { useFlushOnSubmit } from "../flush"
 import { getFieldError, useFieldContext } from "../formContext"
 
 export type UploadResult =
@@ -36,6 +37,9 @@ export const ImageUploadField = ({
   const [uploadedUrl, setUploadedUrl] = useState<string>()
   const [busy, setBusy] = useState(false)
   const [uploadError, setUploadError] = useState<string>()
+  // Submit waits for this, so it does not save the previous image ID
+  const pendingUpload = useRef<Promise<void>>(undefined)
+  useFlushOnSubmit(field.form, () => pendingUpload.current)
 
   const handleChange = async (picked: File) => {
     if (!types.includes(picked.type)) {
@@ -76,7 +80,9 @@ export const ImageUploadField = ({
       accept={types.join(",")}
       busy={busy}
       error={uploadError ?? getFieldError(field.state.meta.errors)}
-      onChange={handleChange}
+      onChange={(picked) => {
+        pendingUpload.current = handleChange(picked)
+      }}
       src={uploadedUrl ?? src}
       value={file}
     />
