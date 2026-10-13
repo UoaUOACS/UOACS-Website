@@ -14,7 +14,7 @@ export const ProjectEditorSkeleton = () => (
     </div>
     <div className="flex flex-col gap-15">
       <div className={base({ className: "border border-gray-200" })}>
-        <Skeleton className="aspect-4/3 w-full rounded-2xl md:w-64 md:shrink-0 lg:w-100" />
+        <Skeleton className="aspect-4/3 h-auto w-full rounded-2xl md:w-64 md:shrink-0 md:self-start lg:w-100" />
         <div className={content({ className: "md:justify-center" })}>
           <Skeleton className="h-12 w-full" />
           <Skeleton className="h-24 w-full" />
