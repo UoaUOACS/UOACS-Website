@@ -1,10 +1,12 @@
 import type { Project } from "@/features/project/components/ProjectCard/ProjectCard"
+import type { Member } from "@/payload/payload-types"
 
 export const Routes = {
   HOME: "/",
   PROFILE: {
     ROOT: "/profile",
     ID: (id?: string) => `/profile/${id ?? ""}`,
+    USERNAME: (username: Member["username"]) => `/profile/${username}`,
     EDIT: "/profile/edit",
   },
   SEARCH: "/search",
