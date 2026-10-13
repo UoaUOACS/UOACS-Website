@@ -58,6 +58,8 @@ export const ProjectEditor = ({ projectID, initialValues, coverImageURL }: Proje
     ...projectFormOptions,
     defaultValues: initialValues,
     validators: { onSubmitAsync: save },
+    // A failed save sets a submit error, which would disable the button until a field changes
+    canSubmitWhenInvalid: true,
     onSubmit: ({ value }) => {
       const id = savedID.current
       if (!id) return
