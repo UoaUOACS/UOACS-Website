@@ -1,6 +1,6 @@
 import { AnimatedSuspense, SessionUnavailable } from "@uoacs/ui"
 import { notFound } from "next/navigation"
-import { redirectToLogin } from "@/features/auth/auth.queries"
+import { redirectToLogin } from "@/features/auth/auth.helpers"
 import { ProjectEditor } from "@/features/project/components/ProjectEditor/ProjectEditor"
 import { ProjectEditorSkeleton } from "@/features/project/components/ProjectEditor/ProjectEditorSkeleton"
 import { toFormValues } from "@/features/project/editor/projectForm.options"
