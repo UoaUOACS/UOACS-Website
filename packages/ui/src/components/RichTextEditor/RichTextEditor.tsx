@@ -192,7 +192,7 @@ export const RichTextEditor = ({
                   id={id}
                   onBlur={onBlur}
                   placeholder={
-                    <div className="pointer-events-none absolute top-2 left-3 text-gray-400 text-sm">
+                    <div className="pointer-events-none absolute top-2.25 left-3.25 text-gray-400 leading-relaxed">
                       {placeholder}
                     </div>
                   }
