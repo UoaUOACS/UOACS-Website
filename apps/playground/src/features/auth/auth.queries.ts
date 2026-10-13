@@ -17,8 +17,13 @@ export type RequiredSessionResult = Exclude<SessionResult, { status: "unauthenti
  */
 export async function requireSession(path: string): Promise<RequiredSessionResult> {
   const result = await getSession()
-  if (result.status === "unauthenticated") {
-    redirect(authPageUrl(AuthPages.LOGIN, projectsUrl(path)))
-  }
+  if (result.status === "unauthenticated") redirectToLogin(path)
   return result
+}
+
+/**
+ * Sends the visitor to the hosted login page, and back to `path` once they are done
+ */
+export function redirectToLogin(path: string): never {
+  redirect(authPageUrl(AuthPages.LOGIN, projectsUrl(path)))
 }
