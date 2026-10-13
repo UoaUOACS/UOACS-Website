@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    // Room for one image upload through the uploadMedia action
+    serverActions: { bodySizeLimit: "5mb" },
+  },
   output: "standalone",
   // Trace from the workspace root so standalone output resolves dependencies
   // hoisted to the monorepo's node_modules, not just this app's.

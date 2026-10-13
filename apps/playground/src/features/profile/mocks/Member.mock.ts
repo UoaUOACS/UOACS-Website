@@ -1,4 +1,4 @@
-import type { ProfileHeaderProps } from "@/features/profile/components/ProfileHeader/ProfileHeader"
+import type { ProfileHeaderProps } from "@/features/profile/components/ProfileHeader/ProfileHeaderView"
 import type { Member } from "@/payload/payload-types"
 
 export const mockMember: Member = {
