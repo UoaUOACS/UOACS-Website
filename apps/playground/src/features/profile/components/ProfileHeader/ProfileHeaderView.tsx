@@ -24,7 +24,8 @@ export interface ProfileHeaderProps {
 
 export interface ProfileHeaderViewProps extends ProfileHeaderProps {
   /**
-   * Whether the signed-in member owns this profile, which shows them the edit button.
+   * Whether the signed-in member owns this profile, which shows them the "your account" label and
+   * the edit button.
    */
   isOwner: boolean
 }
@@ -36,9 +37,13 @@ const AccountLabel = () => (
   </p>
 )
 
+// Takes the label's line when it's hidden, so the header is the same height for everyone
+const AccountLabelSpacer = () => <div aria-hidden="true" className="h-lh font-mono" />
+
 /**
- * The layout of the top of a member's profile: their profile picture, name, UPI and ID, and an
- * edit button for the profile's owner. {@link ProfileHeader} works out who the owner is.
+ * The layout of the top of a member's profile: their profile picture, name, UPI and ID, and a
+ * "your account" label and edit button for the profile's owner. {@link ProfileHeader} works out
+ * who the owner is.
  */
 export const ProfileHeaderView = ({ member, account, isOwner }: ProfileHeaderViewProps) => {
   const { profilePicture } = member
@@ -64,7 +69,7 @@ export const ProfileHeaderView = ({ member, account, isOwner }: ProfileHeaderVie
 
       <div className="flex flex-col items-start gap-4">
         <div className="flex flex-col items-start gap-2">
-          <AccountLabel />
+          {isOwner ? <AccountLabel /> : <AccountLabelSpacer />}
           <Heading className="justify-start text-left" h={2} period>
             {name}
           </Heading>
@@ -95,7 +100,7 @@ export const ProfileHeaderSkeleton = () => (
 
     <div className="flex flex-col items-start gap-4">
       <div className="flex flex-col items-start gap-2">
-        <AccountLabel />
+        <AccountLabelSpacer />
         <Skeleton className="heading-2 w-72" shape="text" />
         <Skeleton className="h-6 w-64" shape="text" />
       </div>

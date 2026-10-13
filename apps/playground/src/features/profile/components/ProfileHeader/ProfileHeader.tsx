@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation"
 import { getCurrentMember } from "@/features/member/member.queries"
 import { type ProfileHeaderProps, ProfileHeaderView } from "./ProfileHeaderView"
 
@@ -7,9 +8,18 @@ import { type ProfileHeaderProps, ProfileHeaderView } from "./ProfileHeaderView"
  * `ProfileHeaderSkeleton` as the fallback.
  */
 export const ProfileHeader = async (props: ProfileHeaderProps) => {
-  const current = await getCurrentMember()
-  // When the auth service is unavailable, ownership can't be confirmed, so show the visitor's view
-  const isOwner = current.status === "authenticated" && current.member.id === props.member.id
+  // Show the visitor's view whenever ownership can't be confirmed, e.g. the auth service is down
+  let isOwner = false
+  try {
+    const current = await getCurrentMember()
+    isOwner = current.status === "authenticated" && current.member.id === props.member.id
+  } catch (error) {
+    unstable_rethrow(error)
+    console.error("[ProfileHeader] Failed to check the profile owner", {
+      memberId: props.member.id,
+      error,
+    })
+  }
 
   return <ProfileHeaderView {...props} isOwner={isOwner} />
 }
