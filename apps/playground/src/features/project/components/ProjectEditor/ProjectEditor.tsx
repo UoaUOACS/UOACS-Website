@@ -1,6 +1,6 @@
 "use client"
 
-import { useStore } from "@tanstack/react-form"
+import { useSelector } from "@tanstack/react-form"
 import { toast } from "@uoacs/ui/toast"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -76,7 +76,7 @@ export const ProjectEditor = ({ projectID, initialValues, coverImageURL }: Proje
     },
   })
 
-  const isDirty = useStore(form.store, (state) => state.isDirty)
+  const isDirty = useSelector(form.store, (state) => state.isDirty)
   useEffect(() => {
     if (!isDirty) return
     const warn = (event: BeforeUnloadEvent) => event.preventDefault()
