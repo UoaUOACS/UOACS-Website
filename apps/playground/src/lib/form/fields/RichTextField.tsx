@@ -29,8 +29,8 @@ export interface RichTextFieldProps
 }
 
 /**
- * The editor is uncontrolled and reads the field value once. Remount it with a new `key` to load
- * other content.
+ * The editor is uncontrolled and reads the field value once.
+ * Remount it with a new `key` to load other content.
  */
 export const RichTextField = ({ label, wait = 300, ...props }: RichTextFieldProps) => {
   const field = useFieldContext<RichTextValue | null>()
