@@ -55,7 +55,6 @@ export const toFormValues = (project: Project): EditProjectValues => ({
   summary: project.summary,
   coverImage: getRelationID(project.coverImage),
   pageContent: project.pageContent.map((block): BlockValue => {
-    // Payload gives every saved block an ID
     const id = block.id ?? crypto.randomUUID()
     return block.blockType === Slugs.Blocks.TEXT
       ? { _key: id, id, blockType: block.blockType, content: block.content }
