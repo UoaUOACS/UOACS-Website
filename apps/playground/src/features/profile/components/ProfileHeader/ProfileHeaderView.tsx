@@ -1,7 +1,6 @@
 import { UserIcon } from "@heroicons/react/24/outline"
 import type { Member as AuthMember } from "@uoacs/shared/payload"
 import { Heading, LazyImage, Skeleton } from "@uoacs/ui"
-import { cn } from "@uoacs/ui/utils"
 import type { Member } from "@/payload/payload-types"
 import { ProfileHeaderButton } from "./ProfileHeaderButton"
 
@@ -104,7 +103,8 @@ export const ProfileHeaderSkeleton = () => (
         <Skeleton className="heading-2 w-72" shape="text" />
         <Skeleton className="h-6 w-64" shape="text" />
       </div>
-      <Skeleton className={cn(ACTION_CLASS_NAME, "w-32 rounded-[10px]")} />
+      {/* Most visitors aren't the owner, so keep the button's space without showing one */}
+      <div className={ACTION_CLASS_NAME} />
     </div>
   </div>
 )
