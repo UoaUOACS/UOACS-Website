@@ -38,7 +38,19 @@ const defaultValues: EditProjectValues = {
   pageContent: [],
 }
 
-export const projectFormOptions = formOptions({ defaultValues })
+/**
+ * What the editor's submit validator returns when the save fails: a summary, and messages keyed
+ * by field path
+ */
+export type SaveErrors = { form: string; fields: Record<string, string> }
+
+export type SaveValidator = (props: { value: EditProjectValues }) => Promise<SaveErrors | undefined>
+
+export const projectFormOptions = formOptions({
+  defaultValues,
+  // Type only: `withForm` components need the editor's error types. The editor sets the validator.
+  validators: {} as { onSubmitAsync?: SaveValidator },
+})
 
 export const createBlock = (blockType: BlockValue["blockType"]): BlockValue => {
   const _key = crypto.randomUUID()
