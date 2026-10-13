@@ -19,11 +19,20 @@ export const useFlushOnSubmit = (form: AnyFormApi, flush: () => void | Promise<v
   }, [form, flush])
 }
 
+// Lets a second click during the upload wait reuse the first submit
+const submitting = new WeakMap<AnyFormApi["store"], Promise<void>>()
+
 /**
- * Flushes pending field values and waits for uploads, then submits. Use this in place of `form.handleSubmit()`, as
- * Enter or a shortcut submits without blurring the field first.
+ * Flushes pending field values and waits for uploads, then submits. Use this in place of
+ * `form.handleSubmit()`, as Enter or a shortcut submits without blurring the field first.
  */
-export const submitForm = async (form: AnyFormApi) => {
-  await Promise.all(Array.from(pending.get(form.store) ?? [], (flush) => flush()))
-  return form.handleSubmit()
+export const submitForm = (form: AnyFormApi) => {
+  const current = submitting.get(form.store)
+  if (current) return current
+  const submit = (async () => {
+    await Promise.all(Array.from(pending.get(form.store) ?? [], (flush) => flush()))
+    await form.handleSubmit()
+  })().finally(() => submitting.delete(form.store))
+  submitting.set(form.store, submit)
+  return submit
 }
