@@ -37,11 +37,9 @@ export const RichTextField = ({ label, wait = 300, ...props }: RichTextFieldProp
   const id = useId()
   const error = getFieldError(field.state.meta.errors)
 
-  // Serialising the Lexical state on every keystroke is slow on long pages
-  const debouncer = useDebouncer(field.handleChange, {
-    wait,
-    onUnmount: (d) => d.flush(),
-  })
+  // Serialising the Lexical state on every keystroke is slow on long pages. No flush on unmount,
+  // as after a block removal it would write to the block that took its index.
+  const debouncer = useDebouncer(field.handleChange, { wait })
   const flush = () => debouncer.flush()
   useFlushOnSubmit(field.form, flush)
 
