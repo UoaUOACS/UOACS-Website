@@ -12,6 +12,7 @@ const meta: Meta<typeof ImageUpload> = {
     accept: { control: "text" },
     required: { control: "boolean" },
     disabled: { control: "boolean" },
+    busy: { control: "boolean" },
   },
   decorators: [
     (Story) => (
@@ -41,4 +42,12 @@ export const WithError: Story = {
 
 export const Disabled: Story = {
   args: { src: "https://placehold.co/400x300", disabled: true },
+}
+
+export const Busy: Story = {
+  args: { src: "https://placehold.co/400x300", busy: true },
+}
+
+export const BrokenImage: Story = {
+  args: { src: "https://image.invalid/cover.png" },
 }
