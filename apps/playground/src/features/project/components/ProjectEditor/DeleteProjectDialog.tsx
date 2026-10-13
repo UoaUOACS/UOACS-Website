@@ -2,6 +2,7 @@
 
 import { Button, Dialog } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
+import { unstable_rethrow } from "next/navigation"
 import { useTransition } from "react"
 import { deleteProject } from "@/features/project/actions/deleteProject"
 
@@ -19,8 +20,14 @@ export const DeleteProjectDialog = ({ projectID, open, onClose }: DeleteProjectD
 
   const handleDelete = () =>
     startTransition(async () => {
-      // Only returns when the delete failed
-      await deleteProject(projectID)
+      try {
+        // Only returns when the delete failed
+        await deleteProject(projectID)
+      } catch (error) {
+        // The success redirect rejects too; anything else is a network or server failure
+        unstable_rethrow(error)
+        console.error("[DeleteProjectDialog] The delete request failed", { error, projectID })
+      }
       toast.error({ description: "The project could not be deleted. Try again." })
       onClose()
     })
