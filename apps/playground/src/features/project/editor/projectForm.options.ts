@@ -55,10 +55,11 @@ export const toFormValues = (project: Project): EditProjectValues => ({
   summary: project.summary,
   coverImage: getRelationID(project.coverImage),
   pageContent: project.pageContent.map((block): BlockValue => {
-    const id = block.id ?? crypto.randomUUID()
+    const id = block.id ?? undefined
+    const _key = id ?? crypto.randomUUID()
     return block.blockType === Slugs.Blocks.TEXT
-      ? { _key: id, id, blockType: block.blockType, content: block.content }
-      : { _key: id, id, blockType: block.blockType, images: block.images.map(getRelationID) }
+      ? { _key, id, blockType: block.blockType, content: block.content }
+      : { _key, id, blockType: block.blockType, images: block.images.map(getRelationID) }
   }),
 })
 
