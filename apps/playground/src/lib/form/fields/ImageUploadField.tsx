@@ -1,8 +1,8 @@
 "use client"
 
+import { downscaleImage } from "@uoacs/shared"
 import { ImageUpload, type ImageUploadProps } from "@uoacs/ui"
 import { useState } from "react"
-import { downscaleImage } from "@/lib/media/downscaleImage"
 import { trackUpload } from "../flush"
 import { getFieldError, useFieldContext } from "../formContext"
 

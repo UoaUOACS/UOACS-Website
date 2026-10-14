@@ -1,6 +1,7 @@
 "use client"
 
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline"
+import { downscaleImage } from "@uoacs/shared"
 import { type GalleryImage, Input, LazyImage } from "@uoacs/ui"
 import { type Dispatch, type SetStateAction, useId, useState } from "react"
 import { uploadProjectMedia } from "@/features/project/actions/uploadProjectMedia"
@@ -15,7 +16,6 @@ import {
 import { trackUpload } from "@/lib/form/flush"
 import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
-import { downscaleImage } from "@/lib/media/downscaleImage"
 
 export type PendingImage = { key: string; previewURL: string; error?: string }
 
