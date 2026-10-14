@@ -128,7 +128,7 @@ export const ProjectEditor = ({
     >
       <form.AppForm>
         <ProjectEditorToolbar form={form} projectID={projectID} />
-        <div className="flex flex-col gap-15">
+        <div className="flex flex-col gap-12 md:gap-15">
           <ProjectHeaderEditor coverImageURL={coverImageURL} form={form} />
           <BlockList
             activeKey={activeKey}
