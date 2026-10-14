@@ -2,7 +2,7 @@
 
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { type GalleryImage, Input, LazyImage } from "@uoacs/ui"
-import { useId, useState } from "react"
+import { type Dispatch, type SetStateAction, useId, useState } from "react"
 import { uploadProjectMedia } from "@/features/project/actions/uploadProjectMedia"
 import { type MediaLookup, projectFormOptions } from "@/features/project/editor/projectForm.options"
 import {
@@ -17,7 +17,7 @@ import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
 import { downscaleImage } from "@/lib/media/downscaleImage"
 
-type PendingImage = { key: string; previewURL: string; error?: string }
+export type PendingImage = { key: string; previewURL: string; error?: string }
 
 const tile = "relative aspect-square overflow-hidden rounded-xl bg-gray-100"
 const removeButton =
@@ -37,10 +37,14 @@ export const ImageGridBlockEditor = withForm({
     blockKey: "",
     media: {} as MediaLookup,
     onUpload: (_image: GalleryImage) => {},
+    /**
+     * Uploads that are running or failed. Held by the frame, as they outlive this editor.
+     */
+    pending: [] as PendingImage[],
+    setPending: (() => {}) as Dispatch<SetStateAction<PendingImage[]>>,
   },
-  render: function Render({ form, index, blockKey, media, onUpload }) {
+  render: function Render({ form, index, blockKey, media, onUpload, pending, setPending }) {
     const inputID = useId()
-    const [pending, setPending] = useState<PendingImage[]>([])
     const [notice, setNotice] = useState<string>()
 
     const updatePending = (key: string, error?: string) =>

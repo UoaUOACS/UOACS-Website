@@ -4,7 +4,7 @@ import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { useSelector } from "@tanstack/react-form"
 import { Dropdown, type DropdownProps, type GalleryImage } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import { Suspense, useEffect, useRef, useTransition } from "react"
+import { Suspense, useEffect, useEffectEvent, useRef, useState, useTransition } from "react"
 import { ImageGridBlockView } from "@/features/project/components/BlockViews/ImageGridBlockView"
 import { TextBlockView } from "@/features/project/components/BlockViews/TextBlockView"
 import {
@@ -16,7 +16,7 @@ import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
 import { Slugs } from "@/lib/payload/slugs"
-import { ImageGridBlockEditor } from "./ImageGridBlockEditor"
+import { ImageGridBlockEditor, type PendingImage } from "./ImageGridBlockEditor"
 import { TextBlockEditor } from "./TextBlockEditor"
 
 /**
@@ -79,6 +79,13 @@ export const BlockFrame = withForm({
       }
       return undefined
     })
+    const [pendingImages, setPendingImages] = useState<PendingImage[]>([])
+    const failedUploads = pendingImages.filter((image) => image.error).length
+    // Reads the latest list, so a deleted block releases the previews it still holds
+    const releasePreviews = useEffectEvent(() => {
+      for (const image of pendingImages) URL.revokeObjectURL(image.previewURL)
+    })
+    useEffect(() => () => releasePreviews(), [])
     const editButton = useRef<HTMLButtonElement>(null)
     const closedByEscape = useRef(false)
     // A transition keeps the view on screen while the editor code loads via the suspense
@@ -146,6 +153,8 @@ export const BlockFrame = withForm({
                     index={index}
                     media={media}
                     onUpload={onUpload}
+                    pending={pendingImages}
+                    setPending={setPendingImages}
                   />
                 )
               ) : (
@@ -181,6 +190,12 @@ export const BlockFrame = withForm({
             </Suspense>
           </div>
           {error && !active && <p className="text-red-600 text-sm">{error}</p>}
+          {failedUploads > 0 && !active && (
+            <p className="text-red-600 text-sm">
+              {failedUploads === 1 ? "1 image" : `${failedUploads} images`} could not be uploaded.
+              Open the block to see why.
+            </p>
+          )}
         </div>
         {/* Over the block's corner on mobile, so the content gets the full width */}
         <div className="absolute top-2 right-2 md:static">
