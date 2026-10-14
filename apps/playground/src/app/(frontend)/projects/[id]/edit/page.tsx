@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import { redirectToLogin } from "@/features/auth/auth.helpers"
 import { ProjectEditor } from "@/features/project/components/ProjectEditor/ProjectEditor"
 import { ProjectEditorSkeleton } from "@/features/project/components/ProjectEditor/ProjectEditorSkeleton"
-import { toFormValues } from "@/features/project/editor/projectForm.options"
+import { toFormValues, toMediaLookup } from "@/features/project/editor/projectForm.options"
 import { getEditableProject } from "@/features/project/project.queries"
 import { Routes } from "@/lib/routes"
 
@@ -24,6 +24,7 @@ const EditProjectContent = async ({ params }: Pick<PageProps<"/projects/[id]/edi
     <ProjectEditor
       coverImageURL={coverImageURL}
       initialValues={toFormValues(project)}
+      media={toMediaLookup(project)}
       projectID={project.id}
     />
   )

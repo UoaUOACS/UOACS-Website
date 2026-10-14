@@ -1,10 +1,12 @@
 "use client"
 
 import { useDebouncer } from "@tanstack/react-pacer"
+import { countRichTextCharacters } from "@uoacs/shared"
 import type { RichTextValue } from "@uoacs/shared/payload"
 import type { RichTextEditorProps } from "@uoacs/ui/rich-text-editor"
+import { cn } from "@uoacs/ui/utils"
 import dynamic from "next/dynamic"
-import { useId } from "react"
+import { useId, useState } from "react"
 import { useFlushOnSubmit } from "../flush"
 import { getFieldError, useFieldContext } from "../formContext"
 
@@ -20,8 +22,12 @@ const RichTextEditor = dynamic(
 export const preloadRichTextEditor = () => void import("@uoacs/ui/rich-text-editor")
 
 export interface RichTextFieldProps
-  extends Pick<RichTextEditorProps, "className" | "disabled" | "placeholder"> {
+  extends Pick<RichTextEditorProps, "autoFocus" | "className" | "disabled" | "placeholder"> {
   label: string
+  /**
+   * Shows a live character count against this limit. Formatting does not count.
+   */
+  maxCharacters?: number
   /**
    * How long to wait after a keystroke before writing the value to the form
    */
@@ -32,10 +38,19 @@ export interface RichTextFieldProps
  * The editor is uncontrolled and reads the field value once.
  * Remount it with a new `key` to load other content.
  */
-export const RichTextField = ({ label, wait = 300, ...props }: RichTextFieldProps) => {
+export const RichTextField = ({
+  label,
+  maxCharacters,
+  wait = 300,
+  ...props
+}: RichTextFieldProps) => {
   const field = useFieldContext<RichTextValue | null>()
   const id = useId()
   const error = getFieldError(field.state.meta.errors)
+  // Counted on every keystroke, as the field value is debounced
+  const [count, setCount] = useState(() =>
+    field.state.value ? countRichTextCharacters(field.state.value) : 0,
+  )
 
   // Serialising the Lexical state on every keystroke is slow on long pages. No flush on unmount,
   // as after a block removal it would write to the block that took its index.
@@ -50,7 +65,10 @@ export const RichTextField = ({ label, wait = 300, ...props }: RichTextFieldProp
       </span>
       <RichTextEditor
         {...props}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={
+          [error && `${id}-error`, maxCharacters && `${id}-count`].filter(Boolean).join(" ") ||
+          undefined
+        }
         aria-invalid={error ? true : undefined}
         aria-labelledby={`${id}-label`}
         defaultValue={field.state.value}
@@ -58,8 +76,19 @@ export const RichTextField = ({ label, wait = 300, ...props }: RichTextFieldProp
           flush()
           field.handleBlur()
         }}
-        onChange={(value) => debouncer.maybeExecute(value)}
+        onChange={(value) => {
+          if (maxCharacters) setCount(value ? countRichTextCharacters(value) : 0)
+          debouncer.maybeExecute(value)
+        }}
       />
+      {maxCharacters && (
+        <p
+          className={cn("text-sm", count > maxCharacters ? "text-red-600" : "text-gray-500")}
+          id={`${id}-count`}
+        >
+          {count}/{maxCharacters}
+        </p>
+      )}
       {error && (
         <p className="text-red-600 text-sm" id={`${id}-error`}>
           {error}

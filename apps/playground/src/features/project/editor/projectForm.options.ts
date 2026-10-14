@@ -1,5 +1,7 @@
 import { formOptions } from "@tanstack/react-form"
 import type { RichTextValue } from "@uoacs/shared/payload"
+import type { GalleryImage } from "@uoacs/ui"
+import { toGalleryImages } from "@uoacs/ui/utils"
 import { getRelationID } from "@/lib/payload/getRelationID"
 import { Slugs } from "@/lib/payload/slugs"
 import type { Project } from "@/payload/payload-types"
@@ -74,6 +76,23 @@ export const toFormValues = (project: Project): EditProjectValues => ({
       : { _key, id, blockType: block.blockType, images: block.images.map(getRelationID) }
   }),
 })
+
+/**
+ * Images by Media ID, so idle image grids can show the IDs that the form holds
+ */
+export type MediaLookup = Record<string, GalleryImage>
+
+/**
+ * The images of a saved project's image grids, as `getEditableProject` populates them
+ */
+export const toMediaLookup = (project: Project): MediaLookup =>
+  Object.fromEntries(
+    project.pageContent
+      .flatMap((block) =>
+        block.blockType === Slugs.Blocks.IMAGE_GRID ? toGalleryImages(block.images) : [],
+      )
+      .map((image) => [image.id, image]),
+  )
 
 /**
  * The input for `saveProject`. Drops `_key` and keeps `id`, so Payload keeps existing blocks.

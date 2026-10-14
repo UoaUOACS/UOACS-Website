@@ -12,6 +12,7 @@ import {
   QUOTE,
   UNORDERED_LIST,
 } from "@lexical/markdown"
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin"
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
@@ -118,6 +119,10 @@ export interface RichTextEditorProps {
   "aria-describedby"?: string
   "aria-invalid"?: boolean
   "aria-labelledby"?: string
+  /**
+   * Focuses the editor when it mounts, e.g. when the user opens it to type
+   */
+  autoFocus?: boolean
   className?: string
   /**
    * Read once on mount, and later changes are ignored. The editor is uncontrolled, so to
@@ -132,6 +137,7 @@ export interface RichTextEditorProps {
 }
 
 export const RichTextEditor = ({
+  autoFocus = false,
   className,
   defaultValue,
   disabled = false,
@@ -207,6 +213,7 @@ export const RichTextEditor = ({
         <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
         <OnChangePlugin ignoreSelectionChange onChange={(state) => onChange?.(toValue(state))} />
         <EditablePlugin editable={!disabled} />
+        {autoFocus && <AutoFocusPlugin />}
       </LexicalComposer>
     </EditorErrorBoundary>
   )

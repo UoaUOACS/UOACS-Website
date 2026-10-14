@@ -1,0 +1,206 @@
+"use client"
+
+import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline"
+import { type GalleryImage, LazyImage } from "@uoacs/ui"
+import { useId, useState } from "react"
+import { uploadProjectMedia } from "@/features/project/actions/uploadProjectMedia"
+import { type MediaLookup, projectFormOptions } from "@/features/project/editor/projectForm.options"
+import {
+  IMAGE_GRID_MAX_IMAGES,
+  MEDIA_MAX_BYTES,
+  MEDIA_TYPES,
+  MEDIA_UPLOAD_MAX_DIMENSION,
+} from "@/features/project/project.constants"
+import { trackUpload } from "@/lib/form/flush"
+import { getFieldError } from "@/lib/form/formContext"
+import { withForm } from "@/lib/form/useAppForm"
+import { downscaleImage } from "@/lib/media/downscaleImage"
+
+type PendingImage = { key: string; previewURL: string; error?: string }
+
+const tile = "relative aspect-square overflow-hidden rounded-xl bg-gray-100"
+const removeButton =
+  "absolute top-1.5 right-1.5 flex size-7 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black"
+
+/**
+ * Uploads images as they are picked and shows each one's progress. Update is disabled until the
+ * uploads finish.
+ */
+export const ImageGridBlockEditor = withForm({
+  ...projectFormOptions,
+  props: {
+    index: 0,
+    /**
+     * The block's `_key`, to find the block again when an upload finishes after a move
+     */
+    blockKey: "",
+    media: {} as MediaLookup,
+    onUpload: (_image: GalleryImage) => {},
+  },
+  render: function Render({ form, index, blockKey, media, onUpload }) {
+    const inputID = useId()
+    const [pending, setPending] = useState<PendingImage[]>([])
+    const [notice, setNotice] = useState<string>()
+
+    const updatePending = (key: string, error?: string) =>
+      setPending((images) =>
+        images.flatMap((image) => {
+          if (image.key !== key) return [image]
+          if (error) return [{ ...image, error }]
+          URL.revokeObjectURL(image.previewURL)
+          return []
+        }),
+      )
+
+    const upload = async (key: string, original: File) => {
+      const file = await downscaleImage(original, MEDIA_UPLOAD_MAX_DIMENSION)
+      if (file.size > MEDIA_MAX_BYTES) {
+        updatePending(key, `Choose an image under ${MEDIA_MAX_BYTES / 1024 / 1024} MB`)
+        return
+      }
+      try {
+        const formData = new FormData()
+        formData.set("file", file)
+        const result = await uploadProjectMedia(formData)
+        if (!result.ok) {
+          updatePending(key, result.message ?? "The image could not be uploaded")
+          return
+        }
+        onUpload({
+          id: result.id,
+          src: result.url ?? "",
+          alt: result.alt,
+          width: result.width,
+          height: result.height,
+        })
+        // By key, as the block can move or be deleted while the image uploads
+        const at = form.state.values.pageContent.findIndex((block) => block._key === blockKey)
+        if (at !== -1) form.pushFieldValue(`pageContent[${at}].images`, result.id)
+        updatePending(key)
+      } catch (error) {
+        console.error("[ImageGridBlockEditor] upload failed", { error })
+        updatePending(key, "The image could not be uploaded")
+      }
+    }
+
+    return (
+      <form.Field mode="array" name={`pageContent[${index}].images`}>
+        {(field) => {
+          const images = field.state.value
+          const slots = IMAGE_GRID_MAX_IMAGES - images.length - pending.length
+          const error = getFieldError(field.state.meta.errors)
+
+          const addFiles = (files: File[]) => {
+            setNotice(
+              files.length > slots
+                ? `A grid can have ${IMAGE_GRID_MAX_IMAGES} images. The extra images were not added.`
+                : undefined,
+            )
+            for (const file of files.slice(0, Math.max(slots, 0))) {
+              const key = crypto.randomUUID()
+              const previewURL = URL.createObjectURL(file)
+              if (!MEDIA_TYPES.includes(file.type)) {
+                setPending((current) => [
+                  ...current,
+                  { key, previewURL, error: "This file type is not supported" },
+                ])
+                continue
+              }
+              setPending((current) => [...current, { key, previewURL }])
+              void trackUpload(form, upload(key, file))
+            }
+            field.handleBlur()
+          }
+
+          return (
+            <div className="flex w-full flex-col gap-2">
+              <ul aria-label="Images" className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {images.map((id, imageIndex) => {
+                  const image = media[id]
+                  return (
+                    <li className={tile} key={id}>
+                      {image && (
+                        <LazyImage
+                          alt={image.alt}
+                          className="object-cover!"
+                          containerClassName="absolute inset-0"
+                          fill
+                          sizes="(min-width: 640px) 33vw, 50vw"
+                          src={image.src}
+                        />
+                      )}
+                      <button
+                        className={removeButton}
+                        onClick={() => field.removeValue(imageIndex)}
+                        type="button"
+                      >
+                        <XMarkIcon aria-hidden className="size-4" />
+                        <span className="sr-only">Remove image {imageIndex + 1}</span>
+                      </button>
+                    </li>
+                  )
+                })}
+                {pending.map((image) => (
+                  <li aria-busy={!image.error || undefined} className={tile} key={image.key}>
+                    {/* biome-ignore lint/performance/noImgElement: an object URL, which next/image cannot load */}
+                    <img
+                      alt=""
+                      className="absolute inset-0 size-full object-cover opacity-50"
+                      src={image.previewURL}
+                    />
+                    <span className="absolute inset-0 flex items-center justify-center p-2 text-center font-medium text-gray-900 text-sm">
+                      {image.error ?? "Uploading…"}
+                    </span>
+                    {image.error && (
+                      <button
+                        className={removeButton}
+                        onClick={() => updatePending(image.key)}
+                        type="button"
+                      >
+                        <XMarkIcon aria-hidden className="size-4" />
+                        <span className="sr-only">Dismiss</span>
+                      </button>
+                    )}
+                  </li>
+                ))}
+                {slots > 0 && (
+                  <li className={tile}>
+                    <label
+                      className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 font-medium text-gray-500 text-sm hover:bg-gray-200 focus-within:[outline:-webkit-focus-ring-color_auto_1px]"
+                      htmlFor={inputID}
+                    >
+                      <PhotoIcon aria-hidden className="size-8 stroke-2" />
+                      Add images
+                      <input
+                        accept={MEDIA_TYPES.join(",")}
+                        aria-describedby={error ? `${inputID}-error` : undefined}
+                        aria-invalid={error ? true : undefined}
+                        className="sr-only"
+                        id={inputID}
+                        multiple
+                        onChange={(event) => {
+                          addFiles(Array.from(event.target.files ?? []))
+                          event.target.value = ""
+                        }}
+                        type="file"
+                      />
+                    </label>
+                  </li>
+                )}
+              </ul>
+              <p className="text-right text-gray-500 text-sm">
+                {images.length}/{IMAGE_GRID_MAX_IMAGES} images
+              </p>
+              {notice && <p className="text-gray-700 text-sm">{notice}</p>}
+              {error && (
+                <p className="text-red-600 text-sm" id={`${inputID}-error`}>
+                  {error}
+                </p>
+              )}
+            </div>
+          )
+        }}
+      </form.Field>
+    )
+  },
+})

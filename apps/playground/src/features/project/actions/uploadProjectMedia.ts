@@ -13,6 +13,7 @@ export type UploadMediaResult =
       ok: true
       id: ProjectMedia["id"]
       url: ProjectMedia["url"]
+      alt: ProjectMedia["alt"]
       width: ProjectMedia["width"] | null
       height: ProjectMedia["height"] | null
     }
@@ -84,6 +85,7 @@ export async function uploadProjectMedia(formData: FormData): Promise<UploadMedi
       ok: true,
       id: media.id,
       url: media.url,
+      alt: media.alt,
       width: media.width ?? null,
       height: media.height ?? null,
     }
