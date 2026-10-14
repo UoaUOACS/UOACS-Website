@@ -1,6 +1,6 @@
 "use client"
 
-import { PencilSquareIcon } from "@heroicons/react/24/outline"
+import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { useSelector } from "@tanstack/react-form"
 import { Dropdown, type DropdownProps, type GalleryImage } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
@@ -112,7 +112,10 @@ export const BlockFrame = withForm({
     ]
 
     return (
-      <div className="relative flex w-full items-start gap-2" id={blockElementID(block._key)}>
+      <div
+        className="group/block relative flex w-full items-start gap-2"
+        id={blockElementID(block._key)}
+      >
         <div className="flex min-w-0 grow flex-col gap-2">
           <div
             className={cn(
@@ -167,12 +170,17 @@ export const BlockFrame = withForm({
             label={<span className="sr-only">{label} actions</span>}
             options={options}
             popoverClassName="items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md"
-            shape="default"
+            shape="pill"
             size="icon"
-            theme="dark"
+            theme="ghost"
             trigger={{
-              triggerClassName: "size-8 md:size-10",
-              triggerIcon: <PencilSquareIcon aria-hidden className="size-4 md:size-6" />,
+              // Shows on hover or focus of the block, and always on touch screens and the open block
+              triggerClassName: cn(
+                "size-8 bg-gray-100 text-gray-700 md:size-10 opacity-0 transition-opacity",
+                "group-focus-within/block:opacity-100 group-hover/block:opacity-100 aria-expanded:opacity-100 pointer-coarse:opacity-100",
+                active && "opacity-100",
+              ),
+              triggerIcon: <EllipsisVerticalIcon aria-hidden className="size-4 md:size-6" />,
             }}
           />
         </div>
