@@ -131,7 +131,7 @@ export const BlockFrame = withForm({
       ...(active ? [] : [menuOption("Edit", activate)]),
       ...(isFirst ? [] : [menuOption("Move up", () => onMove(index - 1))]),
       ...(isLast ? [] : [menuOption("Move down", () => onMove(index + 1))]),
-      menuOption("Delete", onDelete, "text-red-600"),
+      menuOption("Remove", onDelete, "text-red-600"),
     ]
 
     return (
