@@ -3,6 +3,8 @@ import { countRichTextCharacters } from "@uoacs/shared"
 import type { RichTextValue } from "@uoacs/shared/payload"
 import type { GalleryImage } from "@uoacs/ui"
 import { toGalleryImages } from "@uoacs/ui/utils"
+import type { z } from "zod"
+import type { editProjectSchema } from "@/features/project/schemas/EditProject.schema"
 import { getRelationID } from "@/lib/payload/getRelationID"
 import { Slugs } from "@/lib/payload/slugs"
 import type { Project } from "@/payload/payload-types"
@@ -114,23 +116,25 @@ export const toMediaLookup = (project: Project): MediaLookup =>
 /**
  * The input for `saveProject`. Drops `_key` and keeps `id`, so Payload keeps existing blocks.
  * Sends only the changed titles of images that are still in a grid, so an old title that is now
- * too long does not block the save.
+ * too long does not block the save. Checks only the keys against the schema, as the form holds
+ * values like empty content that the schema rejects on the server.
  */
 export const toSaveInput = (
   { pageContent, imageTitles, ...values }: EditProjectValues,
   id?: string,
   savedTitles: EditProjectValues["imageTitles"] = {},
-) => ({
-  ...values,
-  id,
-  pageContent: pageContent.map(({ _key, ...block }) => block),
-  imageTitles: Object.fromEntries(
-    pageContent
-      .flatMap((block) => (block.blockType === Slugs.Blocks.IMAGE_GRID ? block.images : []))
-      .flatMap((mediaID) =>
-        imageTitles[mediaID] === undefined || imageTitles[mediaID] === savedTitles[mediaID]
-          ? []
-          : [[mediaID, imageTitles[mediaID]]],
-      ),
-  ),
-})
+) =>
+  ({
+    ...values,
+    id,
+    pageContent: pageContent.map(({ _key, ...block }) => block),
+    imageTitles: Object.fromEntries(
+      pageContent
+        .flatMap((block) => (block.blockType === Slugs.Blocks.IMAGE_GRID ? block.images : []))
+        .flatMap((mediaID) =>
+          imageTitles[mediaID] === undefined || imageTitles[mediaID] === savedTitles[mediaID]
+            ? []
+            : [[mediaID, imageTitles[mediaID]]],
+        ),
+    ),
+  }) satisfies Record<keyof z.input<typeof editProjectSchema>, unknown>
