@@ -164,18 +164,16 @@ export const BlockFrame = withForm({
         <div className="absolute top-2 right-2 md:static">
           <Dropdown
             fast
-            label={
-              <>
-                <PencilSquareIcon aria-hidden className="size-6" />
-                <span className="sr-only">{label} actions</span>
-              </>
-            }
+            label={<span className="sr-only">{label} actions</span>}
             options={options}
             popoverClassName="items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md"
             shape="default"
             size="icon"
             theme="dark"
-            trigger={false}
+            trigger={{
+              triggerClassName: "size-8 md:size-10",
+              triggerIcon: <PencilSquareIcon aria-hidden className="size-4 md:size-6" />,
+            }}
           />
         </div>
       </div>
