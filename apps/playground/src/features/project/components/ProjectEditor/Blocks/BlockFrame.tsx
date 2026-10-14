@@ -89,6 +89,8 @@ export const BlockFrame = withForm({
         if (event.key !== "Escape" || event.defaultPrevented) return
         if (event.target instanceof Element && event.target.closest("dialog")) return
         closedByEscape.current = true
+        // Blur first, so a text field flushes its debounced value before it unmounts
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
         onDeactivate()
       }
       window.addEventListener("keydown", close)
