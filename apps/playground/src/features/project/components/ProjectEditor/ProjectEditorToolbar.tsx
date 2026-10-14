@@ -2,14 +2,16 @@
 
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline"
 import { Button, Dropdown } from "@uoacs/ui"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { projectFormOptions } from "@/features/project/editor/projectForm.options"
 import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
+import { Routes } from "@/lib/routes"
 import { DeleteProjectDialog } from "./DeleteProjectDialog"
 
 /**
- * Sticky actions above the editor: preview, save, the save error, and a menu with delete
+ * Sticky actions above the editor: preview, discard, save, the save error, and a menu with delete
  */
 export const ProjectEditorToolbar = withForm({
   ...projectFormOptions,
@@ -20,6 +22,7 @@ export const ProjectEditorToolbar = withForm({
     projectID: undefined as string | undefined,
   },
   render: function Render({ form, projectID }) {
+    const router = useRouter()
     const [deleteOpen, setDeleteOpen] = useState(false)
 
     return (
@@ -42,6 +45,15 @@ export const ProjectEditorToolbar = withForm({
         {/* Preview mode comes with the reorder and preview work */}
         <Button className="disabled:text-gray-400" disabled theme="ghost">
           Preview
+        </Button>
+        <Button
+          // Client navigation, so the unsaved changes warning does not show
+          onClick={() =>
+            router.push(projectID ? Routes.PROJECTS.ID(projectID) : Routes.PROFILE.ROOT)
+          }
+          theme="ghost"
+        >
+          Discard Changes
         </Button>
         <form.SubmitButton theme="dark">
           {projectID ? "Update Project" : "Create Project"}
