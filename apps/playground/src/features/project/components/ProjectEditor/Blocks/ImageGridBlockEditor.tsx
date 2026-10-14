@@ -60,7 +60,7 @@ export const ImageGridBlockEditor = withForm({
     const upload = async (key: string, original: File) => {
       const file = await downscaleImage(original, MEDIA_UPLOAD_MAX_DIMENSION)
       if (file.size > MEDIA_MAX_BYTES) {
-        updatePending(key, `Choose an image under ${MEDIA_MAX_BYTES / 1024 / 1024} MB`)
+        updatePending(key, `Choose an image under ${Math.floor(MEDIA_MAX_BYTES / 1024 / 1024)} MB`)
         return
       }
       try {
