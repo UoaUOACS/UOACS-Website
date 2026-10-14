@@ -12,6 +12,7 @@ import {
   type SaveValidator,
   toSaveInput,
 } from "@/features/project/editor/projectForm.options"
+import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { submitForm } from "@/lib/form/flush"
 import { useAppForm } from "@/lib/form/useAppForm"
 import { Routes } from "@/lib/routes"
@@ -109,6 +110,13 @@ export const ProjectEditor = ({
       router.push(Routes.PROJECTS.ID(id))
     },
   })
+
+  // Most edits open a text block, so load the editor once the page is idle.
+  useEffect(() => {
+    if (!("requestIdleCallback" in window)) return preloadRichTextEditor() // safari has no requestIdleCallback
+    const id = requestIdleCallback(preloadRichTextEditor)
+    return () => cancelIdleCallback(id)
+  }, [])
 
   const isDirty = useSelector(form.store, (state) => state.isDirty)
   useEffect(() => {
