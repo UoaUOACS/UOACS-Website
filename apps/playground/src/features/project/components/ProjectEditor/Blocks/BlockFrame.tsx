@@ -77,6 +77,13 @@ export const BlockFrame = withForm({
         const message = getFieldError(meta?.errors ?? [])
         if (message) return message
       }
+      // An image title's error belongs to its grid
+      const current = state.values.pageContent[index]
+      if (current?.blockType !== Slugs.Blocks.IMAGE_GRID) return undefined
+      for (const mediaID of current.images) {
+        const message = getFieldError(state.fieldMeta[`imageTitles.${mediaID}`]?.errors ?? [])
+        if (message) return message
+      }
       return undefined
     })
     const [pendingImages, setPendingImages] = useState<PendingImage[]>([])
