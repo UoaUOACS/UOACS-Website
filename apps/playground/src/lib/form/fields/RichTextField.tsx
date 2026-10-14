@@ -64,7 +64,7 @@ export const RichTextField = ({
   useFlushOnSubmit(field.form, flush)
 
   return (
-    <div className="flex w-full flex-col gap-2 font-mono">
+    <div className="flex w-full flex-col gap-2">
       <span
         className={cn("block font-medium text-gray-700 text-sm", hideLabel && "sr-only")}
         id={`${id}-label`}
