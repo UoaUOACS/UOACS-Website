@@ -5,7 +5,7 @@ import { countRichTextCharacters } from "@uoacs/shared"
 import type { RichTextValue } from "@uoacs/shared/payload"
 import type { RichTextEditorProps } from "@uoacs/ui/rich-text-editor"
 import { cn } from "@uoacs/ui/utils"
-import { lazy, useId, useState } from "react"
+import { Component, lazy, type ReactNode, useId, useState } from "react"
 import { useFlushOnSubmit } from "../flush"
 import { getFieldError, useFieldContext } from "../formContext"
 
@@ -18,7 +18,34 @@ const RichTextEditor = lazy(() =>
 /**
  * Starts loading the editor early, e.g. on hover or focus of a block that will show it
  */
-export const preloadRichTextEditor = () => void import("@uoacs/ui/rich-text-editor")
+export const preloadRichTextEditor = () => {
+  // The editor's own load shows the error
+  import("@uoacs/ui/rich-text-editor").catch(() => {})
+}
+
+// Catches a failed load of the editor code, e.g. offline, so the rest of the page keeps working
+class EditorLoadBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false }
+
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+
+  componentDidCatch(error: unknown) {
+    console.error("[RichTextField] the editor failed to load", { error })
+  }
+
+  render() {
+    if (this.state.failed) {
+      return (
+        <p className="text-red-600 text-sm" role="alert">
+          The editor could not load. Reload the page to try again.
+        </p>
+      )
+    }
+    return this.props.children
+  }
+}
 
 export interface RichTextFieldProps
   extends Pick<RichTextEditorProps, "autoFocus" | "className" | "disabled" | "placeholder"> {
@@ -71,24 +98,26 @@ export const RichTextField = ({
       >
         {label}
       </span>
-      <RichTextEditor
-        {...props}
-        aria-describedby={
-          [error && `${id}-error`, maxCharacters && `${id}-count`].filter(Boolean).join(" ") ||
-          undefined
-        }
-        aria-invalid={error ? true : undefined}
-        aria-labelledby={`${id}-label`}
-        defaultValue={field.state.value}
-        onBlur={() => {
-          flush()
-          field.handleBlur()
-        }}
-        onChange={(value) => {
-          if (maxCharacters) setCount(value ? countRichTextCharacters(value) : 0)
-          debouncer.maybeExecute(value)
-        }}
-      />
+      <EditorLoadBoundary>
+        <RichTextEditor
+          {...props}
+          aria-describedby={
+            [error && `${id}-error`, maxCharacters && `${id}-count`].filter(Boolean).join(" ") ||
+            undefined
+          }
+          aria-invalid={error ? true : undefined}
+          aria-labelledby={`${id}-label`}
+          defaultValue={field.state.value}
+          onBlur={() => {
+            flush()
+            field.handleBlur()
+          }}
+          onChange={(value) => {
+            if (maxCharacters) setCount(value ? countRichTextCharacters(value) : 0)
+            debouncer.maybeExecute(value)
+          }}
+        />
+      </EditorLoadBoundary>
       {maxCharacters && (
         <p
           className={cn("text-sm", count > maxCharacters ? "text-red-600" : "text-gray-500")}
