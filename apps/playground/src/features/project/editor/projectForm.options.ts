@@ -1,4 +1,5 @@
 import { formOptions } from "@tanstack/react-form"
+import { countRichTextCharacters } from "@uoacs/shared"
 import type { RichTextValue } from "@uoacs/shared/payload"
 import type { GalleryImage } from "@uoacs/ui"
 import { toGalleryImages } from "@uoacs/ui/utils"
@@ -65,6 +66,14 @@ export const createBlock = (blockType: BlockValue["blockType"]): BlockValue => {
     ? { _key, blockType, content: null }
     : { _key, blockType, images: [] }
 }
+
+/**
+ * A text block with no text, or an image grid with no images. Save skips these.
+ */
+export const isEmptyBlock = (block: BlockValue) =>
+  block.blockType === Slugs.Blocks.TEXT
+    ? !block.content || countRichTextCharacters(block.content) === 0
+    : block.images.length === 0
 
 /**
  * Maps a saved project, as `getEditableProject` returns it, to form values

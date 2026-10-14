@@ -8,6 +8,7 @@ import { type SaveProjectResult, saveProject } from "@/features/project/actions/
 import {
   type BlockValue,
   type EditProjectValues,
+  isEmptyBlock,
   type MediaLookup,
   projectFormOptions,
   type SaveValidator,
@@ -94,11 +95,21 @@ export const ProjectEditor = ({
 
   // Saves in the validator, so the server's errors land on the form and its fields
   const save: SaveValidator = async ({ value }) => {
-    const result = await saveProject(toSaveInput(value, savedID.current))
+    // Indexes of the blocks to save. Empty blocks are skipped, not errors.
+    const kept = value.pageContent.flatMap((block, index) => (isEmptyBlock(block) ? [] : [index]))
+    const pageContent = kept.map((index) => value.pageContent[index])
+    const result = await saveProject(toSaveInput({ ...value, pageContent }, savedID.current))
     if (!result.ok) {
-      const index = firstBlockWithError(result.fieldErrors ?? {}, value.pageContent)
+      // Back to editor indexes, as the server counts only the saved blocks
+      const fields = Object.fromEntries(
+        Object.entries(result.fieldErrors ?? {}).map(([path, message]) => [
+          path.replace(BLOCK_ERROR_PATH, (_, index) => `pageContent[${kept[Number(index)]}]`),
+          message,
+        ]),
+      )
+      const index = firstBlockWithError(fields, value.pageContent)
       if (index !== undefined) showBlock(index)
-      return { form: SAVE_ERROR_MESSAGES[result.error], fields: result.fieldErrors ?? {} }
+      return { form: SAVE_ERROR_MESSAGES[result.error], fields }
     }
     savedID.current = result.id
     return undefined
