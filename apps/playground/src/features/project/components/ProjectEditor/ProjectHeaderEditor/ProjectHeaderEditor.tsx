@@ -43,7 +43,7 @@ export const ProjectHeaderEditor = withForm({
         <form.AppField name="name">
           {(field) => (
             <field.TextField
-              className="font-bold font-switzer text-3xl"
+              className="heading-4 font-bold font-inter"
               label="Title"
               maxLength={PROJECT_TITLE_MAX_LENGTH}
               placeholder="My project"
@@ -54,7 +54,7 @@ export const ProjectHeaderEditor = withForm({
         <form.AppField name="summary">
           {(field) => (
             <field.TextAreaField
-              className="paragraph"
+              className="text-pretty font-switzer text-gray-600"
               label="Summary"
               maxLength={PROJECT_SUMMARY_MAX_LENGTH}
               placeholder="What it is, in a sentence or two"
