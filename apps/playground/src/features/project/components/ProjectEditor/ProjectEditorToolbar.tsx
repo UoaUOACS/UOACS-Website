@@ -40,10 +40,10 @@ export const ProjectEditorToolbar = withForm({
           }
         </form.Subscribe>
         {/* Preview mode comes with the reorder and preview work */}
-        <Button className="disabled:text-gray-400" disabled size="md" theme="ghost">
+        <Button className="disabled:text-gray-400" disabled theme="ghost">
           Preview
         </Button>
-        <form.SubmitButton shape="pill" size="md" theme="dark">
+        <form.SubmitButton theme="dark">
           {projectID ? "Update Project" : "Create Project"}
         </form.SubmitButton>
         {projectID && (
