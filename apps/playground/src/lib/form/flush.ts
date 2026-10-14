@@ -73,7 +73,8 @@ export const submitForm = (form: AnyFormApi) => {
   const submit = (async () => {
     await Promise.all([
       ...Array.from(pending.get(form.store) ?? [], (flush) => flush()),
-      ...(uploads.get(form.store) ?? []),
+      // Settled, not all, as each upload shows its own error and a failure must not stop the save
+      Promise.allSettled(uploads.get(form.store) ?? []),
     ])
     await form.handleSubmit()
   })().finally(() => submitting.delete(form.store))
