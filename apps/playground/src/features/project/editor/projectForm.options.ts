@@ -97,7 +97,7 @@ export const toFormValues = (project: Project): EditProjectValues => ({
 })
 
 /**
- * Images by Media ID, so idle image grids can show the IDs that the form holds
+ * Images by Media ID, so image grids can show the images for the IDs that the form holds
  */
 export type MediaLookup = Record<string, GalleryImage>
 

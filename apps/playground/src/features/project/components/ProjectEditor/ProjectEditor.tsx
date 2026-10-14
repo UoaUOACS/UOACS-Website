@@ -135,7 +135,7 @@ export const ProjectEditor = ({
 
   // Most edits open a text block, so load the editor once the page is idle.
   useEffect(() => {
-    if (!("requestIdleCallback" in window)) return preloadRichTextEditor() // safari has no requestIdleCallback
+    if (!("requestIdleCallback" in window)) return preloadRichTextEditor()
     const id = requestIdleCallback(preloadRichTextEditor)
     return () => cancelIdleCallback(id)
   }, [])

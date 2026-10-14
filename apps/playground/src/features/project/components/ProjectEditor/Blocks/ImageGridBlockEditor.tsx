@@ -24,8 +24,7 @@ const removeButton =
   "absolute top-1.5 right-1.5 flex size-7 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black"
 
 /**
- * Uploads images as they are picked and shows each one's progress. Update is disabled until the
- * uploads finish.
+ * Uploads images as they are picked and shows each one's progress. Save waits for the uploads.
  */
 export const ImageGridBlockEditor = withForm({
   ...projectFormOptions,

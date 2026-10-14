@@ -13,7 +13,7 @@ const revealClassName =
 export interface BlockInsertPointProps {
   onInsert: (blockType: BlockValue["blockType"]) => void
   /**
-   * Whether the point sits between blocks, so it shows only on hover or focus
+   * Whether the point sits between blocks, so it shows only on hover, focus or touch screens
    */
   between?: boolean
 }
