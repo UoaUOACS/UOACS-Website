@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import type { RichTextValue } from "@uoacs/shared/payload"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { fn } from "storybook/test"
 import { submitForm } from "./flush"
 import { useAppForm } from "./useAppForm"
@@ -64,7 +64,11 @@ const ExampleForm = ({ onSubmit }: ExampleFormProps) => {
         )}
       </form.AppField>
       <form.AppField name="content">
-        {(field) => <field.RichTextField label="Content" placeholder="Write something…" />}
+        {(field) => (
+          <Suspense>
+            <field.RichTextField label="Content" placeholder="Write something…" />
+          </Suspense>
+        )}
       </form.AppField>
       <form.AppForm>
         <form.SubmitButton>Save</form.SubmitButton>

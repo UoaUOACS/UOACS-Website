@@ -5,15 +5,14 @@ import { countRichTextCharacters } from "@uoacs/shared"
 import type { RichTextValue } from "@uoacs/shared/payload"
 import type { RichTextEditorProps } from "@uoacs/ui/rich-text-editor"
 import { cn } from "@uoacs/ui/utils"
-import dynamic from "next/dynamic"
-import { useId, useState } from "react"
+import { lazy, useId, useState } from "react"
 import { useFlushOnSubmit } from "../flush"
 import { getFieldError, useFieldContext } from "../formContext"
 
-// Lexical loads only when a rich text field first renders
-const RichTextEditor = dynamic(
-  () => import("@uoacs/ui/rich-text-editor").then((mod) => mod.RichTextEditor),
-  { ssr: false },
+// Lexical loads only when a rich text field first renders. Lazy, not next/dynamic, so the field
+// suspends to a boundary above it, and a transition can keep the old UI while it loads.
+const RichTextEditor = lazy(() =>
+  import("@uoacs/ui/rich-text-editor").then((mod) => ({ default: mod.RichTextEditor })),
 )
 
 /**
@@ -41,6 +40,7 @@ export interface RichTextFieldProps
 /**
  * The editor is uncontrolled and reads the field value once.
  * Remount it with a new `key` to load other content.
+ * It suspends while the editor code loads, so render it inside a `Suspense` boundary.
  */
 export const RichTextField = ({
   label,
