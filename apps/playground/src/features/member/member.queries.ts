@@ -1,4 +1,4 @@
-import { AuthApiRoutes } from "@uoacs/shared"
+import { AuthApiRoutes, memberResponseSchema as memberDetailsSchema } from "@uoacs/shared"
 import { getSession, sessionFetch } from "@uoacs/shared/auth/server"
 import { headers } from "next/headers"
 import { unstable_rethrow } from "next/navigation"
@@ -6,7 +6,7 @@ import { after } from "next/server"
 import { cache } from "react"
 import { z } from "zod"
 import { createMember, syncNames } from "@/features/member/member.mutations"
-import type { CurrentMemberResult } from "@/features/member/member.types"
+import type { AuthMemberDetailsResult, CurrentMemberResult } from "@/features/member/member.types"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 import type { Member } from "@/payload/payload-types"
@@ -113,5 +113,38 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
     const raced = await findMemberByBetterAuthUserId(betterAuthUserId)
     if (!raced) throw err
     return { status: "authenticated", member: raced }
+  }
+})
+
+/**
+ * Fetches the UOACS member details for the currently signed in user.
+ *
+ * This is for the UOACS `Member`, not the Playground `Member`
+ */
+export const getAuthMemberDetails = cache(async (): Promise<AuthMemberDetailsResult> => {
+  try {
+    const response = await sessionFetch(AuthApiRoutes.MEMBER_ME, await headers(), {
+      signal: AbortSignal.timeout(5000),
+    })
+    if (response.status === 401) return { status: "unauthenticated" }
+    if (response.status === 404) return { status: "not-found" }
+    if (!response.ok) {
+      console.error("[getAuthMemberDetails] Auth service answered with an error", {
+        status: response.status,
+      })
+      return { status: "unavailable" }
+    }
+    const parsed = memberDetailsSchema.safeParse(await response.json())
+    if (!parsed.success) {
+      console.error("[getAuthMemberDetails] Auth service returned an unexpected member shape", {
+        issues: parsed.error.issues.map((issue) => issue.path.join(".")),
+      })
+      return { status: "unavailable" }
+    }
+    return { status: "authenticated", member: parsed.data }
+  } catch (error) {
+    unstable_rethrow(error)
+    console.error("[getAuthMemberDetails] Failed to reach the auth service", { error })
+    return { status: "unavailable" }
   }
 })

@@ -4,11 +4,11 @@ import { AuthPages, authPageUrl } from "@uoacs/shared"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 import { MemberDetailsSection } from "@/features/member/components/MemberDetailsSection/MemberDetailsSection"
-import { getMemberDetails } from "@/features/member/sharedProfile.queries"
+import { getAuthMemberDetails } from "@/features/member/member.queries"
 import { Routes } from "@/lib/routes"
 
 async function MemberDetails() {
-  const result = await getMemberDetails()
+  const result = await getAuthMemberDetails()
 
   if (result.status === "unauthenticated") {
     redirect(
