@@ -1,8 +1,8 @@
 "use client"
 
-import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
+import { CheckIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { useSelector } from "@tanstack/react-form"
-import { Dropdown, type DropdownProps, type GalleryImage } from "@uoacs/ui"
+import { Button, Dropdown, type DropdownProps, type GalleryImage } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
 import { Suspense, useEffect, useEffectEvent, useRef, useState, useTransition } from "react"
 import { ImageGridBlockView } from "@/features/project/components/BlockViews/ImageGridBlockView"
@@ -94,31 +94,36 @@ export const BlockFrame = withForm({
     })
     useEffect(() => () => releasePreviews(), [])
     const editButton = useRef<HTMLButtonElement>(null)
-    const closedByEscape = useRef(false)
+    const returnFocus = useRef(false)
     // A transition keeps the view on screen while the editor code loads via the suspense
     const [isActivating, startActivating] = useTransition()
     const activate = () => startActivating(onActivate)
 
+    const close = () => {
+      returnFocus.current = true
+      // Blur first, so a text field flushes its debounced value before it unmounts
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+      onDeactivate()
+    }
+
+    const closeOnEscape = useEffectEvent((event: KeyboardEvent) => {
+      // An open menu or dialog closes first
+      if (event.key !== "Escape" || event.defaultPrevented) return
+      if (event.target instanceof Element && event.target.closest("dialog")) return
+      close()
+    })
+
     // On the window, as focus can leave the block, e.g. when a removed image's button unmounts
     useEffect(() => {
       if (!active) return
-      const close = (event: KeyboardEvent) => {
-        // An open menu or dialog closes first
-        if (event.key !== "Escape" || event.defaultPrevented) return
-        if (event.target instanceof Element && event.target.closest("dialog")) return
-        closedByEscape.current = true
-        // Blur first, so a text field flushes its debounced value before it unmounts
-        if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
-        onDeactivate()
-      }
-      window.addEventListener("keydown", close)
-      return () => window.removeEventListener("keydown", close)
-    }, [active, onDeactivate])
+      window.addEventListener("keydown", closeOnEscape)
+      return () => window.removeEventListener("keydown", closeOnEscape)
+    }, [active])
 
     // Back to the block once its view shows, so keyboard users keep their place
     useEffect(() => {
-      if (active || !closedByEscape.current) return
-      closedByEscape.current = false
+      if (active || !returnFocus.current) return
+      returnFocus.current = false
       editButton.current?.focus()
     }, [active])
 
@@ -136,7 +141,7 @@ export const BlockFrame = withForm({
 
     return (
       <div
-        className="group/block relative flex w-full items-start gap-2"
+        className="group/block flex w-full flex-col gap-2 md:flex-row md:items-start"
         id={blockElementID(block._key)}
       >
         <div className="flex min-w-0 grow flex-col gap-2">
@@ -204,8 +209,8 @@ export const BlockFrame = withForm({
             </p>
           )}
         </div>
-        {/* Over the block's corner on mobile, so the content gets the full width */}
-        <div className="absolute top-2 right-2 md:static">
+        {/* A row above the block on mobile, so the content gets the full width */}
+        <div className="flex justify-end gap-2 max-md:order-first md:flex-col">
           <Dropdown
             fast
             label={<span className="sr-only">{label} actions</span>}
@@ -224,6 +229,18 @@ export const BlockFrame = withForm({
               triggerIcon: <EllipsisVerticalIcon aria-hidden className="size-4 md:size-6" />,
             }}
           />
+          {active && (
+            <Button
+              className="size-8 bg-gray-100 text-gray-700 max-md:order-first md:size-10"
+              onClick={close}
+              shape="pill"
+              size="icon"
+              theme="ghost"
+            >
+              <CheckIcon aria-hidden className="size-4 md:size-6" />
+              <span className="sr-only">Done editing {label}</span>
+            </Button>
+          )}
         </div>
       </div>
     )
