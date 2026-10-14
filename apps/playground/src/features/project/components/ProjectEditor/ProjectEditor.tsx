@@ -2,7 +2,6 @@
 
 import { useSelector } from "@tanstack/react-form"
 import { toast } from "@uoacs/ui/toast"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { type SaveProjectResult, saveProject } from "@/features/project/actions/saveProject"
@@ -63,16 +62,10 @@ export const ProjectEditor = ({ projectID, initialValues, coverImageURL }: Proje
     onSubmit: ({ value }) => {
       const id = savedID.current
       if (!id) return
+      // Not dirty, so leaving does not warn about unsaved changes
       form.reset(value)
-      toast.success({
-        description: "Saved",
-        action: (
-          <Link className="font-medium underline" href={Routes.PROJECTS.ID(id)}>
-            View page
-          </Link>
-        ),
-      })
-      if (!projectID) router.replace(Routes.PROJECTS.EDIT(id))
+      toast.success({ description: "Saved" })
+      router.push(Routes.PROJECTS.ID(id))
     },
   })
 
