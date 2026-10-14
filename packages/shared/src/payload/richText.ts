@@ -47,5 +47,3 @@ export const richTextSchema = z.custom<RichTextValue>(
     Array.isArray(value.root.children),
   "Invalid rich text",
 )
-
-export { countRichTextCharacters } from "../utils/richText"
