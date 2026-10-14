@@ -1,6 +1,6 @@
 import type { Member } from "@uoacs/shared/payload"
 import { Heading } from "@uoacs/ui"
-import { editProfile } from "@/features/member/actions/editProfile"
+import { editAuthMemberDetails } from "@/features/member/actions/editAuthMemberDetails"
 import { MemberDetailsForm } from "../MemberDetailsForm/MemberDetailsForm"
 
 export type MemberDetailsSectionProps = {
@@ -24,6 +24,6 @@ export const MemberDetailsSection = ({ member }: MemberDetailsSectionProps) => (
       </p>
       <Heading h={3}>Your Info</Heading>
     </div>
-    <MemberDetailsForm member={member} onSave={editProfile} />
+    <MemberDetailsForm member={member} onSave={editAuthMemberDetails} />
   </section>
 )

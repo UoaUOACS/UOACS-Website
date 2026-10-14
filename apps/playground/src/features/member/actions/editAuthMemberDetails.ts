@@ -6,11 +6,11 @@ import { updateMemberSchema } from "@uoacs/shared/payload"
 import { headers } from "next/headers"
 import { unstable_rethrow } from "next/navigation"
 
-export type EditProfileFieldError = { field: string; message: string }
+export type EditAuthMemberDetailsError = { field: string; message: string }
 
-export type EditProfileResult =
+export type EditAuthMemberDetailsResult =
   | { ok: true }
-  | { ok: false; message: string; fieldErrors?: EditProfileFieldError[] }
+  | { ok: false; message: string; fieldErrors?: EditAuthMemberDetailsError[] }
 
 const GENERIC_ERROR = "An error occurred while updating your profile"
 
@@ -18,7 +18,7 @@ const GENERIC_ERROR = "An error occurred while updating your profile"
  * Returns a result rather than throwing, since an error thrown from a server
  * action loses its message and fields on the way to the client.
  */
-export async function editProfile(input: unknown): Promise<EditProfileResult> {
+export async function editAuthMemberDetails(input: unknown): Promise<EditAuthMemberDetailsResult> {
   const parsed = updateMemberSchema.safeParse(input)
   if (!parsed.success) {
     return {

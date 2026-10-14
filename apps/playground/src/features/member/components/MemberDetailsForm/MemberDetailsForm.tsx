@@ -6,7 +6,7 @@ import type { Member, UpdateMemberInput } from "@uoacs/shared/payload"
 import { Input, MultiSelect, Radio, Select, ToggleableInput } from "@uoacs/ui"
 import { toast } from "@uoacs/ui/toast"
 import { useRouter } from "next/navigation"
-import type { EditProfileResult } from "@/features/member/actions/editProfile"
+import type { EditAuthMemberDetailsResult } from "@/features/member/actions/editAuthMemberDetails"
 
 const STUDY_YEAR_OPTIONS = [
   { label: "First Year", value: "first-year" },
@@ -73,7 +73,7 @@ const fieldError = (field: AnyFieldApi): string | undefined => {
 
 export type MemberDetailsFormProps = {
   member: Member
-  onSave: (patch: Partial<UpdateMemberInput>) => Promise<EditProfileResult>
+  onSave: (patch: Partial<UpdateMemberInput>) => Promise<EditAuthMemberDetailsResult>
 }
 
 /**
@@ -92,7 +92,7 @@ export const MemberDetailsForm = ({ member, onSave }: MemberDetailsFormProps) =>
     // Rejecting keeps the field in edit mode, with the error showing under it.
     if (errors.length > 0) throw new Error("Invalid value")
 
-    let result: EditProfileResult
+    let result: EditAuthMemberDetailsResult
     try {
       result = await onSave({ [field.name]: field.state.value } as Partial<UpdateMemberInput>)
     } catch (error) {
