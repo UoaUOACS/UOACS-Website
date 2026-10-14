@@ -30,7 +30,7 @@ const notifyUploads = (form: AnyFormApi) => {
  * Marks an upload as running until it settles. {@link submitForm} waits for it, and
  * {@link useIsUploading} is true meanwhile.
  */
-export const trackUpload = <T>(form: AnyFormApi, upload: Promise<T>) => {
+export const trackUpload = (form: AnyFormApi, upload: Promise<unknown>) => {
   const running = uploads.get(form.store) ?? new Set()
   uploads.set(form.store, running)
   running.add(upload)
@@ -40,7 +40,6 @@ export const trackUpload = <T>(form: AnyFormApi, upload: Promise<T>) => {
     notifyUploads(form)
   }
   upload.then(done, done)
-  return upload
 }
 
 /**

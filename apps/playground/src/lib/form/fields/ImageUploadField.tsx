@@ -86,7 +86,7 @@ export const ImageUploadField = ({
       error={uploadError ?? getFieldError(field.state.meta.errors)}
       onChange={(picked) => {
         // Submit waits for this, so it does not save the previous image ID
-        void trackUpload(field.form, handleChange(picked))
+        trackUpload(field.form, handleChange(picked))
       }}
       src={uploadedUrl ?? src}
       value={file}

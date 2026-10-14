@@ -112,7 +112,7 @@ export const ImageGridBlockEditor = withForm({
                 continue
               }
               setPending((current) => [...current, { key, previewURL }])
-              void trackUpload(form, upload(key, file))
+              trackUpload(form, upload(key, file))
             }
             field.handleBlur()
           }
