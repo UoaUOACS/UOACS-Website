@@ -7,7 +7,11 @@ import { cn } from "@uoacs/ui/utils"
 import { Suspense, useEffect, useRef, useTransition } from "react"
 import { ImageGridBlockView } from "@/features/project/components/BlockViews/ImageGridBlockView"
 import { TextBlockView } from "@/features/project/components/BlockViews/TextBlockView"
-import { type MediaLookup, projectFormOptions } from "@/features/project/editor/projectForm.options"
+import {
+  isEmptyBlock,
+  type MediaLookup,
+  projectFormOptions,
+} from "@/features/project/editor/projectForm.options"
 import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
@@ -108,7 +112,6 @@ export const BlockFrame = withForm({
 
     const isText = block.blockType === Slugs.Blocks.TEXT
     const label = `${isText ? "Text" : "Image grid"} block ${index + 1}`
-    const isEmpty = isText ? !block.content : block.images.length === 0
 
     const options = [
       ...(active ? [] : [menuOption("Edit", activate)]),
@@ -147,7 +150,7 @@ export const BlockFrame = withForm({
                 )
               ) : (
                 <>
-                  {isEmpty ? (
+                  {isEmptyBlock(block) ? (
                     <p className="flex min-h-24 items-center justify-center rounded-xl border border-gray-300 border-dashed text-gray-500 text-sm">
                       {isText ? "Click to write" : "Click to add images"}
                     </p>
