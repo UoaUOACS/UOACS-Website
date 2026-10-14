@@ -21,12 +21,12 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin"
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
+import type { RichTextValue } from "@uoacs/shared/payload"
 import {
   $getRoot,
   createEditor,
   type EditorState,
   type EditorThemeClasses,
-  type SerializedEditorState,
   type SerializedLexicalNode,
 } from "lexical"
 import { Component, type ReactNode, useEffect, useState } from "react"
@@ -113,8 +113,6 @@ const TRANSFORMERS = [
 const theme: EditorThemeClasses = {
   text: { bold: "font-bold", italic: "italic", underline: "underline" },
 }
-
-export type RichTextValue = SerializedEditorState & { [key: string]: unknown }
 
 export interface RichTextEditorProps {
   "aria-describedby"?: string

@@ -39,7 +39,7 @@ export function PlaygroundNavbar({
 }: PlaygroundNavbarProps) {
   const profileOptions: DropdownProps["options"] = [
     {
-      href: Routes.PROFILE,
+      href: Routes.PROFILE.ROOT,
       label: (
         <div className="flex flex-row items-center gap-2">
           <UserIcon className="h-4 w-4" />
