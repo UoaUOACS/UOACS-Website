@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { type SaveProjectResult, saveProject } from "@/features/project/actions/saveProject"
 import {
+  type BlockValue,
   type EditProjectValues,
   type MediaLookup,
   projectFormOptions,
@@ -15,6 +16,7 @@ import {
 import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { submitForm } from "@/lib/form/flush"
 import { useAppForm } from "@/lib/form/useAppForm"
+import { Slugs } from "@/lib/payload/slugs"
 import { Routes } from "@/lib/routes"
 import { blockElementID } from "./Blocks/BlockFrame"
 import { BlockList } from "./Blocks/BlockList"
@@ -46,14 +48,21 @@ export interface ProjectEditorProps {
 }
 
 const BLOCK_ERROR_PATH = /^pageContent\[(\d+)\]/
+const IMAGE_TITLE_ERROR_PATH = /^imageTitles\.(\w+)$/
 
 /**
- * The index of the first block with an error, if any
+ * The index of the first block with an error, if any. An image title's error is on its grid.
  */
-const firstBlockWithError = (fieldErrors: Record<string, string>) => {
+const firstBlockWithError = (fieldErrors: Record<string, string>, blocks: BlockValue[]) => {
   const indexes = Object.keys(fieldErrors).flatMap((path) => {
     const match = BLOCK_ERROR_PATH.exec(path)
-    return match ? [Number(match[1])] : []
+    if (match) return [Number(match[1])]
+    const mediaID = IMAGE_TITLE_ERROR_PATH.exec(path)?.[1]
+    if (!mediaID) return []
+    const index = blocks.findIndex(
+      (block) => block.blockType === Slugs.Blocks.IMAGE_GRID && block.images.includes(mediaID),
+    )
+    return index === -1 ? [] : [index]
   })
   return indexes.length > 0 ? Math.min(...indexes) : undefined
 }
@@ -87,7 +96,7 @@ export const ProjectEditor = ({
   const save: SaveValidator = async ({ value }) => {
     const result = await saveProject(toSaveInput(value, savedID.current))
     if (!result.ok) {
-      const index = firstBlockWithError(result.fieldErrors ?? {})
+      const index = firstBlockWithError(result.fieldErrors ?? {}, value.pageContent)
       if (index !== undefined) showBlock(index)
       return { form: SAVE_ERROR_MESSAGES[result.error], fields: result.fieldErrors ?? {} }
     }

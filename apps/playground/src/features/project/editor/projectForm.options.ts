@@ -31,6 +31,10 @@ export type EditProjectValues = {
   summary: string
   coverImage: string | null // Media ID
   pageContent: BlockValue[]
+  /**
+   * Image grid titles by Media ID, saved as each image's alt text
+   */
+  imageTitles: Record<string, string>
 }
 
 const defaultValues: EditProjectValues = {
@@ -38,6 +42,7 @@ const defaultValues: EditProjectValues = {
   summary: "",
   coverImage: null,
   pageContent: [],
+  imageTitles: {},
 }
 
 /**
@@ -75,6 +80,9 @@ export const toFormValues = (project: Project): EditProjectValues => ({
       ? { _key, id, blockType: block.blockType, content: block.content }
       : { _key, id, blockType: block.blockType, images: block.images.map(getRelationID) }
   }),
+  imageTitles: Object.fromEntries(
+    Object.values(toMediaLookup(project)).map((image) => [image.id, image.alt]),
+  ),
 })
 
 /**
@@ -96,9 +104,20 @@ export const toMediaLookup = (project: Project): MediaLookup =>
 
 /**
  * The input for `saveProject`. Drops `_key` and keeps `id`, so Payload keeps existing blocks.
+ * Sends only the titles of images that are still in a grid.
  */
-export const toSaveInput = ({ pageContent, ...values }: EditProjectValues, id?: string) => ({
+export const toSaveInput = (
+  { pageContent, imageTitles, ...values }: EditProjectValues,
+  id?: string,
+) => ({
   ...values,
   id,
   pageContent: pageContent.map(({ _key, ...block }) => block),
+  imageTitles: Object.fromEntries(
+    pageContent
+      .flatMap((block) => (block.blockType === Slugs.Blocks.IMAGE_GRID ? block.images : []))
+      .flatMap((mediaID) =>
+        imageTitles[mediaID] === undefined ? [] : [[mediaID, imageTitles[mediaID]]],
+      ),
+  ),
 })

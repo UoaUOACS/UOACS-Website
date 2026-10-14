@@ -68,6 +68,7 @@ const header = {
   name: "UOACS Socials",
   summary: "Posters and social media posts for UOACS events.",
   coverImage: objectID(100),
+  imageTitles: Object.fromEntries(Object.values(media).map((image) => [image.id, image.alt])),
 }
 
 const meta = {

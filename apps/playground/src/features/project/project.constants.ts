@@ -61,6 +61,11 @@ export const PROJECT_MAX_BLOCKS = 50
 export const IMAGE_GRID_MAX_IMAGES = 12
 
 /**
+ * Most characters in an image grid image's title, which is also its alt text
+ */
+export const IMAGE_TITLE_MAX_LENGTH = 120
+
+/**
  * Most characters of text in one text block, not counting formatting.
  */
 export const TEXT_BLOCK_MAX_CHARACTERS = 2000

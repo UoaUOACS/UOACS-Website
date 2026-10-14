@@ -1,12 +1,13 @@
 "use client"
 
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline"
-import { type GalleryImage, LazyImage } from "@uoacs/ui"
+import { type GalleryImage, Input, LazyImage } from "@uoacs/ui"
 import { useId, useState } from "react"
 import { uploadProjectMedia } from "@/features/project/actions/uploadProjectMedia"
 import { type MediaLookup, projectFormOptions } from "@/features/project/editor/projectForm.options"
 import {
   IMAGE_GRID_MAX_IMAGES,
+  IMAGE_TITLE_MAX_LENGTH,
   MEDIA_MAX_BYTES,
   MEDIA_TYPES,
   MEDIA_UPLOAD_MAX_DIMENSION,
@@ -73,6 +74,7 @@ export const ImageGridBlockEditor = withForm({
           width: result.width,
           height: result.height,
         })
+        form.setFieldValue(`imageTitles.${result.id}`, result.alt)
         // By key, as the block can move or be deleted while the image uploads
         const at = form.state.values.pageContent.findIndex((block) => block._key === blockKey)
         if (at !== -1) form.pushFieldValue(`pageContent[${at}].images`, result.id)
@@ -118,25 +120,46 @@ export const ImageGridBlockEditor = withForm({
                 {images.map((id, imageIndex) => {
                   const image = media[id]
                   return (
-                    <li className={tile} key={id}>
-                      {image && (
-                        <LazyImage
-                          alt={image.alt}
-                          className="object-cover!"
-                          containerClassName="absolute inset-0"
-                          fill
-                          sizes="(min-width: 640px) 33vw, 50vw"
-                          src={image.src}
-                        />
-                      )}
-                      <button
-                        className={removeButton}
-                        onClick={() => field.removeValue(imageIndex)}
-                        type="button"
+                    <li className="flex flex-col gap-1" key={id}>
+                      <div className={tile}>
+                        {image && (
+                          <LazyImage
+                            alt={image.alt}
+                            className="object-cover!"
+                            containerClassName="absolute inset-0"
+                            fill
+                            sizes="(min-width: 640px) 33vw, 50vw"
+                            src={image.src}
+                          />
+                        )}
+                        <button
+                          className={removeButton}
+                          onClick={() => field.removeValue(imageIndex)}
+                          type="button"
+                        >
+                          <XMarkIcon aria-hidden className="size-4" />
+                          <span className="sr-only">Remove image {imageIndex + 1}</span>
+                        </button>
+                      </div>
+                      <form.Field
+                        name={`imageTitles.${id}`}
+                        validators={{
+                          onChange: ({ value }) => (value?.trim() ? undefined : "Add a title"),
+                        }}
                       >
-                        <XMarkIcon aria-hidden className="size-4" />
-                        <span className="sr-only">Remove image {imageIndex + 1}</span>
-                      </button>
+                        {(title) => (
+                          <Input
+                            aria-label={`Title of image ${imageIndex + 1}`}
+                            className="px-2 py-1 text-sm"
+                            error={getFieldError(title.state.meta.errors)}
+                            maxLength={IMAGE_TITLE_MAX_LENGTH}
+                            onBlur={title.handleBlur}
+                            onChange={(event) => title.handleChange(event.target.value)}
+                            placeholder="Title"
+                            value={title.state.value ?? ""}
+                          />
+                        )}
+                      </form.Field>
                     </li>
                   )
                 })}

@@ -64,6 +64,7 @@ export const BlockFrame = withForm({
   }) {
     // The list only re-renders when blocks are added, moved or removed
     const block = useSelector(form.store, (state) => state.values.pageContent[index])
+    const imageTitles = useSelector(form.store, (state) => state.values.imageTitles)
     // Server errors are set for blocks that have no mounted field, so read them from the form
     const error = useSelector(form.store, (state) => {
       const prefix = `pageContent[${index}]`
@@ -151,7 +152,11 @@ export const BlockFrame = withForm({
                   ) : isText ? (
                     <TextBlockView content={block.content} />
                   ) : (
-                    <ImageGridBlockView images={block.images.flatMap((id) => media[id] ?? [])} />
+                    <ImageGridBlockView
+                      images={block.images.flatMap((id) =>
+                        media[id] ? [{ ...media[id], alt: imageTitles[id] ?? media[id].alt }] : [],
+                      )}
+                    />
                   )}
                   {/* Covers the view, so a click anywhere or Enter opens the editor */}
                   <button
