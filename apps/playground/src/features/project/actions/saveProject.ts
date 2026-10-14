@@ -74,6 +74,8 @@ export async function saveProject(input: unknown): Promise<SaveProjectResult> {
     const payload = await getPayloadClient()
 
     if (!id) {
+      // Titles first, so a failed title save cannot leave a new project the client has no ID for
+      await saveImageTitles(payload, memberID, imageTitles)
       // create the project rather than update
       const created = await payload.create({
         collection: Slugs.Collections.PROJECT,
@@ -81,7 +83,6 @@ export async function saveProject(input: unknown): Promise<SaveProjectResult> {
         depth: 0,
         overrideAccess: true,
       })
-      await saveImageTitles(payload, memberID, imageTitles)
       updateTag(CacheTags.PROJECTS.AUTHOR(memberID))
       return { ok: true, id: created.id }
     }
@@ -97,6 +98,7 @@ export async function saveProject(input: unknown): Promise<SaveProjectResult> {
       return { ok: false, error: "not-found" }
     }
 
+    await saveImageTitles(payload, memberID, imageTitles)
     await payload.update({
       collection: Slugs.Collections.PROJECT,
       id,
@@ -104,7 +106,6 @@ export async function saveProject(input: unknown): Promise<SaveProjectResult> {
       depth: 0,
       overrideAccess: true,
     })
-    await saveImageTitles(payload, memberID, imageTitles)
     updateTag(CacheTags.PROJECTS.ID(id))
     updateTag(CacheTags.PROJECTS.AUTHOR(memberID))
     return { ok: true, id }
