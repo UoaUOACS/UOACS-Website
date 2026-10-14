@@ -50,9 +50,6 @@ export const BlockList = withForm({
             aria-label="Page content"
             className="flex min-h-80 flex-col items-center gap-2 rounded-md border border-gray-200 px-4 py-8 md:px-12"
           >
-            {blocks.length === 0 && (
-              <p className="paragraph text-gray-500">Add your first block to build the page.</p>
-            )}
             {insertPoint(0)}
             {blocks.map((block, index) => (
               <Fragment key={block._key}>
