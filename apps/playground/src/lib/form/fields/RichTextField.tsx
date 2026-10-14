@@ -25,6 +25,10 @@ export interface RichTextFieldProps
   extends Pick<RichTextEditorProps, "autoFocus" | "className" | "disabled" | "placeholder"> {
   label: string
   /**
+   * Keeps the label for screen readers only
+   */
+  hideLabel?: boolean
+  /**
    * Shows a live character count against this limit. Formatting does not count.
    */
   maxCharacters?: number
@@ -40,6 +44,7 @@ export interface RichTextFieldProps
  */
 export const RichTextField = ({
   label,
+  hideLabel,
   maxCharacters,
   wait = 300,
   ...props
@@ -60,7 +65,10 @@ export const RichTextField = ({
 
   return (
     <div className="flex w-full flex-col gap-2 font-mono">
-      <span className="block font-medium text-gray-700 text-sm" id={`${id}-label`}>
+      <span
+        className={cn("block font-medium text-gray-700 text-sm", hideLabel && "sr-only")}
+        id={`${id}-label`}
+      >
         {label}
       </span>
       <RichTextEditor

@@ -116,7 +116,7 @@ export const BlockFrame = withForm({
         <div className="flex min-w-0 grow flex-col gap-2">
           <div
             className={cn(
-              "relative rounded-xl",
+              "relative rounded-xl p-2",
               error && "outline-2 outline-red-600 outline-offset-4",
               // Skips layout and paint for idle blocks off screen, for long pages
               !active && "[contain-intrinsic-block-size:auto_24rem] [content-visibility:auto]",
