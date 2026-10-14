@@ -14,7 +14,7 @@ import { BlockFrame } from "./BlockFrame"
 import { BlockInsertPoint } from "./BlockInsertPoint"
 
 /**
- * The page's blocks, with a "+" insert point before, between and after them
+ * The page's blocks, with an insert point before, between and after them
  */
 export const BlockList = withForm({
   ...projectFormOptions,
@@ -36,6 +36,7 @@ export const BlockList = withForm({
         const insertPoint = (index: number) =>
           canInsert && (
             <BlockInsertPoint
+              between={index < blocks.length}
               onInsert={(blockType) => {
                 const block = createBlock(blockType)
                 field.insertValue(index, block)
@@ -47,7 +48,7 @@ export const BlockList = withForm({
         return (
           <section
             aria-label="Page content"
-            className="flex min-h-80 flex-col items-center gap-6 rounded-md border border-gray-200 px-4 py-8 md:px-12"
+            className="flex min-h-80 flex-col items-center gap-2 rounded-md border border-gray-200 px-4 py-8 md:px-12"
           >
             {blocks.length === 0 && (
               <p className="paragraph text-gray-500">Add your first block to build the page.</p>
