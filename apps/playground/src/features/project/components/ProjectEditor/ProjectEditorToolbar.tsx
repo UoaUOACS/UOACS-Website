@@ -26,7 +26,7 @@ export const ProjectEditorToolbar = withForm({
     const [deleteOpen, setDeleteOpen] = useState(false)
 
     return (
-      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-end gap-x-4 gap-y-2 bg-white py-3">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-end gap-x-1 gap-y-2 bg-white py-3 sm:gap-x-4">
         <form.Subscribe
           selector={(state) => ({
             message: getFieldError([state.errorMap.onSubmit]),
@@ -43,30 +43,32 @@ export const ProjectEditorToolbar = withForm({
           }
         </form.Subscribe>
         {/* Preview mode comes with the reorder and preview work */}
-        <Button className="disabled:text-gray-400" disabled theme="ghost">
+        <Button className="disabled:text-gray-400 max-sm:px-2" disabled theme="ghost">
           Preview
         </Button>
         <Button
+          className="max-sm:px-2"
           // Client navigation, so the unsaved changes warning does not show
           onClick={() =>
             router.push(projectID ? Routes.PROJECTS.ID(projectID) : Routes.PROFILE.ROOT)
           }
           theme="ghost"
         >
-          Discard Changes
+          {/* One span, as the button spaces out its children */}
+          <span>
+            Discard<span className="max-sm:hidden"> Changes</span>
+          </span>
         </Button>
         <form.SubmitButton theme="dark">
-          {projectID ? "Update Project" : "Create Project"}
+          <span>
+            {projectID ? "Update" : "Create"}
+            <span className="max-sm:hidden"> Project</span>
+          </span>
         </form.SubmitButton>
         {projectID && (
           <>
             <Dropdown
-              label={
-                <>
-                  <EllipsisHorizontalIcon aria-hidden className="size-6" />
-                  <span className="sr-only">More actions</span>
-                </>
-              }
+              label={<span className="sr-only">More actions</span>}
               options={[
                 {
                   label: "Delete project",
@@ -79,7 +81,10 @@ export const ProjectEditorToolbar = withForm({
               shape="pill"
               size="icon"
               theme="ghost"
-              trigger={false}
+              trigger={{
+                triggerClassName: "size-8 sm:size-10",
+                triggerIcon: <EllipsisHorizontalIcon aria-hidden className="size-5 sm:size-6" />,
+              }}
             />
             <DeleteProjectDialog
               onClose={() => setDeleteOpen(false)}
