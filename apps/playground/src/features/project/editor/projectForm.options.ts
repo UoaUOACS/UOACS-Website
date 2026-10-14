@@ -115,9 +115,7 @@ export const toMediaLookup = (project: Project): MediaLookup =>
 
 /**
  * The input for `saveProject`. Drops `_key` and keeps `id`, so Payload keeps existing blocks.
- * Sends only the changed titles of images that are still in a grid, so an old title that is now
- * too long does not block the save. Checks only the keys against the schema, as the form holds
- * values like empty content that the schema rejects on the server.
+ * Sends only changed titles of images in a grid, so an old, too-long title cannot block a save.
  */
 export const toSaveInput = (
   { pageContent, imageTitles, ...values }: EditProjectValues,
@@ -137,4 +135,5 @@ export const toSaveInput = (
             : [[mediaID, imageTitles[mediaID]]],
         ),
     ),
+    // Keys only, as the form holds values like empty content that the schema rejects
   }) satisfies Record<keyof z.input<typeof editProjectSchema>, unknown>
