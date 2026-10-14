@@ -98,7 +98,9 @@ export const ProjectEditor = ({
     // Indexes of the blocks to save. Empty blocks are skipped, not errors.
     const kept = value.pageContent.flatMap((block, index) => (isEmptyBlock(block) ? [] : [index]))
     const pageContent = kept.map((index) => value.pageContent[index])
-    const result = await saveProject(toSaveInput({ ...value, pageContent }, savedID.current))
+    const result = await saveProject(
+      toSaveInput({ ...value, pageContent }, savedID.current, initialValues.imageTitles),
+    )
     if (!result.ok) {
       // Back to editor indexes, as the server counts only the saved blocks
       const fields = Object.fromEntries(
