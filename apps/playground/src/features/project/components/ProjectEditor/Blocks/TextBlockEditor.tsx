@@ -13,7 +13,7 @@ export const TextBlockEditor = withForm({
         <field.RichTextField
           autoFocus
           hideLabel
-          label={`Text block ${index + 1}`}
+          label={`Text section ${index + 1}`}
           maxCharacters={TEXT_BLOCK_MAX_CHARACTERS}
           placeholder="Write about your project"
         />

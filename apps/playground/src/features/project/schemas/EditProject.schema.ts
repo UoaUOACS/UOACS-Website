@@ -21,8 +21,8 @@ export const editProjectSchema = z.object({
   coverImage: z.string("Add a cover image").pipe(objectIDSchema),
   pageContent: z
     .array(z.discriminatedUnion("blockType", [textBlockSchema, imageGridBlockSchema]))
-    .min(1, "Add at least one block")
-    .max(PROJECT_MAX_BLOCKS, `A project can have ${PROJECT_MAX_BLOCKS} blocks or fewer`),
+    .min(1, "Add at least one section")
+    .max(PROJECT_MAX_BLOCKS, `A project can have ${PROJECT_MAX_BLOCKS} sections or fewer`),
   // By Media ID. Saved as each image's alt text.
   imageTitles: z
     .record(objectIDSchema, z.string().trim().min(1, "Add a title").max(IMAGE_TITLE_MAX_LENGTH))

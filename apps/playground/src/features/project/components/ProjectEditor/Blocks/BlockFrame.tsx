@@ -125,7 +125,7 @@ export const BlockFrame = withForm({
     if (!block) return null
 
     const isText = block.blockType === Slugs.Blocks.TEXT
-    const label = `${isText ? "Text" : "Image grid"} block ${index + 1}`
+    const label = `${isText ? "Text" : "Image grid"} section ${index + 1}`
 
     const options = [
       ...(active ? [] : [menuOption("Edit", activate)]),
@@ -200,7 +200,7 @@ export const BlockFrame = withForm({
           {failedUploads > 0 && !active && (
             <p className="text-red-600 text-sm">
               {failedUploads === 1 ? "1 image" : `${failedUploads} images`} could not be uploaded.
-              Open the block to see why.
+              Open the section to see why.
             </p>
           )}
         </div>

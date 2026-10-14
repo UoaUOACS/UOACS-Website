@@ -121,7 +121,7 @@ export const LongPage: Story = {
       pageContent: Array.from({ length: 35 }, (_, i) =>
         i % 3 === 2
           ? imageGridBlock(10 + i, [100 + (i % 6), 101 + (i % 5)])
-          : textBlock(10 + i, `Block ${i + 1}. Some text about this part of the project.`),
+          : textBlock(10 + i, `Section ${i + 1}. Some text about this part of the project.`),
       ),
     },
   },

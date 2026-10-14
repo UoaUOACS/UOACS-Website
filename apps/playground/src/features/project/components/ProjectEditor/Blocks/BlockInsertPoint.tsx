@@ -43,12 +43,12 @@ export const BlockInsertPoint = ({ onInsert, between = false }: BlockInsertPoint
             )}
           >
             <PlusIcon aria-hidden className="size-4" />
-            <span className="sr-only">Add a block</span>
+            <span className="sr-only">Add a section</span>
           </span>
         ) : (
           <>
             <PlusIcon aria-hidden className="size-4" />
-            Add a block
+            Add a section
           </>
         )
       }
