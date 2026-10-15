@@ -1,6 +1,5 @@
 import { AnimatedSuspense } from "@uoacs/ui"
 import { notFound } from "next/navigation"
-import { Suspense } from "react"
 import { getMemberByUsernameCached } from "@/features/member/member.queries"
 import { ProfileAbout } from "@/features/profile/components/ProfileAbout/ProfileAbout"
 import { ProfileHeader } from "@/features/profile/components/ProfileHeader/ProfileHeader"
@@ -16,9 +15,9 @@ const ProfileContent = async ({ params }: Pick<PageProps<"/profile/[username]">,
 
   return (
     <>
-      <Suspense fallback={<ProfileHeaderSkeleton />}>
+      <AnimatedSuspense fallback={<ProfileHeaderSkeleton />}>
         <ProfileHeader member={member} />
-      </Suspense>
+      </AnimatedSuspense>
 
       <ProfileTabs
         panels={{
