@@ -39,16 +39,14 @@ export const DeleteProjectDialog = ({ projectID, open, onClose }: DeleteProjectD
           This removes the project page and its likes. You cannot undo it.
         </p>
         <div className="flex justify-end gap-2">
-          <Button disabled={isPending} onClick={onClose} shape="pill" size="md" theme="ghost">
+          <Button disabled={isPending} onClick={onClose} theme="dark">
             Cancel
           </Button>
           <Button
             aria-busy={isPending || undefined}
             disabled={isPending}
             onClick={handleDelete}
-            shape="pill"
-            size="md"
-            theme="primary"
+            theme="ghost"
           >
             {isPending ? "Deleting…" : "Delete"}
           </Button>

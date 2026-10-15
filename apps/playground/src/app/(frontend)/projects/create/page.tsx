@@ -14,7 +14,7 @@ const CreateProjectContent = async () => {
 
 export default function CreateProjectPage() {
   return (
-    <AnimatedSuspense fallback={<ProjectEditorSkeleton />}>
+    <AnimatedSuspense fallback={<ProjectEditorSkeleton create />}>
       <CreateProjectContent />
     </AnimatedSuspense>
   )
