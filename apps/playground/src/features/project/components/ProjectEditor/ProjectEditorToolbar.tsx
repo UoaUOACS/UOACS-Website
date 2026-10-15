@@ -26,7 +26,7 @@ export const ProjectEditorToolbar = withForm({
     const [deleteOpen, setDeleteOpen] = useState(false)
 
     return (
-      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-end gap-x-1 gap-y-2 bg-white py-3 sm:gap-x-4">
+      <div className="sticky top-0 z-40 flex flex-wrap items-center justify-end gap-x-1 gap-y-2 bg-white py-3 sm:gap-x-4">
         <form.Subscribe
           selector={(state) => ({
             message: getFieldError([state.errorMap.onSubmit]),
