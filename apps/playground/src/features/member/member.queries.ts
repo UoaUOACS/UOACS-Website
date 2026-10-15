@@ -115,3 +115,13 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
     return { status: "authenticated", member: raced }
   }
 })
+
+export const getMemberByUsernameCached = cache(async (username: string): Promise<Member | null> => {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: Slugs.Collections.MEMBER,
+    where: { username: { equals: username } },
+    limit: 1,
+  })
+  return docs[0] ?? null
+})
