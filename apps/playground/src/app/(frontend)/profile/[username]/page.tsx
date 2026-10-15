@@ -7,11 +7,7 @@ import { ProfileHeaderSkeleton } from "@/features/profile/components/ProfileHead
 import { ProfileProjects } from "@/features/profile/components/ProfileProjects/ProfileProjects"
 import { ProfileTabs } from "@/features/profile/components/ProfileTabs/ProfileTabs"
 
-interface ProfilePageProps {
-  params: Promise<{ username: string }>
-}
-
-const ProfileContent = async ({ params }: ProfilePageProps) => {
+const ProfileContent = async ({ params }: Pick<PageProps<"/profile/[username]">, "params">) => {
   const { username } = await params
 
   const member = await getMemberByUsernameCached(username)
@@ -33,11 +29,11 @@ const ProfileContent = async ({ params }: ProfilePageProps) => {
   )
 }
 
-export default function ProfilePage({ params }: ProfilePageProps) {
+export default function ProfilePage(props: PageProps<"/profile/[username]">) {
   return (
     <div className="mx-auto flex w-full flex-col gap-10 px-4 py-10">
       <Suspense fallback={<ProfileHeaderSkeleton />}>
-        <ProfileContent params={params} />
+        <ProfileContent params={props.params} />
       </Suspense>
     </div>
   )
