@@ -18,7 +18,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   if (!member) notFound()
 
   return (
-    <main className="mx-auto flex w-full flex-col gap-10 px-4 py-10">
+    <div className="mx-auto flex w-full flex-col gap-10 px-4 py-10">
       <Suspense fallback={<ProfileHeaderSkeleton />}>
         <ProfileHeader member={member} />
       </Suspense>
@@ -29,6 +29,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           About: <ProfileAbout biography={member.bio} skills={member.skills ?? undefined} />,
         }}
       />
-    </main>
+    </div>
   )
 }
