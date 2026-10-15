@@ -11,14 +11,14 @@ interface ProfilePageProps {
   params: Promise<{ username: string }>
 }
 
-export default async function ProfilePage({ params }: ProfilePageProps) {
+const ProfileContent = async ({ params }: ProfilePageProps) => {
   const { username } = await params
 
   const member = await getMemberByUsernameCached(username)
   if (!member) notFound()
 
   return (
-    <div className="mx-auto flex w-full flex-col gap-10 px-4 py-10">
+    <>
       <Suspense fallback={<ProfileHeaderSkeleton />}>
         <ProfileHeader member={member} />
       </Suspense>
@@ -29,6 +29,16 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           About: <ProfileAbout biography={member.bio} skills={member.skills ?? undefined} />,
         }}
       />
+    </>
+  )
+}
+
+export default function ProfilePage({ params }: ProfilePageProps) {
+  return (
+    <div className="mx-auto flex w-full flex-col gap-10 px-4 py-10">
+      <Suspense fallback={<ProfileHeaderSkeleton />}>
+        <ProfileContent params={params} />
+      </Suspense>
     </div>
   )
 }
