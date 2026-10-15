@@ -44,6 +44,7 @@ export const Edit: Story = {
           images: ["000000000000000000000002"],
         },
       ],
+      imageTitles: {},
     },
   },
 }
