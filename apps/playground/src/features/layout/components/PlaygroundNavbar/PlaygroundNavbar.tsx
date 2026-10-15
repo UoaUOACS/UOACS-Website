@@ -2,11 +2,12 @@
 
 import { ArrowLeftEndOnRectangleIcon, ArrowUpRightIcon, UserIcon } from "@heroicons/react/24/solid"
 import { AuthPages } from "@uoacs/shared"
+import { authClient } from "@uoacs/shared/auth"
 import type { DropdownProps } from "@uoacs/ui"
 import { Button, Dropdown } from "@uoacs/ui"
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Suspense } from "react"
 import { Routes } from "@/lib/routes"
 import { AuthPageLink } from "../AuthPageLink/AuthPageLink"
@@ -16,8 +17,8 @@ import { AuthPageLink } from "../AuthPageLink/AuthPageLink"
  */
 export interface PlaygroundNavbarProps {
   /**
-   * Whether the user is signed in. Rendered as a profile dropdown when true,
-   * or Log In and Sign Up links to the hosted auth app when false.
+   * Auth-state override, used by branch unit tests and the Storybook sandbox to
+   * force the auth state even when no session is loaded. Omitted in production.
    */
   signedIn?: boolean
   /**
@@ -27,16 +28,21 @@ export interface PlaygroundNavbarProps {
 }
 
 /**
- * A responsive navbar for the playground, with logo, page title, and auth action.
+ * A responsive navbar for the playground, with logo, page title, and auth action
+ * driven by the auth session.
  *
- * @param signedIn Whether the user is signed in.
+ * @param signedIn Optional session-state override for story/unit tests.
  * @param logoHref Route the logo links to.
  * @returns A Navbar component with logo, tagline, and auth action.
  */
 export function PlaygroundNavbar({
-  signedIn = false,
+  signedIn: signedInOverride,
   logoHref = Routes.HOME,
 }: PlaygroundNavbarProps) {
+  const { data: session, isPending } = authClient.useSession()
+  const router = useRouter()
+  const signedIn = signedInOverride ?? Boolean(session)
+
   const profileOptions: DropdownProps["options"] = [
     {
       href: Routes.PROFILE.ROOT,
@@ -55,7 +61,10 @@ export function PlaygroundNavbar({
           <p>Log Out</p>
         </div>
       ),
-      onClick: () => {}, // TODO: wire up to auth service signOut
+      onClick: async () => {
+        await authClient.signOut()
+        router.refresh()
+      },
       theme: "primary",
     },
   ]
@@ -72,7 +81,9 @@ export function PlaygroundNavbar({
         </span>
       </Link>
 
-      {signedIn ? (
+      {/* While the session resolves, nothing renders in the auth slot so a signed-in user never flashes the signed-out view. */}
+      {/* An explicit signedIn override (storybook/tests) renders immediately, since the sandbox has no session to wait on. */}
+      {isPending && signedInOverride === undefined ? null : signedIn ? (
         <Dropdown
           label={<UserIcon className="h-4 w-4" />}
           options={profileOptions}
