@@ -52,7 +52,7 @@ export function PlaygroundNavbar({
           <p>Profile</p>
         </div>
       ),
-      theme: "primary",
+      theme: "dark",
     },
     {
       label: (
@@ -65,7 +65,7 @@ export function PlaygroundNavbar({
         await authClient.signOut()
         router.refresh()
       },
-      theme: "primary",
+      theme: "dark",
     },
   ]
 
@@ -87,14 +87,8 @@ export function PlaygroundNavbar({
         <Dropdown
           label={<UserIcon className="h-4 w-4" />}
           options={profileOptions}
-          shape="pill"
-          size="icon"
           theme="dark"
-          trigger={{
-            triggerClassName:
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
-            triggerIcon: false,
-          }}
+          trigger={false}
         />
       ) : (
         <div className="flex flex-row items-center gap-3">
