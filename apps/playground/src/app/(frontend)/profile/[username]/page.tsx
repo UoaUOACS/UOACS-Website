@@ -1,3 +1,4 @@
+import { AnimatedSuspense } from "@uoacs/ui"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
 import { getMemberByUsernameCached } from "@/features/member/member.queries"
@@ -32,9 +33,9 @@ const ProfileContent = async ({ params }: Pick<PageProps<"/profile/[username]">,
 export default function ProfilePage(props: PageProps<"/profile/[username]">) {
   return (
     <div className="mx-auto flex w-full flex-col gap-10 px-4 py-10">
-      <Suspense fallback={<ProfileHeaderSkeleton />}>
+      <AnimatedSuspense fallback={<ProfileHeaderSkeleton />}>
         <ProfileContent params={props.params} />
-      </Suspense>
+      </AnimatedSuspense>
     </div>
   )
 }
