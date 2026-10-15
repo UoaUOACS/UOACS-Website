@@ -72,7 +72,7 @@ export const ProjectEditor = ({
   projectID,
   initialValues,
   coverImageURL,
-  media = {},
+  media: initialMedia = {},
 }: ProjectEditorProps) => {
   const router = useRouter()
   // Set by the first save on create, so a second save before the redirect updates that project
@@ -81,6 +81,7 @@ export const ProjectEditor = ({
   const [activeKey, setActiveKey] = useState<string | null>(null)
   // In state, as TanStack clears a form-level error on the next change
   const [saveError, setSaveError] = useState<string>()
+  const [media, setMedia] = useState(initialMedia)
 
   const showBlock = (index: number) => {
     const key = form.state.values.pageContent[index]?._key
@@ -165,6 +166,7 @@ export const ProjectEditor = ({
             form={form}
             media={media}
             onActiveKeyChange={setActiveKey}
+            onUpload={(image) => setMedia((current) => ({ ...current, [image.id]: image }))}
           />
         </div>
       </form.AppForm>

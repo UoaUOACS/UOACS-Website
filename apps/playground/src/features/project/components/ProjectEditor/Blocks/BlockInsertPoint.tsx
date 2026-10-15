@@ -59,6 +59,12 @@ export const BlockInsertPoint = ({ onInsert, between = false }: BlockInsertPoint
           theme: "ghost",
           className: "w-full justify-start",
         },
+        {
+          label: "Image grid",
+          onClick: () => onInsert(Slugs.Blocks.IMAGE_GRID),
+          theme: "ghost",
+          className: "w-full justify-start",
+        },
       ]}
       popoverClassName="right-auto left-1/2 -translate-x-1/2 items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md"
       shape="pill"
