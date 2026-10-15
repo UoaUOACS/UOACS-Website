@@ -81,9 +81,9 @@ export function PlaygroundNavbar({
         </span>
       </Link>
 
-      {/* While the session resolves, sign-in users will briefly see the signed-out (Log In/Sign Up) view; */}
-      {/* a forced override skips the wait entirely for the sandbox. */}
-      {isPending ? null : signedIn ? (
+      {/* While the session resolves, nothing renders in the auth slot so a signed-in user never flashes the signed-out view. */}
+      {/* An explicit signedIn override (storybook/tests) renders immediately, since the sandbox has no session to wait on. */}
+      {isPending && signedInOverride === undefined ? null : signedIn ? (
         <Dropdown
           label={<UserIcon className="h-4 w-4" />}
           options={profileOptions}
