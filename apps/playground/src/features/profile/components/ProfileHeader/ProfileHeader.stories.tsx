@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { mockAccount, mockMember } from "@/features/profile/mocks/Member.mock"
+import { mockMember } from "@/features/profile/mocks/Member.mock"
 import { Routes } from "@/lib/routes"
 import { ProfileHeaderSkeleton, ProfileHeaderView } from "./ProfileHeaderView"
 
 const meta = {
   title: "Profile/ProfileHeader",
   component: ProfileHeaderView,
-  args: { member: mockMember, account: mockAccount, isOwner: true },
+  args: { member: mockMember, isOwner: true },
   parameters: {
     nextjs: {
       appDirectory: true,
@@ -49,7 +49,7 @@ export const WithProfilePicture: Story = {
 
 export const LongName: Story = {
   args: {
-    account: { ...mockAccount, firstName: "Maximiliana Alexandria", lastName: "Montgomery" },
+    member: { ...mockMember, firstName: "Maximiliana Alexandria", lastName: "Montgomery" },
   },
 }
 
