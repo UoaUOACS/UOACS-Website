@@ -1,8 +1,7 @@
 import "server-only"
-import { AuthPages, authPageUrl, type SessionResult } from "@uoacs/shared"
+import type { SessionResult } from "@uoacs/shared"
 import { getSession } from "@uoacs/shared/auth/server"
-import { redirect } from "next/navigation"
-import { projectsUrl } from "@/lib/routes"
+import { redirectToLogin } from "./auth.helpers"
 
 /** A required session never reports "unauthenticated": that case redirects. */
 export type RequiredSessionResult = Exclude<SessionResult, { status: "unauthenticated" }>
@@ -17,8 +16,6 @@ export type RequiredSessionResult = Exclude<SessionResult, { status: "unauthenti
  */
 export async function requireSession(path: string): Promise<RequiredSessionResult> {
   const result = await getSession()
-  if (result.status === "unauthenticated") {
-    redirect(authPageUrl(AuthPages.LOGIN, projectsUrl(path)))
-  }
+  if (result.status === "unauthenticated") redirectToLogin(path)
   return result
 }
