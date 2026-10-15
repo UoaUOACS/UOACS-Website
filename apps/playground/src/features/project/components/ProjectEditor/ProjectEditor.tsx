@@ -3,18 +3,24 @@
 import { useSelector } from "@tanstack/react-form"
 import { toast } from "@uoacs/ui/toast"
 import { useRouter } from "next/navigation"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { type SaveProjectResult, saveProject } from "@/features/project/actions/saveProject"
 import {
+  type BlockValue,
   type EditProjectValues,
+  isEmptyBlock,
+  type MediaLookup,
   projectFormOptions,
   type SaveValidator,
   toSaveInput,
 } from "@/features/project/editor/projectForm.options"
+import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { submitForm } from "@/lib/form/flush"
-import { getFieldError } from "@/lib/form/formContext"
 import { useAppForm } from "@/lib/form/useAppForm"
+import { Slugs } from "@/lib/payload/slugs"
 import { Routes } from "@/lib/routes"
+import { blockElementID } from "./Blocks/BlockFrame"
+import { BlockList } from "./Blocks/BlockList"
 import { ProjectEditorToolbar } from "./ProjectEditorToolbar"
 import { ProjectHeaderEditor } from "./ProjectHeaderEditor/ProjectHeaderEditor"
 
@@ -36,18 +42,75 @@ export interface ProjectEditorProps {
    * The saved cover image, shown until a new one is picked
    */
   coverImageURL?: string
+  /**
+   * The saved images of the page's image grids
+   */
+  media?: MediaLookup
 }
 
-export const ProjectEditor = ({ projectID, initialValues, coverImageURL }: ProjectEditorProps) => {
+const BLOCK_ERROR_PATH = /^pageContent\[(\d+)\]/
+const IMAGE_TITLE_ERROR_PATH = /^imageTitles\.(\w+)$/
+
+/**
+ * The index of the first block with an error, if any. An image title's error is on its grid.
+ */
+const firstBlockWithError = (fieldErrors: Record<string, string>, blocks: BlockValue[]) => {
+  const indexes = Object.keys(fieldErrors).flatMap((path) => {
+    const match = BLOCK_ERROR_PATH.exec(path)
+    if (match) return [Number(match[1])]
+    const mediaID = IMAGE_TITLE_ERROR_PATH.exec(path)?.[1]
+    if (!mediaID) return []
+    const index = blocks.findIndex(
+      (block) => block.blockType === Slugs.Blocks.IMAGE_GRID && block.images.includes(mediaID),
+    )
+    return index === -1 ? [] : [index]
+  })
+  return indexes.length > 0 ? Math.min(...indexes) : undefined
+}
+
+export const ProjectEditor = ({
+  projectID,
+  initialValues,
+  coverImageURL,
+  media = {},
+}: ProjectEditorProps) => {
   const router = useRouter()
   // Set by the first save on create, so a second save before the redirect updates that project
   const savedID = useRef(projectID)
+  // Only this block mounts an editor
+  const [activeKey, setActiveKey] = useState<string | null>(null)
+
+  const showBlock = (index: number) => {
+    const key = form.state.values.pageContent[index]?._key
+    if (!key) return
+    setActiveKey(key)
+    // Instant: a smooth scroll aims at the sizes that idle blocks guess before they render
+    requestAnimationFrame(() =>
+      document
+        .getElementById(blockElementID(key))
+        ?.scrollIntoView({ block: "center", behavior: "instant" }),
+    )
+  }
 
   // Saves in the validator, so the server's errors land on the form and its fields
   const save: SaveValidator = async ({ value }) => {
-    const result = await saveProject(toSaveInput(value, savedID.current))
+    // Indexes of the blocks to save. Empty blocks are skipped, not errors.
+    const kept = value.pageContent.flatMap((block, index) => (isEmptyBlock(block) ? [] : [index]))
+    const pageContent = kept.map((index) => value.pageContent[index])
+    const result = await saveProject(
+      toSaveInput({ ...value, pageContent }, savedID.current, initialValues.imageTitles),
+    )
     if (!result.ok) {
-      return { form: SAVE_ERROR_MESSAGES[result.error], fields: result.fieldErrors ?? {} }
+      // Back to editor indexes, as the server counts only the saved blocks
+      const fields = Object.fromEntries(
+        Object.entries(result.fieldErrors ?? {}).map(([path, message]) => [
+          path.replace(BLOCK_ERROR_PATH, (_, index) => `pageContent[${kept[Number(index)]}]`),
+          message,
+        ]),
+      )
+      const index = firstBlockWithError(fields, value.pageContent)
+      if (index !== undefined) showBlock(index)
+      return { form: SAVE_ERROR_MESSAGES[result.error], fields }
     }
     savedID.current = result.id
     return undefined
@@ -69,6 +132,13 @@ export const ProjectEditor = ({ projectID, initialValues, coverImageURL }: Proje
     },
   })
 
+  // Most edits open a text block, so load the editor once the page is idle.
+  useEffect(() => {
+    if (!("requestIdleCallback" in window)) return preloadRichTextEditor()
+    const id = requestIdleCallback(preloadRichTextEditor)
+    return () => cancelIdleCallback(id)
+  }, [])
+
   const isDirty = useSelector(form.store, (state) => state.isDirty)
   useEffect(() => {
     if (!isDirty) return
@@ -87,23 +157,14 @@ export const ProjectEditor = ({ projectID, initialValues, coverImageURL }: Proje
     >
       <form.AppForm>
         <ProjectEditorToolbar form={form} projectID={projectID} />
-        <div className="flex flex-col gap-15">
+        <div className="flex flex-col gap-12 md:gap-15">
           <ProjectHeaderEditor coverImageURL={coverImageURL} form={form} />
-          <form.Field mode="array" name="pageContent">
-            {(field) => {
-              const error = getFieldError(field.state.meta.errors)
-              return (
-                <section
-                  aria-label="Page content"
-                  className="flex min-h-80 flex-col items-center justify-center gap-2 rounded-md border border-gray-200 p-8 text-center"
-                >
-                  {/* Block editing fills this in */}
-                  <p className="paragraph text-gray-500">Blocks you add show here.</p>
-                  {error && <p className="text-red-600 text-sm">{error}</p>}
-                </section>
-              )
-            }}
-          </form.Field>
+          <BlockList
+            activeKey={activeKey}
+            form={form}
+            media={media}
+            onActiveKeyChange={setActiveKey}
+          />
         </div>
       </form.AppForm>
     </form>
