@@ -9,7 +9,8 @@ import type { Project } from "@/payload/payload-types"
  * @returns The card data for the project.
  */
 export const toProjectCard = (
-  project: Pick<Project, "id" | "name" | "author" | "coverImage" | "likeCount">,
+  project: Pick<Project, "id" | "name" | "author" | "coverImage" | "likeCount"> &
+    Partial<Pick<Project, "summary">>,
 ): ProjectCardData => ({
   id: project.id,
   title: project.name,
@@ -22,4 +23,5 @@ export const toProjectCard = (
   // An unpopulated author is just an ID, e.g. when the member has since been deleted
   authorName: typeof project.author === "object" ? project.author.username : UNKNOWN_AUTHOR_NAME,
   likes: project.likeCount ?? 0,
+  summary: project.summary,
 })

@@ -117,6 +117,8 @@ export const getProjectsByAuthor = async (memberID: string) => {
     pagination: false,
     depth: 1,
     ...projectCardQuery,
+    // The profile card also shows the summary
+    select: { ...projectCardQuery.select, summary: true },
   })
   return docs.map(toProjectCard)
 }
