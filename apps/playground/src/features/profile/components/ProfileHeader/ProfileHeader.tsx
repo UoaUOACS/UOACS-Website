@@ -10,6 +10,7 @@ import { type ProfileHeaderProps, ProfileHeaderView } from "./ProfileHeaderView"
 export const ProfileHeader = async (props: ProfileHeaderProps) => {
   // Show the visitor's view whenever ownership can't be confirmed, e.g. the auth service is down
   let isOwner = false
+
   try {
     const current = await getCurrentMember()
     isOwner = current.status === "authenticated" && current.member.id === props.member.id
