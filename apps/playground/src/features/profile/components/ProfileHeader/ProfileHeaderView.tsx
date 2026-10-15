@@ -1,5 +1,4 @@
 import { UserIcon } from "@heroicons/react/24/outline"
-import type { Member as AuthMember } from "@uoacs/shared/payload"
 import { Heading, LazyImage, Skeleton } from "@uoacs/ui"
 import type { Member } from "@/payload/payload-types"
 import { ProfileHeaderButton } from "./ProfileHeaderButton"
@@ -15,10 +14,6 @@ export interface ProfileHeaderProps {
    * The member's playground profile, for their profile picture and username.
    */
   member: Member
-  /**
-   * The member's record from the auth service, for their name, UPI and ID.
-   */
-  account: Pick<AuthMember, "firstName" | "lastName" | "upi" | "uoaID">
 }
 
 export interface ProfileHeaderViewProps extends ProfileHeaderProps {
@@ -31,8 +26,7 @@ export interface ProfileHeaderViewProps extends ProfileHeaderProps {
 
 const AccountLabel = () => (
   <p className="font-mono">
-    {/** biome-ignore lint/suspicious/noCommentText: the // is not for a comment */}
-    <span className="text-primary">// </span>YOUR ACCOUNT
+    <span className="text-primary">/&#47; </span>YOUR ACCOUNT
   </p>
 )
 
@@ -40,13 +34,13 @@ const AccountLabel = () => (
 const AccountLabelSpacer = () => <div aria-hidden="true" className="h-lh font-mono" />
 
 /**
- * The layout of the top of a member's profile: their profile picture, name, UPI and ID, and a
+ * The layout of the top of a member's profile: their profile picture, name, username and a
  * "your account" label and edit button for the profile's owner. {@link ProfileHeader} works out
  * who the owner is.
  */
-export const ProfileHeaderView = ({ member, account, isOwner }: ProfileHeaderViewProps) => {
+export const ProfileHeaderView = ({ member, isOwner }: ProfileHeaderViewProps) => {
   const { profilePicture } = member
-  const name = `${account.firstName} ${account.lastName}`
+  const name = `${member.firstName} ${member.lastName}`
   const profilePictureURL = typeof profilePicture === "object" ? profilePicture?.url : undefined
 
   return (
@@ -73,13 +67,7 @@ export const ProfileHeaderView = ({ member, account, isOwner }: ProfileHeaderVie
             {name}
           </Heading>
           <p className="flex flex-row justify-start gap-2 font-mono">
-            <span>
-              UPI <span className="font-bold text-black">{account.upi}</span>
-            </span>
-            <span> / </span>
-            <span>
-              ID <span className="font-bold text-black">{account.uoaID}</span>
-            </span>
+            <span className="font-bold text-black">@{member.username}</span>
           </p>
         </div>
         <div className={ACTION_CLASS_NAME}>

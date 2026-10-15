@@ -1,5 +1,6 @@
 import { AuthApiRoutes } from "@uoacs/shared"
 import { getSession, sessionFetch } from "@uoacs/shared/auth/server"
+import { cacheLife, cacheTag } from "next/cache"
 import { headers } from "next/headers"
 import { unstable_rethrow } from "next/navigation"
 import { after } from "next/server"
@@ -7,6 +8,7 @@ import { cache } from "react"
 import { z } from "zod"
 import { createMember, syncNames } from "@/features/member/member.mutations"
 import type { CurrentMemberResult } from "@/features/member/member.types"
+import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 import type { Member } from "@/payload/payload-types"
@@ -115,3 +117,18 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
     return { status: "authenticated", member: raced }
   }
 })
+
+export const getMemberByUsernameCached = async (username: string): Promise<Member | null> => {
+  "use cache"
+  cacheTag(CacheTags.MEDIA)
+  cacheLife("max")
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: Slugs.Collections.MEMBER,
+    where: { username: { equals: username } },
+    limit: 1,
+  })
+  const member = docs[0] ?? null
+  if (member) cacheTag(CacheTags.MEMBERS.ID(member.id))
+  return member
+}
