@@ -26,8 +26,7 @@ export interface ProfileHeaderViewProps extends ProfileHeaderProps {
 
 const AccountLabel = () => (
   <p className="font-mono">
-    {/** biome-ignore lint/suspicious/noCommentText: the // is not for a comment */}
-    <span className="text-primary">// </span>YOUR ACCOUNT
+    <span className="text-primary">/&#47; </span>YOUR ACCOUNT
   </p>
 )
 
