@@ -1,5 +1,6 @@
 import { AuthApiRoutes } from "@uoacs/shared"
 import { getSession, sessionFetch } from "@uoacs/shared/auth/server"
+import { cacheLife, cacheTag } from "next/cache"
 import { headers } from "next/headers"
 import { unstable_rethrow } from "next/navigation"
 import { after } from "next/server"
@@ -116,7 +117,11 @@ export const getCurrentMember = cache(async (): Promise<CurrentMemberResult> => 
   }
 })
 
-export const getMemberByUsernameCached = cache(async (username: string): Promise<Member | null> => {
+export const getMemberByUsernameCached = async (username: string): Promise<Member | null> => {
+  "use cache"
+  cacheLife("minutes")
+  cacheTag(`member:${username}`)
+
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: Slugs.Collections.MEMBER,
@@ -124,4 +129,4 @@ export const getMemberByUsernameCached = cache(async (username: string): Promise
     limit: 1,
   })
   return docs[0] ?? null
-})
+}
