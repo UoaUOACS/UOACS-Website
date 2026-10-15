@@ -1,7 +1,7 @@
 import { UserIcon } from "@heroicons/react/24/outline"
 import { Heading, LazyImage, Skeleton } from "@uoacs/ui"
 import Link from "next/link"
-import type { ReactNode } from "react"
+import type { HTMLAttributes, ReactNode } from "react"
 import { UNKNOWN_AUTHOR_NAME } from "@/features/project/project.constants"
 import { Routes } from "@/lib/routes"
 import type { Project } from "@/payload/payload-types"
@@ -29,17 +29,18 @@ export const ProjectHeader = ({ project, actions }: ProjectHeaderProps) => {
     typeof author === "object" ? `${author.firstName} ${author.lastName}` : UNKNOWN_AUTHOR_NAME
   const profilePicture = typeof author === "object" ? author.profilePicture : undefined
   const profilePictureURL = typeof profilePicture === "object" ? profilePicture?.url : undefined
-  const authorId = typeof author === "object" ? author.id : author
+  const authorHref =
+    typeof author === "object" ? Routes.PROFILE.USERNAME(author.username) : undefined
 
   return (
     <header className="flex w-full flex-col gap-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="group/author flex min-w-0 items-center gap-4">
           {/* Duplicates the name link, so hide it from keyboard and screen reader users */}
-          <Link
+          <AuthorLink
             aria-hidden="true"
             className={AVATAR_CLASS_NAME}
-            href={Routes.PROFILE.ID(authorId)}
+            href={authorHref}
             tabIndex={-1}
           >
             {profilePictureURL ? (
@@ -54,16 +55,16 @@ export const ProjectHeader = ({ project, actions }: ProjectHeaderProps) => {
             ) : (
               <UserIcon aria-hidden="true" className="size-full p-[20%] text-gray-400" />
             )}
-          </Link>
+          </AuthorLink>
           <div className="flex min-w-0 flex-col gap-1">
             <Heading className="justify-start text-left font-bold" h={4}>
               {name}
             </Heading>
-            <Link className="truncate text-gray-500 text-sm" href={Routes.PROFILE.ID(authorId)}>
+            <AuthorLink className="truncate text-gray-500 text-sm" href={authorHref}>
               <span className="truncate text-gray-900 text-sm group-has-[a:hover]/author:underline">
                 {authorName}
               </span>
-            </Link>
+            </AuthorLink>
           </div>
         </div>
         {actions}
@@ -72,6 +73,12 @@ export const ProjectHeader = ({ project, actions }: ProjectHeaderProps) => {
     </header>
   )
 }
+
+/**
+ * A link to the author's profile, or a plain element when the author has no profile to link to.
+ */
+const AuthorLink = ({ href, ...props }: HTMLAttributes<HTMLElement> & { href?: string }) =>
+  href ? <Link href={href} {...props} /> : <div {...props} />
 
 /**
  * A loading placeholder with the same layout as {@link ProjectHeader}.
