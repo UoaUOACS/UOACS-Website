@@ -87,10 +87,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      className={`${inter.variable} ${switzer.variable} ${mono.variable} ${neulis.variable} overflow-x-hidden`}
+      className={`${inter.variable} ${switzer.variable} ${mono.variable} ${neulis.variable} overflow-x-clip`}
       lang="en"
     >
-      <body className="flex min-h-screen flex-col overflow-x-hidden">
+      <body className="flex min-h-screen flex-col overflow-x-clip">
         <Providers>
           <div className="mx-auto flex w-full max-w-[1480px] grow flex-col px-4 py-6 md:px-12 lg:px-20">
             <PlaygroundNavbar />
