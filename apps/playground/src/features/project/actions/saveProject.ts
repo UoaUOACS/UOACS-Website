@@ -98,7 +98,6 @@ export async function saveProject(input: unknown): Promise<SaveProjectResult> {
       return { ok: false, error: "not-found" }
     }
 
-    await saveImageTitles(payload, memberID, imageTitles)
     await payload.update({
       collection: Slugs.Collections.PROJECT,
       id,
@@ -106,6 +105,7 @@ export async function saveProject(input: unknown): Promise<SaveProjectResult> {
       depth: 0,
       overrideAccess: true,
     })
+    await saveImageTitles(payload, memberID, imageTitles)
     updateTag(CacheTags.PROJECTS.ID(id))
     updateTag(CacheTags.PROJECTS.AUTHOR(memberID))
     return { ok: true, id }
