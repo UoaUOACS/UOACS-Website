@@ -32,6 +32,8 @@ interface LikeButtonProps {
 
 interface LikeButtonContentProps extends LikeButtonProps {
   isLiked?: boolean
+  /** Liked state is still loading, so a click can't know what to toggle */
+  pending?: boolean
 }
 
 const StreamedLikeButton = ({
@@ -43,7 +45,7 @@ const StreamedLikeButton = ({
 
 export const LikeButton = ({ isLiked, ...props }: LikeButtonProps) =>
   typeof isLiked === "object" ? (
-    <AnimatedSuspense fallback={<LikeButtonContent {...props} />}>
+    <AnimatedSuspense fallback={<LikeButtonContent {...props} pending />}>
       <StreamedLikeButton {...props} isLiked={isLiked} />
     </AnimatedSuspense>
   ) : (
@@ -57,6 +59,7 @@ const LikeButtonContent = ({
   className,
   iconClassName,
   countClassName,
+  pending,
 }: LikeButtonContentProps) => {
   // Saved results update the button without waiting for new props
   const [saved, setSaved] = useState({ isLiked, likes })
@@ -123,9 +126,11 @@ const LikeButtonContent = ({
 
   return (
     <button
+      aria-busy={pending || undefined}
       aria-label={shown.isLiked ? "Unlike project" : "Like project"}
       aria-pressed={shown.isLiked}
-      className={cn("group/like cursor-pointer", className)}
+      className={cn("group/like cursor-pointer disabled:cursor-default", className)}
+      disabled={pending}
       onClick={handleClick}
       type="button"
     >
