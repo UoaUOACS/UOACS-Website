@@ -120,8 +120,9 @@ export const ProjectEditor = ({
     }
     savedID.current = result.id
     savedTitles.current = value.imageTitles
-    // Not dirty, so leaving does not warn about unsaved changes
-    form.reset(value)
+    // Not dirty, so leaving does not warn about unsaved changes. Keeps the default values, as new
+    // ones differ from the `defaultValues` option, which makes TanStack reset to that option.
+    form.reset(value, { keepDefaultValues: true })
     toast.success({ description: "Saved" })
     router.push(Routes.PROJECTS.ID(result.id))
   }
