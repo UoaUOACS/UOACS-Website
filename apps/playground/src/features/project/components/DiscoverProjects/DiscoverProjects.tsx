@@ -15,8 +15,6 @@ interface DiscoverProjectsProps {
   searchParams: Promise<SearchParams>
 }
 
-// Liked state only marks the cards, so show them unliked rather than fail the page
-// Not rethrown with unstable_rethrow, as nothing awaits the liked state promise to catch it
 const logLikesError = (err: unknown) => {
   console.error("[DiscoverProjects] failed to load liked projects", { error: err })
 }
