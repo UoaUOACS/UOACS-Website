@@ -1,4 +1,4 @@
-import { countRichTextCharacters } from "@uoacs/shared/payload"
+import { countRichTextCharacters } from "@uoacs/shared"
 import type { Block } from "payload"
 import { richText } from "payload/shared"
 import { TEXT_BLOCK_MAX_CHARACTERS } from "@/features/project/project.constants"

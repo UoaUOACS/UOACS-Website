@@ -1,4 +1,5 @@
-import { countRichTextCharacters, richTextSchema } from "@uoacs/shared/payload"
+import { countRichTextCharacters } from "@uoacs/shared"
+import { richTextSchema } from "@uoacs/shared/payload"
 import { z } from "zod"
 import { TEXT_BLOCK_MAX_CHARACTERS } from "@/features/project/project.constants"
 import { Slugs } from "@/lib/payload/slugs"
