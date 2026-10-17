@@ -57,6 +57,7 @@ const ExampleForm = ({ onSubmit }: ExampleFormProps) => {
           <field.ImageUploadField
             label="Cover image"
             maxBytes={4 * 1024 * 1024}
+            maxDimension={2400}
             types={["image/jpeg", "image/png", "image/webp", "image/avif"]}
             upload={upload}
           />
