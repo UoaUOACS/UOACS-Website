@@ -1,6 +1,7 @@
 import { imageResizeOptions, makeImageDimensionsHook } from "@uoacs/shared/payload"
 import type { CollectionConfig, FilterOptions } from "payload"
 import {
+  IMAGE_TITLE_MAX_LENGTH,
   MEDIA_MAX_ASPECT_RATIO,
   MEDIA_MIN_DIMENSION,
   MEDIA_TYPES,
@@ -32,6 +33,7 @@ export const ProjectMedia: CollectionConfig = {
       name: "alt",
       type: "text",
       required: true,
+      maxLength: IMAGE_TITLE_MAX_LENGTH,
     },
     {
       name: "uploadedBy",

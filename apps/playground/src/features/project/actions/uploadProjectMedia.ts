@@ -3,7 +3,11 @@
 import { ValidationError } from "payload"
 import sharp from "sharp"
 import { getCurrentMember } from "@/features/member/member.queries"
-import { MEDIA_MAX_BYTES, MEDIA_TYPES } from "@/features/project/project.constants"
+import {
+  IMAGE_TITLE_MAX_LENGTH,
+  MEDIA_MAX_BYTES,
+  MEDIA_TYPES,
+} from "@/features/project/project.constants"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 import type { ProjectMedia } from "@/payload/payload-types"
@@ -13,6 +17,7 @@ export type UploadMediaResult =
       ok: true
       id: ProjectMedia["id"]
       url: ProjectMedia["url"]
+      alt: ProjectMedia["alt"]
       width: ProjectMedia["width"] | null
       height: ProjectMedia["height"] | null
     }
@@ -64,10 +69,10 @@ export async function uploadProjectMedia(formData: FormData): Promise<UploadMedi
       collection: Slugs.Collections.PROJECT_MEDIA,
       data: {
         // `|| file.name` keeps a name like `.png` from becoming an empty, required alt
-        alt:
-          typeof alt === "string" && alt.trim()
-            ? alt.trim()
-            : file.name.replace(/\.[^.]+$/, "") || file.name,
+        alt: (typeof alt === "string" && alt.trim()
+          ? alt.trim()
+          : file.name.replace(/\.[^.]+$/, "") || file.name
+        ).slice(0, IMAGE_TITLE_MAX_LENGTH),
         uploadedBy: memberID,
       },
       file: {
@@ -84,6 +89,7 @@ export async function uploadProjectMedia(formData: FormData): Promise<UploadMedi
       ok: true,
       id: media.id,
       url: media.url,
+      alt: media.alt,
       width: media.width ?? null,
       height: media.height ?? null,
     }
