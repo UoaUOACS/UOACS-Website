@@ -32,10 +32,14 @@ const scale = async (file: File, maxDimension: number): Promise<File> => {
 /**
  * Scales an image down so its longest side is `maxDimension` or less, and encodes it as WebP
  * (or JPEG for JPEG inputs when the browser cannot encode WebP).
- * Returns the original file if the browser cannot decode or encode it, or if the result is not
- * smaller.
+ * Returns the original file if it is already `maxBytes` or less, if the browser cannot decode or
+ * encode it, or if the result is not smaller.
  */
-export const downscaleImage = async (file: File, maxDimension: number): Promise<File> => {
+export const downscaleImage = async (
+  file: File,
+  { maxDimension, maxBytes }: { maxDimension: number; maxBytes: number },
+): Promise<File> => {
+  if (file.size <= maxBytes) return file
   try {
     return await scale(file, maxDimension)
   } catch (error) {
