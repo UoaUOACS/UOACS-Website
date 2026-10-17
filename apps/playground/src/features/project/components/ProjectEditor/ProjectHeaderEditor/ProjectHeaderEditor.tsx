@@ -6,6 +6,7 @@ import { projectFormOptions } from "@/features/project/editor/projectForm.option
 import {
   MEDIA_MAX_BYTES,
   MEDIA_TYPES,
+  MEDIA_UPLOAD_MAX_DIMENSION,
   PROJECT_SUMMARY_MAX_LENGTH,
   PROJECT_TITLE_MAX_LENGTH,
 } from "@/features/project/project.constants"
@@ -32,6 +33,7 @@ export const ProjectHeaderEditor = withForm({
             containerClassName="md:w-64 md:shrink-0 md:self-start lg:w-100"
             label="Add a cover image"
             maxBytes={MEDIA_MAX_BYTES}
+            maxDimension={MEDIA_UPLOAD_MAX_DIMENSION}
             required
             src={coverImageURL}
             types={MEDIA_TYPES}

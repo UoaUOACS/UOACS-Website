@@ -1,8 +1,9 @@
 "use client"
 
+import { downscaleImage } from "@uoacs/shared"
 import { ImageUpload, type ImageUploadProps } from "@uoacs/ui"
-import { useRef, useState } from "react"
-import { useFlushOnSubmit } from "../flush"
+import { useState } from "react"
+import { trackUpload } from "../flush"
 import { getFieldError, useFieldContext } from "../formContext"
 
 export type UploadResult =
@@ -20,6 +21,10 @@ export interface ImageUploadFieldProps
    */
   types: string[]
   maxBytes: number
+  /**
+   * Longest side, in px, to scale the image down to before the size check and upload
+   */
+  maxDimension: number
 }
 
 /**
@@ -29,6 +34,7 @@ export const ImageUploadField = ({
   upload,
   types,
   maxBytes,
+  maxDimension,
   src,
   ...props
 }: ImageUploadFieldProps) => {
@@ -37,23 +43,21 @@ export const ImageUploadField = ({
   const [uploadedUrl, setUploadedUrl] = useState<string>()
   const [busy, setBusy] = useState(false)
   const [uploadError, setUploadError] = useState<string>()
-  // Submit waits for this, so it does not save the previous image ID
-  const pendingUpload = useRef<Promise<void>>(undefined)
-  useFlushOnSubmit(field.form, () => pendingUpload.current)
 
-  const handleChange = async (picked: File) => {
-    if (!types.includes(picked.type)) {
+  const handleChange = async (original: File) => {
+    if (!types.includes(original.type)) {
       setUploadError("This file type is not supported")
       return
     }
-    if (picked.size > maxBytes) {
-      setUploadError(`Choose an image under ${Math.floor(maxBytes / 1024 / 1024)} MB`)
-      return
-    }
-    setUploadError(undefined)
-    setFile(picked)
     setBusy(true)
     try {
+      const picked = await downscaleImage(original, { maxDimension, maxBytes })
+      if (picked.size > maxBytes) {
+        setUploadError(`Choose an image under ${Math.floor(maxBytes / 1024 / 1024)} MB`)
+        return
+      }
+      setUploadError(undefined)
+      setFile(picked)
       const formData = new FormData()
       formData.set("file", picked)
       const result = await upload(formData)
@@ -81,7 +85,8 @@ export const ImageUploadField = ({
       busy={busy}
       error={uploadError ?? getFieldError(field.state.meta.errors)}
       onChange={(picked) => {
-        pendingUpload.current = handleChange(picked)
+        // Submit waits for this, so it does not save the previous image ID
+        trackUpload(field.form, handleChange(picked))
       }}
       src={uploadedUrl ?? src}
       value={file}

@@ -82,3 +82,8 @@ export const MEDIA_MIN_DIMENSION = 320
  * Largest long side divided by short side of an image a member can upload
  */
 export const MEDIA_MAX_ASPECT_RATIO = 3
+
+/**
+ * Longest side, in px, that the editor scales an image down to before it uploads it
+ */
+export const MEDIA_UPLOAD_MAX_DIMENSION = 2400
