@@ -77,6 +77,8 @@ export const ProjectEditor = ({
   const router = useRouter()
   // Set by the first save on create, so a second save before the redirect updates that project
   const savedID = useRef(projectID)
+  // The titles as last saved, so a save sends only the titles changed since
+  const savedTitles = useRef(initialValues.imageTitles)
   // Only this block mounts an editor
   const [activeKey, setActiveKey] = useState<string | null>(null)
   // In state, as TanStack clears a form-level error on the next change
@@ -100,7 +102,7 @@ export const ProjectEditor = ({
     const kept = value.pageContent.flatMap((block, index) => (isEmptyBlock(block) ? [] : [index]))
     const pageContent = kept.map((index) => value.pageContent[index])
     const result = await saveProject(
-      toSaveInput({ ...value, pageContent }, savedID.current, initialValues.imageTitles),
+      toSaveInput({ ...value, pageContent }, savedID.current, savedTitles.current),
     )
     if (!result.ok) {
       // Back to editor indexes, as the server counts only the saved blocks
@@ -117,6 +119,7 @@ export const ProjectEditor = ({
       return
     }
     savedID.current = result.id
+    savedTitles.current = value.imageTitles
     // Not dirty, so leaving does not warn about unsaved changes
     form.reset(value)
     toast.success({ description: "Saved" })
