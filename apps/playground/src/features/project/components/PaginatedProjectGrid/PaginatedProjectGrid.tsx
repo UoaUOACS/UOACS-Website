@@ -10,6 +10,10 @@ interface PaginatedProjectGridProps extends ProjectGridProps {
    * Builds the link for a page, so the grid can live on any page.
    */
   getPageHref: (page: number) => string
+  /**
+   * Fully prefetch the previous and next pages. Only enable it when the page data is cached.
+   */
+  prefetchNeighbours?: boolean
   className?: string
 }
 
@@ -22,6 +26,7 @@ export const PaginatedProjectGrid = ({
   page,
   totalPages,
   getPageHref,
+  prefetchNeighbours,
   className,
 }: PaginatedProjectGridProps) => {
   const { root, pagination } = paginatedProjectGridVariants()
@@ -36,6 +41,7 @@ export const PaginatedProjectGrid = ({
           className={pagination()}
           getHref={getPageHref}
           page={page}
+          prefetchNeighbours={prefetchNeighbours}
           totalPages={totalPages}
         />
       )}

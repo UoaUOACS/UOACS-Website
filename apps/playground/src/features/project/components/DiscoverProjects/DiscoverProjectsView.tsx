@@ -53,6 +53,7 @@ export const DiscoverProjectsView = ({
         getPageHref={(target) => getDiscoverHref({ tab, sort, page: target })}
         likedIDs={likedIDs}
         page={page}
+        prefetchNeighbours
         projects={projects}
         totalPages={totalPages}
       />
