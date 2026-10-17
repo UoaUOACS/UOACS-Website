@@ -49,15 +49,15 @@ export const ImageUploadField = ({
       setUploadError("This file type is not supported")
       return
     }
-    const picked = await downscaleImage(original, { maxDimension, maxBytes })
-    if (picked.size > maxBytes) {
-      setUploadError(`Choose an image under ${Math.floor(maxBytes / 1024 / 1024)} MB`)
-      return
-    }
-    setUploadError(undefined)
-    setFile(picked)
     setBusy(true)
     try {
+      const picked = await downscaleImage(original, { maxDimension, maxBytes })
+      if (picked.size > maxBytes) {
+        setUploadError(`Choose an image under ${Math.floor(maxBytes / 1024 / 1024)} MB`)
+        return
+      }
+      setUploadError(undefined)
+      setFile(picked)
       const formData = new FormData()
       formData.set("file", picked)
       const result = await upload(formData)
