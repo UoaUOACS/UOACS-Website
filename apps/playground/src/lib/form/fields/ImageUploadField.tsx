@@ -49,7 +49,7 @@ export const ImageUploadField = ({
       setUploadError("This file type is not supported")
       return
     }
-    const picked = await downscaleImage(original, maxDimension)
+    const picked = await downscaleImage(original, { maxDimension, maxBytes })
     if (picked.size > maxBytes) {
       setUploadError(`Choose an image under ${Math.floor(maxBytes / 1024 / 1024)} MB`)
       return
