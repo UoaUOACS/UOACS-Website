@@ -7,6 +7,7 @@
     ".": "./src/index.ts",
     "./utils": "./src/utils/index.ts",
     "./toast": "./src/toast/index.tsx",
+    "./rich-text-editor": "./src/components/RichTextEditor/RichTextEditor.tsx",
     "./styles/theme.css": "./src/styles/theme.css",
     "./styles/fonts.css": "./src/styles/fonts.css",
     "./styles/cartograph.css": "./src/styles/cartograph.css",
