@@ -23,26 +23,25 @@ const logLikesError = (err: unknown) => {
 
 const DiscoverProjectsContent = async ({ searchParams }: DiscoverProjectsProps) => {
   const state = await loadDiscoverParams(searchParams)
-  const [{ projects, totalPages }, member] = await Promise.all([
-    getProjectsCached(state),
-    getCurrentMember().catch((err) => {
-      logLikesError(err)
-      return { status: "unavailable" } as const
-    }),
-  ])
+  const { projects, totalPages } = await getProjectsCached(state)
 
   // Send pages past the end, e.g. from an old link after projects were removed, to the last page
   if (totalPages > 0 && state.page > totalPages) {
     redirect(getDiscoverHref({ ...state, page: totalPages }))
   }
 
-  const likedIDs = await getLikedProjectIDs(
-    member,
-    projects.map((project) => project.id),
-  ).catch((err) => {
-    logLikesError(err)
-    return []
-  })
+  // Not awaited, so the grid render isn't blocked and can be done purely under cached fetches
+  const likedIDs = getCurrentMember()
+    .then((member) =>
+      getLikedProjectIDs(
+        member,
+        projects.map((project) => project.id),
+      ),
+    )
+    .catch((err) => {
+      logLikesError(err)
+      return []
+    })
 
   return (
     <DiscoverProjectsView
