@@ -65,6 +65,7 @@ const blocks = {
     blockType: Slugs.Blocks.IMAGE_GRID,
     images: [objectID(1), objectID(2), objectID(3)],
   },
+  emptyImageGrid: { _key: "empty-image-grid", blockType: Slugs.Blocks.IMAGE_GRID, images: [] },
 } satisfies Record<string, BlockValue>
 
 interface ExampleProps {
@@ -97,6 +98,7 @@ const Example = ({ block, active: initialActive = false, error }: ExampleProps) 
       onDeactivate={() => setActive(false)}
       onDelete={fn()}
       onMove={fn()}
+      onUpload={fn()}
     />
   )
 }
@@ -124,5 +126,9 @@ export const EmptyText: Story = { args: { block: blocks.emptyText } }
 export const ActiveText: Story = { args: { block: blocks.text, active: true } }
 
 export const ImageGrid: Story = { args: { block: blocks.imageGrid } }
+
+export const EmptyImageGrid: Story = { args: { block: blocks.emptyImageGrid } }
+
+export const ActiveImageGrid: Story = { args: { block: blocks.imageGrid, active: true } }
 
 export const WithError: Story = { args: { block: blocks.emptyText, error: "Add some text" } }

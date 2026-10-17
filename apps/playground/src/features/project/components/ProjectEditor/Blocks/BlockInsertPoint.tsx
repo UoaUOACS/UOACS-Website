@@ -32,39 +32,48 @@ export const BlockInsertPoint = ({ onInsert, between = false }: BlockInsertPoint
     {between && (
       <div aria-hidden className={cn("absolute inset-x-0 h-px bg-gray-300", revealClassName)} />
     )}
-    <Dropdown
-      fast
-      label={
-        between ? (
-          <span
-            className={cn(
-              "rounded-full border border-gray-300 bg-white p-0.5 text-gray-500 pointer-coarse:opacity-100",
-              revealClassName,
-            )}
-          >
-            <PlusIcon aria-hidden className="size-4" />
-            <span className="sr-only">Add a section</span>
-          </span>
-        ) : (
-          <>
-            <PlusIcon aria-hidden className="size-4" />
-            Add a section
-          </>
-        )
-      }
-      options={[
-        {
-          label: "Text",
-          onClick: () => onInsert(Slugs.Blocks.TEXT),
-          theme: "ghost",
-          className: "w-full justify-start",
-        },
-      ]}
-      popoverClassName="right-auto left-1/2 -translate-x-1/2 items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md"
-      shape="pill"
-      size={between ? "icon" : "sm"}
-      theme={between ? "ghost" : "light"}
-      trigger={false}
-    />
+    {/* The ring follows the BorderButton border slot */}
+    <div className={cn(!between && "group rounded-full border-4 border-gray-200 bg-white")}>
+      <Dropdown
+        fast
+        label={
+          between ? (
+            <span
+              className={cn(
+                "rounded-full border border-gray-300 bg-white p-0.5 text-gray-500 pointer-coarse:opacity-100",
+                revealClassName,
+              )}
+            >
+              <PlusIcon aria-hidden className="size-4" />
+              <span className="sr-only">Add a section</span>
+            </span>
+          ) : (
+            <span className="flex items-center gap-2 text-gray-600 transition-colors group-hover:text-black">
+              <PlusIcon aria-hidden className="size-4" />
+              Add a section
+            </span>
+          )
+        }
+        options={[
+          {
+            label: "Text",
+            onClick: () => onInsert(Slugs.Blocks.TEXT),
+            theme: "ghost",
+            className: "w-full justify-start",
+          },
+          {
+            label: "Image grid",
+            onClick: () => onInsert(Slugs.Blocks.IMAGE_GRID),
+            theme: "ghost",
+            className: "w-full justify-start",
+          },
+        ]}
+        popoverClassName="right-auto left-1/2 -translate-x-1/2 items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md"
+        shape="pill"
+        size={between ? "icon" : "sm"}
+        theme="ghost"
+        trigger={false}
+      />
+    </div>
   </div>
 )

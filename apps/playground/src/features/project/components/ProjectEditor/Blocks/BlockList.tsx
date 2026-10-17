@@ -1,5 +1,6 @@
 "use client"
 
+import type { GalleryImage } from "@uoacs/ui"
 import { Fragment, useRef } from "react"
 import {
   createBlock,
@@ -24,8 +25,9 @@ export const BlockList = withForm({
     activeKey: null as string | null,
     onActiveKeyChange: (_key: string | null) => {},
     media: {} as MediaLookup,
+    onUpload: (_image: GalleryImage) => {},
   },
-  render: function Render({ form, activeKey, onActiveKeyChange, media }) {
+  render: function Render({ form, activeKey, onActiveKeyChange, media, onUpload }) {
     const section = useRef<HTMLElement>(null)
     return (
       <form.Field mode="array" name="pageContent">
@@ -78,6 +80,7 @@ export const BlockList = withForm({
                       })
                     }}
                     onMove={(to) => field.moveValue(index, to)}
+                    onUpload={onUpload}
                   />
                   {insertPoint(index + 1)}
                 </Fragment>

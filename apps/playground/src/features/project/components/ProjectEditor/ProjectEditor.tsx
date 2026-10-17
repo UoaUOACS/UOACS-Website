@@ -72,15 +72,18 @@ export const ProjectEditor = ({
   projectID,
   initialValues,
   coverImageURL,
-  media = {},
+  media: initialMedia = {},
 }: ProjectEditorProps) => {
   const router = useRouter()
   // Set by the first save on create, so a second save before the redirect updates that project
   const savedID = useRef(projectID)
+  // The titles as last saved, so a save sends only the titles changed since
+  const savedTitles = useRef(initialValues.imageTitles)
   // Only this block mounts an editor
   const [activeKey, setActiveKey] = useState<string | null>(null)
   // In state, as TanStack clears a form-level error on the next change
   const [saveError, setSaveError] = useState<string>()
+  const [media, setMedia] = useState(initialMedia)
 
   const showBlock = (index: number) => {
     const key = form.state.values.pageContent[index]?._key
@@ -99,7 +102,7 @@ export const ProjectEditor = ({
     const kept = value.pageContent.flatMap((block, index) => (isEmptyBlock(block) ? [] : [index]))
     const pageContent = kept.map((index) => value.pageContent[index])
     const result = await saveProject(
-      toSaveInput({ ...value, pageContent }, savedID.current, initialValues.imageTitles),
+      toSaveInput({ ...value, pageContent }, savedID.current, savedTitles.current),
     )
     if (!result.ok) {
       // Back to editor indexes, as the server counts only the saved blocks
@@ -116,8 +119,10 @@ export const ProjectEditor = ({
       return
     }
     savedID.current = result.id
-    // Not dirty, so leaving does not warn about unsaved changes
-    form.reset(value)
+    savedTitles.current = value.imageTitles
+    // Not dirty, so leaving does not warn about unsaved changes. Keeps the default values, as new
+    // ones differ from the `defaultValues` option, which makes TanStack reset to that option.
+    form.reset(value, { keepDefaultValues: true })
     toast.success({ description: "Saved" })
     router.push(Routes.PROJECTS.ID(result.id))
   }
@@ -165,6 +170,7 @@ export const ProjectEditor = ({
             form={form}
             media={media}
             onActiveKeyChange={setActiveKey}
+            onUpload={(image) => setMedia((current) => ({ ...current, [image.id]: image }))}
           />
         </div>
       </form.AppForm>
