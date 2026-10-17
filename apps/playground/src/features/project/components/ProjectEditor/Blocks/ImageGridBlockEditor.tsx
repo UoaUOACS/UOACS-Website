@@ -3,7 +3,7 @@
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { downscaleImage } from "@uoacs/shared"
 import { type GalleryImage, Input, LazyImage } from "@uoacs/ui"
-import { type Dispatch, type SetStateAction, useId, useState } from "react"
+import { type Dispatch, type SetStateAction, useId, useRef, useState } from "react"
 import { uploadProjectMedia } from "@/features/project/actions/uploadProjectMedia"
 import { type MediaLookup, projectFormOptions } from "@/features/project/editor/projectForm.options"
 import {
@@ -56,40 +56,48 @@ export const ImageGridBlockEditor = withForm({
         }),
       )
 
-    const upload = async (key: string, original: File) => {
-      const file = await downscaleImage(original, {
-        maxDimension: MEDIA_UPLOAD_MAX_DIMENSION,
-        maxBytes: MEDIA_MAX_BYTES,
-      })
-      if (file.size > MEDIA_MAX_BYTES) {
-        updatePending(key, `Choose an image under ${Math.floor(MEDIA_MAX_BYTES / 1024 / 1024)} MB`)
-        return
-      }
+    const upload = async (original: File) => {
       try {
+        const file = await downscaleImage(original, {
+          maxDimension: MEDIA_UPLOAD_MAX_DIMENSION,
+          maxBytes: MEDIA_MAX_BYTES,
+        })
+        if (file.size > MEDIA_MAX_BYTES) {
+          return {
+            ok: false as const,
+            message: `Choose an image under ${Math.floor(MEDIA_MAX_BYTES / 1024 / 1024)} MB`,
+          }
+        }
         const formData = new FormData()
         formData.set("file", file)
-        const result = await uploadProjectMedia(formData)
-        if (!result.ok) {
-          updatePending(key, result.message ?? "The image could not be uploaded")
-          return
-        }
-        onUpload({
-          id: result.id,
-          src: result.url ?? "",
-          alt: result.alt,
-          width: result.width,
-          height: result.height,
-        })
-        form.setFieldValue(`imageTitles.${result.id}`, result.alt)
-        // By key, as the block can move or be deleted while the image uploads
-        const at = form.state.values.pageContent.findIndex((block) => block._key === blockKey)
-        if (at !== -1) form.pushFieldValue(`pageContent[${at}].images`, result.id)
-        updatePending(key)
+        return await uploadProjectMedia(formData)
       } catch (error) {
         console.error("[ImageGridBlockEditor] upload failed", { error })
-        updatePending(key, "The image could not be uploaded")
+        return { ok: false as const, message: undefined }
       }
     }
+
+    const add = (key: string, result: Awaited<ReturnType<typeof upload>>) => {
+      if (!result.ok) {
+        updatePending(key, result.message ?? "The image could not be uploaded")
+        return
+      }
+      onUpload({
+        id: result.id,
+        src: result.url ?? "",
+        alt: result.alt,
+        width: result.width,
+        height: result.height,
+      })
+      form.setFieldValue(`imageTitles.${result.id}`, result.alt)
+      // By key, as the block can move or be deleted while the image uploads
+      const at = form.state.values.pageContent.findIndex((block) => block._key === blockKey)
+      if (at !== -1) form.pushFieldValue(`pageContent[${at}].images`, result.id)
+      updatePending(key)
+    }
+
+    // Uploads run at once, but each image joins the grid in the order it was picked
+    const queue = useRef(Promise.resolve())
 
     return (
       <form.Field mode="array" name={`pageContent[${index}].images`}>
@@ -115,7 +123,9 @@ export const ImageGridBlockEditor = withForm({
                 continue
               }
               setPending((current) => [...current, { key, previewURL }])
-              trackUpload(form, upload(key, file))
+              const uploaded = upload(file)
+              queue.current = queue.current.then(() => uploaded).then((result) => add(key, result))
+              trackUpload(form, queue.current)
             }
             field.handleBlur()
           }
