@@ -1,4 +1,4 @@
-import { formOptions } from "@tanstack/react-form"
+import { type AnyFormApi, formOptions } from "@tanstack/react-form"
 import { countRichTextCharacters } from "@uoacs/shared"
 import type { RichTextValue } from "@uoacs/shared/payload"
 import type { GalleryImage } from "@uoacs/ui"
@@ -48,19 +48,23 @@ const defaultValues: EditProjectValues = {
   imageTitles: {},
 }
 
+export const projectFormOptions = formOptions({ defaultValues })
+
 /**
- * What the editor's submit validator returns when the save fails: a summary, and messages keyed
- * by field path
+ * Sets a failed save's messages keyed by field path, or clears them when called with none. Uses
+ * `onServer`, as TanStack clears `onSubmit` errors on the next change or blur, and they should
+ * stay until the next save.
  */
-export type SaveErrors = { form: string; fields: Record<string, string> }
-
-export type SaveValidator = (props: { value: EditProjectValues }) => Promise<SaveErrors | undefined>
-
-export const projectFormOptions = formOptions({
-  defaultValues,
-  // Type only: `withForm` components need the editor's error types. The editor sets the validator.
-  validators: {} as { onSubmitAsync?: SaveValidator },
-})
+export const setSaveErrors = (form: AnyFormApi, fields: Record<string, string> = {}) => {
+  // Includes paths with no mounted field, like closed blocks
+  for (const name of new Set([...Object.keys(form.state.fieldMeta), ...Object.keys(fields)])) {
+    form.setFieldMeta(name, (meta) => ({
+      ...meta,
+      errorMap: { ...meta?.errorMap, onServer: fields[name] },
+      errorSourceMap: { ...meta?.errorSourceMap, onServer: fields[name] ? "form" : undefined },
+    }))
+  }
+}
 
 export const createBlock = (blockType: BlockValue["blockType"]): BlockValue => {
   const _key = crypto.randomUUID()
