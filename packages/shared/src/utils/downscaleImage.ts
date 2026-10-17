@@ -1,4 +1,7 @@
-const WEBP_QUALITY = 0.85
+const QUALITY = 0.85
+
+const encode = (canvas: HTMLCanvasElement, type: string) =>
+  new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, QUALITY))
 
 const scale = async (file: File, maxDimension: number): Promise<File> => {
   const bitmap = await createImageBitmap(file)
@@ -14,16 +17,21 @@ const scale = async (file: File, maxDimension: number): Promise<File> => {
   context.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
   bitmap.close()
 
-  const blob = await new Promise<Blob | null>((resolve) =>
-    canvas.toBlob(resolve, "image/webp", WEBP_QUALITY),
-  )
-  // Some browsers encode PNG when they cannot encode WebP
-  if (blob?.type !== "image/webp" || blob.size >= file.size) return file
-  return new File([blob], `${file.name.replace(/\.[^.]+$/, "")}.webp`, { type: "image/webp" })
+  let blob = await encode(canvas, "image/webp")
+  // Safari encodes PNG when it cannot encode WebP, so fall back to JPEG for photos
+  if (blob?.type !== "image/webp" && file.type === "image/jpeg") {
+    blob = await encode(canvas, "image/jpeg")
+  }
+  if (!blob || !["image/webp", "image/jpeg"].includes(blob.type) || blob.size >= file.size) {
+    return file
+  }
+  const extension = blob.type === "image/webp" ? "webp" : "jpg"
+  return new File([blob], `${file.name.replace(/\.[^.]+$/, "")}.${extension}`, { type: blob.type })
 }
 
 /**
- * Scales an image down so its longest side is `maxDimension` or less, and encodes it as WebP.
+ * Scales an image down so its longest side is `maxDimension` or less, and encodes it as WebP
+ * (or JPEG for JPEG inputs when the browser cannot encode WebP).
  * Returns the original file if the browser cannot decode or encode it, or if the result is not
  * smaller.
  */
