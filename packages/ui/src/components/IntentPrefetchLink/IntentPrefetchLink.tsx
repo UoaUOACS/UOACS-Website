@@ -27,6 +27,8 @@ export const IntentPrefetchLink = (props: IntentPrefetchLinkProps) => {
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const start = () => {
+    // Focus and hover can both fire, so drop the earlier timer or cancel can't reach it
+    clearTimeout(timer.current)
     timer.current = setTimeout(() => setIntent(true), INTENT_DELAY_MS)
   }
   const cancel = () => clearTimeout(timer.current)
