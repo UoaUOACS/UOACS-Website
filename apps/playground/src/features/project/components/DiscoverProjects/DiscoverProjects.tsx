@@ -1,5 +1,5 @@
 import { AnimatedSuspense } from "@uoacs/ui"
-import { redirect, unstable_rethrow } from "next/navigation"
+import { redirect } from "next/navigation"
 import type { SearchParams } from "nuqs/server"
 import { getCurrentMember } from "@/features/member/member.queries"
 import { getDiscoverHref, loadDiscoverParams } from "@/features/project/helpers/discover"
@@ -16,8 +16,8 @@ interface DiscoverProjectsProps {
 }
 
 // Liked state only marks the cards, so show them unliked rather than fail the page
+// Not rethrown with unstable_rethrow, as nothing awaits the liked state promise to catch it
 const logLikesError = (err: unknown) => {
-  unstable_rethrow(err)
   console.error("[DiscoverProjects] failed to load liked projects", { error: err })
 }
 
