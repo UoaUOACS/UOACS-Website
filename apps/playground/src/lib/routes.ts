@@ -5,7 +5,6 @@ export const Routes = {
   HOME: "/",
   PROFILE: {
     ROOT: "/profile",
-    ID: (id?: string) => `/profile/${id ?? ""}`,
     USERNAME: (username: Member["username"]) => `/profile/${username}`,
     EDIT: "/profile/edit",
   },
