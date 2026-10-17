@@ -22,7 +22,7 @@ interface PaginatedProjectGridProps extends ProjectGridProps {
  */
 export const PaginatedProjectGrid = ({
   projects,
-  likedIDs = [],
+  likedIDs,
   page,
   totalPages,
   getPageHref,

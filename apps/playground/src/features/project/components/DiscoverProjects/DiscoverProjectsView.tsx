@@ -10,8 +10,8 @@ import { discoverProjectsVariants } from "./DiscoverProjects.variants"
 
 interface DiscoverProjectsViewProps extends DiscoverState {
   projects: Project[]
-  /** IDs of the projects the signed-in member has liked */
-  likedIDs?: string[]
+  /** IDs of the projects the signed-in member has liked, streamed in after the grid */
+  likedIDs?: Promise<string[]>
   totalPages: number
   className?: string
 }
