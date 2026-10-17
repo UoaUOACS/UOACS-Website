@@ -2,9 +2,9 @@
 
 import { CheckIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { useSelector } from "@tanstack/react-form"
-import { Button, Dropdown, type DropdownProps } from "@uoacs/ui"
+import { Button, Dropdown, type DropdownProps, type GalleryImage } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import { Suspense, useEffect, useEffectEvent, useRef, useTransition } from "react"
+import { Suspense, useEffect, useEffectEvent, useRef, useState, useTransition } from "react"
 import { ImageGridBlockView } from "@/features/project/components/BlockViews/ImageGridBlockView"
 import { TextBlockView } from "@/features/project/components/BlockViews/TextBlockView"
 import {
@@ -16,6 +16,7 @@ import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
 import { Slugs } from "@/lib/payload/slugs"
+import { ImageGridBlockEditor, type PendingImage } from "./ImageGridBlockEditor"
 import { TextBlockEditor } from "./TextBlockEditor"
 
 /**
@@ -50,6 +51,7 @@ export const BlockFrame = withForm({
     onDeactivate: () => {},
     onMove: (_to: number) => {},
     onDelete: () => {},
+    onUpload: (_image: GalleryImage) => {},
   },
   render: function Render({
     form,
@@ -62,6 +64,7 @@ export const BlockFrame = withForm({
     onDeactivate,
     onMove,
     onDelete,
+    onUpload,
   }) {
     // The list only re-renders when blocks are added, moved or removed
     const block = useSelector(form.store, (state) => state.values.pageContent[index])
@@ -83,6 +86,13 @@ export const BlockFrame = withForm({
       }
       return undefined
     })
+    const [pendingImages, setPendingImages] = useState<PendingImage[]>([])
+    const failedUploads = pendingImages.filter((image) => image.error).length
+    // Reads the latest list, so a deleted block releases the previews it still holds
+    const releasePreviews = useEffectEvent(() => {
+      for (const image of pendingImages) URL.revokeObjectURL(image.previewURL)
+    })
+    useEffect(() => () => releasePreviews(), [])
     const editButton = useRef<HTMLButtonElement>(null)
     const returnFocus = useRef(false)
     // A transition keeps the view on screen while the editor code loads via the suspense
@@ -123,8 +133,7 @@ export const BlockFrame = withForm({
     const label = `${isText ? "Text" : "Image grid"} section ${index + 1}`
 
     const options = [
-      // Image grid editing comes in a later PR
-      ...(active || !isText ? [] : [menuOption("Edit", activate)]),
+      ...(active ? [] : [menuOption("Edit", activate)]),
       ...(isFirst ? [] : [menuOption("Move up", () => onMove(index - 1))]),
       ...(isLast ? [] : [menuOption("Move down", () => onMove(index + 1))]),
       menuOption("Remove", onDelete, "text-red-600"),
@@ -146,8 +155,20 @@ export const BlockFrame = withForm({
           >
             {/* Mounted before the editor, so the transition can hold the view in its place */}
             <Suspense>
-              {active && isText ? (
-                <TextBlockEditor form={form} index={index} />
+              {active ? (
+                isText ? (
+                  <TextBlockEditor form={form} index={index} />
+                ) : (
+                  <ImageGridBlockEditor
+                    blockKey={block._key}
+                    form={form}
+                    index={index}
+                    media={media}
+                    onUpload={onUpload}
+                    pending={pendingImages}
+                    setPending={setPendingImages}
+                  />
+                )
               ) : (
                 <>
                   {isEmptyBlock(block) ? (
@@ -164,25 +185,29 @@ export const BlockFrame = withForm({
                     />
                   )}
                   {/* Covers the view, so a click anywhere or Enter opens the editor */}
-                  {isText && (
-                    <button
-                      aria-label={`Edit ${label}`}
-                      className={cn(
-                        "absolute inset-0 cursor-text rounded-xl hover:bg-black/3",
-                        isActivating && "bg-black/3",
-                      )}
-                      onClick={activate}
-                      onFocus={isText ? preloadRichTextEditor : undefined}
-                      onPointerEnter={isText ? preloadRichTextEditor : undefined}
-                      ref={editButton}
-                      type="button"
-                    />
-                  )}
+                  <button
+                    aria-label={`Edit ${label}`}
+                    className={cn(
+                      "absolute inset-0 cursor-text rounded-xl hover:bg-black/3",
+                      isActivating && "bg-black/3",
+                    )}
+                    onClick={activate}
+                    onFocus={isText ? preloadRichTextEditor : undefined}
+                    onPointerEnter={isText ? preloadRichTextEditor : undefined}
+                    ref={editButton}
+                    type="button"
+                  />
                 </>
               )}
             </Suspense>
           </div>
           {error && !active && <p className="text-red-600 text-sm">{error}</p>}
+          {failedUploads > 0 && !active && (
+            <p className="text-red-600 text-sm">
+              {failedUploads === 1 ? "1 image" : `${failedUploads} images`} could not be uploaded.
+              Open the section to see why.
+            </p>
+          )}
         </div>
         {/* A row above the block on mobile, so the content gets the full width */}
         <div className="flex justify-end gap-2 max-md:order-first md:flex-col">
