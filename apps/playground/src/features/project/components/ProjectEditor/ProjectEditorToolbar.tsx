@@ -5,7 +5,6 @@ import { Button, Dropdown } from "@uoacs/ui"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { projectFormOptions } from "@/features/project/editor/projectForm.options"
-import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
 import { Routes } from "@/lib/routes"
 import { DeleteProjectDialog } from "./DeleteProjectDialog"
@@ -20,28 +19,31 @@ export const ProjectEditorToolbar = withForm({
      * Omitted for a project that is not saved yet
      */
     projectID: undefined as string | undefined,
+    /**
+     * The last failed save's summary, until the next save
+     */
+    error: undefined as string | undefined,
   },
-  render: function Render({ form, projectID }) {
+  render: function Render({ form, projectID, error }) {
     const router = useRouter()
     const [deleteOpen, setDeleteOpen] = useState(false)
 
     return (
       <div className="sticky top-0 z-40 flex flex-wrap items-center justify-end gap-x-1 gap-y-2 bg-white py-3 sm:gap-x-4">
-        <form.Subscribe
-          selector={(state) => ({
-            message: getFieldError([state.errorMap.onSubmit]),
-            fieldCount: Object.values(state.fieldMeta).filter((meta) => meta?.errors.length).length,
-          })}
-        >
-          {({ message, fieldCount }) =>
-            message ? (
+        {error && (
+          <form.Subscribe
+            selector={(state) =>
+              Object.values(state.fieldMeta).filter((meta) => meta?.errors.length).length
+            }
+          >
+            {(fieldCount) => (
               <p className="mr-auto text-red-600 text-sm" role="alert">
-                {message}
+                {error}
                 {fieldCount > 0 && ` (${fieldCount})`}
               </p>
-            ) : null
-          }
-        </form.Subscribe>
+            )}
+          </form.Subscribe>
+        )}
         {/* Preview mode comes with the reorder and preview work */}
         <Button className="disabled:text-gray-400 max-sm:px-2" disabled theme="ghost">
           Preview

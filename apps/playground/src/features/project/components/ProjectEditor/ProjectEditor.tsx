@@ -11,7 +11,7 @@ import {
   isEmptyBlock,
   type MediaLookup,
   projectFormOptions,
-  type SaveValidator,
+  setSaveErrors,
   toSaveInput,
 } from "@/features/project/editor/projectForm.options"
 import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
@@ -79,6 +79,8 @@ export const ProjectEditor = ({
   const savedID = useRef(projectID)
   // Only this block mounts an editor
   const [activeKey, setActiveKey] = useState<string | null>(null)
+  // In state, as TanStack clears a form-level error on the next change
+  const [saveError, setSaveError] = useState<string>()
 
   const showBlock = (index: number) => {
     const key = form.state.values.pageContent[index]?._key
@@ -92,8 +94,7 @@ export const ProjectEditor = ({
     )
   }
 
-  // Saves in the validator, so the server's errors land on the form and its fields
-  const save: SaveValidator = async ({ value }) => {
+  const save = async (value: EditProjectValues) => {
     // Indexes of the blocks to save. Empty blocks are skipped, not errors.
     const kept = value.pageContent.flatMap((block, index) => (isEmptyBlock(block) ? [] : [index]))
     const pageContent = kept.map((index) => value.pageContent[index])
@@ -108,28 +109,25 @@ export const ProjectEditor = ({
           message,
         ]),
       )
+      setSaveError(SAVE_ERROR_MESSAGES[result.error])
+      setSaveErrors(form, fields)
       const index = firstBlockWithError(fields, value.pageContent)
       if (index !== undefined) showBlock(index)
-      return { form: SAVE_ERROR_MESSAGES[result.error], fields }
+      return
     }
     savedID.current = result.id
-    return undefined
+    // Not dirty, so leaving does not warn about unsaved changes
+    form.reset(value)
+    toast.success({ description: "Saved" })
+    router.push(Routes.PROJECTS.ID(result.id))
   }
 
   const form = useAppForm({
     ...projectFormOptions,
     defaultValues: initialValues,
-    validators: { onSubmitAsync: save },
-    // A failed save sets a submit error, which would disable the button until a field changes
+    // A failed save's errors make the form invalid, which would disable the button
     canSubmitWhenInvalid: true,
-    onSubmit: ({ value }) => {
-      const id = savedID.current
-      if (!id) return
-      // Not dirty, so leaving does not warn about unsaved changes
-      form.reset(value)
-      toast.success({ description: "Saved" })
-      router.push(Routes.PROJECTS.ID(id))
-    },
+    onSubmit: ({ value }) => save(value),
   })
 
   // Most edits open a text block, so load the editor once the page is idle.
@@ -152,11 +150,14 @@ export const ProjectEditor = ({
       className="flex w-full flex-col gap-4"
       onSubmit={(event) => {
         event.preventDefault()
+        // The last save's errors make the form invalid, so TanStack would skip this save
+        setSaveError(undefined)
+        setSaveErrors(form)
         void submitForm(form)
       }}
     >
       <form.AppForm>
-        <ProjectEditorToolbar form={form} projectID={projectID} />
+        <ProjectEditorToolbar error={saveError} form={form} projectID={projectID} />
         <div className="flex flex-col gap-12 md:gap-15">
           <ProjectHeaderEditor coverImageURL={coverImageURL} form={form} />
           <BlockList

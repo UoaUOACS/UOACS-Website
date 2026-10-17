@@ -6,7 +6,7 @@ import {
   type BlockValue,
   type MediaLookup,
   projectFormOptions,
-  type SaveValidator,
+  setSaveErrors,
 } from "@/features/project/editor/projectForm.options"
 import { useAppForm } from "@/lib/form/useAppForm"
 import { Slugs } from "@/lib/payload/slugs"
@@ -76,16 +76,13 @@ interface ExampleProps {
 // One block in a form, as `BlockList` renders it
 const Example = ({ block, active: initialActive = false, error }: ExampleProps) => {
   const [active, setActive] = useState(initialActive)
-  // Stands in for a failed save
-  const save: SaveValidator = async () =>
-    error ? { form: error, fields: { "pageContent[0].content": error } } : undefined
   const form = useAppForm({
     ...projectFormOptions,
     defaultValues: { ...projectFormOptions.defaultValues, pageContent: [block] },
-    validators: { onSubmitAsync: save },
   })
+  // Stands in for a failed save
   useEffect(() => {
-    if (error) void form.handleSubmit()
+    if (error) setSaveErrors(form, { "pageContent[0].content": error })
   }, [error, form])
 
   return (
