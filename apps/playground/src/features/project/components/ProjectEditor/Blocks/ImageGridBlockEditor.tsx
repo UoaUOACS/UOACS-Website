@@ -156,8 +156,9 @@ export const ImageGridBlockEditor = withForm({
             field.handleBlur()
           }
 
+          const indexOf = (id: UniqueIdentifier) => images.indexOf(String(id))
           // Positions, as the default announcements read out the media ID
-          const position = (id: UniqueIdentifier) => images.indexOf(String(id)) + 1
+          const position = (id: UniqueIdentifier) => indexOf(id) + 1
           const announcements: Announcements = {
             onDragStart: ({ active }) => `Picked up image ${position(active.id)}.`,
             onDragOver: ({ active, over }) =>
@@ -179,7 +180,7 @@ export const ImageGridBlockEditor = withForm({
                 collisionDetection={closestCenter}
                 onDragEnd={({ active, over }) => {
                   if (!over || active.id === over.id) return
-                  field.moveValue(position(active.id) - 1, position(over.id) - 1)
+                  field.moveValue(indexOf(active.id), indexOf(over.id))
                 }}
                 sensors={sensors}
               >
