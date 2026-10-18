@@ -1,9 +1,27 @@
 "use client"
 
+import {
+  type Announcements,
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  type UniqueIdentifier,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core"
+import {
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+} from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { downscaleImage } from "@uoacs/shared"
 import { type GalleryImage, Input, LazyImage } from "@uoacs/ui"
-import { type Dispatch, type SetStateAction, useId, useRef, useState } from "react"
+import { cn } from "@uoacs/ui/utils"
+import { type Dispatch, type ReactNode, type SetStateAction, useId, useRef, useState } from "react"
 import { uploadProjectMedia } from "@/features/project/actions/uploadProjectMedia"
 import { type MediaLookup, projectFormOptions } from "@/features/project/editor/projectForm.options"
 import {
@@ -45,6 +63,11 @@ export const ImageGridBlockEditor = withForm({
   render: function Render({ form, index, blockKey, media, onUpload, pending, setPending }) {
     const inputID = useId()
     const [notice, setNotice] = useState<string>()
+    // The distance lets a click on a tile's buttons work without starting a drag
+    const sensors = useSensors(
+      useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+      useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+    )
 
     const updatePending = (key: string, error?: string) =>
       setPending((images) =>
@@ -130,103 +153,115 @@ export const ImageGridBlockEditor = withForm({
             field.handleBlur()
           }
 
+          // Positions, as the default announcements read out the media ID
+          const position = (id: UniqueIdentifier) => images.indexOf(String(id)) + 1
+          const announcements: Announcements = {
+            onDragStart: ({ active }) => `Picked up image ${position(active.id)}.`,
+            onDragOver: ({ active, over }) =>
+              over
+                ? `Image ${position(active.id)} is over position ${position(over.id)}.`
+                : undefined,
+            onDragEnd: ({ active, over }) =>
+              over
+                ? `Moved image ${position(active.id)} to position ${position(over.id)}.`
+                : `Dropped image ${position(active.id)}.`,
+            onDragCancel: ({ active }) =>
+              `Cancelled. Image ${position(active.id)} is back in its place.`,
+          }
+
           return (
             <div className="flex w-full flex-col gap-2">
-              <ul aria-label="Images" className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {images.map((id, imageIndex) => {
-                  const image = media[id]
-                  return (
-                    <li className="flex flex-col gap-1" key={id}>
-                      <div className={tile}>
-                        {image && (
-                          <LazyImage
-                            alt={image.alt}
-                            className="object-cover!"
-                            containerClassName="absolute inset-0"
-                            fill
-                            sizes="(min-width: 640px) 33vw, 50vw"
-                            src={image.src}
-                          />
-                        )}
+              <DndContext
+                accessibility={{ announcements }}
+                collisionDetection={closestCenter}
+                onDragEnd={({ active, over }) => {
+                  if (!over || active.id === over.id) return
+                  field.moveValue(position(active.id) - 1, position(over.id) - 1)
+                }}
+                sensors={sensors}
+              >
+                <ul aria-label="Images" className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {/* Only uploaded images move. Pending and "Add images" tiles stay at the end. */}
+                  <SortableContext items={images} strategy={rectSortingStrategy}>
+                    {images.map((id, imageIndex) => (
+                      <SortableImageTile
+                        id={id}
+                        image={media[id]}
+                        key={id}
+                        number={imageIndex + 1}
+                        onRemove={() => field.removeValue(imageIndex)}
+                      >
+                        <form.Field
+                          name={`imageTitles.${id}`}
+                          validators={{
+                            onChange: ({ value }) => (value?.trim() ? undefined : "Add a title"),
+                          }}
+                        >
+                          {(title) => (
+                            <Input
+                              aria-label={`Title of image ${imageIndex + 1}`}
+                              className="px-2 py-1 text-sm"
+                              error={getFieldError(title.state.meta.errors)}
+                              maxLength={IMAGE_TITLE_MAX_LENGTH}
+                              onBlur={title.handleBlur}
+                              onChange={(event) => title.handleChange(event.target.value)}
+                              placeholder="Title"
+                              value={title.state.value ?? ""}
+                            />
+                          )}
+                        </form.Field>
+                      </SortableImageTile>
+                    ))}
+                  </SortableContext>
+                  {pending.map((image) => (
+                    <li aria-busy={!image.error || undefined} className={tile} key={image.key}>
+                      {/* biome-ignore lint/performance/noImgElement: an object URL, which next/image cannot load */}
+                      <img
+                        alt=""
+                        className="absolute inset-0 size-full object-cover opacity-50"
+                        src={image.previewURL}
+                      />
+                      <span className="absolute inset-0 flex items-center justify-center p-2 text-center font-medium text-gray-900 text-sm">
+                        {image.error ?? "Uploading…"}
+                      </span>
+                      {image.error && (
                         <button
                           className={removeButton}
-                          onClick={() => field.removeValue(imageIndex)}
+                          onClick={() => updatePending(image.key)}
                           type="button"
                         >
                           <XMarkIcon aria-hidden className="size-4" />
-                          <span className="sr-only">Remove image {imageIndex + 1}</span>
+                          <span className="sr-only">Dismiss</span>
                         </button>
-                      </div>
-                      <form.Field
-                        name={`imageTitles.${id}`}
-                        validators={{
-                          onChange: ({ value }) => (value?.trim() ? undefined : "Add a title"),
-                        }}
-                      >
-                        {(title) => (
-                          <Input
-                            aria-label={`Title of image ${imageIndex + 1}`}
-                            className="px-2 py-1 text-sm"
-                            error={getFieldError(title.state.meta.errors)}
-                            maxLength={IMAGE_TITLE_MAX_LENGTH}
-                            onBlur={title.handleBlur}
-                            onChange={(event) => title.handleChange(event.target.value)}
-                            placeholder="Title"
-                            value={title.state.value ?? ""}
-                          />
-                        )}
-                      </form.Field>
+                      )}
                     </li>
-                  )
-                })}
-                {pending.map((image) => (
-                  <li aria-busy={!image.error || undefined} className={tile} key={image.key}>
-                    {/* biome-ignore lint/performance/noImgElement: an object URL, which next/image cannot load */}
-                    <img
-                      alt=""
-                      className="absolute inset-0 size-full object-cover opacity-50"
-                      src={image.previewURL}
-                    />
-                    <span className="absolute inset-0 flex items-center justify-center p-2 text-center font-medium text-gray-900 text-sm">
-                      {image.error ?? "Uploading…"}
-                    </span>
-                    {image.error && (
-                      <button
-                        className={removeButton}
-                        onClick={() => updatePending(image.key)}
-                        type="button"
+                  ))}
+                  {slots > 0 && (
+                    <li className={tile}>
+                      <label
+                        className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 font-medium text-gray-500 text-sm hover:bg-gray-200 focus-within:[outline:-webkit-focus-ring-color_auto_1px]"
+                        htmlFor={inputID}
                       >
-                        <XMarkIcon aria-hidden className="size-4" />
-                        <span className="sr-only">Dismiss</span>
-                      </button>
-                    )}
-                  </li>
-                ))}
-                {slots > 0 && (
-                  <li className={tile}>
-                    <label
-                      className="flex size-full cursor-pointer flex-col items-center justify-center gap-2 font-medium text-gray-500 text-sm hover:bg-gray-200 focus-within:[outline:-webkit-focus-ring-color_auto_1px]"
-                      htmlFor={inputID}
-                    >
-                      <PhotoIcon aria-hidden className="size-8 stroke-2" />
-                      Add images
-                      <input
-                        accept={MEDIA_TYPES.join(",")}
-                        aria-describedby={error ? `${inputID}-error` : undefined}
-                        aria-invalid={error ? true : undefined}
-                        className="sr-only"
-                        id={inputID}
-                        multiple
-                        onChange={(event) => {
-                          addFiles(Array.from(event.target.files ?? []))
-                          event.target.value = ""
-                        }}
-                        type="file"
-                      />
-                    </label>
-                  </li>
-                )}
-              </ul>
+                        <PhotoIcon aria-hidden className="size-8 stroke-2" />
+                        Add images
+                        <input
+                          accept={MEDIA_TYPES.join(",")}
+                          aria-describedby={error ? `${inputID}-error` : undefined}
+                          aria-invalid={error ? true : undefined}
+                          className="sr-only"
+                          id={inputID}
+                          multiple
+                          onChange={(event) => {
+                            addFiles(Array.from(event.target.files ?? []))
+                            event.target.value = ""
+                          }}
+                          type="file"
+                        />
+                      </label>
+                    </li>
+                  )}
+                </ul>
+              </DndContext>
               <p className="text-right text-gray-500 text-sm">
                 {images.length}/{IMAGE_GRID_MAX_IMAGES} images
               </p>
@@ -243,3 +278,56 @@ export const ImageGridBlockEditor = withForm({
     )
   },
 })
+
+const SortableImageTile = ({
+  children,
+  id,
+  image,
+  number,
+  onRemove,
+}: {
+  /** The title field */
+  children: ReactNode
+  id: string
+  image: GalleryImage | undefined
+  number: number
+  onRemove: () => void
+}) => {
+  const { attributes, isDragging, listeners, setNodeRef, transform, transition } = useSortable({
+    id,
+  })
+
+  return (
+    <li
+      className={cn("flex flex-col gap-1", isDragging && "z-10 opacity-80")}
+      ref={setNodeRef}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+    >
+      <div className={cn(tile, isDragging && "shadow-lg")}>
+        {image && (
+          <LazyImage
+            alt={image.alt}
+            className="object-cover!"
+            containerClassName="absolute inset-0"
+            fill
+            sizes="(min-width: 640px) 33vw, 50vw"
+            src={image.src}
+          />
+        )}
+        {/* Over the image, as LazyImage's div cannot go in a button */}
+        <button
+          aria-label={`Move image ${number}`}
+          className="absolute inset-0 cursor-grab touch-none -outline-offset-4 active:cursor-grabbing"
+          type="button"
+          {...attributes}
+          {...listeners}
+        />
+        <button className={removeButton} onClick={onRemove} type="button">
+          <XMarkIcon aria-hidden className="size-4" />
+          <span className="sr-only">Remove image {number}</span>
+        </button>
+      </div>
+      {children}
+    </li>
+  )
+}
