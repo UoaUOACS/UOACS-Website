@@ -13,6 +13,9 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
+    "@dnd-kit/core": "catalog:",
+    "@dnd-kit/sortable": "catalog:",
+    "@dnd-kit/utilities": "catalog:",
     "@heroicons/react": "catalog:",
     "@payloadcms/db-mongodb": "catalog:payload",
     "@payloadcms/next": "catalog:payload",
