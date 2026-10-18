@@ -5,7 +5,8 @@ import {
   closestCenter,
   DndContext,
   KeyboardSensor,
-  PointerSensor,
+  MouseSensor,
+  TouchSensor,
   type UniqueIdentifier,
   useSensor,
   useSensors,
@@ -63,9 +64,11 @@ export const ImageGridBlockEditor = withForm({
   render: function Render({ form, index, blockKey, media, onUpload, pending, setPending }) {
     const inputID = useId()
     const [notice, setNotice] = useState<string>()
-    // The distance lets a click on a tile's buttons work without starting a drag
+    // A click on the move handle does not pick up the image.
+    // A touch drag needs a long press, so a swipe over the image still scrolls the page.
     const sensors = useSensors(
-      useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+      useSensor(MouseSensor, { activationConstraint: { distance: 5 } }),
+      useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
       useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
     )
 
@@ -317,7 +320,7 @@ const SortableImageTile = ({
         {/* Over the image, as LazyImage's div cannot go in a button */}
         <button
           aria-label={`Move image ${number}`}
-          className="absolute inset-0 cursor-grab touch-none -outline-offset-4 active:cursor-grabbing"
+          className="absolute inset-0 cursor-grab -outline-offset-4 active:cursor-grabbing"
           type="button"
           {...attributes}
           {...listeners}
