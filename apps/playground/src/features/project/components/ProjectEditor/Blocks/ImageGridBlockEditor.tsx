@@ -178,6 +178,7 @@ export const ImageGridBlockEditor = withForm({
               <DndContext
                 accessibility={{ announcements }}
                 collisionDetection={closestCenter}
+                id={`${inputID}-dnd`}
                 onDragEnd={({ active, over }) => {
                   if (!over || active.id === over.id) return
                   field.moveValue(indexOf(active.id), indexOf(over.id))
