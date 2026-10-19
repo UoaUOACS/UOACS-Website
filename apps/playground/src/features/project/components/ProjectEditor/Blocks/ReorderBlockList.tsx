@@ -18,7 +18,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
+import { Bars2Icon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { useSelector } from "@tanstack/react-form"
 import { Dropdown } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
@@ -39,15 +39,6 @@ import { blockLabel, menuOption } from "./BlockFrame"
  * The DOM ID of a block's row, apart from its frame's, as the frames stay mounted while hidden
  */
 const reorderRowID = (key: string) => `reorder-${key}`
-
-// Two columns of three dots. Heroicons has no grip icon.
-const GripIcon = ({ className }: { className?: string }) => (
-  <svg aria-hidden="true" className={className} fill="currentColor" viewBox="0 0 20 20">
-    {[5, 10, 15].flatMap((cy) =>
-      [7, 13].map((cx) => <circle cx={cx} cy={cy} key={`${cx}-${cy}`} r={1.5} />),
-    )}
-  </svg>
-)
 
 /**
  * The page's blocks as compact rows, sorted by drag, keyboard or each row's move to top and bottom
@@ -197,7 +188,7 @@ const SortableBlockRow = ({
           {...attributes}
           {...listeners}
         >
-          <GripIcon className="size-5" />
+          <Bars2Icon aria-hidden className="size-5" />
         </button>
       </div>
       <Dropdown
