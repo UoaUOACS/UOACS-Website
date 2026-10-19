@@ -4,7 +4,16 @@ import { CheckIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { useSelector } from "@tanstack/react-form"
 import { Button, Dropdown, type DropdownProps, type GalleryImage } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import { lazy, Suspense, useEffect, useEffectEvent, useRef, useState, useTransition } from "react"
+import {
+  type Dispatch,
+  lazy,
+  type SetStateAction,
+  Suspense,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useTransition,
+} from "react"
 import { ImageGridBlockView } from "@/features/project/components/BlockViews/ImageGridBlockView"
 import { TextBlockView } from "@/features/project/components/BlockViews/TextBlockView"
 import {
@@ -69,6 +78,12 @@ export const BlockFrame = withForm({
     onDelete: () => {},
     onReorder: () => {},
     onUpload: (_image: GalleryImage) => {},
+    /**
+     * The block's uploads that are running or failed. Held by the list, as they outlive the editor
+     * and the frame's effects clean up while reorder mode hides it.
+     */
+    pending: [] as PendingImage[],
+    setPending: (() => {}) as Dispatch<SetStateAction<PendingImage[]>>,
   },
   render: function Render({
     form,
@@ -83,6 +98,8 @@ export const BlockFrame = withForm({
     onDelete,
     onReorder,
     onUpload,
+    pending,
+    setPending,
   }) {
     // The list only re-renders when blocks are added, moved or removed
     const block = useSelector(form.store, (state) => state.values.pageContent[index])
@@ -104,13 +121,7 @@ export const BlockFrame = withForm({
       }
       return undefined
     })
-    const [pendingImages, setPendingImages] = useState<PendingImage[]>([])
-    const failedUploads = pendingImages.filter((image) => image.error).length
-    // Reads the latest list, so a deleted block releases the previews it still holds
-    const releasePreviews = useEffectEvent(() => {
-      for (const image of pendingImages) URL.revokeObjectURL(image.previewURL)
-    })
-    useEffect(() => () => releasePreviews(), [])
+    const failedUploads = pending.filter((image) => image.error).length
     const editButton = useRef<HTMLButtonElement>(null)
     const returnFocus = useRef(false)
     // A transition keeps the view on screen while the editor code loads via the suspense
@@ -184,8 +195,8 @@ export const BlockFrame = withForm({
                     index={index}
                     media={media}
                     onUpload={onUpload}
-                    pending={pendingImages}
-                    setPending={setPendingImages}
+                    pending={pending}
+                    setPending={setPending}
                   />
                 )
               ) : (
