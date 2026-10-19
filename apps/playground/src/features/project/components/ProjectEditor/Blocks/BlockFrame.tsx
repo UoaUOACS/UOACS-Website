@@ -4,7 +4,7 @@ import { CheckIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { useSelector } from "@tanstack/react-form"
 import { Button, Dropdown, type DropdownProps, type GalleryImage } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import { Suspense, useEffect, useEffectEvent, useRef, useState, useTransition } from "react"
+import { lazy, Suspense, useEffect, useEffectEvent, useRef, useState, useTransition } from "react"
 import { ImageGridBlockView } from "@/features/project/components/BlockViews/ImageGridBlockView"
 import { TextBlockView } from "@/features/project/components/BlockViews/TextBlockView"
 import {
@@ -16,8 +16,13 @@ import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
 import { Slugs } from "@/lib/payload/slugs"
-import { ImageGridBlockEditor, type PendingImage } from "./ImageGridBlockEditor"
+import type { PendingImage } from "./ImageGridBlockEditor"
 import { TextBlockEditor } from "./TextBlockEditor"
+
+// Lazy, so dnd-kit loads only when an image grid opens
+const ImageGridBlockEditor = lazy(() =>
+  import("./ImageGridBlockEditor").then((mod) => ({ default: mod.ImageGridBlockEditor })),
+)
 
 /**
  * The DOM ID of a block's frame, to scroll to it
