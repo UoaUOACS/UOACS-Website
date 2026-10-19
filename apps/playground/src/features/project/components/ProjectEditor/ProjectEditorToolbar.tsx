@@ -10,7 +10,8 @@ import { Routes } from "@/lib/routes"
 import { DeleteProjectDialog } from "./DeleteProjectDialog"
 
 /**
- * Sticky actions above the editor: preview, discard, save, the save error, and a menu with delete
+ * Sticky actions above the editor: reorder, preview, discard, save, the save error, and a menu with
+ * delete
  */
 export const ProjectEditorToolbar = withForm({
   ...projectFormOptions,
@@ -23,8 +24,10 @@ export const ProjectEditorToolbar = withForm({
      * The last failed save's summary, until the next save
      */
     error: undefined as string | undefined,
+    reordering: false,
+    onReorderChange: (_reordering: boolean) => {},
   },
-  render: function Render({ form, projectID, error }) {
+  render: function Render({ form, projectID, error, reordering, onReorderChange }) {
     const router = useRouter()
     const [deleteOpen, setDeleteOpen] = useState(false)
 
@@ -44,7 +47,20 @@ export const ProjectEditorToolbar = withForm({
             )}
           </form.Subscribe>
         )}
-        {/* Preview mode comes with the reorder and preview work */}
+        <form.Subscribe selector={(state) => state.values.pageContent.length}>
+          {(blockCount) => (
+            <Button
+              aria-pressed={reordering}
+              className="disabled:text-gray-400 max-sm:px-2"
+              disabled={blockCount < 2}
+              onClick={() => onReorderChange(!reordering)}
+              theme="ghost"
+            >
+              {reordering ? "Done" : "Reorder"}
+            </Button>
+          )}
+        </form.Subscribe>
+        {/* Preview mode comes with the preview work */}
         <Button className="disabled:text-gray-400 max-sm:px-2" disabled theme="ghost">
           Preview
         </Button>

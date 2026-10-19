@@ -3,7 +3,7 @@
 import { useSelector } from "@tanstack/react-form"
 import { toast } from "@uoacs/ui/toast"
 import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useTransition } from "react"
 import { type SaveProjectResult, saveProject } from "@/features/project/actions/saveProject"
 import {
   type BlockValue,
@@ -84,10 +84,25 @@ export const ProjectEditor = ({
   // In state, as TanStack clears a form-level error on the next change
   const [saveError, setSaveError] = useState<string>()
   const [media, setMedia] = useState(initialMedia)
+  const [reordering, setReordering] = useState(false)
+  const [reorderKey, setReorderKey] = useState<string | null>(null)
+  // A transition keeps the blocks on screen while the reorder code loads
+  const [, startReorderTransition] = useTransition()
+
+  const startReorder = (key: string | null) => {
+    // Blur first, so a text field flushes its debounced value before it unmounts
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+    setActiveKey(null)
+    startReorderTransition(() => {
+      setReorderKey(key)
+      setReordering(true)
+    })
+  }
 
   const showBlock = (index: number) => {
     const key = form.state.values.pageContent[index]?._key
     if (!key) return
+    setReordering(false)
     setActiveKey(key)
     // Instant: a smooth scroll aims at the sizes that idle blocks guess before they render
     requestAnimationFrame(() =>
@@ -162,7 +177,13 @@ export const ProjectEditor = ({
       }}
     >
       <form.AppForm>
-        <ProjectEditorToolbar error={saveError} form={form} projectID={projectID} />
+        <ProjectEditorToolbar
+          error={saveError}
+          form={form}
+          onReorderChange={(next) => (next ? startReorder(null) : setReordering(false))}
+          projectID={projectID}
+          reordering={reordering}
+        />
         <div className="flex flex-col gap-12 md:gap-15">
           <ProjectHeaderEditor coverImageURL={coverImageURL} form={form} />
           <BlockList
@@ -170,7 +191,10 @@ export const ProjectEditor = ({
             form={form}
             media={media}
             onActiveKeyChange={setActiveKey}
+            onReorder={startReorder}
             onUpload={(image) => setMedia((current) => ({ ...current, [image.id]: image }))}
+            reordering={reordering}
+            reorderKey={reorderKey}
           />
         </div>
       </form.AppForm>

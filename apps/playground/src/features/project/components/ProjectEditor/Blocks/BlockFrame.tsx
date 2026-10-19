@@ -8,9 +8,11 @@ import { lazy, Suspense, useEffect, useEffectEvent, useRef, useState, useTransit
 import { ImageGridBlockView } from "@/features/project/components/BlockViews/ImageGridBlockView"
 import { TextBlockView } from "@/features/project/components/BlockViews/TextBlockView"
 import {
+  type BlockValue,
   isEmptyBlock,
   type MediaLookup,
   projectFormOptions,
+  toGridImages,
 } from "@/features/project/editor/projectForm.options"
 import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { getFieldError } from "@/lib/form/formContext"
@@ -29,7 +31,16 @@ const ImageGridBlockEditor = lazy(() =>
  */
 export const blockElementID = (key: string) => `block-${key}`
 
-const menuOption = (
+/**
+ * A block's name for screen readers, e.g. "Text section 2"
+ */
+export const blockLabel = (block: BlockValue, index: number) =>
+  `${block.blockType === Slugs.Blocks.TEXT ? "Text" : "Image grid"} section ${index + 1}`
+
+/**
+ * An option in a block's actions menu
+ */
+export const menuOption = (
   label: string,
   onClick: () => void,
   className?: string,
@@ -56,6 +67,7 @@ export const BlockFrame = withForm({
     onDeactivate: () => {},
     onMove: (_to: number) => {},
     onDelete: () => {},
+    onReorder: () => {},
     onUpload: (_image: GalleryImage) => {},
   },
   render: function Render({
@@ -69,6 +81,7 @@ export const BlockFrame = withForm({
     onDeactivate,
     onMove,
     onDelete,
+    onReorder,
     onUpload,
   }) {
     // The list only re-renders when blocks are added, moved or removed
@@ -135,12 +148,13 @@ export const BlockFrame = withForm({
     if (!block) return null
 
     const isText = block.blockType === Slugs.Blocks.TEXT
-    const label = `${isText ? "Text" : "Image grid"} section ${index + 1}`
+    const label = blockLabel(block, index)
 
     const options = [
       ...(active ? [] : [menuOption("Edit", activate)]),
       ...(isFirst ? [] : [menuOption("Move up", () => onMove(index - 1))]),
       ...(isLast ? [] : [menuOption("Move down", () => onMove(index + 1))]),
+      ...(isFirst && isLast ? [] : [menuOption("Reorder…", onReorder)]),
       menuOption("Remove", onDelete, "text-red-600"),
     ]
 
@@ -183,11 +197,7 @@ export const BlockFrame = withForm({
                   ) : isText ? (
                     <TextBlockView content={block.content} />
                   ) : (
-                    <ImageGridBlockView
-                      images={block.images.flatMap((id) =>
-                        media[id] ? [{ ...media[id], alt: imageTitles[id] ?? media[id].alt }] : [],
-                      )}
-                    />
+                    <ImageGridBlockView images={toGridImages(block.images, media, imageTitles)} />
                   )}
                   {/* Covers the view, so a click anywhere or Enter opens the editor */}
                   <button

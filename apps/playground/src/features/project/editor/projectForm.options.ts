@@ -118,6 +118,16 @@ export const toMediaLookup = (project: Project): MediaLookup =>
   )
 
 /**
+ * An image grid's images with their edited titles as alt text. Skips IDs with no image yet.
+ */
+export const toGridImages = (
+  ids: string[],
+  media: MediaLookup,
+  imageTitles: EditProjectValues["imageTitles"],
+) =>
+  ids.flatMap((id) => (media[id] ? [{ ...media[id], alt: imageTitles[id] ?? media[id].alt }] : []))
+
+/**
  * The input for `saveProject`. Drops `_key` and keeps `id`, so Payload keeps existing blocks.
  * Sends only changed titles of images in a grid, so an old, too-long title cannot block a save.
  */

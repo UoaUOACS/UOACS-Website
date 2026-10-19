@@ -98,6 +98,7 @@ const Example = ({ block, active: initialActive = false, error }: ExampleProps) 
       onDeactivate={() => setActive(false)}
       onDelete={fn()}
       onMove={fn()}
+      onReorder={fn()}
       onUpload={fn()}
     />
   )
