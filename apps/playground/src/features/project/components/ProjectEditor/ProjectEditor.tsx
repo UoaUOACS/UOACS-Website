@@ -180,9 +180,12 @@ export const ProjectEditor = ({
         <ProjectEditorToolbar
           error={saveError}
           form={form}
-          onReorderChange={(next) => (next ? startReorder(null) : setReordering(false))}
+          mode={reordering ? "reorder" : "edit"}
+          onModeChange={(mode) => {
+            if (mode === "edit") setReordering(false)
+            else if (!reordering) startReorder(null)
+          }}
           projectID={projectID}
-          reordering={reordering}
         />
         <div className="flex flex-col gap-12 md:gap-15">
           <ProjectHeaderEditor coverImageURL={coverImageURL} form={form} />

@@ -116,6 +116,9 @@ export const ReorderBlockList = withForm({
               aria-label="Page content"
               className="flex flex-col rounded-md border border-gray-200 px-4 py-8 md:px-12"
             >
+              <p className="mb-4 text-gray-500 text-sm">
+                Drag sections to reorder, or use ⋮ to move one to the top or bottom.
+              </p>
               <DndContext
                 accessibility={{ announcements }}
                 collisionDetection={closestCenter}

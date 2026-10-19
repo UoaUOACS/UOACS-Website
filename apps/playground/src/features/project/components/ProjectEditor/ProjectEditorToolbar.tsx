@@ -12,8 +12,16 @@ import { DeleteProjectDialog } from "./DeleteProjectDialog"
 
 const group = "flex items-center gap-x-1 sm:gap-x-4"
 
+export type EditorMode = "edit" | "reorder"
+
+const modeButton = cn(
+  "text-gray-500 text-sm hover:bg-transparent hover:text-gray-900",
+  "aria-pressed:bg-white aria-pressed:text-gray-900 aria-pressed:shadow-sm",
+  "disabled:text-gray-300 disabled:brightness-100",
+)
+
 /**
- * Sticky actions above the editor: reorder, preview, discard, save, the save error, and a menu with
+ * Sticky actions above the editor: the editor mode, discard, save, the save error, and a menu with
  * delete
  */
 export const ProjectEditorToolbar = withForm({
@@ -27,10 +35,10 @@ export const ProjectEditorToolbar = withForm({
      * The last failed save's summary, until the next save
      */
     error: undefined as string | undefined,
-    reordering: false,
-    onReorderChange: (_reordering: boolean) => {},
+    mode: "edit" as EditorMode,
+    onModeChange: (_mode: EditorMode) => {},
   },
-  render: function Render({ form, projectID, error, reordering, onReorderChange }) {
+  render: function Render({ form, projectID, error, mode, onModeChange }) {
     const router = useRouter()
     const [deleteOpen, setDeleteOpen] = useState(false)
 
@@ -56,25 +64,35 @@ export const ProjectEditorToolbar = withForm({
           </form.Subscribe>
         )}
         {/* Groups wrap as a whole, and in reverse, so on a narrow screen the save group is on top */}
-        <div className={group}>
-          <form.Subscribe selector={(state) => state.values.pageContent.length}>
-            {(blockCount) => (
+        <form.Subscribe selector={(state) => state.values.pageContent.length}>
+          {(blockCount) => (
+            <fieldset aria-label="Editor mode" className="flex rounded-full bg-gray-100 p-1">
               <Button
-                aria-pressed={reordering}
-                className="disabled:text-gray-400 max-sm:px-2"
-                disabled={blockCount < 2}
-                onClick={() => onReorderChange(!reordering)}
+                aria-pressed={mode === "edit"}
+                className={modeButton}
+                onClick={() => onModeChange("edit")}
+                shape="pill"
                 theme="ghost"
               >
-                {reordering ? "Done" : "Reorder"}
+                Edit
               </Button>
-            )}
-          </form.Subscribe>
-          {/* Preview mode comes with the preview work */}
-          <Button className="disabled:text-gray-400 max-sm:px-2" disabled theme="ghost">
-            Preview
-          </Button>
-        </div>
+              <Button
+                aria-pressed={mode === "reorder"}
+                className={modeButton}
+                disabled={blockCount < 2}
+                onClick={() => onModeChange("reorder")}
+                shape="pill"
+                theme="ghost"
+              >
+                Reorder
+              </Button>
+              {/* Preview mode comes with the preview work */}
+              <Button className={modeButton} disabled shape="pill" theme="ghost">
+                Preview
+              </Button>
+            </fieldset>
+          )}
+        </form.Subscribe>
         <div className={group}>
           <Button
             className="max-sm:px-2"
