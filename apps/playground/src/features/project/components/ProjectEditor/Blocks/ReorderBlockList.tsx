@@ -163,6 +163,12 @@ const SortableBlockRow = ({
     id: block._key,
   })
   const label = blockLabel(block, index)
+  const handle = (
+    <Bars2Icon
+      aria-hidden
+      className="size-5 shrink-0 text-gray-400 group-hover/card:text-gray-600"
+    />
+  )
 
   return (
     <li
@@ -171,25 +177,24 @@ const SortableBlockRow = ({
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
     >
-      {/* Room on the left of the view for the grip */}
-      <div
-        className={cn("relative min-w-0 grow rounded-xl [&>div]:pl-12", isDragging && "shadow-lg")}
-      >
+      <div className={cn("group/card relative min-w-0 grow rounded-xl", isDragging && "shadow-lg")}>
         {block.blockType === Slugs.Blocks.TEXT ? (
-          <TextBlockView compact content={block.content} />
+          <TextBlockView compact content={block.content} leading={handle} />
         ) : (
-          <ImageGridBlockView compact images={toGridImages(block.images, media, imageTitles)} />
+          <ImageGridBlockView
+            compact
+            images={toGridImages(block.images, media, imageTitles)}
+            leading={handle}
+          />
         )}
         {/* Over the view, as LazyImage's div cannot go in a button, so the whole card drags */}
         <button
           aria-label={`Move ${label}`}
-          className="absolute inset-0 flex cursor-grab items-center rounded-xl pl-4 text-gray-400 hover:bg-black/3 hover:text-gray-600 active:cursor-grabbing"
+          className="absolute inset-0 cursor-grab rounded-xl hover:bg-black/3 active:cursor-grabbing"
           type="button"
           {...attributes}
           {...listeners}
-        >
-          <Bars2Icon aria-hidden className="size-5" />
-        </button>
+        />
       </div>
       <Dropdown
         fast
