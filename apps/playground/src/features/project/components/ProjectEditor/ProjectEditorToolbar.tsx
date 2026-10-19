@@ -2,12 +2,15 @@
 
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline"
 import { Button, Dropdown } from "@uoacs/ui"
+import { cn } from "@uoacs/ui/utils"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { projectFormOptions } from "@/features/project/editor/projectForm.options"
 import { withForm } from "@/lib/form/useAppForm"
 import { Routes } from "@/lib/routes"
 import { DeleteProjectDialog } from "./DeleteProjectDialog"
+
+const group = "flex items-center gap-x-1 sm:gap-x-4"
 
 /**
  * Sticky actions above the editor: reorder, preview, discard, save, the save error, and a menu with
@@ -32,7 +35,12 @@ export const ProjectEditorToolbar = withForm({
     const [deleteOpen, setDeleteOpen] = useState(false)
 
     return (
-      <div className="sticky top-0 z-40 flex flex-wrap items-center justify-end gap-x-1 gap-y-2 bg-white py-3 sm:gap-x-4">
+      <div
+        className={cn(
+          group,
+          "sticky top-0 z-40 flex-wrap-reverse justify-end gap-y-2 bg-white py-3",
+        )}
+      >
         {error && (
           <form.Subscribe
             selector={(state) =>
@@ -47,70 +55,75 @@ export const ProjectEditorToolbar = withForm({
             )}
           </form.Subscribe>
         )}
-        <form.Subscribe selector={(state) => state.values.pageContent.length}>
-          {(blockCount) => (
-            <Button
-              aria-pressed={reordering}
-              className="disabled:text-gray-400 max-sm:px-2"
-              disabled={blockCount < 2}
-              onClick={() => onReorderChange(!reordering)}
-              theme="ghost"
-            >
-              {reordering ? "Done" : "Reorder"}
-            </Button>
+        {/* Groups wrap as a whole, and in reverse, so on a narrow screen the save group is on top */}
+        <div className={group}>
+          <form.Subscribe selector={(state) => state.values.pageContent.length}>
+            {(blockCount) => (
+              <Button
+                aria-pressed={reordering}
+                className="disabled:text-gray-400 max-sm:px-2"
+                disabled={blockCount < 2}
+                onClick={() => onReorderChange(!reordering)}
+                theme="ghost"
+              >
+                {reordering ? "Done" : "Reorder"}
+              </Button>
+            )}
+          </form.Subscribe>
+          {/* Preview mode comes with the preview work */}
+          <Button className="disabled:text-gray-400 max-sm:px-2" disabled theme="ghost">
+            Preview
+          </Button>
+        </div>
+        <div className={group}>
+          <Button
+            className="max-sm:px-2"
+            // Client navigation, so the unsaved changes warning does not show
+            onClick={() =>
+              router.push(projectID ? Routes.PROJECTS.ID(projectID) : Routes.PROFILE.ROOT)
+            }
+            theme="ghost"
+          >
+            {/* One span, as the button spaces out its children */}
+            <span>
+              Discard<span className="max-sm:hidden"> Changes</span>
+            </span>
+          </Button>
+          <form.SubmitButton theme="dark">
+            <span>
+              {projectID ? "Update" : "Create"}
+              <span className="max-sm:hidden"> Project</span>
+            </span>
+          </form.SubmitButton>
+          {projectID && (
+            <>
+              <Dropdown
+                label={<span className="sr-only">More actions</span>}
+                options={[
+                  {
+                    label: "Delete project",
+                    onClick: () => setDeleteOpen(true),
+                    theme: "ghost",
+                    className: "w-full text-red-600",
+                  },
+                ]}
+                popoverClassName="items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md"
+                shape="pill"
+                size="icon"
+                theme="ghost"
+                trigger={{
+                  triggerClassName: "size-8 sm:size-10",
+                  triggerIcon: <EllipsisHorizontalIcon aria-hidden className="size-5 sm:size-6" />,
+                }}
+              />
+              <DeleteProjectDialog
+                onClose={() => setDeleteOpen(false)}
+                open={deleteOpen}
+                projectID={projectID}
+              />
+            </>
           )}
-        </form.Subscribe>
-        {/* Preview mode comes with the preview work */}
-        <Button className="disabled:text-gray-400 max-sm:px-2" disabled theme="ghost">
-          Preview
-        </Button>
-        <Button
-          className="max-sm:px-2"
-          // Client navigation, so the unsaved changes warning does not show
-          onClick={() =>
-            router.push(projectID ? Routes.PROJECTS.ID(projectID) : Routes.PROFILE.ROOT)
-          }
-          theme="ghost"
-        >
-          {/* One span, as the button spaces out its children */}
-          <span>
-            Discard<span className="max-sm:hidden"> Changes</span>
-          </span>
-        </Button>
-        <form.SubmitButton theme="dark">
-          <span>
-            {projectID ? "Update" : "Create"}
-            <span className="max-sm:hidden"> Project</span>
-          </span>
-        </form.SubmitButton>
-        {projectID && (
-          <>
-            <Dropdown
-              label={<span className="sr-only">More actions</span>}
-              options={[
-                {
-                  label: "Delete project",
-                  onClick: () => setDeleteOpen(true),
-                  theme: "ghost",
-                  className: "w-full text-red-600",
-                },
-              ]}
-              popoverClassName="items-stretch gap-0 rounded-lg border border-gray-200 bg-white p-1 shadow-md"
-              shape="pill"
-              size="icon"
-              theme="ghost"
-              trigger={{
-                triggerClassName: "size-8 sm:size-10",
-                triggerIcon: <EllipsisHorizontalIcon aria-hidden className="size-5 sm:size-6" />,
-              }}
-            />
-            <DeleteProjectDialog
-              onClose={() => setDeleteOpen(false)}
-              open={deleteOpen}
-              projectID={projectID}
-            />
-          </>
-        )}
+        </div>
       </div>
     )
   },
