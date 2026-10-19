@@ -8,7 +8,23 @@
   "commitMessagePrefix": "chore(deps):",
   "dependencyDashboard": true,
   "rebaseWhen": "conflicted",
+  "separateMajorMinor": false,
   "packageRules": [
+    {
+      "description": "Open major updates first",
+      "matchUpdateTypes": ["major"],
+      "prPriority": 10
+    },
+    {
+      "description": "Open minor updates after majors",
+      "matchUpdateTypes": ["minor"],
+      "prPriority": 5
+    },
+    {
+      "description": "Open patch, digest and pin updates last",
+      "matchUpdateTypes": ["patch", "digest", "pin"],
+      "prPriority": 0
+    },
     {
       "description": "Group Payload CMS related dependencies",
       "groupName": "Payload CMS",
