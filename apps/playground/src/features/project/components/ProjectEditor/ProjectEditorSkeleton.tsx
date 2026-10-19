@@ -32,7 +32,6 @@ const FieldSkeleton = ({
  */
 export const ProjectEditorSkeleton = ({ create }: ProjectEditorSkeletonProps) => (
   <div aria-hidden="true" className="flex w-full flex-col gap-4">
-    {/* Wraps like the toolbar: the mode switcher drops below the save group */}
     <div className="flex flex-wrap-reverse items-center justify-end gap-x-1 gap-y-2 py-3 sm:gap-x-4">
       <Skeleton className="h-6.5 w-54.5 md:h-8.5" />
       <div className="flex items-center gap-x-1 sm:gap-x-4">

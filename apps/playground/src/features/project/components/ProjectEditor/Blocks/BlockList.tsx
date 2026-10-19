@@ -24,14 +24,13 @@ import { BlockFrame, blockElementID } from "./BlockFrame"
 import { BlockInsertPoint } from "./BlockInsertPoint"
 import type { PendingImage } from "./ImageGridBlockEditor"
 
-// Lazy, so dnd-kit loads only when reorder mode opens
 const ReorderBlockList = lazy(() =>
   import("./ReorderBlockList").then((mod) => ({ default: mod.ReorderBlockList })),
 )
 
 /**
- * The page's blocks, with an insert point before, between and after them, or as compact rows to
- * reorder
+ * The page's blocks, with an insert point before, between and after them,
+ * or as compact rows to reorder
  */
 export const BlockList = withForm({
   ...projectFormOptions,

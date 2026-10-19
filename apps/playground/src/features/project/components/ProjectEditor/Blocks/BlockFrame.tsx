@@ -30,7 +30,6 @@ import { Slugs } from "@/lib/payload/slugs"
 import type { PendingImage } from "./ImageGridBlockEditor"
 import { TextBlockEditor } from "./TextBlockEditor"
 
-// Lazy, so dnd-kit loads only when an image grid opens
 const ImageGridBlockEditor = lazy(() =>
   import("./ImageGridBlockEditor").then((mod) => ({ default: mod.ImageGridBlockEditor })),
 )

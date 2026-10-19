@@ -15,8 +15,8 @@ const group = "flex items-center gap-x-1 sm:gap-x-4"
 export type EditorMode = "edit" | "reorder"
 
 /**
- * Sticky actions above the editor: the editor mode, discard, save, the save error, and a menu with
- * delete
+ * Sticky actions above the editor: the editor mode, discard,
+ * save, the save error, and a menu with delete
  */
 export const ProjectEditorToolbar = withForm({
   ...projectFormOptions,
@@ -57,7 +57,6 @@ export const ProjectEditorToolbar = withForm({
             )}
           </form.Subscribe>
         )}
-        {/* Groups wrap as a whole, and in reverse, so on a narrow screen the save group is on top */}
         <form.Subscribe selector={(state) => state.values.pageContent.length}>
           {(blockCount) => (
             <fieldset aria-label="Editor mode" className="flex rounded-sm bg-gray-100">
