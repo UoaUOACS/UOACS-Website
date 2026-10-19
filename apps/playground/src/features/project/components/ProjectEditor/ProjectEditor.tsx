@@ -20,7 +20,7 @@ import { useAppForm } from "@/lib/form/useAppForm"
 import { Slugs } from "@/lib/payload/slugs"
 import { Routes } from "@/lib/routes"
 import { blockElementID } from "./Blocks/BlockFrame"
-import { BlockList } from "./Blocks/BlockList"
+import { BlockList, preloadReorderList } from "./Blocks/BlockList"
 import { ProjectEditorToolbar } from "./ProjectEditorToolbar"
 import { ProjectHeaderEditor } from "./ProjectHeaderEditor/ProjectHeaderEditor"
 
@@ -150,10 +150,15 @@ export const ProjectEditor = ({
     onSubmit: ({ value }) => save(value),
   })
 
-  // Most edits open a text block, so load the editor once the page is idle.
+  // Most edits open a text block, and reorder mode is slow to load on first open, so load both
+  // once the page is idle.
   useEffect(() => {
-    if (!("requestIdleCallback" in window)) return preloadRichTextEditor()
-    const id = requestIdleCallback(preloadRichTextEditor)
+    const preload = () => {
+      preloadRichTextEditor()
+      preloadReorderList()
+    }
+    if (!("requestIdleCallback" in window)) return preload()
+    const id = requestIdleCallback(preload)
     return () => cancelIdleCallback(id)
   }, [])
 

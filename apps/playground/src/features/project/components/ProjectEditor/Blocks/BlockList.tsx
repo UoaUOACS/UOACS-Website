@@ -3,10 +3,11 @@
 import type { GalleryImage } from "@uoacs/ui"
 import {
   Activity,
+  type ComponentProps,
   Fragment,
-  lazy,
   type SetStateAction,
   Suspense,
+  use,
   useEffect,
   useEffectEvent,
   useRef,
@@ -24,9 +25,36 @@ import { BlockFrame, blockElementID } from "./BlockFrame"
 import { BlockInsertPoint } from "./BlockInsertPoint"
 import type { PendingImage } from "./ImageGridBlockEditor"
 
-const ReorderBlockList = lazy(() =>
-  import("./ReorderBlockList").then((mod) => ({ default: mod.ReorderBlockList })),
-)
+type ReorderModule = typeof import("./ReorderBlockList")
+
+let reorderModule: Promise<ReorderModule> | undefined
+
+// Marked as fulfilled once loaded, so `use` reads it without suspending. `lazy` always suspends on
+// its first render, and React then holds the switch to reorder mode for about 300ms.
+const loadReorderModule = () => {
+  if (reorderModule) return reorderModule
+  const promise = import("./ReorderBlockList")
+  promise.then(
+    (mod) => Object.assign(promise, { status: "fulfilled", value: mod }),
+    () => {},
+  )
+  reorderModule = promise
+  return promise
+}
+
+/**
+ * Starts loading reorder mode early, so it opens without a wait
+ */
+export const preloadReorderList = () => {
+  // The list's own load shows the error
+  loadReorderModule().catch(() => {})
+}
+
+// Loads dnd-kit only when reorder mode opens, unless the preload got there first
+const ReorderBlockList = (props: ComponentProps<ReorderModule["ReorderBlockList"]>) => {
+  const { ReorderBlockList: List } = use(loadReorderModule())
+  return <List {...props} />
+}
 
 /**
  * The page's blocks, with an insert point before, between and after them,
