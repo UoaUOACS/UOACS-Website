@@ -69,6 +69,7 @@ export const ProjectEditorToolbar = withForm({
               </Button>
               <Button
                 aria-pressed={mode === "reorder"}
+                className="disabled:text-gray-400"
                 disabled={blockCount < 2}
                 onClick={() => onModeChange("reorder")}
                 theme={mode === "reorder" ? "dark" : "ghost"}
