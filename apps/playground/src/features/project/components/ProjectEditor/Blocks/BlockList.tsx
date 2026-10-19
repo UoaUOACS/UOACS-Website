@@ -21,6 +21,7 @@ import {
 import { PROJECT_MAX_BLOCKS } from "@/features/project/project.constants"
 import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
+import { LoadBoundary } from "@/lib/LoadBoundary"
 import { BlockFrame, blockElementID } from "./BlockFrame"
 import { BlockInsertPoint } from "./BlockInsertPoint"
 import type { PendingImage } from "./ImageGridBlockEditor"
@@ -36,7 +37,10 @@ const loadReorderModule = () => {
   const promise = import("./ReorderBlockList")
   promise.then(
     (mod) => Object.assign(promise, { status: "fulfilled", value: mod }),
-    () => {},
+    // Forgets a failed load, e.g. offline, so the next open tries again
+    () => {
+      reorderModule = undefined
+    },
   )
   reorderModule = promise
   return promise
@@ -129,9 +133,14 @@ export const BlockList = withForm({
           return (
             <>
               {reordering && (
-                <Suspense>
-                  <ReorderBlockList focusKey={reorderKey} form={form} media={media} />
-                </Suspense>
+                <LoadBoundary
+                  message="Reorder mode could not load. Go back to edit mode and try again."
+                  source="BlockList"
+                >
+                  <Suspense>
+                    <ReorderBlockList focusKey={reorderKey} form={form} media={media} />
+                  </Suspense>
+                </LoadBoundary>
               )}
               {/* Hidden, not unmounted, so the frames keep their state. Updates to them wait while
               reorder mode moves blocks. */}

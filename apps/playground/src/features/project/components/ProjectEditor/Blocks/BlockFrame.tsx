@@ -26,6 +26,7 @@ import {
 import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
+import { LoadBoundary } from "@/lib/LoadBoundary"
 import { Slugs } from "@/lib/payload/slugs"
 import type { PendingImage } from "./ImageGridBlockEditor"
 import { TextBlockEditor } from "./TextBlockEditor"
@@ -188,15 +189,20 @@ export const BlockFrame = withForm({
                 isText ? (
                   <TextBlockEditor form={form} index={index} />
                 ) : (
-                  <ImageGridBlockEditor
-                    blockKey={block._key}
-                    form={form}
-                    index={index}
-                    media={media}
-                    onUpload={onUpload}
-                    pending={pending}
-                    setPending={setPending}
-                  />
+                  <LoadBoundary
+                    message="The image editor could not load. Reload the page to try again."
+                    source="BlockFrame"
+                  >
+                    <ImageGridBlockEditor
+                      blockKey={block._key}
+                      form={form}
+                      index={index}
+                      media={media}
+                      onUpload={onUpload}
+                      pending={pending}
+                      setPending={setPending}
+                    />
+                  </LoadBoundary>
                 )
               ) : (
                 <>
