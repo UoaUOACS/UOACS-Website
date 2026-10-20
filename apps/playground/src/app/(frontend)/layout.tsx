@@ -34,30 +34,16 @@ const mono = localFont({
     },
   ],
   variable: "--font-mono",
-  display: "optional",
+  display: "swap",
+  adjustFontFallback: false,
+  fallback: ["ui-monospace", "Menlo", "Consolas", "monospace"],
 })
 
 const neulis = localFont({
   src: [
     {
-      path: "../../../../../packages/ui/src/styles/fonts/Neulis-Cursive-Thin.woff2",
-      weight: "100",
-    },
-    {
-      path: "../../../../../packages/ui/src/styles/fonts/Neulis-Cursive-Extra-Light.woff2",
-      weight: "200",
-    },
-    {
-      path: "../../../../../packages/ui/src/styles/fonts/Neulis-Cursive-Light.woff2",
-      weight: "300",
-    },
-    {
       path: "../../../../../packages/ui/src/styles/fonts/Neulis-Cursive-Regular.woff2",
       weight: "400",
-    },
-    {
-      path: "../../../../../packages/ui/src/styles/fonts/Neulis-Cursive-Medium.woff2",
-      weight: "500",
     },
     {
       path: "../../../../../packages/ui/src/styles/fonts/Neulis-Cursive-Semi-Bold.woff2",
@@ -67,13 +53,9 @@ const neulis = localFont({
       path: "../../../../../packages/ui/src/styles/fonts/Neulis-Cursive-Bold.woff2",
       weight: "700",
     },
-    {
-      path: "../../../../../packages/ui/src/styles/fonts/Neulis-Cursive-Extra-Bold.woff2",
-      weight: "800",
-    },
   ],
   variable: "--font-neulis",
-  display: "optional",
+  display: "swap",
 })
 
 export const metadata: Metadata = {
