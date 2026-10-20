@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import type { RichTextValue } from "@uoacs/shared/payload"
 import type { GalleryImage } from "@uoacs/ui"
 import { Toaster } from "@uoacs/ui/toast"
-import { mocked } from "storybook/test"
+import { expect, mocked, userEvent, within } from "storybook/test"
 import { saveProject } from "@/features/project/actions/saveProject"
 import {
   type BlockValue,
@@ -75,7 +75,10 @@ const meta = {
   title: "Project/ProjectEditor",
   component: ProjectEditor,
   parameters: { layout: "padded", nextjs: { appDirectory: true } },
-  args: { initialValues: projectFormOptions.defaultValues },
+  args: {
+    initialValues: projectFormOptions.defaultValues,
+    author: { firstName: "Jane", lastName: "Smith", username: "janesmith" },
+  },
   decorators: [
     (Story) => (
       <div className="mx-auto max-w-6xl">
@@ -138,6 +141,21 @@ export const SaveError: Story = {
       error: "invalid",
       fieldErrors: { "pageContent[30].content": "Add some text" },
     })
+  },
+}
+
+/**
+ * Preview mode shows the page with no links, and does not save
+ */
+export const Preview: Story = {
+  ...Edit,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole("button", { name: "Preview" }))
+    await expect(await canvas.findByRole("article")).toHaveTextContent("UOACS Socials")
+    await expect(canvas.getByText("Jane Smith")).toBeVisible()
+    await expect(canvas.queryByRole("link")).toBeNull()
+    await expect(saveProject).not.toHaveBeenCalled()
   },
 }
 

@@ -12,7 +12,7 @@ import { DeleteProjectDialog } from "./DeleteProjectDialog"
 
 const group = "flex items-center gap-x-1 sm:gap-x-4"
 
-export type EditorMode = "edit" | "reorder"
+export type EditorMode = "edit" | "reorder" | "preview"
 
 /**
  * Sticky actions above the editor: the editor mode, discard,
@@ -76,8 +76,11 @@ export const ProjectEditorToolbar = withForm({
               >
                 Reorder
               </Button>
-              {/* Preview mode comes with the preview work */}
-              <Button disabled theme="ghost">
+              <Button
+                aria-pressed={mode === "preview"}
+                onClick={() => onModeChange("preview")}
+                theme={mode === "preview" ? "dark" : "ghost"}
+              >
                 Preview
               </Button>
             </fieldset>

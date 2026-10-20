@@ -3,8 +3,9 @@
 import { useSelector } from "@tanstack/react-form"
 import { toast } from "@uoacs/ui/toast"
 import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState, useTransition } from "react"
+import { Activity, useEffect, useRef, useState, useTransition } from "react"
 import { type SaveProjectResult, saveProject } from "@/features/project/actions/saveProject"
+import type { ProjectAuthor } from "@/features/project/components/ProjectHeader/ProjectHeader"
 import {
   type BlockValue,
   type EditProjectValues,
@@ -21,8 +22,9 @@ import { Slugs } from "@/lib/payload/slugs"
 import { Routes } from "@/lib/routes"
 import { blockElementID } from "./Blocks/BlockFrame"
 import { BlockList, preloadReorderList } from "./Blocks/BlockList"
-import { ProjectEditorToolbar } from "./ProjectEditorToolbar"
+import { type EditorMode, ProjectEditorToolbar } from "./ProjectEditorToolbar"
 import { ProjectHeaderEditor } from "./ProjectHeaderEditor/ProjectHeaderEditor"
+import { ProjectPreview } from "./ProjectPreview"
 
 const SAVE_ERROR_MESSAGES: Record<Extract<SaveProjectResult, { ok: false }>["error"], string> = {
   invalid: "Fix the highlighted fields",
@@ -46,6 +48,10 @@ export interface ProjectEditorProps {
    * The saved images of the page's image grids
    */
   media?: MediaLookup
+  /**
+   * The signed-in member, shown as the author in preview mode
+   */
+  author: ProjectAuthor
 }
 
 const BLOCK_ERROR_PATH = /^pageContent\[(\d+)\]/
@@ -73,6 +79,7 @@ export const ProjectEditor = ({
   initialValues,
   coverImageURL,
   media: initialMedia = {},
+  author,
 }: ProjectEditorProps) => {
   const router = useRouter()
   // Set by the first save on create, so a second save before the redirect updates that project
@@ -84,25 +91,27 @@ export const ProjectEditor = ({
   // In state, as TanStack clears a form-level error on the next change
   const [saveError, setSaveError] = useState<string>()
   const [media, setMedia] = useState(initialMedia)
-  const [reordering, setReordering] = useState(false)
+  const [mode, setMode] = useState<EditorMode>("edit")
   const [reorderKey, setReorderKey] = useState<string | null>(null)
   // A transition keeps the blocks on screen while the reorder code loads
-  const [, startReorderTransition] = useTransition()
+  const [, startModeTransition] = useTransition()
 
-  const startReorder = (key: string | null) => {
-    // Blur first, so a text field flushes its debounced value before it unmounts
+  const changeMode = (next: EditorMode, key: string | null = null) => {
+    if (next === mode) return
+    if (next === "edit") return setMode(next)
+    // Blur first, so a text field flushes its debounced value before it hides
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
     setActiveKey(null)
-    startReorderTransition(() => {
+    startModeTransition(() => {
       setReorderKey(key)
-      setReordering(true)
+      setMode(next)
     })
   }
 
   const showBlock = (index: number) => {
     const key = form.state.values.pageContent[index]?._key
     if (!key) return
-    setReordering(false)
+    setMode("edit")
     setActiveKey(key)
     // Instant: a smooth scroll aims at the sizes that idle blocks guess before they render
     requestAnimationFrame(() =>
@@ -129,6 +138,8 @@ export const ProjectEditor = ({
       )
       setSaveError(SAVE_ERROR_MESSAGES[result.error])
       setSaveErrors(form, fields)
+      // A save from preview shows the editor, so the highlighted fields are visible
+      setMode("edit")
       const index = firstBlockWithError(fields, value.pageContent)
       if (index !== undefined) showBlock(index)
       return
@@ -185,26 +196,26 @@ export const ProjectEditor = ({
         <ProjectEditorToolbar
           error={saveError}
           form={form}
-          mode={reordering ? "reorder" : "edit"}
-          onModeChange={(mode) => {
-            if (mode === "edit") setReordering(false)
-            else if (!reordering) startReorder(null)
-          }}
+          mode={mode}
+          onModeChange={changeMode}
           projectID={projectID}
         />
-        <div className="flex flex-col gap-12 md:gap-15">
-          <ProjectHeaderEditor coverImageURL={coverImageURL} form={form} />
-          <BlockList
-            activeKey={activeKey}
-            form={form}
-            media={media}
-            onActiveKeyChange={setActiveKey}
-            onReorder={startReorder}
-            onUpload={(image) => setMedia((current) => ({ ...current, [image.id]: image }))}
-            reordering={reordering}
-            reorderKey={reorderKey}
-          />
-        </div>
+        {mode === "preview" && <ProjectPreview author={author} form={form} media={media} />}
+        <Activity mode={mode === "preview" ? "hidden" : "visible"}>
+          <div className="flex flex-col gap-12 md:gap-15">
+            <ProjectHeaderEditor coverImageURL={coverImageURL} form={form} />
+            <BlockList
+              activeKey={activeKey}
+              form={form}
+              media={media}
+              onActiveKeyChange={setActiveKey}
+              onReorder={(key) => changeMode("reorder", key)}
+              onUpload={(image) => setMedia((current) => ({ ...current, [image.id]: image }))}
+              reordering={mode === "reorder"}
+              reorderKey={reorderKey}
+            />
+          </div>
+        </Activity>
       </form.AppForm>
     </form>
   )
