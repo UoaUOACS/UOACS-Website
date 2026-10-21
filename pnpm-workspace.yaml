@@ -18,7 +18,7 @@ catalog:
   tailwindcss: ^4.1.18
   "@tailwindcss/postcss": ^4
   tailwind-variants: ^3.2.2
-  typescript: ^5
+  typescript: ^7
   zod: ^4.3.6
 
 catalogs:
