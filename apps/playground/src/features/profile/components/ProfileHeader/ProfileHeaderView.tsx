@@ -66,7 +66,7 @@ export const ProfileHeaderView = ({ member, isOwner }: ProfileHeaderViewProps) =
           <Heading className="justify-start text-left" h={2} period>
             {name}
           </Heading>
-          <p className="flex flex-row justify-start gap-2 font-mono">
+          <p className="flex flex-row justify-start gap-2 font-neulis">
             <span className="font-bold text-black">@{member.username}</span>
           </p>
         </div>
