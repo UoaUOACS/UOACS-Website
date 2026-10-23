@@ -40,7 +40,7 @@ export async function editAuthMemberDetails(input: unknown): Promise<EditAuthMem
     if (response.ok) return { ok: true }
 
     const body = await response.json().catch(() => null)
-    if (Array.isArray(body?.error)) {
+    if (response.status < 500 && Array.isArray(body?.error)) {
       return { ok: false, message: "Validation failed", fieldErrors: body.error }
     }
     if (response.status === 401) {
@@ -49,7 +49,11 @@ export async function editAuthMemberDetails(input: unknown): Promise<EditAuthMem
     console.error("[editProfile] Auth service answered with an error", {
       status: response.status,
     })
-    return { ok: false, message: typeof body?.error === "string" ? body.error : GENERIC_ERROR }
+    return {
+      ok: false,
+      message:
+        response.status < 500 && typeof body?.error === "string" ? body.error : GENERIC_ERROR,
+    }
   } catch (error) {
     unstable_rethrow(error)
     console.error("[editProfile] Failed to reach the auth service", { error })
