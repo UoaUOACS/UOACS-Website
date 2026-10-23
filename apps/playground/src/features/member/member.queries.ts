@@ -13,11 +13,6 @@ import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 import type { Member } from "@/payload/payload-types"
 
-/**
- * Only the two fields used. The auth service stores `gender` as free text while
- * the shared schema narrows it to four values, so parsing the whole member
- * would reject a valid one over a field the playground never reads.
- */
 const authNamesSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
