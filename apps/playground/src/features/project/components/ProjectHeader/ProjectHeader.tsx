@@ -4,25 +4,34 @@ import Link from "next/link"
 import type { HTMLAttributes, ReactNode } from "react"
 import { UNKNOWN_AUTHOR_NAME } from "@/features/project/project.constants"
 import { Routes } from "@/lib/routes"
-import type { Project } from "@/payload/payload-types"
+import type { Member, Project } from "@/payload/payload-types"
 
 const AVATAR_CLASS_NAME = "relative size-12 shrink-0 overflow-hidden rounded-full bg-gray-200"
+
+/**
+ * The author fields that a project page shows
+ */
+export type ProjectAuthor = Pick<Member, "firstName" | "lastName" | "username" | "profilePicture">
 
 export interface ProjectHeaderProps {
   /**
    * A project with its author and the author's profile picture populated
    */
-  project: Pick<Project, "name" | "summary" | "author">
+  project: Pick<Project, "name" | "summary"> & { author: string | ProjectAuthor }
   /**
    * The like button and the author's edit link
    */
   actions?: ReactNode
+  /**
+   * Show the author without a link, as a link prefetches its page
+   */
+  removeAuthorLink?: boolean
 }
 
 /**
  * The top of a project page: the author, the project's name and summary, and actions.
  */
-export const ProjectHeader = ({ project, actions }: ProjectHeaderProps) => {
+export const ProjectHeader = ({ project, actions, removeAuthorLink }: ProjectHeaderProps) => {
   const { name, summary, author } = project
   // An unpopulated author is just an ID, e.g. when the member has since been deleted
   const authorName =
@@ -30,7 +39,9 @@ export const ProjectHeader = ({ project, actions }: ProjectHeaderProps) => {
   const profilePicture = typeof author === "object" ? author.profilePicture : undefined
   const profilePictureURL = typeof profilePicture === "object" ? profilePicture?.url : undefined
   const authorHref =
-    typeof author === "object" ? Routes.PROFILE.USERNAME(author.username) : undefined
+    typeof author === "object" && !removeAuthorLink
+      ? Routes.PROFILE.USERNAME(author.username)
+      : undefined
 
   return (
     <header className="flex w-full flex-col gap-6">

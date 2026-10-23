@@ -16,7 +16,7 @@ import { CacheTags } from "@/lib/cache"
 import { Slugs } from "@/lib/payload"
 import { getPayloadClient } from "@/lib/payload/getPayloadClient"
 import { getRelationID } from "@/lib/payload/getRelationID"
-import type { Project } from "@/payload/payload-types"
+import type { Member, Project } from "@/payload/payload-types"
 import type { SearchState } from "../search/helpers/search"
 
 export interface ProjectsPage {
@@ -136,7 +136,7 @@ export const getProjectsByAuthorCached = async (memberID: string) => {
 
 /** `not-found` also covers another member's project, so its ID stays hidden. */
 export type EditableProjectResult =
-  | { status: "found"; project: Project }
+  | { status: "found"; project: Project; member: Member }
   | { status: "unauthenticated" | "unavailable" | "not-found" }
 
 /**
@@ -163,5 +163,5 @@ export const getEditableProject = async (id: string): Promise<EditableProjectRes
     return { status: "not-found" }
   }
 
-  return { status: "found", project }
+  return { status: "found", project, member: current.member }
 }

@@ -4,6 +4,7 @@ import { redirectToLogin } from "@/features/auth/auth.helpers"
 import { ProjectEditor } from "@/features/project/components/ProjectEditor/ProjectEditor"
 import { ProjectEditorSkeleton } from "@/features/project/components/ProjectEditor/ProjectEditorSkeleton"
 import { toFormValues, toMediaLookup } from "@/features/project/editor/projectForm.options"
+import { toProjectAuthor } from "@/features/project/helpers/toProjectAuthor"
 import { getEditableProject } from "@/features/project/project.queries"
 import { Routes } from "@/lib/routes"
 
@@ -16,12 +17,13 @@ const EditProjectContent = async ({ params }: Pick<PageProps<"/projects/[id]/edi
     return notFound()
   }
 
-  const { project } = result
+  const { project, member } = result
   const coverImageURL =
     typeof project.coverImage === "object" ? (project.coverImage.url ?? undefined) : undefined
 
   return (
     <ProjectEditor
+      author={toProjectAuthor(member)}
       coverImageURL={coverImageURL}
       initialValues={toFormValues(project)}
       media={toMediaLookup(project)}

@@ -8,9 +8,10 @@ import {
   ProjectHeaderSkeleton,
 } from "@/features/project/components/ProjectHeader/ProjectHeader"
 import { ProjectHeaderActions } from "@/features/project/components/ProjectHeader/ProjectHeaderActions"
+import { projectPageVariants } from "@/features/project/components/ProjectPage/ProjectPage.variants"
 import { getProjectByIDCached } from "@/features/project/project.queries"
 
-const LAYOUT_CLASS_NAME = "flex w-full flex-col gap-10 md:gap-14"
+const { base, blocks } = projectPageVariants()
 
 const ProjectContent = async ({ params }: Pick<PageProps<"/projects/[id]">, "params">) => {
   const { id } = await params
@@ -18,7 +19,7 @@ const ProjectContent = async ({ params }: Pick<PageProps<"/projects/[id]">, "par
   if (!project) notFound()
 
   return (
-    <article className={LAYOUT_CLASS_NAME}>
+    <article className={base()}>
       <ProjectHeader
         actions={
           <Suspense fallback={<ProjectHeaderActionsSkeleton />}>
@@ -27,7 +28,7 @@ const ProjectContent = async ({ params }: Pick<PageProps<"/projects/[id]">, "par
         }
         project={project}
       />
-      <div className="flex flex-col gap-8">
+      <div className={blocks()}>
         {project.pageContent.map((block, index) => (
           <BlockView block={block} key={block.id ?? index} />
         ))}
@@ -45,9 +46,9 @@ export default function ProjectPage({ params }: PageProps<"/projects/[id]">) {
 }
 
 const ProjectPageSkeleton = () => (
-  <div aria-hidden="true" className={LAYOUT_CLASS_NAME}>
+  <div aria-hidden="true" className={base()}>
     <ProjectHeaderSkeleton />
-    <div className="flex flex-col gap-8">
+    <div className={blocks()}>
       <Skeleton className="h-32 w-full" />
       <Skeleton className="aspect-3/2 w-full" />
     </div>
