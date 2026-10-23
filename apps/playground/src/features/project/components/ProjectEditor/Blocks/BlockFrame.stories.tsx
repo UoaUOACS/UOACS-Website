@@ -11,6 +11,7 @@ import {
 import { useAppForm } from "@/lib/form/useAppForm"
 import { Slugs } from "@/lib/payload/slugs"
 import { BlockFrame } from "./BlockFrame"
+import type { PendingImage } from "./ImageGridBlockEditor"
 
 const objectID = (n: number) => n.toString(16).padStart(24, "0")
 
@@ -77,6 +78,7 @@ interface ExampleProps {
 // One block in a form, as `BlockList` renders it
 const Example = ({ block, active: initialActive = false, error }: ExampleProps) => {
   const [active, setActive] = useState(initialActive)
+  const [pending, setPending] = useState<PendingImage[]>([])
   const form = useAppForm({
     ...projectFormOptions,
     defaultValues: { ...projectFormOptions.defaultValues, pageContent: [block] },
@@ -98,7 +100,10 @@ const Example = ({ block, active: initialActive = false, error }: ExampleProps) 
       onDeactivate={() => setActive(false)}
       onDelete={fn()}
       onMove={fn()}
+      onReorder={fn()}
       onUpload={fn()}
+      pending={pending}
+      setPending={setPending}
     />
   )
 }

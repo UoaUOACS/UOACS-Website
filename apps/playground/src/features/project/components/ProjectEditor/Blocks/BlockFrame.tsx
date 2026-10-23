@@ -4,27 +4,52 @@ import { CheckIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { useSelector } from "@tanstack/react-form"
 import { Button, Dropdown, type DropdownProps, type GalleryImage } from "@uoacs/ui"
 import { cn } from "@uoacs/ui/utils"
-import { Suspense, useEffect, useEffectEvent, useRef, useState, useTransition } from "react"
+import {
+  type Dispatch,
+  lazy,
+  type SetStateAction,
+  Suspense,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useTransition,
+} from "react"
 import { ImageGridBlockView } from "@/features/project/components/BlockViews/ImageGridBlockView"
 import { TextBlockView } from "@/features/project/components/BlockViews/TextBlockView"
 import {
+  type BlockValue,
   isEmptyBlock,
   type MediaLookup,
   projectFormOptions,
+  toGridImages,
 } from "@/features/project/editor/projectForm.options"
 import { preloadRichTextEditor } from "@/lib/form/fields/RichTextField"
 import { getFieldError } from "@/lib/form/formContext"
 import { withForm } from "@/lib/form/useAppForm"
+import { LoadBoundary } from "@/lib/LoadBoundary"
 import { Slugs } from "@/lib/payload/slugs"
-import { ImageGridBlockEditor, type PendingImage } from "./ImageGridBlockEditor"
+import type { PendingImage } from "./ImageGridBlockEditor"
 import { TextBlockEditor } from "./TextBlockEditor"
+
+const ImageGridBlockEditor = lazy(() =>
+  import("./ImageGridBlockEditor").then((mod) => ({ default: mod.ImageGridBlockEditor })),
+)
 
 /**
  * The DOM ID of a block's frame, to scroll to it
  */
 export const blockElementID = (key: string) => `block-${key}`
 
-const menuOption = (
+/**
+ * A block's name for screen readers, e.g. "Text section 2"
+ */
+export const blockLabel = (block: BlockValue, index: number) =>
+  `${block.blockType === Slugs.Blocks.TEXT ? "Text" : "Image grid"} section ${index + 1}`
+
+/**
+ * An option in a block's actions menu
+ */
+export const menuOption = (
   label: string,
   onClick: () => void,
   className?: string,
@@ -51,7 +76,14 @@ export const BlockFrame = withForm({
     onDeactivate: () => {},
     onMove: (_to: number) => {},
     onDelete: () => {},
+    onReorder: () => {},
     onUpload: (_image: GalleryImage) => {},
+    /**
+     * The block's uploads that are running or failed. Held by the list, as they outlive the editor
+     * and the frame's effects clean up while reorder mode hides it.
+     */
+    pending: [] as PendingImage[],
+    setPending: (() => {}) as Dispatch<SetStateAction<PendingImage[]>>,
   },
   render: function Render({
     form,
@@ -64,7 +96,10 @@ export const BlockFrame = withForm({
     onDeactivate,
     onMove,
     onDelete,
+    onReorder,
     onUpload,
+    pending,
+    setPending,
   }) {
     // The list only re-renders when blocks are added, moved or removed
     const block = useSelector(form.store, (state) => state.values.pageContent[index])
@@ -86,13 +121,7 @@ export const BlockFrame = withForm({
       }
       return undefined
     })
-    const [pendingImages, setPendingImages] = useState<PendingImage[]>([])
-    const failedUploads = pendingImages.filter((image) => image.error).length
-    // Reads the latest list, so a deleted block releases the previews it still holds
-    const releasePreviews = useEffectEvent(() => {
-      for (const image of pendingImages) URL.revokeObjectURL(image.previewURL)
-    })
-    useEffect(() => () => releasePreviews(), [])
+    const failedUploads = pending.filter((image) => image.error).length
     const editButton = useRef<HTMLButtonElement>(null)
     const returnFocus = useRef(false)
     // A transition keeps the view on screen while the editor code loads via the suspense
@@ -130,12 +159,13 @@ export const BlockFrame = withForm({
     if (!block) return null
 
     const isText = block.blockType === Slugs.Blocks.TEXT
-    const label = `${isText ? "Text" : "Image grid"} section ${index + 1}`
+    const label = blockLabel(block, index)
 
     const options = [
       ...(active ? [] : [menuOption("Edit", activate)]),
       ...(isFirst ? [] : [menuOption("Move up", () => onMove(index - 1))]),
       ...(isLast ? [] : [menuOption("Move down", () => onMove(index + 1))]),
+      ...(isFirst && isLast ? [] : [menuOption("Reorder…", onReorder)]),
       menuOption("Remove", onDelete, "text-red-600"),
     ]
 
@@ -159,15 +189,20 @@ export const BlockFrame = withForm({
                 isText ? (
                   <TextBlockEditor form={form} index={index} />
                 ) : (
-                  <ImageGridBlockEditor
-                    blockKey={block._key}
-                    form={form}
-                    index={index}
-                    media={media}
-                    onUpload={onUpload}
-                    pending={pendingImages}
-                    setPending={setPendingImages}
-                  />
+                  <LoadBoundary
+                    message="The image editor could not load. Reload the page to try again."
+                    source="BlockFrame"
+                  >
+                    <ImageGridBlockEditor
+                      blockKey={block._key}
+                      form={form}
+                      index={index}
+                      media={media}
+                      onUpload={onUpload}
+                      pending={pending}
+                      setPending={setPending}
+                    />
+                  </LoadBoundary>
                 )
               ) : (
                 <>
@@ -178,11 +213,7 @@ export const BlockFrame = withForm({
                   ) : isText ? (
                     <TextBlockView content={block.content} />
                   ) : (
-                    <ImageGridBlockView
-                      images={block.images.flatMap((id) =>
-                        media[id] ? [{ ...media[id], alt: imageTitles[id] ?? media[id].alt }] : [],
-                      )}
-                    />
+                    <ImageGridBlockView images={toGridImages(block.images, media, imageTitles)} />
                   )}
                   {/* Covers the view, so a click anywhere or Enter opens the editor */}
                   <button

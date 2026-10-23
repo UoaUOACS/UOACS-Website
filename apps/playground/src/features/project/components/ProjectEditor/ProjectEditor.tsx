@@ -3,7 +3,7 @@
 import { useSelector } from "@tanstack/react-form"
 import { toast } from "@uoacs/ui/toast"
 import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useTransition } from "react"
 import { type SaveProjectResult, saveProject } from "@/features/project/actions/saveProject"
 import {
   type BlockValue,
@@ -20,7 +20,7 @@ import { useAppForm } from "@/lib/form/useAppForm"
 import { Slugs } from "@/lib/payload/slugs"
 import { Routes } from "@/lib/routes"
 import { blockElementID } from "./Blocks/BlockFrame"
-import { BlockList } from "./Blocks/BlockList"
+import { BlockList, preloadReorderList } from "./Blocks/BlockList"
 import { ProjectEditorToolbar } from "./ProjectEditorToolbar"
 import { ProjectHeaderEditor } from "./ProjectHeaderEditor/ProjectHeaderEditor"
 
@@ -84,10 +84,25 @@ export const ProjectEditor = ({
   // In state, as TanStack clears a form-level error on the next change
   const [saveError, setSaveError] = useState<string>()
   const [media, setMedia] = useState(initialMedia)
+  const [reordering, setReordering] = useState(false)
+  const [reorderKey, setReorderKey] = useState<string | null>(null)
+  // A transition keeps the blocks on screen while the reorder code loads
+  const [, startReorderTransition] = useTransition()
+
+  const startReorder = (key: string | null) => {
+    // Blur first, so a text field flushes its debounced value before it unmounts
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+    setActiveKey(null)
+    startReorderTransition(() => {
+      setReorderKey(key)
+      setReordering(true)
+    })
+  }
 
   const showBlock = (index: number) => {
     const key = form.state.values.pageContent[index]?._key
     if (!key) return
+    setReordering(false)
     setActiveKey(key)
     // Instant: a smooth scroll aims at the sizes that idle blocks guess before they render
     requestAnimationFrame(() =>
@@ -135,10 +150,15 @@ export const ProjectEditor = ({
     onSubmit: ({ value }) => save(value),
   })
 
-  // Most edits open a text block, so load the editor once the page is idle.
+  // Most edits open a text block, and reorder mode is slow to load on first open, so load both
+  // once the page is idle.
   useEffect(() => {
-    if (!("requestIdleCallback" in window)) return preloadRichTextEditor()
-    const id = requestIdleCallback(preloadRichTextEditor)
+    const preload = () => {
+      preloadRichTextEditor()
+      preloadReorderList()
+    }
+    if (!("requestIdleCallback" in window)) return preload()
+    const id = requestIdleCallback(preload)
     return () => cancelIdleCallback(id)
   }, [])
 
@@ -162,7 +182,16 @@ export const ProjectEditor = ({
       }}
     >
       <form.AppForm>
-        <ProjectEditorToolbar error={saveError} form={form} projectID={projectID} />
+        <ProjectEditorToolbar
+          error={saveError}
+          form={form}
+          mode={reordering ? "reorder" : "edit"}
+          onModeChange={(mode) => {
+            if (mode === "edit") setReordering(false)
+            else if (!reordering) startReorder(null)
+          }}
+          projectID={projectID}
+        />
         <div className="flex flex-col gap-12 md:gap-15">
           <ProjectHeaderEditor coverImageURL={coverImageURL} form={form} />
           <BlockList
@@ -170,7 +199,10 @@ export const ProjectEditor = ({
             form={form}
             media={media}
             onActiveKeyChange={setActiveKey}
+            onReorder={startReorder}
             onUpload={(image) => setMedia((current) => ({ ...current, [image.id]: image }))}
+            reordering={reordering}
+            reorderKey={reorderKey}
           />
         </div>
       </form.AppForm>

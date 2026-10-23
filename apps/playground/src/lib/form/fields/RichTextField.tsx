@@ -5,7 +5,8 @@ import { countRichTextCharacters } from "@uoacs/shared"
 import type { RichTextValue } from "@uoacs/shared/payload"
 import type { RichTextEditorProps } from "@uoacs/ui/rich-text-editor"
 import { cn } from "@uoacs/ui/utils"
-import { Component, lazy, type ReactNode, useId, useState } from "react"
+import { lazy, useId, useState } from "react"
+import { LoadBoundary } from "@/lib/LoadBoundary"
 import { useFlushOnSubmit } from "../flush"
 import { getFieldError, useFieldContext } from "../formContext"
 
@@ -21,30 +22,6 @@ const RichTextEditor = lazy(() =>
 export const preloadRichTextEditor = () => {
   // The editor's own load shows the error
   import("@uoacs/ui/rich-text-editor").catch(() => {})
-}
-
-// Catches a failed load of the editor code, e.g. offline, so the rest of the page keeps working
-class EditorLoadBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  state = { failed: false }
-
-  static getDerivedStateFromError() {
-    return { failed: true }
-  }
-
-  componentDidCatch(error: unknown) {
-    console.error("[RichTextField] the editor failed to load", { error })
-  }
-
-  render() {
-    if (this.state.failed) {
-      return (
-        <p className="text-red-600 text-sm" role="alert">
-          The editor could not load. Reload the page to try again.
-        </p>
-      )
-    }
-    return this.props.children
-  }
 }
 
 export interface RichTextFieldProps
@@ -98,7 +75,10 @@ export const RichTextField = ({
       >
         {label}
       </span>
-      <EditorLoadBoundary>
+      <LoadBoundary
+        message="The editor could not load. Reload the page to try again."
+        source="RichTextField"
+      >
         <RichTextEditor
           {...props}
           aria-describedby={
@@ -117,7 +97,7 @@ export const RichTextField = ({
             debouncer.maybeExecute(value)
           }}
         />
-      </EditorLoadBoundary>
+      </LoadBoundary>
       {maxCharacters && (
         <p
           className={cn("text-sm", count > maxCharacters ? "text-red-600" : "text-gray-500")}

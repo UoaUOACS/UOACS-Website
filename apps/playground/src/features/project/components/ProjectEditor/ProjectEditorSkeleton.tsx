@@ -32,11 +32,13 @@ const FieldSkeleton = ({
  */
 export const ProjectEditorSkeleton = ({ create }: ProjectEditorSkeletonProps) => (
   <div aria-hidden="true" className="flex w-full flex-col gap-4">
-    <div className="flex items-center justify-end gap-1 py-3 sm:gap-4">
-      <Skeleton className="h-6.5 w-19 sm:w-21 md:h-8.5" />
-      <Skeleton className="h-6.5 w-19 sm:w-37 md:h-8.5" />
-      <Skeleton className="h-6.5 w-19 sm:w-33 md:h-8.5" />
-      {!create && <Skeleton className="size-8 rounded-full sm:size-10" />}
+    <div className="flex flex-wrap-reverse items-center justify-end gap-x-1 gap-y-2 py-3 sm:gap-x-4">
+      <Skeleton className="h-6.5 w-54.5 md:h-8.5" />
+      <div className="flex items-center gap-x-1 sm:gap-x-4">
+        <Skeleton className="h-6.5 w-19 sm:w-37 md:h-8.5" />
+        <Skeleton className="h-6.5 w-19 sm:w-33 md:h-8.5" />
+        {!create && <Skeleton className="size-8 rounded-full sm:size-10" />}
+      </div>
     </div>
     <div className="flex flex-col gap-12 md:gap-15">
       <div className={base({ className: "border border-gray-200" })}>
